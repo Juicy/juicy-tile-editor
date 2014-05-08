@@ -1,0 +1,20 @@
+{
+  "name": "pj-sortable-tiles-editor",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Polyjuice/pj-sortable-tiles-editor",
+  "description": "<pj-sortable-tiles-editor> is an editor form for <pj-sortable-tiles>",
+  "license": "MIT",
+  "main": "src/pj-sortable-tiles-editor.html",
+  "keywords": [
+    "polymer",
+    "web-components"
+  ],
+  "ignore": [
+    "**/.*",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer",
+    "pj-sortable-tiles": "Polyjuice/pj-sortable-tiles#gh-pages"
+  }
+}
