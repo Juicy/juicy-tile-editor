@@ -64,7 +64,9 @@
     </style>
     <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
       <div class="editableGroup">
-        <button class="{{ {active: selectionMode} | tokenList }}" on-click="{{toggleSelectionMode}}">✎</button>
+        <button class="{{ {active: selectionMode} | tokenList }}" on-click="{{toggleSelectionMode}}">✎ Selection mode</button>
+        <button title="Move selected elements to the same group (CTRL+G)" disabled?="{{selectedItems.length < 1}}" on-click="{{moveSelectionToEditedItemContainer}}">⧉ Move to group</button>
+        <button title="Create a new group from selected elements (CTRL+N)" disabled?="{{selectedItems.length < 1}}" on-click="{{newGroupFromSelection}}">⧈ New group</button>
       </div>
 
       <div class="editableGroup">
