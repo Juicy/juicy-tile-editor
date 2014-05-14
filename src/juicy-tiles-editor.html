@@ -200,7 +200,7 @@
               this.sortableTilesModel = this.highlightedElement.parentNode;
               this.treeRefresh();
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
-              if (ev.ctrlKey) {
+              if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 //expand group
                 this.selectedItems.push(highlightedItem);
                 this.selectedElements.push(this.highlightedElement);
