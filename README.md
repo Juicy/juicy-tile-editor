@@ -1,17 +1,17 @@
-# &lt;pj-sortable-tiles-editor&gt;
+# &lt;juicy-tiles-editor&gt;
 
-`<pj-sortable-tiles-editor>` is a Polymer Element that adds an editor to control the setup of `<pj-sortable-tiles>`
+`<juicy-tiles-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tiles>`
 
 ## Demo
 
-[Check it live!](http://polyjuice.github.io/pj-sortable-tiles-editor)
+[Check it live!](http://juicy.github.io/juicy-tiles-editor)
 
 ## Usage
 
 1. Install the component using [Bower](http://bower.io/):
 
     ```sh
-    $ bower install pj-sortable-tiles-editor --save
+    $ bower install juicy-tiles-editor --save
     ```
 
 2. Import Web Components' polyfill:
@@ -24,15 +24,15 @@
 3. Import Custom Element:
 
     ```html
-    <link rel="import" href="bower_components/pj-sortable-tiles/src/pj-sortable-tiles.html">
-    <link rel="import" href="bower_components/pj-sortable-tiles-editor/src/pj-sortable-tiles-editor.html">
+    <link rel="import" href="bower_components/juicy-tiles/src/juicy-tiles.html">
+    <link rel="import" href="bower_components/juicy-tiles-editor/src/juicy-tiles-editor.html">
     ```
 
 4. Start using it!
 
     ```html
-    <pj-sortable-tiles-editor selectionMode></pj-sortable-tiles-editor>
-    <pj-sortable-tiles></pj-sortable-tiles>
+    <juicy-tiles-editor selectionMode></juicy-tiles-editor>
+    <juicy-tiles></juicy-tiles>
     ```
 
 ## Options

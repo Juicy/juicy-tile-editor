@@ -2,7 +2,7 @@
 <link rel="import" href="element-selector.html">
 <link rel="import" href="juicy-tree.html">
 
-<polymer-element name="pj-sortable-tiles-editor" attributes="selectionMode">
+<polymer-element name="juicy-tiles-editor" attributes="selectionMode">
   <template>
     <style>
       .editablesContainer {
@@ -138,7 +138,7 @@
         obj[property] = power;
       }
 
-      Polymer('pj-sortable-tiles-editor', {
+      Polymer('juicy-tiles-editor', {
         selectionMode: false,
         editedElement: null,
         highlightedElement: null,
@@ -171,7 +171,7 @@
         },
         getSortableElement: function (elem) {
           while (elem.parentNode) {
-            if (elem.parentNode.nodeName == 'PJ-SORTABLE-TILES') {
+            if (elem.parentNode.nodeName == 'JUICY-TILES') {
               return elem;
             }
             elem = elem.parentNode;
