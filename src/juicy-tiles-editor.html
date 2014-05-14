@@ -405,6 +405,7 @@
         },
         treeRefresh: function() {
           this.tree = [this.sortableTilesModel.setup];
+          Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tree can't perform first highlightBranch
         }
       });
     })();
