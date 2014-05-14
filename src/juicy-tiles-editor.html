@@ -398,7 +398,7 @@
             element = this.sortableTilesModel.elements[this.editedItem.index];
           }
           this.$.elementEdited.show(element);
-          this.$.treeView.highlightTreeView(this.editedItem);
+          this.$.treeView.highlightBranch(this.editedItem);
         },
         treeActivateBranch: function() {
           this.editedItem = this.$.treeView.selectedBranch;

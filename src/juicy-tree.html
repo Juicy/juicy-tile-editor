@@ -41,7 +41,7 @@
           this.selectedBranch = target.templateInstance.model.branch;
           this.fire('juicy-tree-activate');
         },
-        highlightTreeView: function (item) {
+        highlightBranch: function (item) {
           while (item) {
             var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
             var menuItem = null;
