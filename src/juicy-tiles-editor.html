@@ -152,7 +152,7 @@
         mouseupListener: null,
         contextMenuListener: null,
         keyUpListener: null,
-        tree: null,
+        tree: {},
         attached: function () {
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
         },
@@ -198,9 +198,7 @@
           this.mouseupListener = function (ev) {
             if (this.highlightedElement) {
               this.sortableTilesModel = this.highlightedElement.parentNode;
-              this.tree = {
-                workspace: this.sortableTilesModel.setup
-              }
+              this.treeRefresh();
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey) {
                 //expand group
@@ -292,6 +290,7 @@
           this.editedItem.container.height = dimensions.height;
 
           this.sortableTilesModel.packItems(); //rerender
+          this.treeRefresh();
         },
         moveSelectionToEditedItemContainer: function () {
           if (!this.editedItem) {
@@ -307,6 +306,7 @@
           this.editedItem.container.height = dimensions.height;
 
           this.sortableTilesModel.packItems(); //rerender
+          this.treeRefresh();
         },
         getContainerChildElements: function (container) {
           var elements = [];
@@ -402,6 +402,9 @@
         },
         treeActivateBranch: function() {
           this.editedItem = this.$.treeView.selectedBranch;
+        },
+        treeRefresh: function() {
+          this.tree = [this.sortableTilesModel.setup];
         }
       });
     })();

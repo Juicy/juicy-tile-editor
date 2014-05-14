@@ -6,13 +6,13 @@
 <polymer-element name="juicy-tree" attributes="tree selectedBranch">
   <template>
     <polymer-ui-menu id="menu">
-      <template repeat="{{ tree | objectValues as branch }}" id="recursive">
+      <template repeat="{{ tree as branch }}" id="recursive">
         <template if="{{ !branch.items }}">
           <polymer-ui-menu-item on-tap="{{branchActivate}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
         </template>
         <template if="{{ branch.items }}">
           <polymer-ui-submenu-item on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
-            <template repeat="{{ branch.items | objectValues as branch }}" ref="recursive"></template>
+            <template repeat="{{ branch.items as branch }}" ref="recursive"></template>
           </polymer-ui-submenu-item>
         </template>
       </template>
@@ -35,18 +35,6 @@
           else {
             return "Unnamed element"
           }
-        },
-        objectValues: function (obj) {
-          var props = Object.keys(obj),
-            index = -1,
-            length = props.length,
-            values = [];
-
-          while (++index < length) {
-            values.push(obj[props[index]]);
-          }
-
-          return values;
         },
         branchActivate: function (ev, index, target) {
           ev.stopImmediatePropagation();
