@@ -1,0 +1,84 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../polymer-ui-menu/polymer-ui-menu.html">
+<link rel="import" href="../../polymer-ui-menu-item/polymer-ui-menu-item.html">
+<link rel="import" href="../../polymer-ui-submenu-item/polymer-ui-submenu-item.html">
+
+<polymer-element name="juicy-tree" attributes="tree selectedBranch">
+  <template>
+    <polymer-ui-menu id="menu">
+      <template repeat="{{ tree | objectValues as branch }}" id="recursive">
+        <template if="{{ !branch.items }}">
+          <polymer-ui-menu-item on-tap="{{branchActivate}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
+        </template>
+        <template if="{{ branch.items }}">
+          <polymer-ui-submenu-item on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+            <template repeat="{{ branch.items | objectValues as branch }}" ref="recursive"></template>
+          </polymer-ui-submenu-item>
+        </template>
+      </template>
+    </polymer-ui-menu>
+
+    <shadow></shadow>
+  </template>
+  <script>
+    (function () {
+      Polymer('juicy-tree', {
+        tree: {},
+        selectedBranch: null,
+        toDisplayName: function (branch) {
+          if (branch.name != void 0) {
+            return branch.name
+          }
+          else if (branch.index != void 0) {
+            return "Element " + branch.index
+          }
+          else {
+            return "Unnamed element"
+          }
+        },
+        objectValues: function (obj) {
+          var props = Object.keys(obj),
+            index = -1,
+            length = props.length,
+            values = [];
+
+          while (++index < length) {
+            values.push(obj[props[index]]);
+          }
+
+          return values;
+        },
+        branchActivate: function (ev, index, target) {
+          ev.stopImmediatePropagation();
+          this.selectedBranch = target.templateInstance.model.branch;
+          this.fire('juicy-tree-activate');
+        },
+        highlightTreeView: function (item) {
+          while (item) {
+            var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
+            var menuItem = null;
+            for (var i = 0, ilen = menuItems.length; i < ilen; i++) {
+              if (menuItems[i].templateInstance.model.branch == item) {
+                menuItem = menuItems[i];
+                break;
+              }
+            }
+
+            if (menuItem) {
+              var parent = menuItem.parentNode;
+              var siblings = parent.items;
+              for (var i = 0, ilen = siblings.length; i < ilen; i++) {
+                if (siblings[i] === menuItem) {
+                  parent.selected = i;
+                  break;
+                }
+              }
+            }
+
+            item = item.container;
+          }
+        }
+      });
+    })();
+  </script>
+</polymer-element>

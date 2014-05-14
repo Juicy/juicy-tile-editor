@@ -1,4 +1,6 @@
+<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="element-selector.html">
+<link rel="import" href="juicy-tree.html">
 
 <polymer-element name="pj-sortable-tiles-editor" attributes="selectionMode">
   <template>
@@ -42,6 +44,22 @@
       h4 {
         margin: 0;
         display: inline;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 150px;
+        left: 10px;
+        width: 200px;
+        height: calc(100% - 160px);
+        background: white;
+        border: 1px solid black;
+        opacity: 0.8;
+        overflow: auto;
+      }
+
+      .sidebar /deep/ #menu {
+        margin-left: 10px;
       }
     </style>
     <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
@@ -91,6 +109,12 @@
         <button class="editable" on-click="{{setBackground}}" style="background: #AAA"></button>
       </div>
     </div>
+
+    <div class="sidebar">
+      <h1>Elements</h1>
+      <juicy-tree id="treeView" tree="{{ tree }}" on-juicy-tree-activate="{{treeActivateBranch}}"></juicy-tree>
+    </div>
+
     <element-selector id="elementEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></element-selector>
     <element-selector id="elementRollover" strokeWidth="1" strokeColor="#222222" strokeOffset="4"></element-selector>
     <element-selector id="elementSelected" strokeWidth="1" strokeColor="#33579F" strokeOffset="3"></element-selector>
@@ -126,6 +150,7 @@
         mouseupListener: null,
         contextMenuListener: null,
         keyUpListener: null,
+        tree: null,
         attached: function () {
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
         },
@@ -171,6 +196,9 @@
           this.mouseupListener = function (ev) {
             if (this.highlightedElement) {
               this.sortableTilesModel = this.highlightedElement.parentNode;
+              this.tree = {
+                workspace: this.sortableTilesModel.setup
+              }
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey) {
                 //expand group
@@ -368,6 +396,10 @@
             element = this.sortableTilesModel.elements[this.editedItem.index];
           }
           this.$.elementEdited.show(element);
+          this.$.treeView.highlightTreeView(this.editedItem);
+        },
+        treeActivateBranch: function() {
+          this.editedItem = this.$.treeView.selectedBranch;
         }
       });
     })();
