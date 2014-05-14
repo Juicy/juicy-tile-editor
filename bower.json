@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer",
+    "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-tiles": "Juicy/juicy-tiles#gh-pages",
     "polymer-ui-menu": "Polymer/polymer-ui-menu",
     "polymer-ui-menu-item": "Polymer/polymer-ui-menu-item",
