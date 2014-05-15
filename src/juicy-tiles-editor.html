@@ -280,9 +280,10 @@
             this.sortableTilesModel.moveToContainer(this.selectedItems[i], newContainer, true);
           }
 
+          this.editedItem = newContainer; //change edited item to the new container
           var dimensions = this.sortableTilesModel.getMinimumDimensions(this.getContainerChildElements(newContainer));
-          this.editedItem.container.width = dimensions.width;
-          this.editedItem.container.height = dimensions.height;
+          this.editedItem.width = dimensions.width;
+          this.editedItem.height = dimensions.height;
 
           this.sortableTilesModel.packItems(); //rerender
           this.treeRefresh();
