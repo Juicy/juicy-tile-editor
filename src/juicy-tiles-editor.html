@@ -77,6 +77,15 @@
           <h4>Container <code>{{editedItem.name}}</code></h4>
         </div>
 
+        <div class="editableGroup"><label>Background <input class="val" on-blur="{{refresh}}" value="{{editedItem.background}}"></label>
+          <button class="editable" on-click="{{setBackground}}" style="background: transparent; color: red">╱</button>
+          <button class="editable" on-click="{{setBackground}}" style="background: #EEE"></button>
+          <button class="editable" on-click="{{setBackground}}" style="background: #DDD"></button>
+          <button class="editable" on-click="{{setBackground}}" style="background: #CCC"></button>
+          <button class="editable" on-click="{{setBackground}}" style="background: #BBB"></button>
+          <button class="editable" on-click="{{setBackground}}" style="background: #AAA"></button>
+        </div>
+
         <div class="editableGroup">
           <label>Gap <span class="val">({{editedItem.gap}})</span></label>
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
@@ -96,14 +105,6 @@
       <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
         <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
-      </div>
-      <div class="editableGroup"><label>Background <input class="val" on-blur="{{refresh}}" value="{{editedItem.background}}"></label>
-        <button class="editable" on-click="{{setBackground}}" style="background: transparent; color: red">╱</button>
-        <button class="editable" on-click="{{setBackground}}" style="background: #EEE"></button>
-        <button class="editable" on-click="{{setBackground}}" style="background: #DDD"></button>
-        <button class="editable" on-click="{{setBackground}}" style="background: #CCC"></button>
-        <button class="editable" on-click="{{setBackground}}" style="background: #BBB"></button>
-        <button class="editable" on-click="{{setBackground}}" style="background: #AAA"></button>
       </div>
     </div>
 
