@@ -202,8 +202,6 @@
                 this.$.elementSelected.show(this.selectedElements);
               }
               else if (this.editedItem !== highlightedItem) {
-                this.selectedItems.length = 0;
-                this.selectedElements.length = 0;
                 this.$.elementSelected.hide();
                 this.editedItem = highlightedItem;
                 this.highlightedElement = null;
@@ -392,6 +390,8 @@
           }
           this.$.elementEdited.show(element);
           this.$.treeView.highlightBranch(this.editedItem);
+          this.selectedItems.length = 0;
+          this.selectedElements.length = 0;
         },
         treeActivateBranch: function() {
           this.editedItem = this.$.treeView.selectedBranch;
