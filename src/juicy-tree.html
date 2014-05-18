@@ -5,10 +5,21 @@
 
 <polymer-element name="juicy-tree" attributes="tree selectedBranch">
   <template>
-    <polymer-ui-menu id="menu">
+    <style>
+      polymer-ui-submenu-item.polymer-selected > polymer-ui-menu-item {
+        background-color: blue !important;
+        color: white;
+      }
+
+      polymer-ui-menu-item.polymer-selected {
+        background-color: blue;
+        color: white;
+      }
+    </style>
+    <polymer-ui-menu id="menu" multi>
       <template repeat="{{ tree as branch }}" id="recursive">
         <template if="{{ !branch.items }}">
-          <polymer-ui-menu-item on-tap="{{branchActivate}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
+          <polymer-ui-menu-item on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
         </template>
         <template if="{{ branch.items }}">
           <polymer-ui-submenu-item on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
@@ -38,33 +49,77 @@
         },
         branchActivate: function (ev, index, target) {
           ev.stopImmediatePropagation();
-          this.selectedBranch = target.templateInstance.model.branch;
-          this.fire('juicy-tree-activate');
+          //this.selectedBranch = target.templateInstance.model.branch;
+          if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
+            this.highlightBranch(target.templateInstance.model.branch, true);
+          }
+          else {
+            this.highlightBranch(target.templateInstance.model.branch);
+            this.fire('juicy-tree-activate', {branch: target.templateInstance.model.branch});
+          }
         },
-        highlightBranch: function (item) {
+        highlightBranch: function (item, expand) {
+          var direct = true;
+
+          //normalize
+          var menus = this.shadowRoot.querySelectorAll('polymer-ui-submenu-item, #menu');
+          for (var i = 0, ilen = menus.length; i < ilen; i++) {
+            if (!Array.isArray(menus[i].selected)) {
+              menus[i].selected = [];
+              if (menus[i].nodeName === "POLYMER-UI-SUBMENU-ITEM") {
+                menus[i].shadowRoot.querySelector("polymer-ui-menu").multi = true;
+              }
+            }
+            if (!expand) {
+              menus[i].selected.length = 0;
+            }
+            if (menus[i].activeChanged) {
+              menus[i].activeChanged = undefined;
+            }
+            if (menus[i].activate) {
+              menus[i].activate = undefined;
+            }
+          }
+
+          //expand tree recursively
+          var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
           while (item) {
-            var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
             var menuItem = null;
             for (var i = 0, ilen = menuItems.length; i < ilen; i++) {
               if (menuItems[i].templateInstance.model.branch == item) {
                 menuItem = menuItems[i];
-                break;
               }
             }
 
             if (menuItem) {
               var parent = menuItem.parentNode;
-              var siblings = parent.items;
-              for (var i = 0, ilen = siblings.length; i < ilen; i++) {
-                if (siblings[i] === menuItem) {
-                  parent.selected = i;
-                  break;
+              if (direct) {
+                var siblings = parent.items;
+                for (var i = 0, ilen = siblings.length; i < ilen; i++) {
+                  if (siblings[i] === menuItem) {
+                    var index = parent.selected.indexOf(i);
+                    if (index == -1) {
+                      parent.selected.push(i);
+                      this.fire('juicy-tree-selection-add', {branch: item});
+                    }
+                    else {
+                      parent.selected.splice(index, 1);
+                      this.fire('juicy-tree-selection-remove', {branch: item});
+                    }
+                    break;
+                  }
                 }
               }
+              menuItem.collapsed = false;
+              parent.collapsed = false;
             }
 
             item = item.container;
+            direct = false;
           }
+        },
+        preventSelection: function(ev) {
+          ev.preventDefault();
         }
       });
     })();

@@ -129,7 +129,9 @@
 
     <div class="sidebar">
       <h1>Elements</h1>
-      <juicy-tree id="treeView" tree="{{ tree }}" on-juicy-tree-activate="{{treeActivateBranch}}"></juicy-tree>
+      <juicy-tree id="treeView" tree="{{ tree }}" on-juicy-tree-activate="{{treeActivateBranch}}"
+        on-juicy-tree-selection-add="{{selectionAdd}}"
+        on-juicy-tree-selection-remove="{{selectionRemove}}"></juicy-tree>
     </div>
 
     <juicy-highlight id="elementEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></juicy-highlight>
@@ -217,8 +219,14 @@
               var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 //expand group
-                this.selectedItems.push(highlightedItem);
-                this.selectedElements.push(this.highlightedElement);
+                var index = this.selectedItems.indexOf(highlightedItem);
+                if(index == -1) {
+                  this.selectionAdd(highlightedItem);
+                }
+                else {
+                  this.selectionRemove(highlightedItem);
+                }
+                this.$.treeView.highlightBranch(highlightedItem, true); //toggles highlight
                 this.$.elementSelected.show(this.selectedElements);
               }
               else if (this.editedItem !== highlightedItem) {
@@ -409,12 +417,28 @@
           this.selectedItems.length = 0;
           this.selectedElements.length = 0;
         },
-        treeActivateBranch: function() {
-          this.editedItem = this.$.treeView.selectedBranch;
+        treeActivateBranch: function(ev) {
+          this.editedItem = ev.detail.branch;
         },
         treeRefresh: function() {
           this.tree = [this.sortableTilesModel.setup];
           Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tree can't perform first highlightBranch
+        },
+        selectionAdd: function(item) {
+          if(item.detail) {  //is tree event
+            item = item.detail.branch;
+          }
+          this.selectedItems.push(item);
+          var elem = this.sortableTilesModel.elements[item.name || item.index];
+          this.selectedElements.push(elem);
+        },
+        selectionRemove: function(item) {
+          if(item.detail) {  //is tree event
+            item = item.detail.branch;
+          }
+          var index = this.selectedItems.indexOf(item);
+          this.selectedItems.splice(index, 1);
+          this.selectedElements.splice(index, 1);
         }
       });
     })();
