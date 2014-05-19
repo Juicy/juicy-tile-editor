@@ -88,6 +88,7 @@
       <template if="{{editedItem.items}}">
         <div class="editableGroup">
           <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">⧉ Ungroup</button>
+          <button class="editable" on-click="{{changeDirection}}" disabled?="{{!editedItem.container}}">↷Change direction</button>
         </div>
 
         <div class="editableGroup">
@@ -402,6 +403,10 @@
           var container = this.editedItem.container;
           this.sortableTilesModel.deleteContainer(this.editedItem);
           this.editedItem = container;
+        },
+        changeDirection: function(){
+          this.editedItem.direction = this.editedItem.direction == "downRight" ? "rightDown" : "downRight";
+          this.sortableTilesModel.refresh();
         },
         editedItemChanged: function() {
           var element;
