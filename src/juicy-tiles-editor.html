@@ -389,10 +389,14 @@
           this.sortableTilesModel.refresh();
         },
         priorityIncrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.editedItem, true);
+          this.sortableTilesModel
+            .reprioritizeItem(this.editedItem, true)
+            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         priorityDecrease: function () {
-          this.sortableTilesModel.reprioritizeItem(this.editedItem, false);
+          this.sortableTilesModel
+            .reprioritizeItem(this.editedItem, false)
+            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         deleteContainer: function () {
           var container = this.editedItem.container;
