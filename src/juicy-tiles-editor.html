@@ -158,6 +158,18 @@
         obj[property] = power;
       }
 
+      /**
+       * Returns true if the element would be selected by the specified selector string; otherwise, returns false.
+       * @see https://developer.mozilla.org/en-US/docs/Web/API/Element.matches
+       */
+      if (!Element.prototype.matches) {
+        Element.prototype.matches =
+          Element.prototype.webkitMatchesSelector ||
+            Element.prototype.mozMatchesSelector ||
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.oMatchesSelector
+      }
+
       Polymer('juicy-tiles-editor', {
         selectionMode: false,
         editedElement: null,
@@ -215,9 +227,9 @@
 
           this.mouseupListener = function (ev) {
             if (this.highlightedElement) {
-              this.sortableTilesModel = this.highlightedElement.parentNode;
+              var model = this.highlightedElement.parentNode;
               this.treeRefresh();
-              var highlightedItem = this.sortableTilesModel.items[ this.sortableTilesModel.elements.indexOf(this.highlightedElement) ];
+              var highlightedItem = model.items[ model.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 //expand group
                 var index = this.selectedItems.indexOf(highlightedItem);
@@ -301,18 +313,19 @@
             index: this.editedItem.index
           }
 
-          var newContainer = this.sortableTilesModel.createNewContainer(null, this.editedItem.container, setup, true);
-          this.sortableTilesModel.moveToContainer(this.editedItem, newContainer, true);
+          var model = this.editedItem.root;
+          var newContainer = model.createNewContainer(null, this.editedItem.container, setup, true);
+          model.moveToContainer(this.editedItem, newContainer, true);
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            this.sortableTilesModel.moveToContainer(this.selectedItems[i], newContainer, true);
+            model.moveToContainer(this.selectedItems[i], newContainer, true);
           }
 
           this.editedItem = newContainer; //change edited item to the new container
-          var dimensions = this.sortableTilesModel.getMinimumDimensions(this.getContainerChildElements(newContainer));
+          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
           this.editedItem.width = dimensions.width;
           this.editedItem.height = dimensions.height;
 
-          this.sortableTilesModel.packItems(); //rerender
+          model.packItems(); //rerender
           this.treeRefresh();
         },
         moveSelectionToEditedItemContainer: function () {
@@ -320,49 +333,51 @@
             return;
           }
 
+          var model = this.editedItem.root;
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            this.sortableTilesModel.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
+            model.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
           }
 
-          var dimensions = this.sortableTilesModel.getMinimumDimensions(this.getContainerChildElements(this.editedItem.container));
+          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(this.editedItem.container));
           this.editedItem.container.width = dimensions.width;
           this.editedItem.container.height = dimensions.height;
 
-          this.sortableTilesModel.packItems(); //rerender
+          model.packItems(); //rerender
           this.treeRefresh();
         },
         getContainerChildElements: function (container) {
+          var model = container.root;
           var elements = [];
           for (var i = 0, ilen = container.items.length; i < ilen; i++) {
             if (container.items[i].index != void 0) {
-              elements.push(this.sortableTilesModel.elements[container.items[i].index])
+              elements.push(model.elements[container.items[i].index])
             }
             else if (container.items[i].name != void 0) {
-              elements.push(this.sortableTilesModel.elements[container.items[i].name])
+              elements.push(model.elements[container.items[i].name])
             }
           }
           return elements;
         },
         gapIncrease: function () {
           this.editedItem.gap++;
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         gapDecrease: function () {
           if (this.editedItem.gap >= 1) {
             this.editedItem.gap--;
           }
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         refresh: function () {
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         widthIncrease: function () {
           powerIncrease(this.editedItem, "width");
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         widthDecrease: function () {
           powerDecrease(this.editedItem, "width");
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         heightIncrease: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -370,7 +385,7 @@
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
           powerIncrease(this.editedItem, "height");
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         heightDecrease: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -378,7 +393,7 @@
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
           powerDecrease(this.editedItem, "height");
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         heightAuto: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -387,40 +402,44 @@
           else { //turn on auto
             this.editedItem.height = "auto";
           }
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
         priorityIncrease: function () {
-          this.sortableTilesModel
+          this.editedItem.root
             .reprioritizeItem(this.editedItem, true)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         priorityDecrease: function () {
-          this.sortableTilesModel
+          this.editedItem.root
             .reprioritizeItem(this.editedItem, false)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         deleteContainer: function () {
           var container = this.editedItem.container;
-          this.sortableTilesModel.deleteContainer(this.editedItem);
+          this.editedItem.root.deleteContainer(this.editedItem);
           this.editedItem = container;
         },
         changeDirection: function(){
           this.editedItem.direction = this.editedItem.direction == "downRight" ? "rightDown" : "downRight";
-          this.sortableTilesModel.refresh();
+          this.editedItem.root.refresh();
         },
-        editedItemChanged: function() {
-          var element;
-          if (this.editedItem.name) {
-            if (this.editedItem.name === "root") {
-              element = this.sortableTilesModel.shadowRoot.firstElementChild;
+        getItemElement: function (item) {
+          var model = item.root;
+          if (item.name) {
+            if (item.name === "root") {
+              //return;
+              return model.shadowRoot.firstElementChild;
             }
             else {
-              element = this.sortableTilesModel.elements[this.editedItem.name];
+              return model.elements[item.name];
             }
           }
           else {
-            element = this.sortableTilesModel.elements[this.editedItem.index];
+            return model.elements[item.index];
           }
+        },
+        editedItemChanged: function() {
+          var element = this.getItemElement(this.editedItem);
           this.$.elementEdited.show(element);
           this.$.treeView.highlightBranch(this.editedItem);
           this.selectedItems.length = 0;
@@ -430,7 +449,43 @@
           this.editedItem = ev.detail.branch;
         },
         treeRefresh: function() {
-          this.tree = [this.sortableTilesModel.setup];
+          var extendWithSubTiles = function (tree) {
+            var element = this.getItemElement(tree);
+            var nested;
+            if (element && element.nodeName == "JUICY-TILES") {
+              nested = element;
+            }
+            else {
+              nested = element.querySelector("JUICY-TILES");
+            }
+            if (nested && !tree.hasOwnProperty("items")) {
+              Object.defineProperty(tree, "items", {
+                value: [nested.setup]
+              });
+            }
+
+            if (tree.items) {
+              for (var i = 0, ilen = tree.items.length; i < ilen; i++) {
+                extendWithSubTiles(tree.items[i])
+              }
+            }
+          }.bind(this);
+
+          //find all trees
+          var topmost = this;
+          while (topmost.parentNode) {
+            topmost = topmost.parentNode;
+          }
+
+          var models = topmost.querySelectorAll("JUICY-TILES");
+          this.tree = [];
+          for (var i = 0, ilen = models.length; i < ilen; i++) {
+            if (!models[i].matches("JUICY-TILES JUICY-TILES")) {
+              this.tree.push(models[i].setup);
+              extendWithSubTiles(models[i].setup);
+            }
+          }
+
           Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tree can't perform first highlightBranch
         },
         selectionAdd: function(item) {
@@ -438,7 +493,7 @@
             item = item.detail.branch;
           }
           this.selectedItems.push(item);
-          var elem = this.sortableTilesModel.elements[item.name || item.index];
+          var elem = item.root.elements[item.name || item.index];
           this.selectedElements.push(elem);
         },
         selectionRemove: function(item) {
