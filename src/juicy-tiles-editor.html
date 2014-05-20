@@ -481,6 +481,14 @@
           }
 
           var models = topmost.querySelectorAll("JUICY-TILES");
+
+          if(topmost.host) {
+            models = Array.prototype.slice.call(models);
+            var distributedModels = topmost.host.querySelectorAll("JUICY-TILES");
+            distributedModels = Array.prototype.slice.call(distributedModels);
+            models = models.concat(distributedModels);
+          }
+
           this.tree = [];
           for (var i = 0, ilen = models.length; i < ilen; i++) {
             if (!models[i].matches("JUICY-TILES JUICY-TILES")) {
