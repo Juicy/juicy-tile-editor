@@ -462,6 +462,9 @@
               Object.defineProperty(tree, "items", {
                 value: [nested.setup]
               });
+              Object.defineProperty(nested.setup, "container", {
+                value: tree
+              });
             }
 
             if (tree.items) {
