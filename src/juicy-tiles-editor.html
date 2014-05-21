@@ -185,6 +185,21 @@
         tree: {},
         attached: function () {
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
+
+          this.$.treeView.toDisplayName = function(branch) {
+            if (branch.name != void 0) {
+              if(branch.name === "root" && branch.root.id) {
+                return "root#" + branch.root.id;
+              }
+              return branch.name
+            }
+            else if (branch.index != void 0) {
+              return "Element " + branch.index
+            }
+            else {
+              return "Unnamed element"
+            }
+          }
         },
         detached: function () {
           this.$.elementEdited.hide();

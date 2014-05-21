@@ -36,12 +36,14 @@
       Polymer('juicy-tree', {
         tree: {},
         selectedBranch: null,
+        /**
+         * Converts branch object to a display name string. Can be overloaded
+         * @param branch
+         * @returns {String}
+         */
         toDisplayName: function (branch) {
           if (branch.name != void 0) {
             return branch.name
-          }
-          else if (branch.index != void 0) {
-            return "Element " + branch.index
           }
           else {
             return "Unnamed element"
