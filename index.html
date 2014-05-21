@@ -23,10 +23,9 @@
     juicy-tiles{
       /*width: 300px;
       height: 150px;*/
-      width: 600px;
+      width: 100%;
       height: 600px;
       margin: 2em 0;
-      padding:1em;
       box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
     }
     juicy-tiles>*{
@@ -81,6 +80,7 @@
       <input value="Input2">
     </div>
     <div>
+      Nested tiles 1:
       <juicy-tiles setup="{{setup2}}">
         <div>Subitem 0 </div>
         <div>
@@ -91,6 +91,19 @@
         </div>
         <section>Subitem 3</section>
       </juicy-tiles>
+      <section>
+        Nested tiles 2:
+        <juicy-tiles setup="{{setup2}}">
+          <div>Subitem 0 </div>
+          <div>
+            <button>Subitem 1</button>
+          </div>
+          <div>
+            <input value="Subitem2">
+          </div>
+          <section>Subitem 3</section>
+        </juicy-tiles>
+      </section>
     </div>
   </juicy-tiles>
 </template>
