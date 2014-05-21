@@ -443,7 +443,7 @@
           if (item.name) {
             if (item.name === "root") {
               //return;
-              return model.shadowRoot.firstElementChild;
+              return model.$.container;
             }
             else {
               return model.elements[item.name];
