@@ -442,7 +442,6 @@
           var model = item.root;
           if (item.name) {
             if (item.name === "root") {
-              //return;
               return model.$.container;
             }
             else {
@@ -453,14 +452,18 @@
             return model.elements[item.index];
           }
         },
-        editedItemChanged: function() {
+        editedItemChanged: function () {
           var element = this.getItemElement(this.editedItem);
           this.$.elementEdited.show(element);
-          this.$.treeView.highlightBranch(this.editedItem);
+          if (!this.ignoreHightlight) {
+            this.$.treeView.highlightBranch(this.editedItem);
+          }
           this.selectedItems.length = 0;
           this.selectedElements.length = 0;
+          this.ignoreHightlight = false;
         },
-        treeActivateBranch: function(ev) {
+        treeActivateBranch: function (ev) {
+          this.ignoreHightlight = true;
           this.editedItem = ev.detail.branch;
         },
         treeRefresh: function() {

@@ -60,7 +60,7 @@
             this.fire('juicy-tree-activate', {branch: target.templateInstance.model.branch});
           }
         },
-        highlightBranch: function (item, expand) {
+        highlightBranch: function (branch, expand) {
           var direct = true;
 
           //normalize
@@ -85,6 +85,7 @@
 
           //expand tree recursively
           var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
+          var item = branch;
           while (item) {
             var menuItem = null;
             for (var i = 0, ilen = menuItems.length; i < ilen; i++) {
@@ -111,14 +112,26 @@
                     break;
                   }
                 }
+                if (parent.selected.length == 1 && this.lastHighlightedBranch == item) {
+                  menuItem.collapsed = !menuItem.collapsed;
+                  parent.collapsed = !parent.collapsed;
+                }
+                else {
+                  menuItem.collapsed = false;
+                  parent.collapsed = false;
+                }
               }
-              menuItem.collapsed = false;
-              parent.collapsed = false;
+              else {
+                menuItem.collapsed = false;
+                parent.collapsed = false;
+              }
             }
 
             item = item.container;
             direct = false;
           }
+
+          this.lastHighlightedBranch = branch;
         },
         preventSelection: function(ev) {
           ev.preventDefault();
