@@ -467,8 +467,9 @@
           this.editedItem = ev.detail.branch;
         },
         treeRefresh: function() {
+          var that = this;
           var extendWithSubTiles = function (tree) {
-            var element = this.getItemElement(tree);
+            var element = that.getItemElement(tree);
             var nested;
             if (element && element.nodeName == "JUICY-TILES") {
               nested = element;
@@ -490,7 +491,7 @@
                 extendWithSubTiles(tree.items[i])
               }
             }
-          }.bind(this);
+          };
 
           //find all trees
           var topmost = this;
