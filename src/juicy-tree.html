@@ -6,51 +6,59 @@
 <polymer-element name="juicy-tree" attributes="tree selectedBranch">
   <template>
     <style>
-      polymer-ui-submenu-item.polymer-selected > polymer-ui-menu-item {
-        background-color: blue !important;
-        color: white;
+      ul {
+        list-style: none;
+        padding: 0 0 0 20px;
       }
 
-      polymer-ui-menu-item.polymer-selected {
+      li .selected {
         background-color: blue;
         color: white;
       }
     </style>
-    <polymer-ui-menu id="menu" multi>
-      
+
+    <ul class="root">
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
-        <polymer-ui-submenu-item class="branch" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
-          
-          <template repeat="{{ branch.setup.items as item }}" id="item">
-            <!-- item -->
-            <template if="{{ item.items }}">
-              <!-- group -->
-              <polymer-ui-submenu-item class="group" on-tap="{{branchActivate}}" label='{{ item | toDisplayName }} ▾'>
-                <template repeat="{{ item.items as item }}" ref="item"></template>
-              </polymer-ui-submenu-item>
+        <li>
+          <span on-tap="{{activateBranch}}">{{ branch | toDisplayName }} ▾</span>
+
+          <ul class="branch">
+            <template repeat="{{ branch.setup.items as item }}" id="item">
+              <!-- item -->
+              <li>
+                <template if="{{ item.items }}">
+                  <!-- group -->
+                  <span on-tap="{{activateBranch}}">{{ item | toDisplayName }} ▾</span>
+
+                  <ul class="group">
+                    <template repeat="{{ item.items as item }}" ref="item"></template>
+                  </ul>
+                </template>
+
+                <template if="{{ !item.items }}" id="element">
+                  <!-- real element -->
+
+                  <template if="{{ !branch.branches[ item.index ] }}">
+                    <!-- without nested juicy-tiles -->
+
+                    <span on-tap="{{activateBranch}}">{{ item | toDisplayName }}</span>
+                  </template>
+                  <template if="{{ branch.branches[ item.index ] }}">
+                    <!-- with nested juicy-tiles -->
+                    <span on-tap="{{activateBranch}}">{{ item | toDisplayName }} ▾</span>
+
+                    <ul class="group">
+                      <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="recursive"></template>
+                    </ul>
+                  </template>
+                </template>
+              </li>
             </template>
-
-            <template if="{{ !item.items }}" id="element">
-              <!-- real element -->
-
-              <template if="{{ !branch.branches[ item.index ] }}">
-              <!-- without nested juicy-tiles -->
-
-                <polymer-ui-menu-item class="real" on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ item | toDisplayName }}</polymer-ui-menu-item>
-              </template>
-              <template if="{{ branch.branches[ item.index ] }}">
-              <!-- with nested juicy-tiles -->
-
-                <polymer-ui-submenu-item class="real subbranches" on-tap="{{branchActivate}}" label='{{ item | toDisplayName }} ▾'>
-                  <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="branch"></template>
-                </polymer-ui-submenu-item>
-              </template>
-            </template>
-          </template>
-        </polymer-ui-submenu-item>
+          </ul>
+        </li>
       </template>
-    </polymer-ui-menu>
+    </ul>
 
     <shadow></shadow>
   </template>
@@ -58,7 +66,6 @@
     (function () {
       Polymer('juicy-tree', {
         tree: [],
-        selectedBranch: null,
         /**
          * Converts branch object to a display name string. Can be overloaded
          * @param branch
@@ -72,19 +79,31 @@
             return "Unnamed element"
           }
         },
-        branchActivate: function (ev, index, target) {
+        activateBranch: function (ev, index, target) {
           ev.stopImmediatePropagation();
-          //this.selectedBranch = target.templateInstance.model.branch;
           if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-            this.highlightBranch(target.templateInstance.model.branch, true);
+            //this.highlightBranch(target.templateInstance.model.branch, true);
           }
           else {
-            this.highlightBranch(target.templateInstance.model.branch);
-            this.fire('juicy-tree-activate', {branch: target.templateInstance.model.branch});
+            //this.highlightBranch(target.templateInstance.model.branch);
+            var model = target.templateInstance.model;
+            var proto = Object.getPrototypeOf(model);
+            if(model.branch === proto.branch) { //a branch of a leaf (branch is inherited from prototype)
+              this.fire('juicy-tree-activate', {branch: target.templateInstance.model.item, tiles: target.templateInstance.model.branch.node});
+            }
+            else if(model.item === proto.item) { //a nested tiles (item is inherited from prototype)
+              this.fire('juicy-tree-activate', {branch: target.templateInstance.model.branch.setup, tiles: target.templateInstance.model.branch.node});
+            }
+
+            Array.prototype.slice.call(this.shadowRoot.querySelectorAll('.selected')).forEach(function(li){
+              li.classList.remove('selected');
+            });
+            target.classList.add('selected');
           }
         },
         highlightBranch: function (branch, expand) {
-          var direct = true;
+          return;
+          /*var direct = true;
 
           //normalize
           var menus = this.shadowRoot.querySelectorAll('polymer-ui-submenu-item, #menu');
@@ -155,9 +174,10 @@
           }
 
           this.lastHighlightedBranch = branch;
+          */
         },
         preventSelection: function(ev) {
-          ev.preventDefault();
+          //ev.preventDefault();
         }
       });
     })();

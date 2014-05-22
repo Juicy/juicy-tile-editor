@@ -468,6 +468,7 @@
         },
         treeActivateBranch: function (ev) {
           this.ignoreHightlight = true;
+          this.editedTiles = ev.detail.tiles;
           this.editedItem = ev.detail.branch;
         },
         /**
