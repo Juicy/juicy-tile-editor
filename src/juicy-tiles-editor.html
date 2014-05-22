@@ -2,7 +2,7 @@
 <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html">
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
-<link rel="import" href="juicy-tree.html">
+<link rel="import" href="juicy-tiles-tree.html">
 
 <polymer-element name="juicy-tiles-editor" attributes="selectionMode">
   <template>
@@ -130,9 +130,9 @@
 
     <div class="sidebar">
       <h1>Elements</h1>
-      <juicy-tree id="treeView" tree="{{ tree }}" on-juicy-tree-activate="{{treeActivateBranch}}"
-        on-juicy-tree-selection-add="{{selectionAdd}}"
-        on-juicy-tree-selection-remove="{{selectionRemove}}"></juicy-tree>
+      <juicy-tiles-tree id="treeView" tree="{{ tree }}" on-juicy-tiles-tree-activate="{{treeActivateBranch}}"
+        on-juicy-tiles-tree-selection-add="{{selectionAdd}}"
+        on-juicy-tiles-tree-selection-remove="{{selectionRemove}}"></juicy-tiles-tree>
     </div>
 
     <juicy-highlight id="elementEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></juicy-highlight>
@@ -565,7 +565,7 @@
           // notify observer/two-way-binding/tempalte only once
           this.tree = tree;
 
-          Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tree can't perform first highlightBranch
+          Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tiles-tree can't perform first highlightBranch
         },
         selectionAdd: function(item) {
           if(item.detail) {  //is tree event

@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="juicy-tree" attributes="tree">
+<polymer-element name="juicy-tiles-tree" attributes="tree">
   <template>
     <style>
       ul {
@@ -65,7 +65,7 @@
   </template>
   <script>
     (function () {
-      Polymer('juicy-tree', {
+      Polymer('juicy-tiles-tree', {
         tree: [],
         /**
          * Converts branch object to a display name string. Can be overloaded
@@ -84,16 +84,16 @@
           var eventName;
           if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
             if(target.classList.contains('selected')) {
-              eventName = 'juicy-tree-selection-remove';
+              eventName = 'juicy-tiles-tree-selection-remove';
               target.classList.remove('selected');
             }
             else {
-              eventName = 'juicy-tree-selection-add';
+              eventName = 'juicy-tiles-tree-selection-add';
               target.classList.add('selected');
             }
           }
           else {
-            eventName = 'juicy-tree-activate';
+            eventName = 'juicy-tiles-tree-activate';
             Array.prototype.slice.call(this.shadowRoot.querySelectorAll('.selected')).forEach(function(span){
               span.classList.remove('selected');
             });
