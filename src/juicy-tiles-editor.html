@@ -170,6 +170,26 @@
             Element.prototype.oMatchesSelector
       }
 
+      /**
+       * Returns an array of descendant elements that match the given tag name.
+       */
+      function getFirstLevelChildTags(baseElement, tagName) {
+        var tagName = tagName.toUpperCase();
+        var children = [];
+        var elements = baseElement.getElementsByTagName(tagName);
+        elementLoop: for (var i = 0, ilen = elements.length; i < ilen; i++) {
+          var elem = elements[i].parentNode;
+          while (elem != baseElement) {
+            if (elem.nodeName == tagName) {
+              continue elementLoop;
+            }
+            elem = elem.parentNode;
+          }
+          children.push(elements[i]);
+        }
+        return children;
+      }
+
       Polymer('juicy-tiles-editor', {
         selectionMode: false,
         editedElement: null,
@@ -496,9 +516,12 @@
 
             // iterate on element's real DOM elements
             for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
-            	nested = 
-            		// findFirstLevelDescendants(element.elements[childNo], 'juicy-tiles');
-            		element.elements[childNo].getElementsByTagName('juicy-tiles');
+              if (element.elements[childNo].nodeName == 'JUICY-TILES') { //element is directly a nested tiles
+                nested = [element.elements[childNo]]
+              }
+              else { //check if element has nested tiles children
+                nested = getFirstLevelChildTags(element.elements[childNo], 'juicy-tiles');
+              }
             	// iterate on nested juicy-tiles
             	if( nested.length ){
             		branches[ childNo ] = [];
@@ -527,21 +550,17 @@
             topmost = topmost.parentNode;
           }
 
-          var models = topmost.querySelectorAll("JUICY-TILES");
+          var models = getFirstLevelChildTags(topmost, 'juicy-tiles');
 
-          if(topmost.host) {
-            models = Array.prototype.slice.call(models);
-            var distributedModels = topmost.host.querySelectorAll("JUICY-TILES");
-            distributedModels = Array.prototype.slice.call(distributedModels);
+          if (topmost.host) {
+            var distributedModels = getFirstLevelChildTags(topmost.host, 'juicy-tiles');
             models = models.concat(distributedModels);
           }
 
           for (var i = 0, ilen = models.length; i < ilen; i++) {
-            if (!models[i].matches("JUICY-TILES JUICY-TILES")) {
-              tree.push(
-              	extendWithSubTiles(models[i])
-              );
-            }
+            tree.push(
+              extendWithSubTiles(models[i])
+            );
           }
           // notify observer/two-way-binding/tempalte only once
           this.tree = tree;
