@@ -17,9 +17,6 @@
     "polymer": "Polymer/polymer",
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
-    "juicy-tiles": "Juicy/juicy-tiles#gh-pages",
-    "polymer-ui-menu": "Polymer/polymer-ui-menu",
-    "polymer-ui-menu-item": "Polymer/polymer-ui-menu-item",
-    "polymer-ui-submenu-item": "Polymer/polymer-ui-submenu-item"
+    "juicy-tiles": "Juicy/juicy-tiles#gh-pages"
   }
 }
