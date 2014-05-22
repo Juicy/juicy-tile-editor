@@ -572,8 +572,9 @@
             item = item.detail.branch;
           }
           this.selectedItems.push(item);
-          var elem = item.root.elements[item.name || item.index];
+          var elem = this.editedTiles.elements[item.name || item.index];
           this.selectedElements.push(elem);
+          this.$.elementSelected.show(this.selectedElements);
         },
         selectionRemove: function(item) {
           if(item.detail) {  //is tree event
@@ -582,6 +583,7 @@
           var index = this.selectedItems.indexOf(item);
           this.selectedItems.splice(index, 1);
           this.selectedElements.splice(index, 1);
+          this.$.elementSelected.show(this.selectedElements);
         }
       });
     })();

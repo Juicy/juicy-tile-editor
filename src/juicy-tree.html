@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="juicy-tree" attributes="tree selectedBranch">
+<polymer-element name="juicy-tree" attributes="tree">
   <template>
     <style>
       ul {
@@ -8,13 +8,17 @@
         padding: 0 0 0 20px;
       }
 
-      li .selected {
+      li span {
+        cursor: default;
+      }
+
+      li span.selected {
         background-color: blue;
         color: white;
       }
     </style>
 
-    <ul class="root">
+    <ul class="root" on-mousedown="{{preventTextSelection}}">
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
         <li>
@@ -77,104 +81,43 @@
           }
         },
         activateBranch: function (ev, index, target) {
-          ev.stopImmediatePropagation();
+          var eventName;
           if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-            //this.highlightBranch(target.templateInstance.model.branch, true);
+            if(target.classList.contains('selected')) {
+              eventName = 'juicy-tree-selection-remove';
+              target.classList.remove('selected');
+            }
+            else {
+              eventName = 'juicy-tree-selection-add';
+              target.classList.add('selected');
+            }
           }
           else {
-            //this.highlightBranch(target.templateInstance.model.branch);
-            var model = target.templateInstance.model;
-            var proto = Object.getPrototypeOf(model);
-            if(model.branch === proto.branch) { //a branch of a leaf (branch is inherited from prototype)
-              this.fire('juicy-tree-activate', {branch: target.templateInstance.model.item, tiles: target.templateInstance.model.branch.node});
-            }
-            else if(model.item === proto.item) { //a nested tiles (item is inherited from prototype)
-              this.fire('juicy-tree-activate', {branch: target.templateInstance.model.branch.setup, tiles: target.templateInstance.model.branch.node});
-            }
-
-            Array.prototype.slice.call(this.shadowRoot.querySelectorAll('.selected')).forEach(function(li){
-              li.classList.remove('selected');
+            eventName = 'juicy-tree-activate';
+            Array.prototype.slice.call(this.shadowRoot.querySelectorAll('.selected')).forEach(function(span){
+              span.classList.remove('selected');
             });
             target.classList.add('selected');
           }
+          var model = target.templateInstance.model;
+          var proto = Object.getPrototypeOf(model);
+          if(model.branch === proto.branch) { //a branch of a leaf (branch is inherited from prototype)
+            this.fire(eventName, {branch: target.templateInstance.model.item, tiles: target.templateInstance.model.branch.node});
+          }
+          else if(model.item === proto.item) { //a nested tiles (item is inherited from prototype)
+            this.fire(eventName, {branch: target.templateInstance.model.branch.setup, tiles: target.templateInstance.model.branch.node});
+          }
         },
         highlightBranch: function (branch, expand) {
-          return;
-          /*var direct = true;
-
-          //normalize
-          var menus = this.shadowRoot.querySelectorAll('polymer-ui-submenu-item, #menu');
-          for (var i = 0, ilen = menus.length; i < ilen; i++) {
-            if (!Array.isArray(menus[i].selected)) {
-              menus[i].selected = [];
-              if (menus[i].nodeName === "POLYMER-UI-SUBMENU-ITEM") {
-                menus[i].shadowRoot.querySelector("polymer-ui-menu").multi = true;
-              }
+          //TODO this does not highlight multiselection because recreation of .tree[] rerenders the templates
+          Array.prototype.slice.call(this.shadowRoot.querySelectorAll('span')).forEach(function(span){
+            if(span.templateInstance.model.item === branch) {
+              span.classList.add('selected');
             }
-            if (!expand) {
-              menus[i].selected.length = 0;
-            }
-            if (menus[i].activeChanged) {
-              menus[i].activeChanged = undefined;
-            }
-            if (menus[i].activate) {
-              menus[i].activate = undefined;
-            }
-          }
-
-          //expand tree recursively
-          var menuItems = this.shadowRoot.querySelectorAll('polymer-ui-menu-item, polymer-ui-submenu-item');
-          var item = branch;
-          while (item) {
-            var menuItem = null;
-            for (var i = 0, ilen = menuItems.length; i < ilen; i++) {
-              if (menuItems[i].templateInstance.model.branch == item) {
-                menuItem = menuItems[i];
-              }
-            }
-
-            if (menuItem) {
-              var parent = menuItem.parentNode;
-              if (direct) {
-                var siblings = parent.items;
-                for (var i = 0, ilen = siblings.length; i < ilen; i++) {
-                  if (siblings[i] === menuItem) {
-                    var index = parent.selected.indexOf(i);
-                    if (index == -1) {
-                      parent.selected.push(i);
-                      this.fire('juicy-tree-selection-add', {branch: item});
-                    }
-                    else {
-                      parent.selected.splice(index, 1);
-                      this.fire('juicy-tree-selection-remove', {branch: item});
-                    }
-                    break;
-                  }
-                }
-                if (parent.selected.length == 1 && this.lastHighlightedBranch == item) {
-                  menuItem.collapsed = !menuItem.collapsed;
-                  parent.collapsed = !parent.collapsed;
-                }
-                else {
-                  menuItem.collapsed = false;
-                  parent.collapsed = false;
-                }
-              }
-              else {
-                menuItem.collapsed = false;
-                parent.collapsed = false;
-              }
-            }
-
-            item = item.container;
-            direct = false;
-          }
-
-          this.lastHighlightedBranch = branch;
-          */
+          });
         },
-        preventSelection: function(ev) {
-          //ev.preventDefault();
+        preventTextSelection: function(ev) {
+          ev.preventDefault();
         }
       });
     })();
