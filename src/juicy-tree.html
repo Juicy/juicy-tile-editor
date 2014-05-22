@@ -26,7 +26,7 @@
             <!-- item -->
             <template if="{{ item.items }}">
               <!-- group -->
-              <polymer-ui-submenu-item class="group" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+              <polymer-ui-submenu-item class="group" on-tap="{{branchActivate}}" label='{{ item | toDisplayName }} ▾'>
                 <template repeat="{{ item.items as item }}" ref="item"></template>
               </polymer-ui-submenu-item>
             </template>
@@ -37,12 +37,12 @@
               <template if="{{ !branch.branches[ item.index ] }}">
               <!-- without nested juicy-tiles -->
 
-                <polymer-ui-menu-item class="real" on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
+                <polymer-ui-menu-item class="real" on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ item | toDisplayName }}</polymer-ui-menu-item>
               </template>
               <template if="{{ branch.branches[ item.index ] }}">
               <!-- with nested juicy-tiles -->
 
-                <polymer-ui-submenu-item class="real subbranches" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+                <polymer-ui-submenu-item class="real subbranches" on-tap="{{branchActivate}}" label='{{ item | toDisplayName }} ▾'>
                   <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="branch"></template>
                 </polymer-ui-submenu-item>
               </template>

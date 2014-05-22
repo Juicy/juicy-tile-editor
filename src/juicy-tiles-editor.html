@@ -187,16 +187,16 @@
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
 
           this.$.treeView.toDisplayName = function(branch) {
-            if (branch.name != void 0) {
-              if(branch.name === "root" && branch.root.id) {
-                return "root#" + branch.root.id;
-              }
+            if(branch.node) { //juicy-tiles root
+              return "root#" + branch.node.id;
+            }
+            else if (branch.name != void 0) { //container
               return branch.name
             }
-            else if (branch.index != void 0) {
+            else if (branch.index != void 0) { //element
               return "Element " + branch.index
             }
-            else {
+            else { //error
               return "Unnamed element"
             }
           }
