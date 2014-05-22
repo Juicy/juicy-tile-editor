@@ -17,15 +17,38 @@
       }
     </style>
     <polymer-ui-menu id="menu" multi>
+      
       <template repeat="{{ tree as branch }}" id="recursive">
-        <template if="{{ !branch.items }}">
-          <polymer-ui-menu-item on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
-        </template>
-        <template if="{{ branch.items }}">
-          <polymer-ui-submenu-item on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
-            <template repeat="{{ branch.items as branch }}" ref="recursive"></template>
-          </polymer-ui-submenu-item>
-        </template>
+        <!-- branch -->
+        <polymer-ui-submenu-item class="branch" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+          
+          <template repeat="{{ branch.setup.items as item }}" id="item">
+            <!-- item -->
+            <template if="{{ item.items }}">
+              <!-- group -->
+              <polymer-ui-submenu-item class="group" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+                <template repeat="{{ item.items as item }}" ref="item"></template>
+              </polymer-ui-submenu-item>
+            </template>
+
+            <template if="{{ !item.items }}" id="element">
+              <!-- real element -->
+
+              <template if="{{ !branch.branches[ item.index ] }}">
+              <!-- without nested juicy-tiles -->
+
+                <polymer-ui-menu-item class="real" on-tap="{{branchActivate}}" on-mousedown="{{preventSelection}}">{{ branch | toDisplayName }}</polymer-ui-menu-item>
+              </template>
+              <template if="{{ branch.branches[ item.index ] }}">
+              <!-- with nested juicy-tiles -->
+
+                <polymer-ui-submenu-item class="real subbranches" on-tap="{{branchActivate}}" label='{{ branch | toDisplayName }} ▾'>
+                  <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="branch"></template>
+                </polymer-ui-submenu-item>
+              </template>
+            </template>
+          </template>
+        </polymer-ui-submenu-item>
       </template>
     </polymer-ui-menu>
 
@@ -34,7 +57,7 @@
   <script>
     (function () {
       Polymer('juicy-tree', {
-        tree: {},
+        tree: [],
         selectedBranch: null,
         /**
          * Converts branch object to a display name string. Can be overloaded

@@ -182,7 +182,7 @@
         mouseupListener: null,
         contextMenuListener: null,
         keyUpListener: null,
-        tree: {},
+        tree: [],
         attached: function () {
           this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
 
@@ -244,6 +244,8 @@
             if (this.highlightedElement) {
               var model = this.highlightedElement.parentNode;
               this.treeRefresh();
+              this.editedTiles = model;
+              // ??? cantWe simply use editedElement?
               var highlightedItem = model.items[ model.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 //expand group
@@ -328,7 +330,7 @@
             index: this.editedItem.index
           }
 
-          var model = this.editedItem.root;
+          var model = this.editedTiles;
           var newContainer = model.createNewContainer(null, this.editedItem.container, setup, true);
           model.moveToContainer(this.editedItem, newContainer, true);
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -348,7 +350,7 @@
             return;
           }
 
-          var model = this.editedItem.root;
+          var model = this.editedTiles;
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
             model.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
           }
@@ -361,7 +363,8 @@
           this.treeRefresh();
         },
         getContainerChildElements: function (container) {
-          var model = container.root;
+        	//FIXME I may not work (tomalec)
+          var model = this.editedTiles;
           var elements = [];
           for (var i = 0, ilen = container.items.length; i < ilen; i++) {
             if (container.items[i].index != void 0) {
@@ -375,24 +378,24 @@
         },
         gapIncrease: function () {
           this.editedItem.gap++;
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         gapDecrease: function () {
           if (this.editedItem.gap >= 1) {
             this.editedItem.gap--;
           }
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         refresh: function () {
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         widthIncrease: function () {
           powerIncrease(this.editedItem, "width");
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         widthDecrease: function () {
           powerDecrease(this.editedItem, "width");
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         heightIncrease: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -400,7 +403,7 @@
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
           powerIncrease(this.editedItem, "height");
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         heightDecrease: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -408,7 +411,7 @@
             this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
           }
           powerDecrease(this.editedItem, "height");
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         heightAuto: function () {
           if (this.editedItem.height == 'auto') { //turn off auto
@@ -417,29 +420,30 @@
           else { //turn on auto
             this.editedItem.height = "auto";
           }
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         priorityIncrease: function () {
-          this.editedItem.root
+          this.editedTiles
             .reprioritizeItem(this.editedItem, true)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         priorityDecrease: function () {
-          this.editedItem.root
+          this.editedTiles
             .reprioritizeItem(this.editedItem, false)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         deleteContainer: function () {
           var container = this.editedItem.container;
-          this.editedItem.root.deleteContainer(this.editedItem);
+          this.editedTiles.deleteContainer(this.editedItem);
           this.editedItem = container;
         },
         changeDirection: function(){
           this.editedItem.direction = this.editedItem.direction == "downRight" ? "rightDown" : "downRight";
-          this.editedItem.root.refresh();
+          this.editedTiles.refresh();
         },
         getItemElement: function (item) {
-          var model = item.root;
+        	//FIXME I may not work (tomalec)
+          var model = this.editedTiles;
           if (item.name) {
             if (item.name === "root") {
               return model.$.container;
@@ -466,32 +470,55 @@
           this.ignoreHightlight = true;
           this.editedItem = ev.detail.branch;
         },
+        /**
+         * [treeRefresh description]
+         * @return {[type]} [description]
+         */
+        // tree: [
+        // 	{
+        // 		node: _juicy-tiles_,
+        // 		setup: _PackageSetup_, // redundand consider removal 
+        // 		branches: [
+        // 			_setup.items[?].index_: [
+        // 				_tree_, 
+        // 				_tree_
+        // 			]
+        // 		]
+        // 	}
+        // ]
         treeRefresh: function() {
-          var that = this;
-          var extendWithSubTiles = function (tree) {
-            var element = that.getItemElement(tree);
-            var nested;
-            if (element && element.nodeName == "JUICY-TILES") {
-              nested = element;
-            }
-            else {
-              nested = element.querySelector("JUICY-TILES");
-            }
-            if (nested && !tree.hasOwnProperty("items")) {
-              Object.defineProperty(tree, "items", {
-                value: [nested.setup]
-              });
-              Object.defineProperty(nested.setup, "container", {
-                value: tree
-              });
+          var that = this,
+          	  tree = [];
+          var extendWithSubTiles = function (element, parentJuicyTile) {
+            var nested,
+            	branches = [];
+
+            // iterate on element's real DOM elements
+            for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
+            	nested = 
+            		// findFirstLevelDescendants(element.elements[childNo], 'juicy-tiles');
+            		element.elements[childNo].getElementsByTagName('juicy-tiles');
+            	// iterate on nested juicy-tiles
+            	if( nested.length ){
+            		branches[ childNo ] = [];
+
+	            	for(var branchNo = 0, bLen = nested.length; branchNo < bLen; branchNo++){
+	            		branches[ childNo ].push(
+	            			extendWithSubTiles(
+	            				nested[branchNo],
+	            				element.elements[childNo]
+	            			)
+	            		);
+	            	}
+	            }
             }
 
-            if (tree.items) {
-              for (var i = 0, ilen = tree.items.length; i < ilen; i++) {
-                extendWithSubTiles(tree.items[i])
-              }
+            return {
+            	node: element,
+            	setup: element.setup, // redundand consider removal 
+            	branches: branches
             }
-          };
+          }
 
           //find all trees
           var topmost = this;
@@ -508,13 +535,15 @@
             models = models.concat(distributedModels);
           }
 
-          this.tree = [];
           for (var i = 0, ilen = models.length; i < ilen; i++) {
             if (!models[i].matches("JUICY-TILES JUICY-TILES")) {
-              this.tree.push(models[i].setup);
-              extendWithSubTiles(models[i].setup);
+              tree.push(
+              	extendWithSubTiles(models[i])
+              );
             }
           }
+          // notify observer/two-way-binding/tempalte only once
+          this.tree = tree;
 
           Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tree can't perform first highlightBranch
         },
