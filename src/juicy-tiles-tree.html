@@ -123,7 +123,7 @@
           });
         },
         unhighlightBranch: function (branch) {
-          this.highlightedBranches.splice(this.highlightedBranches.indexOf(model.item), 1);
+          this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
 
           //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
           Array.prototype.forEach.call(this.$.root.querySelectorAll('span.selected'), function (span) {
