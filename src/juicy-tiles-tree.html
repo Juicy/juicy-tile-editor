@@ -18,11 +18,11 @@
       }
     </style>
 
-    <ul class="root" on-mousedown="{{preventTextSelection}}">
+    <ul id="root" on-mousedown="{{preventTextSelection}}">
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
         <li>
-          <span on-tap="{{activateBranch}}">{{ branch | toDisplayName }} ▾</span>
+          <span on-tap="{{activateBranch}}" class="{{ branch | getBranchClassName }}">{{ branch | toDisplayName }} ▾</span>
 
           <ul class="branch">
             <template repeat="{{ branch.setup.items as item }}" id="item">
@@ -30,7 +30,7 @@
               <li>
                 <template if="{{ item.items }}">
                   <!-- group -->
-                  <span on-tap="{{activateBranch}}">{{ item | toDisplayName }} ▾</span>
+                  <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
 
                   <ul class="group">
                     <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -43,11 +43,11 @@
                   <template if="{{ !branch.branches[ item.index ] }}">
                     <!-- without nested juicy-tiles -->
 
-                    <span on-tap="{{activateBranch}}">{{ item | toDisplayName }}</span>
+                    <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.index ] }}">
                     <!-- with nested juicy-tiles -->
-                    <span on-tap="{{activateBranch}}">{{ item | toDisplayName }} ▾</span>
+                    <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
 
                     <ul class="group">
                       <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="recursive"></template>
@@ -67,6 +67,7 @@
     (function () {
       Polymer('juicy-tiles-tree', {
         tree: [],
+        highlightedBranches: [],
         /**
          * Converts branch object to a display name string. Can be overloaded
          * @param branch
@@ -82,39 +83,65 @@
         },
         activateBranch: function (ev, index, target) {
           var eventName;
+          var model = target.templateInstance.model;
           if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-            if(target.classList.contains('selected')) {
+            if(this.isBranchHighlighted(model.item)) {
               eventName = 'juicy-tiles-tree-selection-remove';
-              target.classList.remove('selected');
+              this.unhighlightBranch(model.item);
             }
             else {
               eventName = 'juicy-tiles-tree-selection-add';
-              target.classList.add('selected');
+              this.highlightBranch(model.item, true);
             }
           }
           else {
             eventName = 'juicy-tiles-tree-activate';
-            Array.prototype.slice.call(this.shadowRoot.querySelectorAll('.selected')).forEach(function(span){
-              span.classList.remove('selected');
-            });
-            target.classList.add('selected');
+            this.highlightBranch(model.item);
           }
-          var model = target.templateInstance.model;
           var proto = Object.getPrototypeOf(model);
           if(model.branch === proto.branch) { //a branch of a leaf (branch is inherited from prototype)
-            this.fire(eventName, {branch: target.templateInstance.model.item, tiles: target.templateInstance.model.branch.node});
+            this.fire(eventName, {branch: model.item, tiles: model.branch.node});
           }
           else if(model.item === proto.item) { //a nested tiles (item is inherited from prototype)
-            this.fire(eventName, {branch: target.templateInstance.model.branch.setup, tiles: target.templateInstance.model.branch.node});
+            this.fire(eventName, {branch: model.branch.setup, tiles: model.branch.node});
           }
         },
         highlightBranch: function (branch, expand) {
-          //TODO this does not highlight multiselection because recreation of .tree[] rerenders the templates
-          Array.prototype.slice.call(this.shadowRoot.querySelectorAll('span')).forEach(function(span){
-            if(span.templateInstance.model.item === branch) {
-              span.classList.add('selected');
+          if (!expand) {
+            this.highlightedBranches.length = 0;
+          }
+          this.highlightedBranches.push(branch);
+
+          //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
+          Array.prototype.forEach.call(this.$.root.querySelectorAll('span'), function (span) {
+            if (span.templateInstance.model.item === branch) {
+              span.classList.add("selected");
+            }
+            else if (!expand) {
+              span.classList.remove("selected");
             }
           });
+        },
+        unhighlightBranch: function (branch) {
+          this.highlightedBranches.splice(this.highlightedBranches.indexOf(model.item), 1);
+
+          //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
+          Array.prototype.forEach.call(this.$.root.querySelectorAll('span.selected'), function (span) {
+            if (span.templateInstance.model.item === branch) {
+              span.classList.remove("selected");
+            }
+          });
+        },
+        isBranchHighlighted: function (branch) {
+          return this.highlightedBranches.indexOf(branch) > -1;
+        },
+        getBranchClassName: function (branch) {
+          if (this.isBranchHighlighted(branch)) {
+            return "selected";
+          }
+          else {
+            return "";
+          }
         },
         preventTextSelection: function(ev) {
           ev.preventDefault();

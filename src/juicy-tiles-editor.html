@@ -272,11 +272,12 @@
                 var index = this.selectedItems.indexOf(highlightedItem);
                 if(index == -1) {
                   this.selectionAdd(highlightedItem);
+                  this.$.treeView.highlightBranch(highlightedItem, true);
                 }
                 else {
                   this.selectionRemove(highlightedItem);
+                  this.$.treeView.unhighlightBranch(highlightedItem);
                 }
-                this.$.treeView.highlightBranch(highlightedItem, true); //toggles highlight
                 this.$.elementSelected.show(this.selectedElements);
               }
               else if (this.editedItem !== highlightedItem) {
@@ -564,8 +565,6 @@
           }
           // notify observer/two-way-binding/tempalte only once
           this.tree = tree;
-
-          Platform.performMicrotaskCheckpoint(); //this is needed because otherwise juicy-tiles-tree can't perform first highlightBranch
         },
         selectionAdd: function(item) {
           if(item.detail) {  //is tree event
