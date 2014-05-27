@@ -57,7 +57,13 @@
         width: 144px;
         white-space: normal;
       }
-
+      .expandable.innerHTML{
+        width: auto;
+      }
+      .expandable textarea{
+        width: 40em;
+        height: 5em;
+      }
       h4 {
         margin: 0;
         display: inline;
@@ -111,6 +117,16 @@
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
+
+
+        <juicy-popover>
+          <span class="handle">
+            <button>✎ inner HTML</button>
+          </span>
+          <div class="expandable innerHTML">
+            <textarea>{{editedItem.innerHTML}}</textarea>
+          </div>
+        </juicy-popover>
       </template>
 
       <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}" disabled?="{{editedItem.widthAuto}}"></label>
