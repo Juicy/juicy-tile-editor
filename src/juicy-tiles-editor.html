@@ -113,14 +113,15 @@
         </div>
       </template>
 
-      <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}"></label>
-        <button class="editable" on-click="{{widthIncrease}}">Inc</button>
-        <button class="editable" on-click="{{widthDecrease}}">Dec</button>
+      <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}" disabled?="{{editedItem.widthAuto}}"></label>
+        <button class="editable" on-click="{{widthIncrease}}" disabled?="{{editedItem.widthAuto}}">Inc</button>
+        <button class="editable" on-click="{{widthDecrease}}" disabled?="{{editedItem.widthAuto}}">Dec</button>
+        <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.widthAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Height <input class="val" on-blur="{{refresh}}" value="{{editedItem.height}}"></label>
-        <button class="editable" on-click="{{heightIncrease}}">Inc</button>
-        <button class="editable" on-click="{{heightDecrease}}">Dec</button>
-        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{heightAuto}}"> auto</label>
+      <div class="editableGroup"><label>Height <input class="val" on-blur="{{refresh}}" value="{{editedItem.height}}" disabled?="{{editedItem.heightAuto}}"></label>
+        <button class="editable" on-click="{{heightIncrease}}" disabled?="{{editedItem.heightAuto}}">Inc</button>
+        <button class="editable" on-click="{{heightDecrease}}" disabled?="{{editedItem.heightAuto}}">Dec</button>
+        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.heightAuto}}"> auto</label>
       </div>
       <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
         <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
