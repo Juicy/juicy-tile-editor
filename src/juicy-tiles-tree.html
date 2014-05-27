@@ -12,7 +12,7 @@
         cursor: default;
       }
 
-      li span.selected {
+      li span.highlight {
         background-color: blue;
         color: white;
       }
@@ -22,7 +22,7 @@
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
         <li>
-          <span on-tap="{{activateBranch}}" class="{{ branch | getBranchClassName }}">{{ branch | toDisplayName }} ▾</span>
+          <span on-tap="{{tapAction}}" class="{{ branch | getBranchClassName }}">{{ branch | toDisplayName }} ▾</span>
 
           <ul class="branch">
             <template repeat="{{ branch.setup.items as item }}" id="item">
@@ -30,7 +30,7 @@
               <li>
                 <template if="{{ item.items }}">
                   <!-- group -->
-                  <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
+                  <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
 
                   <ul class="group">
                     <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -43,11 +43,11 @@
                   <template if="{{ !branch.branches[ item.index ] }}">
                     <!-- without nested juicy-tiles -->
 
-                    <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }}</span>
+                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.index ] }}">
                     <!-- with nested juicy-tiles -->
-                    <span on-tap="{{activateBranch}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
+                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
 
                     <ul class="group">
                       <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="recursive"></template>
@@ -81,21 +81,21 @@
             return "Unnamed element"
           }
         },
-        activateBranch: function (ev, index, target) {
+        tapAction: function (ev, index, target) {
           var eventName;
           var model = target.templateInstance.model;
           if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
             if(this.isBranchHighlighted(model.item)) {
-              eventName = 'juicy-tiles-tree-selection-remove';
+              eventName = 'juicy-tiles-tree-highlight-remove';
               this.unhighlightBranch(model.item);
             }
             else {
-              eventName = 'juicy-tiles-tree-selection-add';
+              eventName = 'juicy-tiles-tree-highlight-extend';
               this.highlightBranch(model.item, true);
             }
           }
           else {
-            eventName = 'juicy-tiles-tree-activate';
+            eventName = 'juicy-tiles-tree-highlight';
             this.highlightBranch(model.item);
           }
           var proto = Object.getPrototypeOf(model);
@@ -115,10 +115,10 @@
           //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
           Array.prototype.forEach.call(this.$.root.querySelectorAll('span'), function (span) {
             if (span.templateInstance.model.item === branch) {
-              span.classList.add("selected");
+              span.classList.add("highlight");
             }
             else if (!expand) {
-              span.classList.remove("selected");
+              span.classList.remove("highlight");
             }
           });
         },
@@ -126,9 +126,9 @@
           this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
 
           //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
-          Array.prototype.forEach.call(this.$.root.querySelectorAll('span.selected'), function (span) {
+          Array.prototype.forEach.call(this.$.root.querySelectorAll('span.highlight'), function (span) {
             if (span.templateInstance.model.item === branch) {
-              span.classList.remove("selected");
+              span.classList.remove("highlight");
             }
           });
         },
@@ -137,7 +137,7 @@
         },
         getBranchClassName: function (branch) {
           if (this.isBranchHighlighted(branch)) {
-            return "selected";
+            return "highlight";
           }
           else {
             return "";
