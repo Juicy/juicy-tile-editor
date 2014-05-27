@@ -1,74 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html">
-<link rel="import" href="../../juicy-popover/src/juicy-popover.html">
-<link rel="import" href="juicy-color-picker.html">
+<link rel="import" href="juicy-tiles-editor-form.html">
 <link rel="import" href="juicy-tiles-tree.html">
 
 <polymer-element name="juicy-tiles-editor" attributes="selectionMode">
   <template>
     <style>
-      .editablesContainer {
-        display: flex;
-      }
-
-      .editableGroup {
-        flex: 1 1 auto;
-      }
-
-      label {
-        display: inline-block;
-        white-space: nowrap;
-      }
-
-      .val {
-        display: inline-block;
-        width: 40px;
-      }
-
-      .disabled .val {
-        visibility: hidden;
-      }
-
-      .disabled .editable {
-        opacity: 0.5;
-        pointer-events: none;
-      }
-
-      button {
-        min-height: 1.45em;
-        min-width: 1.45em;
-      }
-
-      button.active {
-        box-shadow: inset 0 0 10px #000000;
-      }
-
-      button.color {
-        border: 1px solid #bbb;
-        background: #bbb;
-        padding: 4px 2px;
-      }
-
-      .expandable {
-        background: #fff;
-        border: 1px solid rgba(0, 0, 0, .2);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-        padding: 5px;
-        width: 144px;
-        white-space: normal;
-      }
-      .expandable.innerHTML{
-        width: auto;
-      }
-      .expandable textarea{
-        width: 40em;
-        height: 5em;
-      }
-      h4 {
-        margin: 0;
-        display: inline;
-      }
-
       .sidebar {
         position: fixed;
         top: 150px;
@@ -85,65 +22,8 @@
         margin-left: 10px;
       }
     </style>
-    <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
-      <div class="editableGroup">
-        <button title="Move selected elements to the same group (CTRL+M)" disabled?="{{selectedItems.length < 1}}" on-click="{{moveSelectionToEditedItemContainer}}">⧉ Move to group</button>
-        <button title="Create a new group from selected elements (CTRL+G)" disabled?="{{selectedItems.length < 1}}" on-click="{{newGroupFromSelection}}">⧈ New group</button>
-      </div>
-
-      <template if="{{editedItem.items}}">
-        <div class="editableGroup">
-          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">⧉ Ungroup</button>
-          <button class="editable" on-click="{{changeDirection}}" disabled?="{{!editedItem.container}}">↷Change direction</button>
-        </div>
-
-        <div class="editableGroup">
-          <h4>Container <code>{{editedItem.name}}</code></h4>
-        </div>
-
-        <div class="editableGroup"><label>Background</label>
-          <juicy-popover>
-            <span class="handle">
-              <button class='color' style='background: {{editedItem.background || "transparent"}}'></button>
-            </span>
-            <div class="expandable">
-              <juicy-color-picker value="{{editedItem.background}}" on-juicy-color-picker-value-changed="{{refresh}}"></juicy-color-picker>
-            </div>
-          </juicy-popover>
-        </div>
-
-        <div class="editableGroup">
-          <label>Gap <span class="val">({{editedItem.gap}})</span></label>
-          <button class="editable" on-click="{{gapIncrease}}">Inc</button>
-          <button class="editable" on-click="{{gapDecrease}}">Dec</button>
-        </div>
-
-
-        <juicy-popover>
-          <span class="handle">
-            <button>✎ inner HTML</button>
-          </span>
-          <div class="expandable innerHTML">
-            <textarea on-blur="{{refresh}}" value="{{editedItem.innerHTML}}"></textarea>
-          </div>
-        </juicy-popover>
-      </template>
-
-      <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}" disabled?="{{editedItem.widthAuto}}"></label>
-        <button class="editable" on-click="{{widthIncrease}}" disabled?="{{editedItem.widthAuto}}">Inc</button>
-        <button class="editable" on-click="{{widthDecrease}}" disabled?="{{editedItem.widthAuto}}">Dec</button>
-        <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.widthAuto}}"> auto</label>
-      </div>
-      <div class="editableGroup"><label>Height <input class="val" on-blur="{{refresh}}" value="{{editedItem.height}}" disabled?="{{editedItem.heightAuto}}"></label>
-        <button class="editable" on-click="{{heightIncrease}}" disabled?="{{editedItem.heightAuto}}">Inc</button>
-        <button class="editable" on-click="{{heightDecrease}}" disabled?="{{editedItem.heightAuto}}">Dec</button>
-        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.heightAuto}}"> auto</label>
-      </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
-        <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
-        <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
-      </div>
-    </div>
+    <juicy-tiles-editor-form editedItem="{{editedItem}}" selectedItems="{{selectedItems}}" editedTiles="{{editedTiles}}"
+      on-juicy-tiles-editor-form-tree-changed="{{treeChangedAction}}"></juicy-tiles-editor-form>
 
     <div class="sidebar">
       <h1>Elements</h1>
@@ -159,35 +39,6 @@
   </template>
   <script>
     (function () {
-      function powerIncrease(obj, property) {
-        var power = 1;
-        while (power <= obj[property])
-          power *= 2;
-        obj[property] = power;
-      }
-
-      function powerDecrease(obj, property, minimum) {
-        var power = 1;
-        while (power * 2 < obj[property])
-          power *= 2;
-        if (power < minimum) {
-          power = minimum;
-        }
-        obj[property] = power;
-      }
-
-      /**
-       * Returns true if the element would be selected by the specified selector string; otherwise, returns false.
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/Element.matches
-       */
-      if (!Element.prototype.matches) {
-        Element.prototype.matches =
-          Element.prototype.webkitMatchesSelector ||
-            Element.prototype.mozMatchesSelector ||
-            Element.prototype.msMatchesSelector ||
-            Element.prototype.oMatchesSelector
-      }
-
       /**
        * Returns an array of descendant elements that match the given tag name.
        */
@@ -358,128 +209,6 @@
         toggleSelectionMode: function () {
           this.selectionMode = !this.selectionMode;
         },
-        newGroupFromSelection: function () {
-          if (!this.editedItem) {
-            return;
-          }
-
-          var setup = {
-            priority: this.editedItem.priority,
-            gap: 0,
-            index: this.editedItem.index
-          }
-
-          var model = this.editedTiles;
-          var newContainer = model.createNewContainer(null, this.editedItem.container, setup, true);
-          model.moveToContainer(this.editedItem, newContainer, true);
-          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            model.moveToContainer(this.selectedItems[i], newContainer, true);
-          }
-
-          this.editedItem = newContainer; //change edited item to the new container
-          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
-          this.editedItem.width = dimensions.width;
-          this.editedItem.height = dimensions.height;
-
-          model.packItems(); //rerender
-          this.treeRefresh();
-        },
-        moveSelectionToEditedItemContainer: function () {
-          if (!this.editedItem) {
-            return;
-          }
-
-          var model = this.editedTiles;
-          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            model.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
-          }
-
-          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(this.editedItem.container));
-          this.editedItem.container.width = dimensions.width;
-          this.editedItem.container.height = dimensions.height;
-
-          model.packItems(); //rerender
-          this.treeRefresh();
-        },
-        getContainerChildElements: function (container) {
-        	//FIXME I may not work (tomalec)
-          var model = this.editedTiles;
-          var elements = [];
-          for (var i = 0, ilen = container.items.length; i < ilen; i++) {
-            if (container.items[i].index != void 0) {
-              elements.push(model.elements[container.items[i].index])
-            }
-            else if (container.items[i].name != void 0) {
-              elements.push(model.elements[container.items[i].name])
-            }
-          }
-          return elements;
-        },
-        gapIncrease: function () {
-          this.editedItem.gap++;
-          this.editedTiles.refresh();
-        },
-        gapDecrease: function () {
-          if (this.editedItem.gap >= 1) {
-            this.editedItem.gap--;
-          }
-          this.editedTiles.refresh();
-        },
-        refresh: function () {
-          this.editedTiles.refresh();
-        },
-        widthIncrease: function () {
-          powerIncrease(this.editedItem, "width");
-          this.editedTiles.refresh();
-        },
-        widthDecrease: function () {
-          powerDecrease(this.editedItem, "width");
-          this.editedTiles.refresh();
-        },
-        heightIncrease: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-            this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
-          }
-          powerIncrease(this.editedItem, "height");
-          this.editedTiles.refresh();
-        },
-        heightDecrease: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-            this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
-          }
-          powerDecrease(this.editedItem, "height");
-          this.editedTiles.refresh();
-        },
-        heightAuto: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-          }
-          else { //turn on auto
-            this.editedItem.height = "auto";
-          }
-          this.editedTiles.refresh();
-        },
-        priorityIncrease: function () {
-          this.editedTiles
-            .reprioritizeItem(this.editedItem, true)
-            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
-        },
-        priorityDecrease: function () {
-          this.editedTiles
-            .reprioritizeItem(this.editedItem, false)
-            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
-        },
-        deleteContainer: function () {
-          var container = this.editedItem.container;
-          this.editedTiles.deleteContainer(this.editedItem);
-          this.editedItem = container;
-        },
-        changeDirection: function(){
-          this.editedItem.direction = this.editedItem.direction == "downRight" ? "rightDown" : "downRight";
-          this.editedTiles.refresh();
-        },
         getItemElement: function (item) {
         	//FIXME I may not work (tomalec)
           var model = this.editedTiles;
@@ -496,14 +225,16 @@
           }
         },
         editedItemChanged: function () {
-          var element = this.getItemElement(this.editedItem);
-          this.$.elementEdited.show(element);
-          if (!this.ignoreHightlight) {
-            this.$.treeView.highlightBranch(this.editedItem);
+          if(this.editedItem) {
+            var element = this.getItemElement(this.editedItem);
+            this.$.elementEdited.show(element);
+            if (!this.ignoreHightlight) {
+              this.$.treeView.highlightBranch(this.editedItem);
+            }
+            this.selectedItems.length = 0;
+            this.selectedElements.length = 0;
+            this.ignoreHightlight = false;
           }
-          this.selectedItems.length = 0;
-          this.selectedElements.length = 0;
-          this.ignoreHightlight = false;
         },
         treeHighlightAction: function (ev) {
           this.ignoreHightlight = true;
@@ -517,10 +248,10 @@
         // tree: [
         // 	{
         // 		node: _juicy-tiles_,
-        // 		setup: _PackageSetup_, // redundand consider removal 
+        // 		setup: _PackageSetup_, // redundand consider removal
         // 		branches: [
         // 			_setup.items[?].index_: [
-        // 				_tree_, 
+        // 				_tree_,
         // 				_tree_
         // 			]
         // 		]
@@ -558,7 +289,7 @@
 
             return {
             	node: element,
-            	setup: element.setup, // redundand consider removal 
+            	setup: element.setup, // redundand consider removal
             	branches: branches
             }
           }
@@ -601,6 +332,9 @@
           this.selectedItems.splice(index, 1);
           this.selectedElements.splice(index, 1);
           this.$.elementSelected.show(this.selectedElements);
+        },
+        treeChangedAction: function() {
+          this.treeRefresh();
         }
       });
     })();
