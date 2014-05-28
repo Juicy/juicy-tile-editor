@@ -291,9 +291,9 @@
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         deleteContainer: function () {
-          var container = this.selectedItems[0].container;
-          this.editedTiles.deleteContainer(this.selectedItems[0]);
-          this.selectedItems[0] = container;
+          var deleteElement = this.selectedItems[0];
+          this.selectedItems[0] = deleteElement.container;
+          this.editedTiles.deleteContainer(deleteElement, true); //do not repack after change
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
