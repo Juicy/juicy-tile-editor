@@ -116,6 +116,9 @@
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
+        <div class="editableGroup">
+          <label>Oversize <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{oversize}}"></label>
+        </div>
 
 
         <juicy-popover>
@@ -173,6 +176,7 @@
         height: null,
         heightAuto: null,
         gap: null,
+        oversize: 0,
         priority: null,
         innerHTML: null,
         getSortableElement: function (elem) {
@@ -367,6 +371,9 @@
         gapChanged: function (oldVal, val) {
           this.setCommonValue("gap", val);
         },
+        oversizeChanged: function (oldVal, val) {
+          this.setCommonValue("oversize", val);
+        },
         priorityChanged: function (oldVal, val) {
           this.setCommonValue("priority", val);
         },
@@ -381,6 +388,7 @@
           this.height = this.getCommonValue("height", "");
           this.heightAuto = this.getCommonValue("heightAuto", false);
           this.gap = this.getCommonValue("gap", "");
+          this.oversize = this.getCommonValue("oversize", 0);
           this.priority = this.getCommonValue("priority", "");
           this.innerHTML = this.getCommonValue("innerHTML", "");
           this.isSingleSelection = (this.selectedItems.length == 1);
