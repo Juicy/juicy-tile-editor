@@ -122,7 +122,7 @@
             <button>✎ inner HTML</button>
           </span>
           <div class="expandable innerHTML">
-            <textarea on-blur="{{refresh}}">{{innerHTML}}</textarea>
+            <textarea on-blur="{{refresh}}" value="{{innerHTML}}"></textarea>
           </div>
         </juicy-popover>
       </template>
@@ -173,6 +173,7 @@
         heightAuto: null,
         gap: null,
         priority: null,
+        innerHTML: null,
         getSortableElement: function (elem) {
           while (elem.parentNode) {
             if (elem.parentNode.nodeName == 'JUICY-TILES') {
@@ -343,6 +344,9 @@
         priorityChanged: function (oldVal, val) {
           this.setCommonValue("priority", val);
         },
+        innerHTMLChanged: function (oldVal, val) {
+          this.setCommonValue("innerHTML", val);
+        },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName", "");
           this.background = this.getCommonValue("background", "transparent");
@@ -352,6 +356,7 @@
           this.heightAuto = this.getCommonValue("heightAuto", false);
           this.gap = this.getCommonValue("gap", "");
           this.priority = this.getCommonValue("priority", "");
+          this.innerHTML = this.getCommonValue("innerHTML", "");
           this.isSingleSelection = (this.selectedItems.length == 1);
         }
       });
