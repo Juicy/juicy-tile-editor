@@ -22,7 +22,7 @@
         margin-left: 10px;
       }
     </style>
-    <juicy-tiles-editor-form editedItem="{{editedItem}}" selectedItems="{{selectedItems}}" editedTiles="{{editedTiles}}"
+    <juicy-tiles-editor-form selectedItems="{{selectedItems}}" editedTiles="{{editedTiles}}"
       on-juicy-tiles-editor-form-tree-changed="{{treeChangedAction}}"></juicy-tiles-editor-form>
 
     <div class="sidebar">
@@ -73,7 +73,7 @@
         keyUpListener: null,
         tree: [],
         attached: function () {
-          this.$.elementEdited.show(this.editedItem ? this.editedItem.element : null);
+          this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
           this.$.treeView.toDisplayName = function(branch) {
             if(branch.node) { //juicy-tiles root
@@ -133,26 +133,25 @@
             if (this.highlightedElement) {
               var model = this.highlightedElement.parentNode;
               this.treeRefresh();
-              this.editedTiles = model;
               // ??? cantWe simply use editedElement?
               var highlightedItem = model.items[ model.elements.indexOf(this.highlightedElement) ];
               if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-                //expand group
-                var index = this.selectedItems.indexOf(highlightedItem);
-                if(index == -1) {
-                  this.treeHighlightExtendAction(highlightedItem);
-                  this.$.treeView.highlightBranch(highlightedItem, true);
+                if(this.editedTiles == model) {
+                  //expand group
+                  var index = this.selectedItems.indexOf(highlightedItem);
+                  if(index == -1) {
+                    this.treeHighlightExtendAction(highlightedItem);
+                    this.$.treeView.highlightBranch(highlightedItem, true);
+                  }
+                  else {
+                    this.treeHighlightRemoveAction(highlightedItem);
+                    this.$.treeView.unhighlightBranch(highlightedItem);
+                  }
                 }
-                else {
-                  this.treeHighlightRemoveAction(highlightedItem);
-                  this.$.treeView.unhighlightBranch(highlightedItem);
-                }
-                this.$.elementSelected.show(this.selectedElements);
               }
-              else if (this.editedItem !== highlightedItem) {
-                this.$.elementSelected.hide();
-                this.editedItem = highlightedItem;
-                this.highlightedElement = null;
+              else {
+                this.treeHighlightAction(highlightedItem, model);
+                this.$.treeView.highlightBranch(highlightedItem);
               }
               ev.preventDefault();
               ev.stopImmediatePropagation();
@@ -224,22 +223,18 @@
             return model.elements[item.index];
           }
         },
-        editedItemChanged: function () {
-          if(this.editedItem) {
-            var element = this.getItemElement(this.editedItem);
-            this.$.elementEdited.show(element);
-            if (!this.ignoreHightlight) {
-              this.$.treeView.highlightBranch(this.editedItem);
-            }
-            this.selectedItems.length = 0;
-            this.selectedElements.length = 0;
-            this.ignoreHightlight = false;
+        treeHighlightAction: function (item, tiles) {
+          if(item.detail) {  //is tree event
+            tiles = item.detail.tiles;
+            item = item.detail.branch;
           }
-        },
-        treeHighlightAction: function (ev) {
-          this.ignoreHightlight = true;
-          this.editedTiles = ev.detail.tiles;
-          this.editedItem = ev.detail.branch;
+          this.editedTiles = tiles;
+          var element = this.getItemElement(item);
+          this.$.elementEdited.show(element);
+          this.selectedItems.length = 0;
+          this.selectedItems.push(item);
+          this.selectedElements.length = 0;
+          this.selectedElements.push(element);
         },
         /**
          * [treeRefresh description]

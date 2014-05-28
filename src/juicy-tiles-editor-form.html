@@ -2,7 +2,7 @@
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
 
-<polymer-element name="juicy-tiles-editor-form" attributes="editedItem selectedItems editedTiles">
+<polymer-element name="juicy-tiles-editor-form" attributes="selectedItems editedTiles">
   <template>
     <style>
       .editablesContainer {
@@ -83,35 +83,35 @@
         margin-left: 10px;
       }
     </style>
-    <div class="{{ {editablesContainer: true, disabled: !editedItem} | tokenList }}">
+    <div class="{{ {editablesContainer: true, disabled: !selectedItems.length} | tokenList }}">
       <div class="editableGroup">
         <button title="Move selected elements to the same group (CTRL+M)" disabled?="{{selectedItems.length < 1}}" on-click="{{moveSelectionToEditedItemContainer}}">⧉ Move to group</button>
         <button title="Create a new group from selected elements (CTRL+G)" disabled?="{{selectedItems.length < 1}}" on-click="{{newGroupFromSelection}}">⧈ New group</button>
       </div>
 
-      <template if="{{editedItem.items}}">
+      <template if="{{selectedItems.0.items}}">
         <div class="editableGroup">
-          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!editedItem.container}}">⧉ Ungroup</button>
-          <button class="editable" on-click="{{changeDirection}}" disabled?="{{!editedItem.container}}">↷Change direction</button>
+          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!isChildContainer}}">⧉ Ungroup</button>
+          <button class="editable" on-click="{{changeDirection}}" disabled?="{{!isChildContainer}}">↷Change direction</button>
         </div>
 
         <div class="editableGroup">
-          <h4>Container <code>{{editedItem.name}}</code></h4>
+          <h4>Container <code>{{itemName}}</code></h4>
         </div>
 
         <div class="editableGroup"><label>Background</label>
           <juicy-popover>
             <span class="handle">
-              <button class='color' style='background: {{editedItem.background || "transparent"}}'></button>
+              <button class='color' style='background: {{background}}'></button>
             </span>
             <div class="expandable">
-              <juicy-color-picker value="{{editedItem.background}}" on-juicy-color-picker-value-changed="{{refresh}}"></juicy-color-picker>
+              <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{refresh}}"></juicy-color-picker>
             </div>
           </juicy-popover>
         </div>
 
         <div class="editableGroup">
-          <label>Gap <span class="val">({{editedItem.gap}})</span></label>
+          <label>Gap <span class="val">({{gap}})</span></label>
           <button class="editable" on-click="{{gapIncrease}}">Inc</button>
           <button class="editable" on-click="{{gapDecrease}}">Dec</button>
         </div>
@@ -122,24 +122,24 @@
             <button>✎ inner HTML</button>
           </span>
           <div class="expandable innerHTML">
-            <textarea>{{editedItem.innerHTML}}</textarea>
+            <textarea>{{innerHTML}}</textarea>
           </div>
         </juicy-popover>
       </template>
 
-      <div class="editableGroup"><label>Width <input class="val" on-blur="{{refresh}}" value="{{editedItem.width}}" disabled?="{{editedItem.widthAuto}}"></label>
-        <button class="editable" on-click="{{widthIncrease}}" disabled?="{{editedItem.widthAuto}}">Inc</button>
-        <button class="editable" on-click="{{widthDecrease}}" disabled?="{{editedItem.widthAuto}}">Dec</button>
-        <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.widthAuto}}"> auto</label>
+      <div class="editableGroup"><label>Width <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{width}}" disabled?="{{widthAuto}}"></label>
+        <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">Inc</button>
+        <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">Dec</button>
+        <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{widthAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Height <input class="val" on-blur="{{refresh}}" value="{{editedItem.height}}" disabled?="{{editedItem.heightAuto}}"></label>
-        <button class="editable" on-click="{{heightIncrease}}" disabled?="{{editedItem.heightAuto}}">Inc</button>
-        <button class="editable" on-click="{{heightDecrease}}" disabled?="{{editedItem.heightAuto}}">Dec</button>
-        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{editedItem.heightAuto}}"> auto</label>
+      <div class="editableGroup"><label>Height <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{height}}" disabled?="{{heightAuto}}"></label>
+        <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">Inc</button>
+        <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">Dec</button>
+        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{heightAuto}}"> auto</label>
       </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{editedItem.priority}})</span></label>
-        <button class="editable" on-click="{{priorityIncrease}}">Inc</button>
-        <button class="editable" on-click="{{priorityDecrease}}">Dec</button>
+      <div class="editableGroup"><label>Priority <span class="val">({{priority}})</span></label>
+        <button class="editable" on-click="{{priorityIncrease}}" disabled?="{{!isSingleSelection}}">Inc</button>
+        <button class="editable" on-click="{{priorityDecrease}}" disabled?="{{!isSingleSelection}}">Dec</button>
       </div>
     </div>
   </template>
@@ -163,8 +163,16 @@
       }
 
       Polymer('juicy-tiles-editor-form', {
-        editedItem: null,
+        selectedItems: [],
         editedTiles: null,
+        itemName: null,
+        background: null,
+        width: null,
+        widthAuto: null,
+        height: null,
+        heightAuto: null,
+        gap: null,
+        priority: null,
         getSortableElement: function (elem) {
           while (elem.parentNode) {
             if (elem.parentNode.nodeName == 'JUICY-TILES') {
@@ -174,44 +182,47 @@
           }
         },
         newGroupFromSelection: function () {
-          if (!this.editedItem) {
+          if (!this.selectedItems.length > 1) {
             return;
           }
 
+          var current = this.selectedItems[0];
           var setup = {
-            priority: this.editedItem.priority,
+            priority: current.priority,
             gap: 0,
-            index: this.editedItem.index
+            index: current.index
           }
 
           var model = this.editedTiles;
-          var newContainer = model.createNewContainer(null, this.editedItem.container, setup, true);
-          model.moveToContainer(this.editedItem, newContainer, true);
+          var newContainer = model.createNewContainer(null, current.container, setup, true);
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
             model.moveToContainer(this.selectedItems[i], newContainer, true);
           }
 
-          this.editedItem = newContainer; //change edited item to the new container
+          this.selectedItems.length = 0; //change edited item to the new container
+          this.selectedItems.push(newContainer);
+
           var dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
-          this.editedItem.width = dimensions.width;
-          this.editedItem.height = dimensions.height;
+          newContainer.width = dimensions.width;
+          newContainer.height = dimensions.height;
 
           model.packItems(); //rerender
           this.fire('juicy-tiles-editor-form-tree-changed');
         },
         moveSelectionToEditedItemContainer: function () {
-          if (!this.editedItem) {
+          if (!this.selectedItems.length > 1) {
             return;
           }
 
+          var current = this.selectedItems[0];
           var model = this.editedTiles;
-          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            model.moveToContainer(this.selectedItems[i], this.editedItem.container, true);
+          for (var i = 1, ilen = this.selectedItems.length; i < ilen; i++) {
+            model.moveToContainer(this.selectedItems[i], current.container, true);
           }
 
-          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(this.editedItem.container));
-          this.editedItem.container.width = dimensions.width;
-          this.editedItem.container.height = dimensions.height;
+          var dimensions = model.getMinimumDimensions(this.getContainerChildElements(current.container));
+          this.selectedItems[0].container.width = dimensions.width;
+          this.selectedItems[0].container.height = dimensions.height;
 
           model.packItems(); //rerender
           this.fire('juicy-tiles-editor-form-tree-changed');
@@ -231,69 +242,117 @@
           return elements;
         },
         gapIncrease: function () {
-          this.editedItem.gap++;
-          this.editedTiles.refresh();
+          this.gap++;
+          this.refresh();
         },
         gapDecrease: function () {
-          if (this.editedItem.gap >= 1) {
-            this.editedItem.gap--;
+          if (this.gap >= 1) {
+            this.gap--;
           }
-          this.editedTiles.refresh();
+          this.refresh();
         },
         refresh: function () {
           this.editedTiles.refresh();
         },
         widthIncrease: function () {
-          powerIncrease(this.editedItem, "width");
-          this.editedTiles.refresh();
+          powerIncrease(this, "width");
+          this.refresh();
         },
         widthDecrease: function () {
-          powerDecrease(this.editedItem, "width");
-          this.editedTiles.refresh();
+          powerDecrease(this, "width");
+          this.refresh();
         },
         heightIncrease: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-            this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
+          if (this.height == 'auto') { //turn off auto
+            this.height = 32;
+            this.heightAuto = false;
           }
-          powerIncrease(this.editedItem, "height");
-          this.editedTiles.refresh();
+          powerIncrease(this, "height");
+          this.refresh();
         },
         heightDecrease: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-            this.shadowRoot.querySelector("#heightAutoCheckbox").checked = false;
+          if (this.height == 'auto') { //turn off auto
+            this.height = 32;
+            this.heightAuto = false;
           }
-          powerDecrease(this.editedItem, "height");
-          this.editedTiles.refresh();
-        },
-        heightAuto: function () {
-          if (this.editedItem.height == 'auto') { //turn off auto
-            this.editedItem.height = 32;
-          }
-          else { //turn on auto
-            this.editedItem.height = "auto";
-          }
-          this.editedTiles.refresh();
+          powerDecrease(this, "height");
+          this.refresh();
         },
         priorityIncrease: function () {
           this.editedTiles
-            .reprioritizeItem(this.editedItem, true)
+            .reprioritizeItem(this.selectedItems[0], true)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         priorityDecrease: function () {
           this.editedTiles
-            .reprioritizeItem(this.editedItem, false)
+            .reprioritizeItem(this.selectedItems[0], false)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
         },
         deleteContainer: function () {
-          var container = this.editedItem.container;
-          this.editedTiles.deleteContainer(this.editedItem);
-          this.editedItem = container;
+          var container = this.selectedItems[0].container;
+          this.editedTiles.deleteContainer(this.selectedItems[0]);
+          this.selectedItems[0] = container;
         },
         changeDirection: function(){
-          this.editedItem.direction = this.editedItem.direction == "downRight" ? "rightDown" : "downRight";
+          this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
           this.editedTiles.refresh();
+        },
+        isChildContainer: function() {
+          return !!this.selectedItems[0].container;
+        },
+        getCommonValue: function (propName, devaultVal) {
+          if (this.selectedItems.length) {
+            var val = this.selectedItems[0][propName];
+            for (var i = 1, ilen = this.selectedItems.length; i < ilen; i++) {
+              if (this.selectedItems[i][propName] !== val) {
+                return ""; //shows "multiple" in placeholder
+              }
+            }
+            return val;
+          }
+          return devaultVal;
+        },
+        setCommonValue: function (propName, val) {
+          if (val !== "" && this.selectedItems.length) {
+            for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+              this.selectedItems[i][propName] = val;
+            }
+            this.refresh();
+          }
+        },
+        backgroundChanged: function (oldVal, val) {
+          this.setCommonValue("background", val);
+        },
+        widthChanged: function (oldVal, val) {
+          this.setCommonValue("widthAuto", false);
+          this.setCommonValue("width", val);
+        },
+        widthAutoChanged: function (oldVal, val) {
+          this.setCommonValue("widthAuto", val);
+        },
+        heightChanged: function (oldVal, val) {
+          this.setCommonValue("heightAuto", false);
+          this.setCommonValue("height", val);
+        },
+        heightAutoChanged: function (oldVal, val) {
+          this.setCommonValue("heightAuto", val);
+        },
+        gapChanged: function (oldVal, val) {
+          this.setCommonValue("gap", val);
+        },
+        priorityChanged: function (oldVal, val) {
+          this.setCommonValue("priority", val);
+        },
+        selectedItemsChanged: function () {
+          this.itemName = this.getCommonValue("itemName", "");
+          this.background = this.getCommonValue("background", "transparent");
+          this.width = this.getCommonValue("width", "");
+          this.widthAuto = this.getCommonValue("widthAuto", false);
+          this.height = this.getCommonValue("height", "");
+          this.heightAuto = this.getCommonValue("heightAuto", false);
+          this.gap = this.getCommonValue("gap", "");
+          this.priority = this.getCommonValue("priority", "");
+          this.isSingleSelection = (this.selectedItems.length == 1);
         }
       });
     })();
