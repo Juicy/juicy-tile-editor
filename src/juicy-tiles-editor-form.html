@@ -89,10 +89,11 @@
         <button title="Create a new group from selected elements (CTRL+G)" disabled?="{{selectedItems.length < 1}}" on-click="{{newGroupFromSelection}}">⧈ New group</button>
       </div>
 
-      <template if="{{selectedItems.0.items}}">
+      <template if="{{isContainer}}">
         <div class="editableGroup">
           <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!isChildContainer}}">⧉ Ungroup</button>
           <button class="editable" on-click="{{changeDirection}}" disabled?="{{!isChildContainer}}">↷Change direction</button>
+          <button class="editable" on-click="{{stackItems}}">⇟ Stack items</button>
         </div>
 
         <div class="editableGroup">
@@ -298,8 +299,33 @@
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
           this.editedTiles.refresh();
         },
-        isChildContainer: function() {
-          return !!this.selectedItems[0].container;
+        stackItems: function () {
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            if (this.selectedItems[i].items) {
+              this.selectedItems[i].direction = "downRight";
+              this.selectedItems[i].heightAuto = true;
+              for (var j = 0, jlen = this.selectedItems[i].items.length; j < jlen; j++) {
+                this.selectedItems[i].items[j].width = "100%";
+              }
+            }
+          }
+          this.refresh();
+        },
+        isContainerInSelection: function() {
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            if (this.selectedItems[i].items) {
+              return true;
+            }
+          }
+          return false;
+        },
+        isChildContainerInSelection: function() {
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            if (this.selectedItems[i].container) {
+              return true;
+            }
+          }
+          return false;
         },
         getCommonValue: function (propName, devaultVal) {
           if (this.selectedItems.length) {
@@ -358,6 +384,8 @@
           this.priority = this.getCommonValue("priority", "");
           this.innerHTML = this.getCommonValue("innerHTML", "");
           this.isSingleSelection = (this.selectedItems.length == 1);
+          this.isContainer = this.isContainerInSelection();
+          this.isChildContainer = this.isChildContainerInSelection();
         }
       });
     })();
