@@ -124,7 +124,7 @@
             <button>✎ inner HTML</button>
           </span>
           <div class="expandable innerHTML">
-            <textarea>{{editedItem.innerHTML}}</textarea>
+            <textarea on-blur="{{refresh}}" value="{{editedItem.innerHTML}}"></textarea>
           </div>
         </juicy-popover>
       </template>
