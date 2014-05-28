@@ -84,8 +84,9 @@
         tapAction: function (ev, index, target) {
           var eventName;
           var model = target.templateInstance.model;
-          if(ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-            if(this.isBranchHighlighted(model.item)) {
+          var isNestedTiles = this.isNestedTilesLabel(target);
+          if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
+            if (this.isBranchHighlighted(model.item)) {
               eventName = 'juicy-tiles-tree-highlight-remove';
               this.unhighlightBranch(model.item);
             }
@@ -96,15 +97,28 @@
           }
           else {
             eventName = 'juicy-tiles-tree-highlight';
-            this.highlightBranch(model.item);
+            if (isNestedTiles) {
+              this.highlightBranch(model.branch.setup);
+            }
+            else {
+              this.highlightBranch(model.item);
+            }
           }
-          var proto = Object.getPrototypeOf(model);
-          if(model.branch === proto.branch) { //a branch of a leaf (branch is inherited from prototype)
-            this.fire(eventName, {branch: model.item, tiles: model.branch.node});
-          }
-          else if(model.item === proto.item) { //a nested tiles (item is inherited from prototype)
+          if (isNestedTiles) {
             this.fire(eventName, {branch: model.branch.setup, tiles: model.branch.node});
           }
+          else {
+            this.fire(eventName, {branch: model.item, tiles: model.branch.node});
+          }
+        },
+        isNestedTilesLabel: function(elem) {
+          var model = elem.templateInstance.model;
+          var proto = Object.getPrototypeOf(model);
+
+          if (model.item === proto.item) { //a nested tiles (item is inherited from prototype)
+            return true;
+          }
+          return false; //a branch of a leaf (branch is inherited from prototype)
         },
         highlightBranch: function (branch, expand) {
           if (!expand) {
@@ -114,13 +128,17 @@
 
           //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
           Array.prototype.forEach.call(this.$.root.querySelectorAll('span'), function (span) {
-            if (span.templateInstance.model.item === branch) {
+            var isNestedTiles = this.isNestedTilesLabel(span);
+            if (isNestedTiles && span.templateInstance.model.branch.setup == branch) {
               span.classList.add("highlight");
             }
-            else if (!expand) {
+            else if (!isNestedTiles && span.templateInstance.model.item == branch) {
+              span.classList.add("highlight");
+            }
+            else {
               span.classList.remove("highlight");
             }
-          });
+          }.bind(this));
         },
         unhighlightBranch: function (branch) {
           this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
