@@ -135,7 +135,7 @@
             else if (!isNestedTiles && span.templateInstance.model.item == branch) {
               span.classList.add("highlight");
             }
-            else {
+            else if (!expand) {
               span.classList.remove("highlight");
             }
           }.bind(this));
