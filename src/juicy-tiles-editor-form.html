@@ -11,6 +11,7 @@
 
       .editableGroup {
         flex: 1 1 auto;
+        display: flex;
       }
 
       label {
@@ -20,31 +21,43 @@
 
       .val {
         display: inline-block;
-        width: 40px;
+        width: 50px;
       }
 
-      .disabled .val {
-        visibility: hidden;
-      }
-
-      .disabled .editable {
-        opacity: 0.5;
+      .toolbar-item[disabled] {
+        opacity: 0.25;
         pointer-events: none;
       }
 
       button {
         min-height: 1.45em;
         min-width: 1.45em;
+        display: inline-block;
+        padding: 0;
+        vertical-align: top;
+        line-height: 1;
+        font-size: 14px;
+        color: #243140;
+        text-align: center;
+        text-shadow: 0 1px rgba(255,255,255,0.2);
+        background: #e5e7ed;
+        border: 0;
+        border-radius: 2px;
+        cursor: pointer;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
       }
 
-      button.active {
-        box-shadow: inset 0 0 10px #000000;
+      button:hover {
+        color: #243140;
+        background: #dcdfe7;
       }
 
-      button.color {
-        border: 1px solid #bbb;
-        background: #bbb;
-        padding: 4px 2px;
+      button:active,
+      .expanded button.handle {
+        color: #1d2938;
+        background: #cdd1dc;
       }
 
       .expandable {
@@ -52,19 +65,62 @@
         border: 1px solid rgba(0, 0, 0, .2);
         box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
         padding: 5px;
-        width: 144px;
+        max-width: 144px;
         white-space: normal;
       }
       .expandable.innerHTML{
         width: auto;
+        max-width: none;
       }
+
       .expandable textarea{
         width: 40em;
         height: 5em;
       }
+
       h4 {
         margin: 0;
         display: inline;
+      }
+
+      .toolbar-item {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+      }
+
+      .toolbar-button {
+        height: 20px;
+        display: inline-block;
+        white-space: nowrap;
+        box-sizing: border-box;
+      }
+
+      .toolbar-button * {
+        height: 20px;
+        box-sizing: border-box;
+      }
+
+      .toolbar-button input{
+        background-color: transparent;
+      }
+
+      .toolbar-button input{
+        border: 1px solid #333;
+      }
+
+      .toolbar-button button{
+        margin: 0 0 0 -1px;
+      }
+
+      .toolbar-button-background {
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .toolbar-label {
+        font-size: 10px;
+        text-align: center;
       }
 
       .sidebar {
@@ -83,67 +139,115 @@
         margin-left: 10px;
       }
     </style>
-    <div class="{{ {editablesContainer: true, disabled: !selectedItems.length} | tokenList }}">
+    <div class="editablesContainer">
       <div class="editableGroup">
-        <button title="Move selected elements to the same group (CTRL+M)" disabled?="{{selectedItems.length < 1}}" on-click="{{moveSelectionToEditedItemContainer}}">⧉ Move to group</button>
-        <button title="Create a new group from selected elements (CTRL+G)" disabled?="{{selectedItems.length < 1}}" on-click="{{newGroupFromSelection}}">⧈ New group</button>
-      </div>
+        <h4>Container</h4>
 
-      <template if="{{isContainer}}">
-        <div class="editableGroup">
-          <button class="editable" on-click="{{deleteContainer}}" disabled?="{{!isChildContainer}}">⧉ Ungroup</button>
-          <button class="editable" on-click="{{changeDirection}}" disabled?="{{!isChildContainer}}">↷Change direction</button>
-          <button class="editable" on-click="{{stackItems}}">⇟ Stack items</button>
+        <div class="toolbar-item" disabled?="{{!isContainer && !isRoot}}">
+          <button class="toolbar-button" on-click="{{deleteContainer}}">⧉</button>
+          <label class="toolbar-label">Ungroup</label>
         </div>
 
-        <div class="editableGroup">
-          <h4>Container <code>{{itemName}}</code></h4>
+        <div class="toolbar-item" disabled?="{{!isContainer}}">
+          <button class="toolbar-button" on-click="{{changeDirection}}">↷</button>
+          <label class="toolbar-label">Direction</label>
         </div>
 
-        <div class="editableGroup"><label>Background</label>
+        <div class="toolbar-item" disabled?="{{!isContainer}}">
+          <button class="toolbar-button" on-click="{{stackItems}}">⇟</button>
+          <label class="toolbar-label">Stack</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
           <juicy-popover>
-            <span class="handle">
-              <button class='color' style='background: {{background}}'></button>
-            </span>
+            <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
             <div class="expandable">
               <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{refresh}}"></juicy-color-picker>
             </div>
           </juicy-popover>
+          <label class="toolbar-label">Background</label>
         </div>
 
-        <div class="editableGroup">
-          <label>Gap <span class="val">({{gap}})</span></label>
-          <button class="editable" on-click="{{gapIncrease}}">Inc</button>
-          <button class="editable" on-click="{{gapDecrease}}">Dec</button>
+        <div class="toolbar-item" disabled?="{{!isContainer}}">
+          <juicy-popover>
+            <input class="handle toolbar-button val" placeholder="multiple" on-blur="{{refresh}}" value="{{gap}}">
+            <div class="expandable">
+              <button class="editable" on-click="{{gapIncrease}}">+</button>
+              <button class="editable" on-click="{{gapDecrease}}">-</button>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Gap</label>
         </div>
-        <div class="editableGroup">
-          <label>Oversize <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{oversize}}"></label>
+
+        <div class="toolbar-item" disabled?="{{!isContainer}}">
+          <juicy-popover>
+            <input class="handle toolbar-button val" placeholder="multiple" on-blur="{{refresh}}" value="{{oversize}}">
+            <div class="expandable">
+              <button class="editable" on-click="{{oversizeIncrease}}">+</button>
+              <button class="editable" on-click="{{oversizeDecrease}}">-</button>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Oversize</label>
         </div>
 
-
-        <juicy-popover>
-          <span class="handle">
-            <button>✎ inner HTML</button>
-          </span>
-          <div class="expandable innerHTML">
-            <textarea on-blur="{{refresh}}" value="{{innerHTML}}"></textarea>
-          </div>
-        </juicy-popover>
-      </template>
-
-      <div class="editableGroup"><label>Width <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{width}}" disabled?="{{widthAuto}}"></label>
-        <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">Inc</button>
-        <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">Dec</button>
-        <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{widthAuto}}"> auto</label>
+        <div class="toolbar-item" disabled?="{{!isSingleSelection}}">
+          <juicy-popover>
+            <button class="handle toolbar-button">✎</button>
+            <div class="expandable innerHTML">
+              <textarea on-blur="{{refresh}}" value="{{innerHTML}}"></textarea>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Inner HTML</label>
+        </div>
       </div>
-      <div class="editableGroup"><label>Height <input placeholder="multiple" class="val" on-blur="{{refresh}}" value="{{height}}" disabled?="{{heightAuto}}"></label>
-        <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">Inc</button>
-        <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">Dec</button>
-        <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{heightAuto}}"> auto</label>
-      </div>
-      <div class="editableGroup"><label>Priority <span class="val">({{priority}})</span></label>
-        <button class="editable" on-click="{{priorityIncrease}}" disabled?="{{!isSingleSelection}}">Inc</button>
-        <button class="editable" on-click="{{priorityDecrease}}" disabled?="{{!isSingleSelection}}">Dec</button>
+
+      <div class="editableGroup">
+        <h4>Selection</h4>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
+          <button class="toolbar-button" title="Move selected elements to the same group (CTRL+M)" on-click="{{moveSelectionToEditedItemContainer}}">⧉</button>
+          <label class="toolbar-label">Move to group</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
+          <button class="toolbar-button" title="Create a new group from selected elements (CTRL+G)" on-click="{{newGroupFromSelection}}">⧈</button>
+          <label class="toolbar-label">New group</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
+          <juicy-popover>
+            <input placeholder="multiple" class="handle toolbar-button val" on-blur="{{refresh}}" value="{{width}}" disabled?="{{widthAuto}}">
+            <div class="expandable">
+              <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
+              <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
+              <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{widthAuto}}"> auto</label>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Width</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
+          <juicy-popover>
+            <input placeholder="multiple" class="handle toolbar-button val" on-blur="{{refresh}}" value="{{height}}" disabled?="{{heightAuto}}">
+            <div class="expandable">
+              <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
+              <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
+              <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{heightAuto}}"> auto</label>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Height</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!isSingleSelection}}">
+          <juicy-popover>
+            <input class="handle toolbar-button val" value="{{priority}}" disabled>
+            <div class="expandable">
+              <button class="editable" on-click="{{priorityIncrease}}" disabled?="{{!isSingleSelection}}">+</button>
+              <button class="editable" on-click="{{priorityDecrease}}" disabled?="{{!isSingleSelection}}">-</button>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Priority</label>
+        </div>
       </div>
     </div>
   </template>
@@ -167,6 +271,8 @@
       }
 
       Polymer('juicy-tiles-editor-form', {
+        isSelection: false,
+        isSingleSelection: false,
         selectedItems: [],
         editedTiles: null,
         itemName: null,
@@ -257,8 +363,23 @@
           }
           this.refresh();
         },
+        oversizeIncrease: function () {
+          if (this.oversize >= 1) {
+            this.oversize++;
+          }
+          else{
+            this.oversize = 1;
+          }
+          this.refresh();
+        },
+        oversizeDecrease: function () {
+          if (this.oversize >= 1) {
+            this.oversize--;
+          }
+          this.refresh();
+        },
         refresh: function () {
-          this.editedTiles.refresh();
+          this.editedTiles && this.editedTiles.refresh();
         },
         widthIncrease: function () {
           powerIncrease(this, "width");
@@ -285,14 +406,24 @@
           this.refresh();
         },
         priorityIncrease: function () {
+          if (!this.selectedItems.length == 1) {
+            return;
+          }
+
           this.editedTiles
             .reprioritizeItem(this.selectedItems[0], true)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
+          this.priority = this.selectedItems[0].priority;
         },
         priorityDecrease: function () {
+          if (!this.selectedItems.length == 1) {
+            return;
+          }
+
           this.editedTiles
             .reprioritizeItem(this.selectedItems[0], false)
             .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
+          this.priority = this.selectedItems[0].priority;
         },
         deleteContainer: function () {
           var deleteElement = this.selectedItems[0];
@@ -301,7 +432,7 @@
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
-          this.editedTiles.refresh();
+          this.refresh();
         },
         stackItems: function () {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -323,9 +454,9 @@
           }
           return false;
         },
-        isChildContainerInSelection: function() {
+        isRootInSelection: function() {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-            if (this.selectedItems[i].container) {
+            if (!this.selectedItems[i].container) {
               return true;
             }
           }
@@ -374,9 +505,6 @@
         oversizeChanged: function (oldVal, val) {
           this.setCommonValue("oversize", val);
         },
-        priorityChanged: function (oldVal, val) {
-          this.setCommonValue("priority", val);
-        },
         innerHTMLChanged: function (oldVal, val) {
           this.setCommonValue("innerHTML", val);
         },
@@ -391,9 +519,10 @@
           this.oversize = this.getCommonValue("oversize", 0);
           this.priority = this.getCommonValue("priority", "");
           this.innerHTML = this.getCommonValue("innerHTML", "");
+          this.isSelection = (this.selectedItems.length > 0);
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
-          this.isChildContainer = this.isChildContainerInSelection();
+          this.isRoot = this.isRootInSelection();
         }
       });
     })();
