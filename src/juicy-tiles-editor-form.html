@@ -462,7 +462,7 @@
           }
           return false;
         },
-        getCommonValue: function (propName, devaultVal) {
+        getCommonValue: function (propName) {
           if (this.selectedItems.length) {
             var val = this.selectedItems[0][propName];
             for (var i = 1, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -472,7 +472,6 @@
             }
             return val;
           }
-          return devaultVal;
         },
         setCommonValue: function (propName, val) {
           if (val !== "" && this.selectedItems.length) {
@@ -509,20 +508,29 @@
           this.setCommonValue("innerHTML", val);
         },
         selectedItemsChanged: function () {
-          this.itemName = this.getCommonValue("itemName", "");
-          this.background = this.getCommonValue("background", "transparent");
-          this.width = this.getCommonValue("width", "");
-          this.widthAuto = this.getCommonValue("widthAuto", false);
-          this.height = this.getCommonValue("height", "");
-          this.heightAuto = this.getCommonValue("heightAuto", false);
-          this.gap = this.getCommonValue("gap", "");
-          this.oversize = this.getCommonValue("oversize", 0);
-          this.priority = this.getCommonValue("priority", "");
-          this.innerHTML = this.getCommonValue("innerHTML", "");
+          this.itemName = this.getCommonValue("itemName");
+          this.background = this.getCommonValue("background");
+          this.width = this.getCommonValue("width");
+          this.widthAuto = this.getCommonValue("widthAuto");
+          this.height = this.getCommonValue("height");
+          this.heightAuto = this.getCommonValue("heightAuto");
+          this.gap = this.getCommonValue("gap");
+          this.oversize = this.getCommonValue("oversize");
+          this.priority = this.getCommonValue("priority");
+          this.innerHTML = this.getCommonValue("innerHTML");
           this.isSelection = (this.selectedItems.length > 0);
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
           this.isRoot = this.isRootInSelection();
+
+          Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
+            if (this.isSelection && !this.isSingleSelection) {
+              input.setAttribute('placeholder', 'multiple'); //display "multiple" text when getCommonValue returns empty string
+            }
+            else {
+              input.setAttribute('placeholder', '');
+            }
+          }.bind(this));
         }
       });
     })();
