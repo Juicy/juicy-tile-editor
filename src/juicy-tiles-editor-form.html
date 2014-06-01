@@ -518,7 +518,7 @@
           this.gap = this.getCommonValue("gap");
           this.oversize = this.getCommonValue("oversize");
           this.priority = this.getCommonValue("priority");
-          this.innerHTML = this.getCommonValue("innerHTML");
+          this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
           this.isSelection = (this.selectedItems.length > 0);
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
