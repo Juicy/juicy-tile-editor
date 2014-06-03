@@ -23,6 +23,7 @@
       }
     </style>
     <juicy-tiles-editor-form selectedItems="{{selectedItems}}" editedTiles="{{editedTiles}}"
+      on-juicy-tiles-editor-revert="{{revertAction}}"
       on-juicy-tiles-editor-form-tree-changed="{{treeChangedAction}}"></juicy-tiles-editor-form>
 
     <div class="sidebar">
@@ -222,6 +223,12 @@
           else {
             return model.elements[item.index];
           }
+        },
+        revertAction: function() {
+          this.selectedItems.length = 0; //TODO solve this better (put changes on a stack?). Currently I need to clear selection because `this.editedTiles.loadFromStorage()` recreates `setup`, which results in `this.selectedItems` pointing to objects that are not referenced anymore [Marcin]
+          this.$.elementEdited.show();
+          this.$.elementRollover.hide();
+          this.$.elementSelected.hide();
         },
         treeHighlightAction: function (item, tiles) {
           if(item.detail) {  //is tree event

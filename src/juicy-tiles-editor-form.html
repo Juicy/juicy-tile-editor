@@ -140,7 +140,19 @@
         margin-left: 10px;
       }
     </style>
-    <div class="editablesContainer">
+    <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
+      <div class="editableGroup">
+        <div class="toolbar-item" disabled?="{{!modified}}">
+          <button class="toolbar-button" on-click="{{saveChanges}}">✓</button>
+          <label class="toolbar-label">Save</label>
+        </div>
+
+        <div class="toolbar-item" disabled?="{{!modified}}">
+          <button class="toolbar-button" on-click="{{revertChanges}}">✗</button>
+          <label class="toolbar-label">Revert</label>
+        </div>
+      </div>
+
       <div class="editableGroup">
         <h4>Container</h4>
 
@@ -159,19 +171,19 @@
           <label class="toolbar-label">Stack</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isSelection}}">
+        <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="background">
           <juicy-popover>
             <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
             <div class="expandable">
-              <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{refresh}}"></juicy-color-picker>
+              <juicy-color-picker value="{{background}}"></juicy-color-picker>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Background</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isContainer}}">
+        <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="gap">
           <juicy-popover>
-            <input class="handle toolbar-button val" placeholder="multiple" on-blur="{{refresh}}" value="{{gap}}">
+            <input class="handle toolbar-button val" placeholder="multiple" value="{{gap}}">
             <div class="expandable">
               <button class="editable" on-click="{{gapIncrease}}">+</button>
               <button class="editable" on-click="{{gapDecrease}}">-</button>
@@ -180,9 +192,9 @@
           <label class="toolbar-label">Gap</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isContainer}}">
+        <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="oversize">
           <juicy-popover>
-            <input class="handle toolbar-button val" placeholder="multiple" on-blur="{{refresh}}" value="{{oversize}}">
+            <input class="handle toolbar-button val" placeholder="multiple" value="{{oversize}}">
             <div class="expandable">
               <button class="editable" on-click="{{oversizeIncrease}}">+</button>
               <button class="editable" on-click="{{oversizeDecrease}}">-</button>
@@ -191,11 +203,11 @@
           <label class="toolbar-label">Oversize</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isSingleSelection}}">
+        <div class="toolbar-item" disabled?="{{!isSingleSelection}}" data-applyvalue="innerHTML">
           <juicy-popover>
             <button class="handle toolbar-button">✎</button>
             <div class="expandable innerHTML">
-              <textarea on-blur="{{refresh}}" value="{{innerHTML}}"></textarea>
+              <textarea value="{{innerHTML}}"></textarea>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Inner HTML</label>
@@ -215,31 +227,31 @@
           <label class="toolbar-label">New group</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isSelection}}">
+        <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
           <juicy-popover>
-            <input placeholder="multiple" class="handle toolbar-button val" on-blur="{{refresh}}" value="{{width}}" disabled?="{{widthAuto}}">
+            <input placeholder="multiple" class="handle toolbar-button val" value="{{width}}" disabled?="{{widthAuto}}">
             <div class="expandable">
               <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
               <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
-              <label class="editable"><input id="widthAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{widthAuto}}"> auto</label>
+              <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Width</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isSelection}}">
+        <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="height">
           <juicy-popover>
-            <input placeholder="multiple" class="handle toolbar-button val" on-blur="{{refresh}}" value="{{height}}" disabled?="{{heightAuto}}">
+            <input placeholder="multiple" class="handle toolbar-button val" value="{{height}}" disabled?="{{heightAuto}}">
             <div class="expandable">
               <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
               <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
-              <label class="editable"><input id="heightAutoCheckbox" type="checkbox" on-click="{{refresh}}" checked="{{heightAuto}}"> auto</label>
+              <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Height</label>
         </div>
 
-        <div class="toolbar-item" disabled?="{{!isSingleSelection}}">
+        <div class="toolbar-item" disabled?="{{!isSingleSelection}}" data-applyvalue="priority">
           <juicy-popover>
             <input class="handle toolbar-button val" value="{{priority}}" disabled>
             <div class="expandable">
@@ -272,6 +284,7 @@
       }
 
       Polymer('juicy-tiles-editor-form', {
+        modified: false,
         isSelection: false,
         isSingleSelection: false,
         selectedItems: [],
@@ -356,13 +369,11 @@
         },
         gapIncrease: function () {
           this.gap++;
-          this.refresh();
         },
         gapDecrease: function () {
           if (this.gap >= 1) {
             this.gap--;
           }
-          this.refresh();
         },
         oversizeIncrease: function () {
           if (this.oversize >= 1) {
@@ -371,24 +382,24 @@
           else{
             this.oversize = 1;
           }
-          this.refresh();
         },
         oversizeDecrease: function () {
           if (this.oversize >= 1) {
             this.oversize--;
           }
-          this.refresh();
         },
         refresh: function () {
-          this.editedTiles && this.editedTiles.refresh();
+          if (this.editedTiles) {
+            this.editedTiles.refresh();
+            this.modified = this.editedTiles.isModified();
+            debugger;
+          }
         },
         widthIncrease: function () {
           powerIncrease(this, "width");
-          this.refresh();
         },
         widthDecrease: function () {
           powerDecrease(this, "width");
-          this.refresh();
         },
         heightIncrease: function () {
           if (this.height == 'auto') { //turn off auto
@@ -396,7 +407,6 @@
             this.heightAuto = false;
           }
           powerIncrease(this, "height");
-          this.refresh();
         },
         heightDecrease: function () {
           if (this.height == 'auto') { //turn off auto
@@ -404,7 +414,6 @@
             this.heightAuto = false;
           }
           powerDecrease(this, "height");
-          this.refresh();
         },
         priorityIncrease: function () {
           if (!this.selectedItems.length == 1) {
@@ -412,8 +421,7 @@
           }
 
           this.editedTiles
-            .reprioritizeItem(this.selectedItems[0], true)
-            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
+            .reprioritizeItem(this.selectedItems[0], true);
           this.priority = this.selectedItems[0].priority;
         },
         priorityDecrease: function () {
@@ -422,8 +430,7 @@
           }
 
           this.editedTiles
-            .reprioritizeItem(this.selectedItems[0], false)
-            .refresh(); //FIXME: this calls pack items for the second time, consider changing Package.js (tomalec)
+            .reprioritizeItem(this.selectedItems[0], false);
           this.priority = this.selectedItems[0].priority;
         },
         deleteContainer: function () {
@@ -433,7 +440,6 @@
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
-          this.refresh();
         },
         stackItems: function () {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -445,7 +451,6 @@
               }
             }
           }
-          this.refresh();
         },
         isContainerInSelection: function() {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -482,39 +487,35 @@
             this.refresh();
           }
         },
-        backgroundChanged: function (oldVal, val) {
-          this.setCommonValue("background", val);
+        applyChange: function (ev) {
+          var node = ev.target;
+          while (node) {
+            if (node.dataset && node.dataset.applyvalue) {
+              this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue]);
+              break;
+            }
+            node = node.parentNode;
+          }
         },
-        widthChanged: function (oldVal, val) {
-          this.setCommonValue("widthAuto", false);
-          this.setCommonValue("width", val);
+        saveChanges: function () {
+          this.editedTiles.saveToStorage();
+          this.modified = this.editedTiles.isModified();
+          debugger;
+          this.fire('juicy-tiles-editor-save');
         },
-        widthAutoChanged: function (oldVal, val) {
-          this.setCommonValue("widthAuto", val);
-        },
-        heightChanged: function (oldVal, val) {
-          this.setCommonValue("heightAuto", false);
-          this.setCommonValue("height", val);
-        },
-        heightAutoChanged: function (oldVal, val) {
-          this.setCommonValue("heightAuto", val);
-        },
-        gapChanged: function (oldVal, val) {
-          this.setCommonValue("gap", val);
-        },
-        oversizeChanged: function (oldVal, val) {
-          this.setCommonValue("oversize", val);
-        },
-        innerHTMLChanged: function (oldVal, val) {
-          this.setCommonValue("innerHTML", val);
+        revertChanges: function () {
+          this.editedTiles.loadFromStorage();
+          this.modified = this.editedTiles.isModified();
+          debugger;
+          this.fire('juicy-tiles-editor-revert');
         },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName");
           this.background = this.getCommonValue("background");
           this.width = this.getCommonValue("width");
-          this.widthAuto = this.getCommonValue("widthAuto");
+          this.widthAuto = this.getCommonValue("widthAuto") || false;
           this.height = this.getCommonValue("height");
-          this.heightAuto = this.getCommonValue("heightAuto");
+          this.heightAuto = this.getCommonValue("heightAuto") || false;
           this.gap = this.getCommonValue("gap");
           this.oversize = this.getCommonValue("oversize");
           this.priority = this.getCommonValue("priority");
