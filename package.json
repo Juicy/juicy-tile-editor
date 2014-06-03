@@ -1,8 +1,8 @@
 {
-  "name": "juicy-tiles-editor",
+  "name": "juicy-tile-editor",
   "version": "0.0.0",
-  "description": "<juicy-tiles-editor> is an editor form for <juicy-tile-list>",
-  "main": "src/juicy-tiles-editor.html",
+  "description": "<juicy-tile-editor> is an editor form for <juicy-tile-list>",
+  "main": "src/juicy-tile-editor.html",
   "directories": {
     "example": "examples",
     "test": "test"
@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Juicy/juicy-tiles-editor"
+    "url": "https://github.com/Juicy/juicy-tile-editor"
   },
   "bugs": {
-    "url": "https://github.com/Juicy/juicy-tiles-editor/issues"
+    "url": "https://github.com/Juicy/juicy-tile-editor/issues"
   },
   "license": "MIT"
 }

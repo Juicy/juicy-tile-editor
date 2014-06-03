@@ -1,17 +1,17 @@
-# &lt;juicy-tiles-editor&gt;
+# &lt;juicy-tile-editor&gt;
 
-`<juicy-tiles-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tile-list>`
+`<juicy-tile-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tile-list>`
 
 ## Demo
 
-[Check it live!](http://juicy.github.io/juicy-tiles-editor)
+[Check it live!](http://juicy.github.io/juicy-tile-editor)
 
 ## Usage
 
 1. Install the component using [Bower](http://bower.io/):
 
     ```sh
-    $ bower install juicy-tiles-editor --save
+    $ bower install juicy-tile-editor --save
     ```
 
 2. Import Web Components' polyfill:
@@ -25,13 +25,13 @@
 
     ```html
     <link rel="import" href="bower_components/juicy-tile-list/src/juicy-tile-list.html">
-    <link rel="import" href="bower_components/juicy-tiles-editor/src/juicy-tiles-editor.html">
+    <link rel="import" href="bower_components/juicy-tile-editor/src/juicy-tile-editor.html">
     ```
 
 4. Start using it!
 
     ```html
-    <juicy-tiles-editor selectionMode></juicy-tiles-editor>
+    <juicy-tile-editor selectionMode></juicy-tile-editor>
     <juicy-tile-list></juicy-tile-list>
     ```
 

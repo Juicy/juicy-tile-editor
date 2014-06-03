@@ -1,6 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 
-<polymer-element name="juicy-tiles-tree" attributes="tree">
+<polymer-element name="juicy-tile-tree" attributes="tree">
   <template>
     <style>
       ul {
@@ -65,7 +65,7 @@
   </template>
   <script>
     (function () {
-      Polymer('juicy-tiles-tree', {
+      Polymer('juicy-tile-tree', {
         tree: [],
         highlightedBranches: [],
         /**
@@ -87,16 +87,16 @@
           var isNestedTiles = this.isNestedTilesLabel(target);
           if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
             if (this.isBranchHighlighted(model.item)) {
-              eventName = 'juicy-tiles-tree-highlight-remove';
+              eventName = 'juicy-tile-tree-highlight-remove';
               this.unhighlightBranch(model.item);
             }
             else {
-              eventName = 'juicy-tiles-tree-highlight-extend';
+              eventName = 'juicy-tile-tree-highlight-extend';
               this.highlightBranch(model.item, true);
             }
           }
           else {
-            eventName = 'juicy-tiles-tree-highlight';
+            eventName = 'juicy-tile-tree-highlight';
             if (isNestedTiles) {
               this.highlightBranch(model.branch.setup);
             }

@@ -1,10 +1,10 @@
 {
-  "name": "juicy-tiles-editor",
+  "name": "juicy-tile-editor",
   "version": "0.0.0",
-  "homepage": "https://github.com/Juicy/juicy-tiles-editor",
-  "description": "<juicy-tiles-editor> is an editor form for <juicy-tile-list>",
+  "homepage": "https://github.com/Juicy/juicy-tile-editor",
+  "description": "<juicy-tile-editor> is an editor form for <juicy-tile-list>",
   "license": "MIT",
-  "main": "src/juicy-tiles-editor.html",
+  "main": "src/juicy-tile-editor.html",
   "keywords": [
     "polymer",
     "web-components"

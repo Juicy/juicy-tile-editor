@@ -2,7 +2,7 @@
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
 
-<polymer-element name="juicy-tiles-editor-form" attributes="selectedItems editedTiles">
+<polymer-element name="juicy-tile-editor-form" attributes="selectedItems editedTiles">
   <template>
     <style>
       .editablesContainer {
@@ -283,7 +283,7 @@
         obj[property] = power;
       }
 
-      Polymer('juicy-tiles-editor-form', {
+      Polymer('juicy-tile-editor-form', {
         modified: false,
         isSelection: false,
         isSingleSelection: false,
@@ -333,7 +333,7 @@
           newContainer.height = dimensions.height;
 
           model.packItems(); //rerender
-          this.fire('juicy-tiles-editor-form-tree-changed');
+          this.fire('juicy-tile-editor-form-tree-changed');
         },
         moveSelectionToEditedItemContainer: function () {
           if (!this.selectedItems.length > 1) {
@@ -351,7 +351,7 @@
           this.selectedItems[0].container.height = dimensions.height;
 
           model.packItems(); //rerender
-          this.fire('juicy-tiles-editor-form-tree-changed');
+          this.fire('juicy-tile-editor-form-tree-changed');
         },
         getContainerChildElements: function (container) {
         	//FIXME I may not work (tomalec)
@@ -501,13 +501,13 @@
           this.editedTiles.saveToStorage();
           this.modified = this.editedTiles.isModified();
           debugger;
-          this.fire('juicy-tiles-editor-save');
+          this.fire('juicy-tile-editor-save');
         },
         revertChanges: function () {
           this.editedTiles.loadFromStorage();
           this.modified = this.editedTiles.isModified();
           debugger;
-          this.fire('juicy-tiles-editor-revert');
+          this.fire('juicy-tile-editor-revert');
         },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName");

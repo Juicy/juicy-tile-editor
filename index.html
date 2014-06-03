@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>&lt;juicy-tiles-editor&gt;</title>
+  <title>&lt;juicy-tile-editor&gt;</title>
 
   <!-- Importing Web Component's Polyfill -->
   <script src="../platform/platform.js"></script>
@@ -10,7 +10,7 @@
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../juicy-tile-list/src/juicy-tile-list.html">
-  <link rel="import" href="src/juicy-tiles-editor.html">
+  <link rel="import" href="src/juicy-tile-editor.html">
 
   <style>
     body {
@@ -70,7 +70,7 @@
   <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
   <template if="{{editingMode}}">
     <div id="aboveOverlay">
-      <juicy-tiles-editor selectionMode></juicy-tiles-editor>
+      <juicy-tile-editor selectionMode></juicy-tile-editor>
     </div>
   </template>
   <juicy-tile-list id="st1" setup="{{setup}}">
