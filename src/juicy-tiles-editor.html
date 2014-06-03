@@ -76,7 +76,7 @@
           this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
           this.$.treeView.toDisplayName = function(branch) {
-            if(branch.node) { //juicy-tiles root
+            if(branch.node) { //juicy-tile-list root
               return "root#" + branch.node.id;
             }
             else if (branch.name != void 0) { //container
@@ -107,7 +107,7 @@
         },
         getSortableElement: function (elem) {
           while (elem.parentNode) {
-            if (elem.parentNode.nodeName == 'JUICY-TILES') {
+            if (elem.parentNode.nodeName == 'JUICY-TILE-LIST') {
               return elem;
             }
             elem = elem.parentNode;
@@ -242,7 +242,7 @@
          */
         // tree: [
         // 	{
-        // 		node: _juicy-tiles_,
+        // 		node: _juicy-tile-list_,
         // 		setup: _PackageSetup_, // redundand consider removal
         // 		branches: [
         // 			_setup.items[?].index_: [
@@ -261,13 +261,13 @@
 
             // iterate on element's real DOM elements
             for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
-              if (element.elements[childNo].nodeName == 'JUICY-TILES') { //element is directly a nested tiles
+              if (element.elements[childNo].nodeName == 'JUICY-TILE-LIST') { //element is directly a nested tiles
                 nested = [element.elements[childNo]]
               }
               else { //check if element has nested tiles children
-                nested = getFirstLevelChildTags(element.elements[childNo], 'juicy-tiles');
+                nested = getFirstLevelChildTags(element.elements[childNo], 'juicy-tile-list');
               }
-            	// iterate on nested juicy-tiles
+            	// iterate on nested juicy-tile-list
             	if( nested.length ){
             		branches[ childNo ] = [];
 
@@ -295,10 +295,10 @@
             topmost = topmost.parentNode;
           }
 
-          var models = getFirstLevelChildTags(topmost, 'juicy-tiles');
+          var models = getFirstLevelChildTags(topmost, 'juicy-tile-list');
 
           if (topmost.host) {
-            var distributedModels = getFirstLevelChildTags(topmost.host, 'juicy-tiles');
+            var distributedModels = getFirstLevelChildTags(topmost.host, 'juicy-tile-list');
             models = models.concat(distributedModels);
           }
 

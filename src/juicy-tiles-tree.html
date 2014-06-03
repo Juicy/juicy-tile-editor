@@ -41,12 +41,12 @@
                   <!-- real element -->
 
                   <template if="{{ !branch.branches[ item.index ] }}">
-                    <!-- without nested juicy-tiles -->
+                    <!-- without nested juicy-tile-list -->
 
                     <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.index ] }}">
-                    <!-- with nested juicy-tiles -->
+                    <!-- with nested juicy-tile-list -->
                     <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }} ▾</span>
 
                     <ul class="group">

@@ -1,6 +1,6 @@
 # &lt;juicy-tiles-editor&gt;
 
-`<juicy-tiles-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tiles>`
+`<juicy-tiles-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tile-list>`
 
 ## Demo
 
@@ -24,7 +24,7 @@
 3. Import Custom Element:
 
     ```html
-    <link rel="import" href="bower_components/juicy-tiles/src/juicy-tiles.html">
+    <link rel="import" href="bower_components/juicy-tile-list/src/juicy-tile-list.html">
     <link rel="import" href="bower_components/juicy-tiles-editor/src/juicy-tiles-editor.html">
     ```
 
@@ -32,7 +32,7 @@
 
     ```html
     <juicy-tiles-editor selectionMode></juicy-tiles-editor>
-    <juicy-tiles></juicy-tiles>
+    <juicy-tile-list></juicy-tile-list>
     ```
 
 ## Options

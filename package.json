@@ -1,8 +1,8 @@
 {
-  "name": "juicy-tiles",
+  "name": "juicy-tiles-editor",
   "version": "0.0.0",
-  "description": "<juicy-tiles> is a Custom Element with sortable tiles that packs efficiently without changing HTML structure (changes CSS only).",
-  "main": "src/juicy-tiles.html",
+  "description": "<juicy-tiles-editor> is an editor form for <juicy-tile-list>",
+  "main": "src/juicy-tiles-editor.html",
   "directories": {
     "example": "examples",
     "test": "test"
@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Juicy/juicy-tiles"
+    "url": "https://github.com/Juicy/juicy-tiles-editor"
   },
   "bugs": {
-    "url": "https://github.com/Juicy/juicy-tiles/issues"
+    "url": "https://github.com/Juicy/juicy-tiles-editor/issues"
   },
   "license": "MIT"
 }

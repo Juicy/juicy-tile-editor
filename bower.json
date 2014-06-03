@@ -2,7 +2,7 @@
   "name": "juicy-tiles-editor",
   "version": "0.0.0",
   "homepage": "https://github.com/Juicy/juicy-tiles-editor",
-  "description": "<juicy-tiles-editor> is an editor form for <juicy-tiles>",
+  "description": "<juicy-tiles-editor> is an editor form for <juicy-tile-list>",
   "license": "MIT",
   "main": "src/juicy-tiles-editor.html",
   "keywords": [
@@ -17,6 +17,6 @@
     "polymer": "Polymer/polymer",
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
-    "juicy-tiles": "Juicy/juicy-tiles#gh-pages"
+    "juicy-tile-list": "Juicy/juicy-tile-list#gh-pages"
   }
 }

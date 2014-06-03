@@ -9,7 +9,7 @@
   <link rel="import" href="../polymer/polymer.html">
 
   <!-- Importing Custom Elements -->
-  <link rel="import" href="../juicy-tiles/src/juicy-tiles.html">
+  <link rel="import" href="../juicy-tile-list/src/juicy-tile-list.html">
   <link rel="import" href="src/juicy-tiles-editor.html">
 
   <style>
@@ -20,7 +20,7 @@
       margin:0px;
       padding:0px;
     }
-    juicy-tiles{
+    juicy-tile-list{
       /*width: 300px;
       height: 150px;*/
       width: 100%;
@@ -28,30 +28,30 @@
       margin: 2em 0;
       box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
     }
-    juicy-tiles>*{
+    juicy-tile-list>*{
       box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
     }
-    juicy-tiles>:first-child {
+    juicy-tile-list>:first-child {
       background:lightgreen;
     }
 
-    juicy-tiles>:nth-child(2) {
+    juicy-tile-list>:nth-child(2) {
       /* background:lightblue; */
       background: rgba(173, 216, 230, 0.8);
     }
 
-    juicy-tiles>:nth-child(3) {
+    juicy-tile-list>:nth-child(3) {
       /*background:yellow;*/
       background: rgba(255, 255, 0, 0.8);
       overflow:auto;
     }
 
-    juicy-tiles>:nth-child(4) {
+    juicy-tile-list>:nth-child(4) {
       background:gray;
       overflow:auto;
     }
 
-    juicy-tiles>:nth-child(5) {
+    juicy-tile-list>:nth-child(5) {
       background:orange;
       max-height: 100px;
       overflow:auto;
@@ -73,7 +73,7 @@
       <juicy-tiles-editor selectionMode></juicy-tiles-editor>
     </div>
   </template>
-  <juicy-tiles id="st1" setup="{{setup}}">
+  <juicy-tile-list id="st1" setup="{{setup}}">
     <div>Item 0 </div>
     <div>
       <button>Item 1</button>
@@ -83,7 +83,7 @@
     </div>
     <div>
       Nested tiles 1:
-      <juicy-tiles setup="{{setup2}}">
+      <juicy-tile-list setup="{{setup2}}">
         <div>Subitem 0 </div>
         <div>
           <button>Subitem 1</button>
@@ -92,10 +92,10 @@
           <input value="Subitem2">
         </div>
         <section>Subitem 3</section>
-      </juicy-tiles>
+      </juicy-tile-list>
       <section>
         Nested tiles 2:
-        <juicy-tiles setup="{{setup2}}">
+        <juicy-tile-list setup="{{setup2}}">
           <div>Subitem 0 </div>
           <div>
             <button>Subitem 1</button>
@@ -104,10 +104,10 @@
             <input value="Subitem2">
           </div>
           <section>Subitem 3</section>
-        </juicy-tiles>
+        </juicy-tile-list>
       </section>
     </div>
-    <juicy-tiles setup="{{setup2}}">
+    <juicy-tile-list setup="{{setup2}}">
       <div>Subitem 0 </div>
       <div>
         <button>Subitem 1</button>
@@ -116,8 +116,8 @@
         <input value="Subitem2">
       </div>
       <section>Subitem 3</section>
-    </juicy-tiles>
-  </juicy-tiles>
+    </juicy-tile-list>
+  </juicy-tile-list>
 </template>
 <script type="text/javascript">
   // 011
