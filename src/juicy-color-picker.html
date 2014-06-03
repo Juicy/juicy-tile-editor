@@ -61,8 +61,8 @@
       </template>
     </div>
     <div class="customCrayons">
-      <input type="text" class="val" on-mouseup="{{stopBubble}}"
-             value="{{value}}"><button class="moreColors" on-mouseup="{{stopBubble}}">
+      <input type="text" class="val"
+             value="{{value}}"><button class="moreColors">
         ...
         <input type="color" value="{{value}}">
       </button>
@@ -89,9 +89,6 @@
       },
       setValue: function (ev) {
         this.value = ev.target.value;
-      },
-      stopBubble: function (ev) {
-        ev.stopPropagation();
       }
     });
   </script>
