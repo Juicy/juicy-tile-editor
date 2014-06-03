@@ -392,7 +392,6 @@
           if (this.editedTiles) {
             this.editedTiles.refresh();
             this.modified = this.editedTiles.isModified();
-            debugger;
           }
         },
         widthIncrease: function () {
@@ -500,13 +499,11 @@
         saveChanges: function () {
           this.editedTiles.saveToStorage();
           this.modified = this.editedTiles.isModified();
-          debugger;
           this.fire('juicy-tile-editor-save');
         },
         revertChanges: function () {
           this.editedTiles.loadFromStorage();
           this.modified = this.editedTiles.isModified();
-          debugger;
           this.fire('juicy-tile-editor-revert');
         },
         selectedItemsChanged: function () {
