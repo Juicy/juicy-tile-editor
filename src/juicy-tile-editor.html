@@ -229,6 +229,7 @@
           this.$.elementEdited.show();
           this.$.elementRollover.hide();
           this.$.elementSelected.hide();
+          this.treeChangedAction();
         },
         treeHighlightAction: function (item, tiles) {
           if(item.detail) {  //is tree event
@@ -337,6 +338,7 @@
         },
         treeChangedAction: function() {
           this.treeRefresh();
+          this.$.treeView.highlightBranch(this.selectedItems);
         }
       });
     })();
