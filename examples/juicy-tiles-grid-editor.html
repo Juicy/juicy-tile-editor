@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>&lt;juicy-tile-editor&gt;</title>
+
+  <!-- Importing Web Component's Polyfill -->
+  <script src="../../platform/platform.js"></script>
+  <link rel="import" href="../../polymer/polymer.html">
+
+  <!-- Importing Custom Elements -->
+  <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
+  <link rel="import" href="../src/juicy-tile-editor.html">
+
+  <style>
+    body {
+      padding: 2em;
+    }
+    * {
+      margin:0px;
+      padding:0px;
+    }
+    juicy-tile-grid{
+      /*width: 300px;
+      height: 150px;*/
+      margin: 2em 0 2em 200px;
+      display: block;
+      box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+    }
+    juicy-tile-grid>*{
+      box-shadow:         0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    }
+    juicy-tile-grid>:first-child {
+      background:lightgreen;
+    }
+
+    juicy-tile-grid>:nth-child(2) {
+      /* background:lightblue; */
+      background: rgba(173, 216, 230, 0.8);
+    }
+
+    juicy-tile-grid>:nth-child(3) {
+      /*background:yellow;*/
+      background: rgba(255, 255, 0, 0.8);
+      overflow:auto;
+    }
+
+    juicy-tile-grid>:nth-child(4) {
+      background:gray;
+      overflow:auto;
+    }
+
+    juicy-tile-grid>:nth-child(5) {
+      background:orange;
+      max-height: 100px;
+      overflow:auto;
+    }
+
+    #aboveOverlay {
+      position: relative;
+      z-index: 100;
+      background-color: #fff;
+    }
+  </style>
+
+<body>
+<template bind>
+  <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+  <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
+  <template if="{{editingMode}}">
+    <div id="aboveOverlay">
+      <juicy-tile-editor selectionMode></juicy-tile-editor>
+    </div>
+  </template>
+  <juicy-tile-grid id="st1" setup="{{setup}}">
+    <div>Item 0 </div>
+    <div>
+      <button>Item 1</button>
+    </div>
+    <div>
+      <input value="Input2">
+    </div>
+    <div>
+      Nested tiles 1:
+      <section>
+        Nested tiles 2:
+      </section>
+    </div>
+  </juicy-tile-grid>
+</template>
+<script type="text/javascript">
+  // 011
+  // 233
+  // 2
+  //
+  // prioritized
+  //
+  // 110
+  // 233
+  // 2
+  model = {
+    editingMode: true,
+    setup:{
+      gap: 16,
+      items: [
+        {"width": 128, "height": 100, "priority": 0.5, "index": 0},
+        {"width": 512, "height": 100, "priority": 0.48, "gap": 8, 
+        "innerHTML": "<div style=\"background: rgba(191, 81, 236, 0.5); position: relative; top: -8px; left: -8px; height: calc(100% + 2 * 8px ); width: calc(100% + 2 * 8px ); font-size: 100px;\"><marquee title=\"old school test\">☃</marquee></div>",
+        "items":[
+          {"width": 256, "height": 100, "priority": 0.7, "index": 1},
+          {"width": 128, "height": 100, "priority": 0.0, "index": 2}
+        ]},
+        {"width": 256, "height": 256, "priority": 0.47, "index": 3}
+      ]
+    },
+    setup2: {
+      gap: 4,
+      items: [
+        // 011
+        // 233
+        // 2
+        // prioritized
+        //
+        // 110
+        // 233
+        // 2
+        {
+          index:0,
+          priority:0.9,// 0.6,
+          height: 20,
+          width: 100
+        },
+        {
+          index:1,
+          priority:0.8,// 0.9,
+          height: 20,
+          width: 100
+        },
+        {
+          index:2,
+          priority:0.6,// 0.3,
+          height: 40,
+          width: 180
+        },
+        {
+          index:3,
+          priority:0.4,
+          height: 20,
+          width: 150
+        }
+      ]
+    }
+  };
+  document.addEventListener("polymer-ready", function(){
+    document.querySelector("template").bindingDelegate = new PolymerExpressions();
+    document.querySelector("template").model = model;
+
+  })
+</script>
+
+
+</body>

@@ -11,6 +11,7 @@
   ],
   "ignore": [
     "**/.*",
+    "examples",
     "bower_components"
   ],
   "dependencies": {
@@ -18,5 +19,8 @@
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
     "juicy-tile-list": "Juicy/juicy-tile-list#gh-pages"
+  },
+  "devDependencies": {
+    "juicy-tile-grid": "Juicy/juicy-tile-grid#gh-pages"
   }
 }
