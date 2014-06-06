@@ -527,7 +527,7 @@
           this.fire('juicy-tile-editor-revert');
         },
         applyLayout: function () {
-          this.editedTiles.layout = this.layout;
+          this.editedTiles.setAttribute('layout', this.layout);
           this.editedTiles.refresh();
         },
         selectedItemsChanged: function () {
@@ -541,7 +541,7 @@
           this.oversize = this.getCommonValue("oversize");
           this.priority = this.getCommonValue("priority");
           this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
-          this.layout = this.getCommonValue("layout") || "absolute";
+          this.layout = this.editedTiles ? this.editedTiles.getAttribute('layout') : '';
           this.isSelection = (this.selectedItems.length > 0);
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
