@@ -435,7 +435,9 @@
         deleteContainer: function () {
           var deleteElement = this.selectedItems[0];
           this.selectedItems[0] = deleteElement.container;
-          this.editedTiles.deleteContainer(deleteElement, true); //do not repack after change
+          this.editedTiles.deleteContainer(deleteElement, true);
+          this.refresh();
+          this.fire('juicy-tile-editor-form-tree-changed');
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
