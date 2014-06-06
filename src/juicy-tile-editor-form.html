@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../core-selector/core-selector.html">
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
 
@@ -151,6 +152,22 @@
           <button class="toolbar-button" on-click="{{revertChanges}}">✗</button>
           <label class="toolbar-label">Revert</label>
         </div>
+
+        <div class="toolbar-item" disabled?="{{!isSelection}}">
+          <juicy-popover>
+            <button class="handle toolbar-button">☷</button>
+            <div class="expandable">
+              <core-selector target="{{$.layoutForm}}" itemsSelector="input[type=radio]"
+                             selected="{{layout}}" valueattr="value" selectedProperty="checked"
+                             activateEvent="change"></core-selector>
+              <form id="layoutForm">
+                <label><input type="radio" name="layout" value="absolute" on-click="{{applyLayout}}"> Absolute</label> <br>
+                <label><input type="radio" name="layout" value="grid" on-click="{{applyLayout}}"> Grid</label>
+              </form>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Layout</label>
+        </div>
       </div>
 
       <div class="editableGroup">
@@ -299,6 +316,7 @@
         oversize: 0,
         priority: null,
         innerHTML: null,
+        layout: null,
         getSortableElement: function (elem) {
           while (elem.parentNode) {
             if (elem.parentNode.nodeName == 'JUICY-TILE-LIST') {
@@ -508,6 +526,10 @@
           this.modified = this.editedTiles.isModified();
           this.fire('juicy-tile-editor-revert');
         },
+        applyLayout: function () {
+          this.editedTiles.layout = this.layout;
+          this.editedTiles.refresh();
+        },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName");
           this.background = this.getCommonValue("background");
@@ -519,6 +541,7 @@
           this.oversize = this.getCommonValue("oversize");
           this.priority = this.getCommonValue("priority");
           this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
+          this.layout = this.getCommonValue("layout") || "absolute";
           this.isSelection = (this.selectedItems.length > 0);
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();

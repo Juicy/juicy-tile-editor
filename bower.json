@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer",
+    "core-selector": "Polymer/core-selector",
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
     "juicy-tile-list": "Juicy/juicy-tile-list#gh-pages"
