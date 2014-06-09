@@ -34,7 +34,7 @@
         min-height: 1.45em;
         min-width: 1.45em;
         display: inline-block;
-        padding: 0;
+        padding: 0 2px;
         margin: 0;
         vertical-align: top;
         line-height: 1;
@@ -70,7 +70,7 @@
         max-width: 144px;
         white-space: normal;
       }
-      .expandable.innerHTML{
+      .expandable.wide{
         width: auto;
         max-width: none;
       }
@@ -78,6 +78,10 @@
       .expandable textarea{
         width: 40em;
         height: 5em;
+      }
+
+      .sourceActions {
+        text-align: right;
       }
 
       h4 {
@@ -153,9 +157,22 @@
           <label class="toolbar-label">Revert</label>
         </div>
 
+        <div class="toolbar-item">
+          <juicy-popover>
+            <button class="handle toolbar-button">{}</button>
+            <div class="expandable wide">
+              <textarea value="{{source}}"></textarea>
+              <div class="sourceActions">
+                <button class="editable" on-click="{{applySource}}">Apply</button>
+              </div>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Source</label>
+        </div>
+
         <div class="toolbar-item" disabled?="{{!isSelection}}">
           <juicy-popover>
-            <button class="handle toolbar-button">☷</button>
+            <button class="handle toolbar-button">⌗</button>
             <div class="expandable">
               <core-selector target="{{$.layoutForm}}" itemsSelector="input[type=radio]"
                              selected="{{layout}}" valueattr="value" selectedProperty="checked"
@@ -223,7 +240,7 @@
         <div class="toolbar-item" disabled?="{{!isSingleSelection}}" data-applyvalue="innerHTML">
           <juicy-popover>
             <button class="handle toolbar-button">✎</button>
-            <div class="expandable innerHTML">
+            <div class="expandable wide">
               <textarea value="{{innerHTML}}"></textarea>
             </div>
           </juicy-popover>
@@ -410,6 +427,7 @@
           if (this.editedTiles) {
             this.editedTiles.refresh();
             this.modified = this.editedTiles.isModified();
+            this.getSource();
           }
         },
         widthIncrease: function () {
@@ -521,14 +539,31 @@
           this.modified = this.editedTiles.isModified();
           this.fire('juicy-tile-editor-save');
         },
+        /**
+         * Reverts setup from local storage
+         */
         revertChanges: function () {
           this.editedTiles.loadFromStorage();
           this.modified = this.editedTiles.isModified();
           this.fire('juicy-tile-editor-revert');
+          this.getSource();
         },
         applyLayout: function () {
           this.editedTiles.setAttribute('layout', this.layout);
           this.editedTiles.refresh();
+        },
+        getSource: function () {
+          this.source = this.editedTiles ? JSON.stringify(this.editedTiles.setup) : '';
+        },
+        /**
+         * Force tiles to apply given JSON string as setup
+         */
+        applySource: function () {
+          if (this.editedTiles) {
+            this.editedTiles.loadFromString(this.source);
+            this.modified = this.editedTiles.isModified();
+            this.fire('juicy-tile-editor-revert');
+          }
         },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName");
@@ -546,6 +581,7 @@
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
           this.isRoot = this.isRootInSelection();
+          this.getSource();
 
           Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
             if (this.isSelection && !this.isSingleSelection) {
