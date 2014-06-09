@@ -3,7 +3,7 @@
 <link rel="import" href="juicy-tile-editor-form.html">
 <link rel="import" href="juicy-tile-tree.html">
 
-<polymer-element name="juicy-tile-editor" attributes="selectionMode">
+<polymer-element name="juicy-tile-editor" attributes="selectionMode watchedTagNames">
   <template>
     <style>
       .sidebar {
@@ -41,21 +41,25 @@
   <script>
     (function () {
       /**
-       * Returns an array of descendant elements that match the given tag name.
+       * Returns an array of descendant elements that match the given tag names.
+       * Tests: http://jsfiddle.net/tomalec/3u2CM/5/
        */
-      function getFirstLevelChildTags(baseElement, tagName) {
-        var tagName = tagName.toUpperCase();
+      function getFirstLevelChildTags(baseElement, tagNames) {
+        var tagNo = tagNames.length;
         var children = [];
-        var elements = baseElement.getElementsByTagName(tagName);
-        elementLoop: for (var i = 0, ilen = elements.length; i < ilen; i++) {
-          var elem = elements[i].parentNode;
-          while (elem != baseElement) {
-            if (elem.nodeName == tagName) {
-              continue elementLoop;
+        var elements;
+        while( tagNo-- ){
+          elements = baseElement.getElementsByTagName(tagNames[ tagNo ]);
+          elementLoop: for (var i = 0, ilen = elements.length; i < ilen; i++) {
+            var elem = elements[i].parentNode;
+            while (elem != baseElement) {
+              if ( tagNames.indexOf(elem.nodeName )> -1 ) {
+                continue elementLoop;
+              }
+              elem = elem.parentNode;
             }
-            elem = elem.parentNode;
+            children.push(elements[i]);
           }
-          children.push(elements[i]);
         }
         return children;
       }
@@ -73,6 +77,7 @@
         contextMenuListener: null,
         keyUpListener: null,
         tree: [],
+        watchedTagNames: ["JUICY-TILE-LIST"],
         attached: function () {
           this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
@@ -108,7 +113,7 @@
         },
         getSortableElement: function (elem) {
           while (elem.parentNode) {
-            if (elem.parentNode.nodeName == 'JUICY-TILE-LIST') {
+            if (this.watchedTagNames.indexOf( elem.parentNode.nodeName ) > -1 ) {
               return elem;
             }
             elem = elem.parentNode;
@@ -269,11 +274,11 @@
 
             // iterate on element's real DOM elements
             for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
-              if (element.elements[childNo].nodeName == 'JUICY-TILE-LIST') { //element is directly a nested tiles
+              if ( that.watchedTagNames.indexOf( element.elements[childNo].nodeName ) > -1 ) { //element is directly a nested tiles
                 nested = [element.elements[childNo]]
               }
               else { //check if element has nested tiles children
-                nested = getFirstLevelChildTags(element.elements[childNo], 'juicy-tile-list');
+                nested = getFirstLevelChildTags(element.elements[childNo], that.watchedTagNames);
               }
             	// iterate on nested juicy-tile-list
             	if( nested.length ){
@@ -303,10 +308,10 @@
             topmost = topmost.parentNode;
           }
 
-          var models = getFirstLevelChildTags(topmost, 'juicy-tile-list');
+          var models = getFirstLevelChildTags(topmost, this.watchedTagNames);
 
           if (topmost.host) {
-            var distributedModels = getFirstLevelChildTags(topmost.host, 'juicy-tile-list');
+            var distributedModels = getFirstLevelChildTags(topmost.host, this.watchedTagNames);
             models = models.concat(distributedModels);
           }
 
