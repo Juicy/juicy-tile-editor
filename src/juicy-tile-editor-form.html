@@ -367,7 +367,7 @@
           newContainer.width = dimensions.width;
           newContainer.height = dimensions.height;
 
-          model.packItems(); //rerender
+          this.refresh();
           this.fire('juicy-tile-editor-form-tree-changed');
         },
         moveSelectionToEditedItemContainer: function () {
@@ -385,7 +385,7 @@
           this.selectedItems[0].container.width = dimensions.width;
           this.selectedItems[0].container.height = dimensions.height;
 
-          model.packItems(); //rerender
+          this.refresh();
           this.fire('juicy-tile-editor-form-tree-changed');
         },
         getContainerChildElements: function (container) {
