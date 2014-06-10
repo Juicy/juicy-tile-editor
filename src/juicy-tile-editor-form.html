@@ -209,7 +209,7 @@
           <juicy-popover>
             <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
             <div class="expandable">
-              <juicy-color-picker value="{{background}}"></juicy-color-picker>
+              <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{applyChange}}"></juicy-color-picker>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Background</label>
