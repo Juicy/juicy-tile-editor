@@ -25,7 +25,8 @@
         width: 50px;
       }
 
-      .toolbar-item[disabled] {
+      .toolbar-item[disabled],
+      button[disabled]{
         opacity: 0.25;
         pointer-events: none;
       }
@@ -143,6 +144,26 @@
 
       .sidebar /deep/ #menu {
         margin-left: 10px;
+      }
+
+      .button-column {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .button-column button {
+        margin-top: 4px;
+      }
+
+      .button-column button:first-child {
+        margin-top: 0;
+      }
+
+      hr {
+        border: 0;
+        background-color: #ddd;
+        height: 1px;
+        margin: 10px 0;
       }
     </style>
     <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
@@ -268,6 +289,13 @@
               <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
               <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
               <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
+              <hr>
+              <div class="button-column">
+                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
+                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
+                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
+                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+              </div>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Width</label>
@@ -280,6 +308,13 @@
               <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
               <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
               <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
+              <hr>
+              <div class="button-column">
+                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
+                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
+                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
+                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+              </div>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Height</label>
@@ -522,6 +557,16 @@
               this.selectedItems[i][propName] = val;
             }
             this.refresh();
+          }
+        },
+        setValueFromButton: function (ev) {
+          var node = ev.target;
+          while (node) {
+            if (node.dataset && node.dataset.applyvalue) {
+              this[node.dataset.applyvalue] = ev.target.value;
+              break;
+            }
+            node = node.parentNode;
           }
         },
         applyChange: function (ev) {
