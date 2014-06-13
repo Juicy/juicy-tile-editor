@@ -1,4 +1,4 @@
-<link rel="import" href="../../polymer/polymer.html">
+﻿<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../core-selector/core-selector.html">
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
@@ -512,6 +512,7 @@
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
+          this.refresh();
         },
         stackItems: function () {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -523,6 +524,7 @@
               }
             }
           }
+          this.refresh();
         },
         isContainerInSelection: function() {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
