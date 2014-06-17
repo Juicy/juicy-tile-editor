@@ -1,4 +1,4 @@
-<link rel="import" href="../../polymer/polymer.html">
+﻿<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../core-selector/core-selector.html">
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html">
 <link rel="import" href="juicy-color-picker.html">
@@ -25,7 +25,8 @@
         width: 50px;
       }
 
-      .toolbar-item[disabled] {
+      .toolbar-item[disabled],
+      button[disabled]{
         opacity: 0.25;
         pointer-events: none;
       }
@@ -34,7 +35,7 @@
         min-height: 1.45em;
         min-width: 1.45em;
         display: inline-block;
-        padding: 0;
+        padding: 0 2px;
         margin: 0;
         vertical-align: top;
         line-height: 1;
@@ -70,7 +71,7 @@
         max-width: 144px;
         white-space: normal;
       }
-      .expandable.innerHTML{
+      .expandable.wide{
         width: auto;
         max-width: none;
       }
@@ -78,6 +79,10 @@
       .expandable textarea{
         width: 40em;
         height: 5em;
+      }
+
+      .sourceActions {
+        text-align: right;
       }
 
       h4 {
@@ -140,6 +145,26 @@
       .sidebar /deep/ #menu {
         margin-left: 10px;
       }
+
+      .button-column {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .button-column button {
+        margin-top: 4px;
+      }
+
+      .button-column button:first-child {
+        margin-top: 0;
+      }
+
+      hr {
+        border: 0;
+        background-color: #ddd;
+        height: 1px;
+        margin: 10px 0;
+      }
     </style>
     <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
       <div class="editableGroup">
@@ -153,9 +178,22 @@
           <label class="toolbar-label">Revert</label>
         </div>
 
+        <div class="toolbar-item">
+          <juicy-popover>
+            <button class="handle toolbar-button">{}</button>
+            <div class="expandable wide">
+              <textarea value="{{source}}"></textarea>
+              <div class="sourceActions">
+                <button class="editable" on-click="{{applySource}}">Apply</button>
+              </div>
+            </div>
+          </juicy-popover>
+          <label class="toolbar-label">Source</label>
+        </div>
+
         <div class="toolbar-item" disabled?="{{!isSelection}}">
           <juicy-popover>
-            <button class="handle toolbar-button">☷</button>
+            <button class="handle toolbar-button">⌗</button>
             <div class="expandable">
               <core-selector target="{{$.layoutForm}}" itemsSelector="input[type=radio]"
                              selected="{{layout}}" valueattr="value" selectedProperty="checked"
@@ -192,7 +230,7 @@
           <juicy-popover>
             <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
             <div class="expandable">
-              <juicy-color-picker value="{{background}}"></juicy-color-picker>
+              <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{applyChange}}"></juicy-color-picker>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Background</label>
@@ -223,7 +261,7 @@
         <div class="toolbar-item" disabled?="{{!isSingleSelection}}" data-applyvalue="innerHTML">
           <juicy-popover>
             <button class="handle toolbar-button">✎</button>
-            <div class="expandable innerHTML">
+            <div class="expandable wide">
               <textarea value="{{innerHTML}}"></textarea>
             </div>
           </juicy-popover>
@@ -251,6 +289,13 @@
               <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
               <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
               <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
+              <hr>
+              <div class="button-column">
+                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
+                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
+                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
+                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+              </div>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Width</label>
@@ -263,6 +308,13 @@
               <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
               <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
               <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
+              <hr>
+              <div class="button-column">
+                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
+                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
+                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
+                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+              </div>
             </div>
           </juicy-popover>
           <label class="toolbar-label">Height</label>
@@ -351,7 +403,7 @@
           newContainer.width = dimensions.width;
           newContainer.height = dimensions.height;
 
-          model.packItems(); //rerender
+          this.refresh();
           this.fire('juicy-tile-editor-form-tree-changed');
         },
         moveSelectionToEditedItemContainer: function () {
@@ -369,7 +421,7 @@
           this.selectedItems[0].container.width = dimensions.width;
           this.selectedItems[0].container.height = dimensions.height;
 
-          model.packItems(); //rerender
+          this.refresh();
           this.fire('juicy-tile-editor-form-tree-changed');
         },
         getContainerChildElements: function (container) {
@@ -411,6 +463,7 @@
           if (this.editedTiles) {
             this.editedTiles.refresh();
             this.modified = this.editedTiles.isModified();
+            this.getSource();
           }
         },
         widthIncrease: function () {
@@ -460,6 +513,7 @@
         },
         changeDirection: function(){
           this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
+          this.refresh();
         },
         stackItems: function () {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -471,6 +525,7 @@
               }
             }
           }
+          this.refresh();
         },
         isContainerInSelection: function() {
           for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -507,6 +562,16 @@
             this.refresh();
           }
         },
+        setValueFromButton: function (ev) {
+          var node = ev.target;
+          while (node) {
+            if (node.dataset && node.dataset.applyvalue) {
+              this[node.dataset.applyvalue] = ev.target.value;
+              break;
+            }
+            node = node.parentNode;
+          }
+        },
         applyChange: function (ev) {
           var node = ev.target;
           while (node) {
@@ -522,14 +587,31 @@
           this.modified = this.editedTiles.isModified();
           this.fire('juicy-tile-editor-save');
         },
+        /**
+         * Reverts setup from local storage
+         */
         revertChanges: function () {
           this.editedTiles.loadFromStorage();
           this.modified = this.editedTiles.isModified();
           this.fire('juicy-tile-editor-revert');
+          this.getSource();
         },
         applyLayout: function () {
           this.editedTiles.setAttribute('layout', this.layout);
           this.editedTiles.refresh();
+        },
+        getSource: function () {
+          this.source = this.editedTiles ? JSON.stringify(this.editedTiles.setup) : '';
+        },
+        /**
+         * Force tiles to apply given JSON string as setup
+         */
+        applySource: function () {
+          if (this.editedTiles) {
+            this.editedTiles.loadFromString(this.source);
+            this.modified = this.editedTiles.isModified();
+            this.fire('juicy-tile-editor-revert');
+          }
         },
         selectedItemsChanged: function () {
           this.itemName = this.getCommonValue("itemName");
@@ -547,6 +629,7 @@
           this.isSingleSelection = (this.selectedItems.length == 1);
           this.isContainer = this.isContainerInSelection();
           this.isRoot = this.isRootInSelection();
+          this.getSource();
 
           Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
             if (this.isSelection && !this.isSingleSelection) {
