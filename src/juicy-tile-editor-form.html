@@ -308,6 +308,8 @@
               <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
               <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
               <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
+              <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
+              <label class="editable"><input id="heightAdaptiveCheckbox" type="checkbox" data-applyvalue="heightAdaptive" checked="{{heightAdaptive}}"> adaptive</label>
               <hr>
               <div class="button-column">
                 <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
@@ -364,6 +366,8 @@
         widthAuto: null,
         height: null,
         heightAuto: null,
+        heightDynamic: null,
+        heightAdaptive: null,
         gap: null,
         oversize: 0,
         priority: null,
@@ -620,6 +624,8 @@
           this.widthAuto = this.getCommonValue("widthAuto") || false;
           this.height = this.getCommonValue("height");
           this.heightAuto = this.getCommonValue("heightAuto") || false;
+          this.heightDynamic = this.getCommonValue("heightDynamic") || false;
+          this.heightAdaptive = this.getCommonValue("heightAdaptive") || false;
           this.gap = this.getCommonValue("gap");
           this.oversize = this.getCommonValue("oversize");
           this.priority = this.getCommonValue("priority");
