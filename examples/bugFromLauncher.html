@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-editor&gt; Launcher bug</title>
+
+    <!-- Importing Web Component's Polyfill -->
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script> -->
+    <script src="../../platform/platform.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
+    <link rel="import" href="../src/juicy-tile-editor.html">
+
+    <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
+
+
+    <!-- Use JSONEditor to edit tiles setup -->
+        <link rel="import" href="../../juicy-jsoneditor/src/juicy-jsoneditor.html"> 
+
+        <!-- josdejong/jsoneditor#104 workaround-->
+        <link rel="stylesheet" type="text/css" href="../../jsoneditor/jsoneditor.min.css">
+
+  <style>
+body {
+    font-family: sans-serif;
+    min-width: 200px;
+    width: 100%;
+    padding: 30px;
+}
+.markdown-body{
+    width: 70%;
+    margin: 0 auto;
+}
+.markdown-body.playground{
+    display: grid;
+    grid-template-columns: auto minmax(15em, 1fr)  min-content;
+    overflow: visible;
+}
+juicy-tile-grid{
+    /*width: 300px;
+    height: 150px;*/
+    display: block;
+    width: calc( 200px * 2 + 15px * 2 + 25px);
+    padding: 15px;
+    box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+body>juicy-tile-grid{
+    margin-left: 250px;
+}
+juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
+juicy-tile-grid>*{
+    box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+    text-align: center;
+    border-radius: 2px;
+}
+section input{
+    width: 4em;
+}
+juicy-jsoneditor{
+    width: 100%;
+    height: 100%;
+    grid-column-start: 2;
+}
+.playground > button{
+    grid-column-start: 3;
+}
+#aboveOverlay {
+      position: relative;
+      z-index: 100;
+      background-color: #fff;
+    }
+  </style>
+
+<body>
+<template bind>
+  <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+  <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
+  <template if="{{editingMode}}">
+    <div id="aboveOverlay">
+      <juicy-tile-editor selectionMode watchedTagNames="['JUICY-TILE-LIST', 'JUICY-TILE-GRID']"></juicy-tile-editor>
+    </div>
+  </template>
+
+        <juicy-tile-grid class="workspace {{appName}}" id="juicy-tile:{{master.Html}}" disabled>
+            <template bind="{{ master }}">
+
+<link rel="import" href="/vendor/juicy-redirect/src/juicy-redirect.html">
+
+<template bind="{{SuperCRM}}">
+  <style>
+    h1 {
+      margin: 0;
+    }
+  </style>
+    <template if="{{Message}}">
+        <h2>{{Message}}</h2>
+    </template>
+    <template bind="{{FavoriteCustomer}}">
+      <juicy-tile-grid id="juicy-tile:{{Html}}" disabled>
+        <!-- <template is="imported-template" content="{{Html}}"></template> -->
+
+<template bind="{{SuperCRM}}">
+
+    <style>
+        /*h1 input {
+            font-size: 0.9em;
+        }
+
+        .company {
+            background: yellow;
+        }
+
+        .contacts {
+            border: 2px dashed black;
+        }*/
+
+    </style>
+
+    <h1>Logo here</h1>
+
+
+    <div class="launcher-labeled-input">
+        <input id="Name$" type='text' value='{{ Name$ }}' placeholder='<Name>'>
+        <label for="Name$">Name</label>
+    </div>
+
+    <div class="launcher-labeled-input">
+        <input id="Revenue$" type='text' value='{{ Revenue$ }}' placeholder='<Revenue>'>
+        <label for="Revenue$">Revenue</label>
+    </div>
+
+    <div class="SuperCRM-Contacts">
+        <h1><i class="icon-adult"></i><span class="i-name">Contacts</span></h1>
+
+        <template repeat="{{ Contacts }}">
+            <juicy-tile-grid id="juicy-tile:{{Html}}" disabled>
+                <template is="imported-template" content="{{ Html }}"></template>
+            </juicy-tile-grid>
+        </template>
+        <button class="launcher-button" style="background-color:#184259" onclick="getModel(this).AddContact$ = null">Add a contact in {{Name$}}</button>
+    </div> 
+
+    <button class="launcher-button" style="background-color:#11653B" onclick="getModel(this).Save$ = null">Save</button>
+    <link is="juicy-redirect" history url="{{ RedirectUrl$ }}">
+
+</template>
+<template bind="{{Noise}}">
+  <!--<div style="background: #eee">noise</div>-->
+</template>
+
+
+        
+      </juicy-tile-grid>
+    </template>
+</template>
+<template bind="{{Noise}}">
+  <!--<div style="background: #eee">noise</div>-->
+</template>
+            </template> 
+        </juicy-tile-grid>
+</template>
+<script type="text/javascript">
+  // 011
+  // 233
+  // 2
+  //
+  // prioritized
+  //
+  // 110
+  // 233
+  // 2
+  model = {"appName":"supercrm","master":{"Noise":{"Uri":"","Html":"/noise.html"},"SuperCRM":{"Html":"/SuperCRM.html","Message":"","FavoriteCustomer":{"Noise":{"Uri":"","Html":"/noise.html"},"SuperCRM":{"Html":"/company.html","Name$":"","Revenue$":0,"Uri":"/launcher/workspace/supercrm/companies/u","Contacts":[],"Save$":null,"AddContact$":null,"RedirectUrl$":""},"Html":"/polyjuice-merger?SuperCRM=/company.html&Noise=/noise.html"}},"Html":"/polyjuice-merger?SuperCRM=/SuperCRM.html&Noise=/noise.html"}};
+  document.addEventListener("polymer-ready", function(){
+    document.querySelector("template").bindingDelegate = new PolymerExpressions();
+    document.querySelector("template").model = model;
+
+  });
+
+
+  addMore = function( button ){
+      // var newOne = button.ownerDocument.createElement("div");
+      // newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+      // button.parentNode.appendChild( newOne );
+      // With !<3 to IE
+      document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
+          "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
+  };
+</script>
+
+
+</body>
