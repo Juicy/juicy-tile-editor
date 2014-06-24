@@ -47,9 +47,6 @@ juicy-tile-grid{
     padding: 15px;
     box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
 }
-body>juicy-tile-grid{
-    margin-left: 250px;
-}
 juicy-tile-grid #container>*, /** <-- oh, our `beloved` IE does not get concept of Shadow DOM */
 juicy-tile-grid>*{
     box-shadow:     0px 0px 10px 0px rgba(50, 50, 50, 0.75);
@@ -74,7 +71,7 @@ juicy-jsoneditor{
     }
   </style>
 
-<body>
+<body class="markdown-body">
 <template bind>
   <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
   <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
@@ -84,111 +81,25 @@ juicy-jsoneditor{
     </div>
   </template>
 
-        <juicy-tile-grid class="workspace {{appName}}" id="juicy-tile:{{master.Html}}" disabled>
-            <template bind="{{ master }}">
+  <juicy-tile-grid disabled>
+    <!-- Here it is, if we remove this line it works -->
+      <link rel="import" href="bugFromLauncher/whatever.html">
 
-<link rel="import" href="/vendor/juicy-redirect/src/juicy-redirect.html">
-
-<template bind="{{SuperCRM}}">
-  <style>
-    h1 {
-      margin: 0;
-    }
-  </style>
-    <template if="{{Message}}">
-        <h2>{{Message}}</h2>
-    </template>
-    <template bind="{{FavoriteCustomer}}">
-      <juicy-tile-grid id="juicy-tile:{{Html}}" disabled>
-        <!-- <template is="imported-template" content="{{Html}}"></template> -->
-
-<template bind="{{SuperCRM}}">
-
-    <style>
-        /*h1 input {
-            font-size: 0.9em;
-        }
-
-        .company {
-            background: yellow;
-        }
-
-        .contacts {
-            border: 2px dashed black;
-        }*/
-
-    </style>
-
-    <h1>Logo here</h1>
-
-
-    <div class="launcher-labeled-input">
-        <input id="Name$" type='text' value='{{ Name$ }}' placeholder='<Name>'>
-        <label for="Name$">Name</label>
-    </div>
-
-    <div class="launcher-labeled-input">
-        <input id="Revenue$" type='text' value='{{ Revenue$ }}' placeholder='<Revenue>'>
-        <label for="Revenue$">Revenue</label>
-    </div>
-
-    <div class="SuperCRM-Contacts">
-        <h1><i class="icon-adult"></i><span class="i-name">Contacts</span></h1>
-
-        <template repeat="{{ Contacts }}">
-            <juicy-tile-grid id="juicy-tile:{{Html}}" disabled>
-                <template is="imported-template" content="{{ Html }}"></template>
-            </juicy-tile-grid>
-        </template>
-        <button class="launcher-button" style="background-color:#184259" onclick="getModel(this).AddContact$ = null">Add a contact in {{Name$}}</button>
-    </div> 
-
-    <button class="launcher-button" style="background-color:#11653B" onclick="getModel(this).Save$ = null">Save</button>
-    <link is="juicy-redirect" history url="{{ RedirectUrl$ }}">
-
-</template>
-<template bind="{{Noise}}">
-  <!--<div style="background: #eee">noise</div>-->
-</template>
-
-
-        
-      </juicy-tile-grid>
-    </template>
-</template>
-<template bind="{{Noise}}">
-  <!--<div style="background: #eee">noise</div>-->
-</template>
-            </template> 
-        </juicy-tile-grid>
+    <juicy-tile-grid disabled>
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>      
+    </juicy-tile-grid>
+  </juicy-tile-grid>
 </template>
 <script type="text/javascript">
-  // 011
-  // 233
-  // 2
-  //
-  // prioritized
-  //
-  // 110
-  // 233
-  // 2
-  model = {"appName":"supercrm","master":{"Noise":{"Uri":"","Html":"/noise.html"},"SuperCRM":{"Html":"/SuperCRM.html","Message":"","FavoriteCustomer":{"Noise":{"Uri":"","Html":"/noise.html"},"SuperCRM":{"Html":"/company.html","Name$":"","Revenue$":0,"Uri":"/launcher/workspace/supercrm/companies/u","Contacts":[],"Save$":null,"AddContact$":null,"RedirectUrl$":""},"Html":"/polyjuice-merger?SuperCRM=/company.html&Noise=/noise.html"}},"Html":"/polyjuice-merger?SuperCRM=/SuperCRM.html&Noise=/noise.html"}};
+  model = {};
   document.addEventListener("polymer-ready", function(){
     document.querySelector("template").bindingDelegate = new PolymerExpressions();
     document.querySelector("template").model = model;
 
   });
-
-
-  addMore = function( button ){
-      // var newOne = button.ownerDocument.createElement("div");
-      // newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
-      // button.parentNode.appendChild( newOne );
-      // With !<3 to IE
-      document.getElementById("ieHierarchyRequestErrorWorkaround").innerHTML += 
-          "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
-  };
 </script>
-
-
 </body>
