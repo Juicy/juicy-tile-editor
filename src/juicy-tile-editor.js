@@ -1,4 +1,5 @@
 (function () {
+
   /**
    * Returns an array of descendant elements that match the given tag names.
    * Tests: http://jsfiddle.net/tomalec/3u2CM/5/
@@ -23,6 +24,14 @@
     return children;
   }
 
+  function getChildOfContaining( parent, node ){
+    var elem = node;
+    while( elem && elem.parentNode != parent ){
+      elem = elem.parentNode;
+    }
+    return elem;
+  }
+
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
@@ -36,8 +45,14 @@
     contextMenuListener: null,
     keyUpListener: null,
     tree: [],
+    /** NodeList of <juicy-tile-list> elements we will bind to */
+    tileLists: null,
     watchedTagNames: ["JUICY-TILE-LIST"],
     attached: function () {
+      // getElementsByTagName is cool because it's fast and its LIVE
+      // as it is live, consider moving to created callback.
+      this.tileLists = this.ownerDocument.getElementsByTagName('juicy-tile-list');
+
       this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
       var that = this;
@@ -96,21 +111,26 @@
       }
     },
     listen: function () {
+      var editor = this;
+      // Highlight hovered tile
       this.mouseOverListener = function (ev) {
-        this.highlightedElement = null;
-        var highlightedElement = this.getSortableElement(ev.target);
+        editor.highlightedElement = null;
+
+        var highlightedElement = getChildOfContaining(this, ev.target);
         if (highlightedElement) {
-          if (this.highlightedElement !== highlightedElement) {
-            this.highlightedElement = highlightedElement;
-            this.$.elementRollover.show(this.highlightedElement);
+          if (editor.highlightedElement !== highlightedElement) {
+            editor.highlightedElement = highlightedElement;
+            editor.$.elementRollover.show( highlightedElement);
           }
         }
-      }.bind(this);
-
+      }
+      // Remove highlight
       this.mouseOutListener = function (ev) {
         this.$.elementRollover.hide();
       }.bind(this);
 
+      // Attach clicked tile for editing
+      // Expand selection if cmd/ctrl/shift button pressed
       this.mouseupListener = function (ev) {
         if (this.highlightedElement) {
           var model = this.highlightedElement.parentNode;
@@ -140,6 +160,7 @@
         }
       }.bind(this);
 
+      // Block clicking on tile content over highlight
       this.clickListener = function (ev) {
         var sortableElement = this.getSortableElement(ev.target);
         if(sortableElement) {
@@ -147,13 +168,13 @@
           ev.stopImmediatePropagation();
         }
       }.bind(this);
-
+      // Mac command kay fix
       this.contextMenuListener = function (ev) {
         if (ev.ctrlKey) {
           ev.preventDefault(); //on Mac, CTRL+Click opens system context menu, which we would like to avoid
         }
       }.bind(this);
-
+      // Shortcuts
       this.keyUpListener = function (ev) {
         if (ev.ctrlKey || ev.metaKey) { //mind that CTRL+T, CTRL+N, CTRL+W cannot be captured in Chrome
           if (ev.keyCode == 71) { //CTRL+G
@@ -170,7 +191,22 @@
         }
       }.bind(this);
 
-      window.addEventListener('mouseover', this.mouseOverListener);
+
+      // attach listeners for every <juicy-tile-list>
+      var listNo = this.tileLists.length;
+      var list;
+      while( listNo-- ){
+        list = this.tileLists[ listNo ];
+
+        list.addEventListener('mouseover', this.mouseOverListener);
+        // list.addEventListener('mouseout', this.mouseOutListener);
+        // list.addEventListener('mouseup', this.mouseupListener, true);
+        // list.addEventListener('mousedown', this.clickListener, true);
+        // list.addEventListener('click', this.clickListener, true);
+        // list.addEventListener('contextmenu', this.contextMenuListener);
+        // list.addEventListener('keyup', this.keyUpListener);
+      }
+
       window.addEventListener('mouseout', this.mouseOutListener);
       window.addEventListener('mouseup', this.mouseupListener, true);
       window.addEventListener('mousedown', this.clickListener, true);
@@ -178,7 +214,21 @@
       window.addEventListener('contextmenu', this.contextMenuListener);
       window.addEventListener('keyup', this.keyUpListener);
     },
-    unlisten: function () {
+    unlisten: function () {  
+      // remove listeners for every <juicy-tile-list>
+      var listNo = this.tileLists.length;
+      var list;    
+      while( listNo-- ){
+        list = this.tileLists[ listNo ];
+
+        list.removeEventListener('mouseover', this.mouseOverListener);
+        // list.removeEventListener('mouseout', this.mouseOutListener);
+        // list.removeEventListener('mouseup', this.mouseupListener, true);
+        // list.removeEventListener('mousedown', this.clickListener, true);
+        // list.removeEventListener('click', this.clickListener, true);
+        // list.removeEventListener('contextmenu', this.contextMenuListener);
+        // list.removeEventListener('keyup', this.keyUpListener);
+      }
       window.removeEventListener('mouseover', this.mouseOverListener);
       window.removeEventListener('mouseout', this.mouseOutListener);
       window.removeEventListener('mouseup', this.mouseupListener, true);
@@ -191,7 +241,7 @@
       this.selectionMode = !this.selectionMode;
     },
     getItemElement: function (item) {
-    	//FIXME I may not work (tomalec)
+      //FIXME I may not work (tomalec)
       var model = this.editedTiles;
       if (item.name) {
         if (item.name === "root") {
@@ -230,23 +280,23 @@
      * @return {[type]} [description]
      */
     // tree: [
-    // 	{
-    // 		node: _juicy-tile-list_,
-    // 		setup: _PackageSetup_, // redundand consider removal
-    // 		branches: [
-    // 			_setup.items[?].index_: [
-    // 				_tree_,
-    // 				_tree_
-    // 			]
-    // 		]
-    // 	}
+    //  {
+    //    node: _juicy-tile-list_,
+    //    setup: _PackageSetup_, // redundand consider removal
+    //    branches: [
+    //      _setup.items[?].index_: [
+    //        _tree_,
+    //        _tree_
+    //      ]
+    //    ]
+    //  }
     // ]
     treeRefresh: function() {
       var that = this,
-      	  tree = [];
+          tree = [];
       var extendWithSubTiles = function (element, parentJuicyTile) {
         var nested,
-        	branches = [];
+          branches = [];
 
         // iterate on element's real DOM elements
         for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
@@ -256,25 +306,25 @@
           else { //check if element has nested tiles children
             nested = getFirstLevelChildTags(element.elements[childNo], that.watchedTagNames);
           }
-        	// iterate on nested juicy-tile-list
-        	if( nested.length ){
-        		branches[ childNo ] = [];
+          // iterate on nested juicy-tile-list
+          if( nested.length ){
+            branches[ childNo ] = [];
 
-          	for(var branchNo = 0, bLen = nested.length; branchNo < bLen; branchNo++){
-          		branches[ childNo ].push(
-          			extendWithSubTiles(
-          				nested[branchNo],
-          				element.elements[childNo]
-          			)
-          		);
-          	}
-          }
+              for(var branchNo = 0, bLen = nested.length; branchNo < bLen; branchNo++){
+                branches[ childNo ].push(
+                  extendWithSubTiles(
+                    nested[branchNo],
+                    element.elements[childNo]
+                  )
+                );
+              }
+            }
         }
 
         return {
-        	node: element,
-        	setup: element.setup, // redundand consider removal
-        	branches: branches
+          node: element,
+          setup: element.setup, // redundand consider removal
+          branches: branches
         }
       }
 
