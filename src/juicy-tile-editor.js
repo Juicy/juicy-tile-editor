@@ -56,7 +56,7 @@
     /** NodeList of <juicy-tile-list> elements we will bind to */
     tileLists: null,
     watchedTagNames: ["JUICY-TILE-LIST"],
-    attached: function () {
+    domReady: function () {
       // getElementsByTagName is cool because it's fast and its LIVE
       // as it is live, consider moving to created callback.
       this.tileLists = this.ownerDocument.getElementsByTagName('juicy-tile-list');
@@ -91,9 +91,12 @@
           return txt;
         }
         else { //error
-          return "Unnamed element"
+          return "Unnamed element";
         }
-      }
+      };
+      // trigger change manually to start listening,
+      // if needed according to initial state of selectionMode
+      this.selectionModeChanged();
     },
     detached: function () {
       this.$.elementEdited.hide();
@@ -103,6 +106,10 @@
       this.unlisten(); //changing property in "detached" callback does not execute "selectionModeChanged" (Polymer 0.2.3)
     },
     selectionModeChanged: function() {
+      if( !this.tileLists ){ 
+      // do nothing before domReady: no tiles to observe
+        return;
+      }
       if (this.selectionMode) {
         this.listen();
       }
