@@ -115,7 +115,6 @@
       // Highlight hovered tile
       this.mouseOverListener = function (ev) {
         editor.highlightedElement = null;
-
         var highlightedElement = getChildOfContaining(this, ev.target);
         if (highlightedElement) {
           if (editor.highlightedElement !== highlightedElement) {
@@ -194,12 +193,15 @@
 
       // attach listeners for every <juicy-tile-list>
       var listNo = this.tileLists.length;
-      var list;
+      var list, shadowContainer;
       while( listNo-- ){
         list = this.tileLists[ listNo ];
+        shadowContainer = list.$.container; // list.shadowRoot.getElementById("container");
 
         list.addEventListener('mouseover', this.mouseOverListener);
-        // list.addEventListener('mouseout', this.mouseOutListener);
+        shadowContainer.addEventListener('mouseover', this.mouseOverListener);
+        list.addEventListener('mouseout', this.mouseOutListener);
+        shadowContainer.addEventListener('mouseout', this.mouseOutListener);
         // list.addEventListener('mouseup', this.mouseupListener, true);
         // list.addEventListener('mousedown', this.clickListener, true);
         // list.addEventListener('click', this.clickListener, true);
@@ -207,7 +209,6 @@
         // list.addEventListener('keyup', this.keyUpListener);
       }
 
-      window.addEventListener('mouseout', this.mouseOutListener);
       window.addEventListener('mouseup', this.mouseupListener, true);
       window.addEventListener('mousedown', this.clickListener, true);
       window.addEventListener('click', this.clickListener, true);
@@ -217,20 +218,21 @@
     unlisten: function () {  
       // remove listeners for every <juicy-tile-list>
       var listNo = this.tileLists.length;
-      var list;    
+      var list, shadowContainer;
       while( listNo-- ){
         list = this.tileLists[ listNo ];
+        shadowContainer = list.$.container; // list.shadowRoot.getElementById("container");
 
         list.removeEventListener('mouseover', this.mouseOverListener);
-        // list.removeEventListener('mouseout', this.mouseOutListener);
+        shadowContainer.removeEventListener('mouseover', this.mouseOverListener);
+        list.removeEventListener('mouseout', this.mouseOutListener);
+        shadowContainer.removeEventListener('mouseout', this.mouseOutListener);
         // list.removeEventListener('mouseup', this.mouseupListener, true);
         // list.removeEventListener('mousedown', this.clickListener, true);
         // list.removeEventListener('click', this.clickListener, true);
         // list.removeEventListener('contextmenu', this.contextMenuListener);
         // list.removeEventListener('keyup', this.keyUpListener);
       }
-      window.removeEventListener('mouseover', this.mouseOverListener);
-      window.removeEventListener('mouseout', this.mouseOutListener);
       window.removeEventListener('mouseup', this.mouseupListener, true);
       window.removeEventListener('mousedown', this.clickListener, true);
       window.removeEventListener('click', this.clickListener, true);
