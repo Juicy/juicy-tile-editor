@@ -32,6 +32,14 @@
     return elem;
   }
 
+  function keyOf( arrayObj, element ){
+    for( var key in arrayObj ){
+      if( arrayObj[key] === element ){
+        return key;
+      }
+    }
+  }
+
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
@@ -114,13 +122,14 @@
       var editor = this;
       // Highlight hovered tile
       this.mouseOverListener = function (ev) {
-        editor.highlightedElement = null;
+        // editor.highlightedElement = null;
         var highlightedElement = getChildOfContaining(this, ev.target);
         if (highlightedElement) {
           if (editor.highlightedElement !== highlightedElement) {
             editor.highlightedElement = highlightedElement;
             editor.$.elementRollover.show( highlightedElement);
           }
+          ev.stopImmediatePropagation();
         }
       }
       // Remove highlight
@@ -131,33 +140,37 @@
       // Attach clicked tile for editing
       // Expand selection if cmd/ctrl/shift button pressed
       this.mouseupListener = function (ev) {
-        if (this.highlightedElement) {
-          var model = this.highlightedElement.parentNode;
-          this.treeRefresh();
+        if (editor.highlightedElement) {
+          var elementKey = keyOf( this.elements, editor.highlightedElement);
+          if( !elementKey ){// Element is inside nested <juicy-tile-list>
+            return false; 
+          }
+          editor.treeRefresh();
           // ??? cantWe simply use editedElement?
-          var highlightedItem = model.items[ model.elements.indexOf(this.highlightedElement) ];
+          // var highlightedItem = this.items[ this.elements.indexOf(editor.highlightedElement) ];
+          var highlightedItem = this.items[ elementKey ];
           if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
-            if(this.editedTiles == model) {
+            if(editor.editedTiles == this) {
               //expand group
-              var index = this.selectedItems.indexOf(highlightedItem);
+              var index = editor.selectedItems.indexOf(highlightedItem); // elementKey?
               if(index == -1) {
-                this.treeHighlightExtendAction(highlightedItem);
-                this.$.treeView.highlightBranch(highlightedItem, true);
+                editor.treeHighlightExtendAction(highlightedItem);
+                editor.$.treeView.highlightBranch(highlightedItem, true);
               }
               else {
-                this.treeHighlightRemoveAction(highlightedItem);
-                this.$.treeView.unhighlightBranch(highlightedItem);
+                editor.treeHighlightRemoveAction(highlightedItem);
+                editor.$.treeView.unhighlightBranch(highlightedItem);
               }
             }
           }
           else {
-            this.treeHighlightAction(highlightedItem, model);
-            this.$.treeView.highlightBranch(highlightedItem);
+            editor.treeHighlightAction(highlightedItem, this);
+            editor.$.treeView.highlightBranch(highlightedItem);
           }
           ev.preventDefault();
           ev.stopImmediatePropagation();
         }
-      }.bind(this);
+      };
 
       // Block clicking on tile content over highlight
       // consider removing it to editor's prototype, not to redeclare it every time
@@ -202,13 +215,12 @@
         shadowContainer.addEventListener('mouseover', this.mouseOverListener);
         list.addEventListener('mouseout', this.mouseOutListener);
         shadowContainer.addEventListener('mouseout', this.mouseOutListener);
-        // list.addEventListener('mouseup', this.mouseupListener, true);
+        list.addEventListener('mouseup', this.mouseupListener, true);
         // list.addEventListener('mousedown', this.clickListener, true);
         // list.addEventListener('contextmenu', this.contextMenuListener);
         // list.addEventListener('keyup', this.keyUpListener);
       }
 
-      window.addEventListener('mouseup', this.mouseupListener, true);
       window.addEventListener('mousedown', this.clickListener, true);
       window.addEventListener('click', this.clickListener, true);
       window.addEventListener('contextmenu', this.contextMenuListener);
@@ -226,12 +238,11 @@
         shadowContainer.removeEventListener('mouseover', this.mouseOverListener);
         list.removeEventListener('mouseout', this.mouseOutListener);
         shadowContainer.removeEventListener('mouseout', this.mouseOutListener);
-        // list.removeEventListener('mouseup', this.mouseupListener, true);
+        list.removeEventListener('mouseup', this.mouseupListener, true);
         // list.removeEventListener('mousedown', this.clickListener, true);
         // list.removeEventListener('contextmenu', this.contextMenuListener);
         // list.removeEventListener('keyup', this.keyUpListener);
       }
-      window.removeEventListener('mouseup', this.mouseupListener, true);
       window.removeEventListener('mousedown', this.clickListener, true);
       window.removeEventListener('click', this.clickListener, true);
       window.removeEventListener('contextmenu', this.contextMenuListener);
