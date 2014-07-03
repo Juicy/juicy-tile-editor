@@ -8,6 +8,8 @@ module.exports = function(grunt) {
                 },
                 files: [
                     '*.html',
+                    'src/*.html',
+                    'src/*.js',
                     'examples/**/*.html',
                     'tests/*.js'
                 ],
