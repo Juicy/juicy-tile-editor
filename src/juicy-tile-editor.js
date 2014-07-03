@@ -160,9 +160,9 @@
       }.bind(this);
 
       // Block clicking on tile content over highlight
+      // consider removing it to editor's prototype, not to redeclare it every time
       this.clickListener = function (ev) {
-        var sortableElement = this.getSortableElement(ev.target);
-        if(sortableElement) {
+        if(this.highlightedElement) { // if we are still over a tile
           ev.preventDefault();
           ev.stopImmediatePropagation();
         }
@@ -204,7 +204,6 @@
         shadowContainer.addEventListener('mouseout', this.mouseOutListener);
         // list.addEventListener('mouseup', this.mouseupListener, true);
         // list.addEventListener('mousedown', this.clickListener, true);
-        // list.addEventListener('click', this.clickListener, true);
         // list.addEventListener('contextmenu', this.contextMenuListener);
         // list.addEventListener('keyup', this.keyUpListener);
       }
@@ -229,7 +228,6 @@
         shadowContainer.removeEventListener('mouseout', this.mouseOutListener);
         // list.removeEventListener('mouseup', this.mouseupListener, true);
         // list.removeEventListener('mousedown', this.clickListener, true);
-        // list.removeEventListener('click', this.clickListener, true);
         // list.removeEventListener('contextmenu', this.contextMenuListener);
         // list.removeEventListener('keyup', this.keyUpListener);
       }
