@@ -117,14 +117,6 @@
         this.unlisten();
       }
     },
-    getSortableElement: function (elem) {
-      while (elem.parentNode) {
-        if (this.watchedTagNames.indexOf( elem.parentNode.nodeName ) > -1 ) {
-          return elem;
-        }
-        elem = elem.parentNode;
-      }
-    },
     listen: function () {
       var editor = this;
       // Highlight hovered tile
@@ -146,8 +138,11 @@
 
       // Attach clicked tile for editing
       // Expand selection if cmd/ctrl/shift button pressed
-      this.mouseupListener = function (ev) {
+      this.clickListener = function (ev) {
         if (editor.highlightedElement) {
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+
           var elementKey = keyOf( this.elements, editor.highlightedElement);
           if( !elementKey ){// Element is inside nested <juicy-tile-list>
             return false; 
@@ -174,20 +169,10 @@
             editor.treeHighlightAction(highlightedItem, this);
             editor.$.treeView.highlightBranch(highlightedItem);
           }
-          ev.preventDefault();
-          ev.stopImmediatePropagation();
         }
       };
 
-      // Block clicking on tile content over highlight
-      // consider removing it to editor's prototype, not to redeclare it every time
-      this.clickListener = function (ev) {
-        if(this.highlightedElement) { // if we are still over a tile
-          ev.preventDefault();
-          ev.stopImmediatePropagation();
-        }
-      }.bind(this);
-      // Mac command kay fix
+      // Mac command key fix
       this.contextMenuListener = function (ev) {
         if (ev.ctrlKey) {
           ev.preventDefault(); //on Mac, CTRL+Click opens system context menu, which we would like to avoid
@@ -222,14 +207,10 @@
         shadowContainer.addEventListener('mouseover', this.mouseOverListener);
         list.addEventListener('mouseout', this.mouseOutListener);
         shadowContainer.addEventListener('mouseout', this.mouseOutListener);
-        list.addEventListener('mouseup', this.mouseupListener, true);
-        // list.addEventListener('mousedown', this.clickListener, true);
-        // list.addEventListener('contextmenu', this.contextMenuListener);
-        // list.addEventListener('keyup', this.keyUpListener);
+
+        list.addEventListener('click', this.clickListener, true);
       }
 
-      window.addEventListener('mousedown', this.clickListener, true);
-      window.addEventListener('click', this.clickListener, true);
       window.addEventListener('contextmenu', this.contextMenuListener);
       window.addEventListener('keyup', this.keyUpListener);
     },
@@ -245,13 +226,9 @@
         shadowContainer.removeEventListener('mouseover', this.mouseOverListener);
         list.removeEventListener('mouseout', this.mouseOutListener);
         shadowContainer.removeEventListener('mouseout', this.mouseOutListener);
-        list.removeEventListener('mouseup', this.mouseupListener, true);
-        // list.removeEventListener('mousedown', this.clickListener, true);
-        // list.removeEventListener('contextmenu', this.contextMenuListener);
-        // list.removeEventListener('keyup', this.keyUpListener);
+
+        list.removeEventListener('click', this.clickListener, true);
       }
-      window.removeEventListener('mousedown', this.clickListener, true);
-      window.removeEventListener('click', this.clickListener, true);
       window.removeEventListener('contextmenu', this.contextMenuListener);
       window.removeEventListener('keyup', this.keyUpListener);
     },

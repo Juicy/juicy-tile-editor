@@ -76,7 +76,7 @@
   <juicy-tile-list id="st1" setup="{{setup}}">
     <div>Item 0 </div>
     <div>
-      <button>Item 1</button>
+      <button onclick="blockme()">Item 1</button>
     </div>
     <div>
       <input value="Input2">
@@ -187,6 +187,9 @@
     document.querySelector("template").model = model;
 
   })
+  function blockme(){
+    alert("I should get blocked when editor is opened");
+  }
 </script>
 
 
