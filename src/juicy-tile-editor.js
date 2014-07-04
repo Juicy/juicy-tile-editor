@@ -140,13 +140,14 @@
       // Expand selection if cmd/ctrl/shift button pressed
       this.clickListener = function (ev) {
         if (editor.highlightedElement) {
-          ev.preventDefault();
-          ev.stopImmediatePropagation();
 
           var elementKey = keyOf( this.elements, editor.highlightedElement);
           if( !elementKey ){// Element is inside nested <juicy-tile-list>
             return false; 
           }
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+
           editor.treeRefresh();
           // ??? cantWe simply use editedElement?
           // var highlightedItem = this.items[ this.elements.indexOf(editor.highlightedElement) ];
