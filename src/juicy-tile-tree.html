@@ -26,7 +26,7 @@
           <span on-tap="{{tapAction}}" class="{{ branch | getBranchClassName }}">⌗ {{ branch | toDisplayName }} ▾</span>
 
           <ul class="branch">
-            <template repeat="{{ branch.setup.items as item }}" id="item">
+            <template repeat="{{ branch.node.setup.items as item }}" id="item">
               <!-- item -->
               <li>
                 <template if="{{ item.items }}">

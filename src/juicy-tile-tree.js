@@ -6,6 +6,7 @@
      * Converts branch object to a display name string. Can be overloaded
      * @param branch
      * @returns {String}
+     * @todo not used, as it is overwritten in juicy-tile-editor
      */
     toDisplayName: function (branch) {
       if (branch.name != void 0) {
@@ -32,14 +33,14 @@
       else {
         eventName = 'juicy-tile-tree-highlight';
         if (isNestedTiles) {
-          this.highlightBranch(model.branch.setup);
+          this.highlightBranch(model.branch.node.setup);
         }
         else {
           this.highlightBranch(model.item);
         }
       }
       if (isNestedTiles) {
-        this.fire(eventName, {branch: model.branch.setup, tiles: model.branch.node});
+        this.fire(eventName, {branch: model.branch.node.setup, tiles: model.branch.node});
       }
       else {
         this.fire(eventName, {branch: model.item, tiles: model.branch.node});
@@ -63,7 +64,7 @@
       //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
       Array.prototype.forEach.call(this.$.root.querySelectorAll('span'), function (span) {
         var isNestedTiles = this.isNestedTilesLabel(span);
-        if (isNestedTiles && span.templateInstance.model.branch.setup == branch) {
+        if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
           span.classList.add("highlight");
         }
         else if (!isNestedTiles && span.templateInstance.model.item == branch) {

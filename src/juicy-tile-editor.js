@@ -1,27 +1,55 @@
 (function () {
-
   /**
-   * Returns an array of descendant elements that match the given tag names.
-   * Tests: http://jsfiddle.net/tomalec/3u2CM/5/
-   */
-  function getFirstLevelChildTags(baseElement, tagNames) {
-    var tagNo = tagNames.length;
-    var children = [];
-    var elements;
-    while( tagNo-- ){
-      elements = baseElement.getElementsByTagName(tagNames[ tagNo ]);
-      elementLoop: for (var i = 0, ilen = elements.length; i < ilen; i++) {
-        var elem = elements[i].parentNode;
-        while (elem != baseElement) {
-          if ( tagNames.indexOf(elem.nodeName )> -1 ) {
-            continue elementLoop;
-          }
-          elem = elem.parentNode;
-        }
-        children.push(elements[i]);
+   * Produced inducted, reduced, spanning trees for given set of nodes.
+   * @param  {Array-Like<Element>} elements array of DOM elements
+   * @return {Array<Object>}       tree structure that wraps DOM nodes, array of root nodes
+   * treeNode: {
+        node: element,
+        children: [{treeNode},{treeNode}],
+        parentNode: null
       }
-    }
-    return children;
+   * @IDEA rewrite map, foreach, filter to regular loops for performance (tomalec)
+   * @IDEA separate as lib, write test (tomalec)
+   */
+  function reducedInductedSpanningTree( elements ){
+    var elementsArray = Array.prototype.slice.call(elements,0);
+    var treeNodes = elementsArray.map( function(element){
+      return {
+        node: element,
+        //children: [],
+        branches: [],
+        parentNode: null
+      };
+    });
+    elementsArray.forEach( function(element, index){
+      var parent = element.parentNode,
+          parentIndex = -1,
+          //
+          prevNode = element,
+          childNo, parentTreeNode;
+
+      while(parent){
+        parentIndex = elementsArray.indexOf(parent);
+        if( parentIndex > -1){
+          //treeNodes[parentIndex].branches.push(treeNodes[index]);
+          childNo = Array.prototype.indexOf.call(parent.children, prevNode);
+          parentTreeNode = treeNodes[parentIndex];
+          //push to array, or create it
+          if( parentTreeNode.branches[ childNo ] ){
+            parentTreeNode.branches[ childNo ].push( treeNodes[index]);
+          } else {
+            parentTreeNode.branches[ childNo ] = [ treeNodes[index] ];
+          }
+          treeNodes[index].parentNode = treeNodes[parentIndex];
+          return; 
+        }
+        //
+        prevNode = parent;
+        parent = parent.parentNode;
+      }
+    });
+
+    return treeNodes.filter(function(elem){return elem.parentNode === null;});
   }
 
   function getChildOfContaining( parent, node ){
@@ -40,6 +68,18 @@
     }
   }
 
+  function getRootNode( element ){
+    if( document.contains(element) ){
+      return document;
+    }
+    
+    var root = element;
+    while( root.parentNode ){
+      root = root.parentNode;
+    }
+    return root;
+  }
+
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
@@ -53,13 +93,41 @@
     contextMenuListener: null,
     keyUpListener: null,
     tree: [],
-    /** NodeList of <juicy-tile-list> elements we will bind to */
+    /** Document | DocumentFragment document root, or shadow root containing this element. */
+    parentRoot: null,
+    /** {NodeList | Array} of <juicy-tile-list> elements we will bind to */
     tileLists: null,
     watchedTagNames: ["JUICY-TILE-LIST"],
-    domReady: function () {
+    /** 
+     * Search document (and shadowRoot if any) for juicy-tile-lists to manage 
+     * @returns {NodeList | Array} found lists.
+    */
+    attachTileLists: function (){
+      var lists = document.getElementsByTagName('juicy-tile-list').array();
+      if( this.parentRoot != document ){
+        lists.concat(
+          this.parentRoot.getElementsByTagName('juicy-tile-list')
+          );
+      }
+      this.tileLists = lists;
+      return lists;
+    },
+    attachedCallback: function () {
+      // get root element to provide scope where we will be searching for juicy-tile-lists
+      if( document.contains(this) ){
+        this.parentRoot = document;
+      } else {
+        var root = element;
+        while( root.parentNode ){
+          root = root.parentNode;
+        }
+        this.parentRoot = root;
+      }
+
       // getElementsByTagName is cool because it's fast and its LIVE
       // as it is live, consider moving to created callback.
-      this.tileLists = this.ownerDocument.getElementsByTagName('juicy-tile-list');
+      // this.tileLists = this.parentRoot.getElementsByTagName('juicy-tile-list');
+      this.attachTileLists();
 
       this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
@@ -105,6 +173,7 @@
       this.selectionMode = false;
       this.unlisten(); //changing property in "detached" callback does not execute "selectionModeChanged" (Polymer 0.2.3)
     },
+    //attributeChanged
     selectionModeChanged: function() {
       if( !this.tileLists ){ 
       // do nothing before domReady: no tiles to observe
@@ -130,7 +199,7 @@
           }
           ev.stopImmediatePropagation();
         }
-      }
+      };
       // Remove highlight
       this.mouseOutListener = function (ev) {
         this.$.elementRollover.hide();
@@ -278,7 +347,6 @@
     // tree: [
     //  {
     //    node: _juicy-tile-list_,
-    //    setup: _PackageSetup_, // redundand consider removal
     //    branches: [
     //      _setup.items[?].index_: [
     //        _tree_,
@@ -288,62 +356,9 @@
     //  }
     // ]
     treeRefresh: function() {
-      var that = this,
-          tree = [];
-      var extendWithSubTiles = function (element, parentJuicyTile) {
-        var nested,
-          branches = [];
-
-        // iterate on element's real DOM elements
-        for (var childNo = 0, eLen = element.elements.length; childNo < eLen; childNo++) {
-          if ( that.watchedTagNames.indexOf( element.elements[childNo].nodeName ) > -1 ) { //element is directly a nested tiles
-            nested = [element.elements[childNo]]
-          }
-          else { //check if element has nested tiles children
-            nested = getFirstLevelChildTags(element.elements[childNo], that.watchedTagNames);
-          }
-          // iterate on nested juicy-tile-list
-          if( nested.length ){
-            branches[ childNo ] = [];
-
-              for(var branchNo = 0, bLen = nested.length; branchNo < bLen; branchNo++){
-                branches[ childNo ].push(
-                  extendWithSubTiles(
-                    nested[branchNo],
-                    element.elements[childNo]
-                  )
-                );
-              }
-            }
-        }
-
-        return {
-          node: element,
-          setup: element.setup, // redundand consider removal
-          branches: branches
-        }
-      }
-
-      //find all trees
-      var topmost = this;
-      while (topmost.parentNode) {
-        topmost = topmost.parentNode;
-      }
-
-      var models = getFirstLevelChildTags(topmost, this.watchedTagNames);
-
-      if (topmost.host) {
-        var distributedModels = getFirstLevelChildTags(topmost.host, this.watchedTagNames);
-        models = models.concat(distributedModels);
-      }
-
-      for (var i = 0, ilen = models.length; i < ilen; i++) {
-        tree.push(
-          extendWithSubTiles(models[i])
-        );
-      }
       // notify observer/two-way-binding/tempalte only once
-      this.tree = tree;
+      // Idea calculate this only once
+      this.tree = reducedInductedSpanningTree(this.tileLists);
     },
     treeHighlightExtendAction: function(item) {
       if(item.detail) {  //is tree event
