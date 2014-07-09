@@ -1,10 +1,11 @@
 # &lt;juicy-tile-editor&gt;
 
-`<juicy-tile-editor>` is a Polymer Element that adds an editor to control the setup of `<juicy-tile-list>`
+`<juicy-tile-editor>` is a Polymer Element that adds an editor to control the setup of [`<juicy-tile-list>`](http://github.com/juicy-tile-list) and [`<juicy-tile-grid>`](http://github.com/juicy-tile-grid)
 
 ## Demo
 
 [Check it live!](http://juicy.github.io/juicy-tile-editor)
+> [`juicy-tile-grid` example](http://juicy.github.io/juicy-tile-editor/examples/juicy-tiles-grid-editor.html)
 
 ## Usage
 
@@ -17,8 +18,8 @@
 2. Import Web Components' polyfill:
 
     ```html
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/platform.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.0/polymer.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
     ```
 
 3. Import Custom Element:
