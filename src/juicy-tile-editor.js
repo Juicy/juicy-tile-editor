@@ -97,16 +97,18 @@
     parentRoot: null,
     /** {NodeList | Array} of <juicy-tile-list> elements we will bind to */
     tileLists: null,
-    watchedTagNames: ["JUICY-TILE-LIST"],
     /** 
      * Search document (and shadowRoot if any) for juicy-tile-lists to manage 
      * @returns {NodeList | Array} found lists.
     */
     attachTileLists: function (){
-      var lists = document.getElementsByTagName('juicy-tile-list').array();
+      // var lists = document.getElementsByTagName('juicy-tile-list').array();
+      var lists = Array.prototype.slice.call (
+          document.querySelectorAll('juicy-tile-list, juicy-tile-grid')
+      );
       if( this.parentRoot != document ){
         lists.concat(
-          this.parentRoot.getElementsByTagName('juicy-tile-list')
+          this.parentRoot.querySelectorAll('juicy-tile-list, juicy-tile-grid')
           );
       }
       this.tileLists = lists;
