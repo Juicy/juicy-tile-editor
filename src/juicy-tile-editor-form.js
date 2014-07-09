@@ -35,15 +35,6 @@
     priority: null,
     innerHTML: null,
     layout: null,
-    watchedTagNames: "JUICY-TILE-LIST",
-    getSortableElement: function (elem) {
-      while (elem.parentNode) {
-        if ( this.watchedTagNames.indexOf( elem.parentNode.nodeName ) > -1 ) {
-          return elem;
-        }
-        elem = elem.parentNode;
-      }
-    },
     newGroupFromSelection: function () {
       if (!this.selectedItems.length > 1) {
         return;
