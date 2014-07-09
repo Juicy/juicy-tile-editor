@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>&lt;juicy-tile-editor&gt;</title>
+  <title>&lt;juicy-tile-editor&gt; for grid</title>
+  <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
 
   <!-- Importing Web Component's Polyfill -->
   <script src="../../platform/platform.js"></script>
@@ -63,9 +64,16 @@
       z-index: 100;
       background-color: #fff;
     }
+    iframe{float:right}
   </style>
 
 <body>
+<article class="markdown-body">
+    <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+    <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+  allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+
 <template bind>
   <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
   <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
@@ -271,6 +279,6 @@
           "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
   };
 </script>
-
+</article>
 
 </body>
