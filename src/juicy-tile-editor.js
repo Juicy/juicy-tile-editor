@@ -32,7 +32,7 @@
         parentIndex = elementsArray.indexOf(parent);
         if( parentIndex > -1){
           //treeNodes[parentIndex].branches.push(treeNodes[index]);
-          childNo = Array.prototype.indexOf.call(parent.children, prevNode);
+          childNo = Array.prototype.indexOf.call(parent.elements, prevNode);
           parentTreeNode = treeNodes[parentIndex];
           //push to array, or create it
           if( parentTreeNode.branches[ childNo ] ){
@@ -119,7 +119,7 @@
       if( document.contains(this) ){
         this.parentRoot = document;
       } else {
-        var root = element;
+        var root = this;
         while( root.parentNode ){
           root = root.parentNode;
         }
