@@ -175,7 +175,7 @@
     stackItems: function () {
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
         if (this.selectedItems[i].items) {
-          this.selectedItems[i].direction = "downRight";
+          this.selectedItems[i].direction = "rightDown";
           this.selectedItems[i].heightAuto = true;
           for (var j = 0, jlen = this.selectedItems[i].items.length; j < jlen; j++) {
             this.selectedItems[i].items[j].width = "100%";
