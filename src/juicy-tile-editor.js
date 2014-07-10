@@ -382,7 +382,7 @@
     },
     treeChangedAction: function() {
       this.treeRefresh();
-      this.$.treeView.highlightBranch(this.selectedItems);
+      this.$.treeView.highlightBranch(this.selectedItems[0]);
     }
   });
 })();
