@@ -12,14 +12,14 @@
 1. Install the component using [Bower](http://bower.io/):
 
     ```sh
-    $ bower install juicy-tile-editor --save
+    $ bower install Juicy/juicy-tile-editor --save
     ```
 
 2. Import Web Components' polyfill:
 
     ```html
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/platform.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.3/polymer.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/platform.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/polymer.js"></script>
     ```
 
 3. Import Custom Element:
