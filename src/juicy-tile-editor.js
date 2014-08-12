@@ -135,15 +135,12 @@
 
       var that = this;
       this.$.treeView.toDisplayName = function(branch) {
-        if(branch.node) { //juicy-tile-list root
-          return branch.node.id;
+        if (branch.item && branch.item.name != void 0) { //container
+          return branch.item.name;
         }
-        else if (branch.name != void 0) { //container
-          return branch.name;
-        }
-        else if (branch.index != void 0) { //element
+        else if (branch.item && branch.item.index != void 0) { //element
           var txt = "";
-          var elem = that.editedTiles.elements[ branch.index];
+          var elem = branch.node.elements[ branch.item.index];
           var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
           if(header) {
             txt = header.textContent;
@@ -159,6 +156,9 @@
             txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
           }
           return txt;
+        }
+        else if(branch.node) { //juicy-tile-list root
+          return branch.node.id;
         }
         else { //error
           return "Unnamed element";

@@ -23,7 +23,7 @@
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
         <li>
-          <span on-tap="{{tapAction}}" class="{{ branch | getBranchClassName }}">⌗ {{ branch | toDisplayName }} ▾</span>
+          <span on-tap="{{tapAction}}" class="{{ branch | getBranchClassName }}">⌗ {{ {node: branch.node}  | toDisplayName }} ▾</span>
 
           <ul class="branch">
             <template repeat="{{ branch.node.setup.items as item }}" id="item">
@@ -31,7 +31,7 @@
               <li>
                 <template if="{{ item.items }}">
                   <!-- group -->
-                  <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊕ {{ item | toDisplayName }} ▾</span>
+                  <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊕ {{ {node: branch.node, item: item} | toDisplayName }} ▾</span>
 
                   <ul class="group">
                     <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -44,11 +44,11 @@
                   <template if="{{ !branch.branches[ item.index ] }}">
                     <!-- without nested juicy-tile-list -->
 
-                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ item | toDisplayName }}</span>
+                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item} | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.index ] }}">
                     <!-- with nested juicy-tile-list -->
-                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊛ {{ item | toDisplayName }} ▾</span>
+                    <span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊛ {{ {node: branch.node, item: item} | toDisplayName }} ▾</span>
 
                     <ul class="group">
                       <template repeat="{{ branch.branches[ item.index ] as branch }}" ref="recursive"></template>
