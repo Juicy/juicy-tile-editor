@@ -133,37 +133,6 @@
 
       this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
-      var that = this;
-      this.$.treeView.toDisplayName = function(branch) {
-        if (branch.item && branch.item.name != void 0) { //container
-          return branch.item.name;
-        }
-        else if (branch.item && branch.item.index != void 0) { //element
-          var txt = "";
-          var elem = branch.node.elements[ branch.item.index];
-          var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
-          if(header) {
-            txt = header.textContent;
-          }
-          else {
-            txt = elem.textContent;
-          }
-          txt = txt.trim();
-          if(!txt) {
-            txt = "<" + elem.nodeName.toLowerCase() + ">";
-          }
-          if(txt.length > 23) {
-            txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
-          }
-          return txt;
-        }
-        else if(branch.node) { //juicy-tile-list root
-          return branch.node.id;
-        }
-        else { //error
-          return "Unnamed element";
-        }
-      };
       // trigger change manually to start listening,
       // if needed according to initial state of selectionMode
       this.selectionModeChanged();
