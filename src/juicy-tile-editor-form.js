@@ -30,7 +30,7 @@
     heightAuto: null,
     heightDynamic: null,
     heightAdaptive: null,
-    gap: null,
+    gutter: null,
     oversize: 0,
     priority: null,
     innerHTML: null,
@@ -43,7 +43,7 @@
       var current = this.selectedItems[0];
       var setup = {
         priority: current.priority,
-        gap: 0,
+        gutter: 0,
         index: current.index
       }
 
@@ -95,12 +95,12 @@
       }
       return elements;
     },
-    gapIncrease: function () {
-      this.gap++;
+    gutterIncrease: function () {
+      this.gutter++;
     },
-    gapDecrease: function () {
-      if (this.gap >= 1) {
-        this.gap--;
+    gutterDecrease: function () {
+      if (this.gutter >= 1) {
+        this.gutter--;
       }
     },
     oversizeIncrease: function () {
@@ -279,7 +279,7 @@
       this.heightAuto = this.getCommonValue("heightAuto") || false;
       this.heightDynamic = this.getCommonValue("heightDynamic") || false;
       this.heightAdaptive = this.getCommonValue("heightAdaptive") || false;
-      this.gap = this.getCommonValue("gap");
+      this.gutter = this.getCommonValue("gutter");
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
