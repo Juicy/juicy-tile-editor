@@ -14,6 +14,8 @@
     <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
     <link rel="import" href="../src/juicy-tile-editor.html">
 
+    <link rel="import" href="../../core-localstorage/core-localstorage.html">
+
     <link rel="stylesheet" href="http://juicy.github.io/juicy-tile-list/examples/github-markdown.css">
 
 
@@ -81,6 +83,7 @@ juicy-jsoneditor{
     </div>
   </template>
 
+  <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>
   <juicy-tile-grid disabled>
     <!-- Here it is, if we remove this line it works -->
       <link rel="import" href="bugFromLauncher/whatever.html">

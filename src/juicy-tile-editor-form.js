@@ -15,6 +15,23 @@
     }
     obj[property] = power;
   }
+  /**
+   * Save string to the local storage using the provided key
+   * @param {String} key
+   * @param {String} value
+   */
+  function saveJson(key, value) {
+    if (key) {
+      localStorage.setItem(key, value);
+    }
+  }
+  /**
+   * Returns true if current setup state is different from loaded from storage
+   * @return {Boolean}
+   */
+  function isSetupModified(tileList) {
+    return (JSON.stringify(tileList.setup) !== tileList._storedSetup);
+  }
 
   Polymer('juicy-tile-editor-form', {
     modified: false,
@@ -119,7 +136,7 @@
     refresh: function () {
       if (this.editedTiles) {
         this.editedTiles.refresh();
-        this.modified = this.editedTiles.isModified();
+        this.modified = isSetupModified( this.editedTiles );
         this.getSource();
       }
     },
@@ -240,8 +257,11 @@
       }
     },
     saveChanges: function () {
-      this.editedTiles.saveToStorage();
-      this.modified = this.editedTiles.isModified();
+      var editedTiles = this.editedTiles;
+      editedTiles._storedSetup = JSON.stringify(editedTiles.setup);
+      saveJson(editedTiles.id,  editedTiles._storedSetup ) ;
+
+      this.modified = false;// isSetupModified( editedTiles );
       this.fire('juicy-tile-editor-save');
     },
     /**
@@ -251,7 +271,7 @@
       // do it nice after we will move save-to-storage from juicy-tile-list
         this.editedTiles.setup = this.editedTiles._storedSetup;
         this.editedTiles.loadFromString();
-      this.modified = this.editedTiles.isModified();
+      this.modified = false;// isSetupModified( this.editedTiles );
       this.fire('juicy-tile-editor-revert');
       this.getSource();
     },
@@ -268,7 +288,7 @@
     applySource: function () {
       if (this.editedTiles) {
         this.editedTiles.loadFromString(this.source);
-        this.modified = this.editedTiles.isModified();
+        this.modified = isSetupModified( this.editedTiles );
         this.fire('juicy-tile-editor-revert');
       }
     },

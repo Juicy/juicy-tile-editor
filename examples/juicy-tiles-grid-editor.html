@@ -13,6 +13,8 @@
   <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
   <link rel="import" href="../src/juicy-tile-editor.html">
 
+  <link rel="import" href="../../core-localstorage/core-localstorage.html">
+
   <style>
     body {
       padding: 2em;
@@ -82,6 +84,8 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
       <juicy-tile-editor selectionMode></juicy-tile-editor>
     </div>
   </template>
+
+  <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>
   <juicy-tile-grid id="st1" setup="{{setup}}">
     <div>0</div>
     <div>
