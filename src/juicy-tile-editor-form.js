@@ -15,24 +15,7 @@
     }
     obj[property] = power;
   }
-  /**
-   * Save string to the local storage using the provided key
-   * @param {String} key
-   * @param {String} value
-   */
-  function saveJson(key, value) {
-    if (key) {
-      localStorage.setItem(key, value);
-    }
-  }
-  /**
-   * Returns true if current setup state is different from loaded from storage
-   * @return {Boolean}
-   */
-  function isSetupModified(tileList) {
-    return (JSON.stringify(tileList.setup) !== tileList._storedSetup);
-  }
-
+  
   Polymer('juicy-tile-editor-form', {
     modified: false,
     isSelection: false,
@@ -99,7 +82,7 @@
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     getContainerChildElements: function (container) {
-    	//FIXME I may not work (tomalec)
+      //FIXME I may not work (tomalec)
       var model = this.editedTiles;
       var elements = [];
       for (var i = 0, ilen = container.items.length; i < ilen; i++) {
@@ -136,7 +119,7 @@
     refresh: function () {
       if (this.editedTiles) {
         this.editedTiles.refresh();
-        this.modified = isSetupModified( this.editedTiles );
+        this.modified = this.editedTiles.sync.isModified();
         this.getSource();
       }
     },
@@ -258,20 +241,17 @@
     },
     saveChanges: function () {
       var editedTiles = this.editedTiles;
-      editedTiles._storedSetup = JSON.stringify(editedTiles.setup);
-      saveJson(editedTiles.id,  editedTiles._storedSetup ) ;
+      editedTiles.sync.save();
 
-      this.modified = false;// isSetupModified( editedTiles );
+      this.modified = false;// editedTiles.sync.isModified();
       this.fire('juicy-tile-editor-save');
     },
     /**
-     * Reverts setup from local storage
+     * Reverts setup and refresh tiles
      */
     revertChanges: function () {
-      // do it nice after we will move save-to-storage from juicy-tile-list
-        this.editedTiles.setup = this.editedTiles._storedSetup;
-        this.editedTiles.loadFromString();
-      this.modified = false;// isSetupModified( this.editedTiles );
+      this.editedTiles.sync.revert();
+      this.modified = false;// this.editedTiles.sync.isModified();
       this.fire('juicy-tile-editor-revert');
       this.getSource();
     },
@@ -287,8 +267,8 @@
      */
     applySource: function () {
       if (this.editedTiles) {
-        this.editedTiles.loadFromString(this.source);
-        this.modified = isSetupModified( this.editedTiles );
+        this.editedTiles.setup = JSON.parse(this.source);
+        this.modified = this.editedTiles.sync.isModified();
         this.fire('juicy-tile-editor-revert');
       }
     },

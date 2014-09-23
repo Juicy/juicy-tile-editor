@@ -11,6 +11,7 @@
 
   <!-- Importing Custom Elements -->
   <link rel="import" href="../../juicy-tile-grid/src/juicy-tile-grid.html">
+  <link rel="import" href="../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
   <link rel="import" href="../src/juicy-tile-editor.html">
 
   <link rel="import" href="../../core-localstorage/core-localstorage.html">
@@ -86,7 +87,8 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
   </template>
 
   <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>
-  <juicy-tile-grid id="st1" setup="{{setup}}">
+  <juicy-tiles-setup-sync storedValue="{{setup}}"></juicy-tiles-setup-sync>
+  <juicy-tile-grid id="st1" setup="[[setup]]">
     <div>0</div>
     <div>
         <button>1</button>

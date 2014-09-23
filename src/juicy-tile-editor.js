@@ -292,7 +292,7 @@
       }
     },
     revertAction: function() {
-      this.selectedItems.length = 0; //TODO solve this better (put changes on a stack?). Currently I need to clear selection because `this.editedTiles.loadFromStorage()` recreates `setup`, which results in `this.selectedItems` pointing to objects that are not referenced anymore [Marcin]
+      this.selectedItems.length = 0; //TODO solve this better (put changes on a stack?). Currently I need to clear selection because `this.editedTiles.setupChanged()` recreates `setup`, which results in `this.selectedItems` pointing to objects that are not referenced anymore [Marcin]
       this.$.elementEdited.show();
       this.$.elementRollover.hide();
       this.$.elementSelected.hide();
