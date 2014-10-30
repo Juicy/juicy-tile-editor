@@ -119,7 +119,7 @@
     refresh: function () {
       if (this.editedTiles) {
         this.editedTiles.refresh();
-        this.modified = this.editedTiles.sync.isModified();
+        this.modified = this.editedTiles.sync && this.editedTiles.sync.isModified();
         this.getSource();
       }
     },

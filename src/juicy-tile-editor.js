@@ -114,7 +114,8 @@
       this.tileLists = lists;
       return lists;
     },
-    attachedCallback: function () {
+    domReady: function () {// doReady instead of attached to make sure `attrChanged` will not be triggered afterwards
+
       // get root element to provide scope where we will be searching for juicy-tile-lists
       if( document.contains(this) ){
         this.parentRoot = document;
