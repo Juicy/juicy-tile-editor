@@ -229,9 +229,13 @@
         node = node.parentNode;
       }
     },
-    parseInt: { 
-      toModel: parseInt,
-      toDOM: function(arg, radix){return arg;}
+    toNumber: { 
+      toModel: function(arg){
+        return parseInt(arg, 10) || 0;
+      },
+      toDOM: function(arg){
+        return arg;
+      }
     },
     applyChange: function (ev) {
       var node = ev.target;

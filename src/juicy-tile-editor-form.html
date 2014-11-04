@@ -248,7 +248,7 @@
 
         <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="gutter">
           <juicy-popover>
-            <input class="handle toolbar-button val" placeholder="multiple" value="{{gutter | parseInt(10)}}">
+            <input class="handle toolbar-button val" placeholder="multiple" value="{{gutter | toNumber}}">
             <div class="expandable">
               <button class="editable" on-click="{{gutterIncrease}}">+</button>
               <button class="editable" on-click="{{gutterDecrease}}">-</button>
