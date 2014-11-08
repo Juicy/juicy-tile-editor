@@ -130,8 +130,27 @@
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.1);
       }
-      .toolbar-button.revert{
+      /*.toolbar-button*/
+      .revert{
         transform: scale(1, -1);
+      }
+      .directionGroup{
+        background-color: #e5e7ed;
+        box-shadow: 0px 0 7px black inset;
+        border-radius: 3px;
+      }
+      /*.toolbar-button*/
+      .direction{
+        border-radius: 3px;
+      }
+      /*.toolbar-button*/
+      .direction:not([checked]){
+        /*box-shadow: 0px 0 7px black inset;*/
+        background-color: transparent;
+      }
+      /*.toolbar-button*/
+      .direction[checked]{
+        box-shadow: 0px 0 7px black;
       }
 
       .toolbar-label {
@@ -234,7 +253,24 @@
         </div>
 
         <div class="toolbar-item" disabled?="{{!isContainer}}">
-          <button class="toolbar-button" on-click="{{changeDirection}}">⤷/⤵</button>
+          <div class="directionGroup">
+            <button 
+              class="toolbar-button direction" 
+              on-click="{{ changeDirection }}" 
+              role="radio" 
+              aria-checked?="{{!direction || direction == 'rightDown'}}" 
+              checked?="{{!direction || direction == 'rightDown'}}"
+              value="rightDown"
+              >⤵</button>
+            <button 
+              class="toolbar-button direction" 
+              on-click="{{ changeDirection }}" 
+              role="radio" 
+              aria-checked?="{{direction == 'downRight'}}" 
+              checked?="{{direction == 'downRight'}}"
+              value="downRight"
+              >⤷</button>
+          </div>
           <label class="toolbar-label">Direction</label>
         </div>
 

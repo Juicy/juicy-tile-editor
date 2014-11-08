@@ -168,8 +168,9 @@
       this.refresh();
       this.fire('juicy-tile-editor-form-tree-changed');
     },
-    changeDirection: function(){
-      this.selectedItems[0].direction = this.selectedItems[0].direction == "downRight" ? "rightDown" : "downRight";
+    changeDirection: function(event, i, element){
+      this.selectedItems[0].direction = element.value;
+      this.direction = element.value;
       this.refresh();
     },
     stackItems: function () {
@@ -298,6 +299,7 @@
       this.gutter = this.getCommonValue("gutter");
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
+      this.direction = this.getCommonValue("direction");
       this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
       this.layout = this.editedTiles ? this.editedTiles.getAttribute('layout') : '';
       this.isSelection = (this.selectedItems.length > 0);
