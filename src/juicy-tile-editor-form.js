@@ -263,6 +263,12 @@
       this.fire('juicy-tile-editor-revert');
       this.getSource();
     },
+    clearConfig: function () {
+      this.editedTiles.sync.clear();
+      this.modified = false;// this.editedTiles.sync.isModified();
+      this.fire('juicy-tile-editor-clear');
+      this.getSource();
+    },
     applyLayout: function () {
       this.editedTiles.setAttribute('layout', this.layout);
       this.editedTiles.refresh();

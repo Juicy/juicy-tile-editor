@@ -42,6 +42,14 @@ Attribute                    | Options             | Default      | Description
 ---                          | ---                 | ---          | ---
 `selectionMode`              | *Boolean*           |              | If present, the editor starts in selection mode
 
+## Events
+
+Event                     | Description
+---                       | ---
+`juicy-tile-editor-save`  | Triggers when configuration of any `<juicy-tile-list>` is saved.
+`juicy-tile-editor-revert`| Triggers when configuration of any `<juicy-tile-list>` is reverted.
+`juicy-tile-editor-clear` | Triggers when configuration of any `<juicy-tile-list>` is cleared.
+
 ## Contributing
 
 1. Fork it!

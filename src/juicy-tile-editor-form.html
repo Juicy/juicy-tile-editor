@@ -130,6 +130,9 @@
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.1);
       }
+      .toolbar-button.revert{
+        transform: scale(1, -1);
+      }
 
       .toolbar-label {
         font-size: 10px;
@@ -181,8 +184,12 @@
           </div>
 
           <div class="toolbar-item" disabled?="{{!modified}}">
-            <button class="toolbar-button" on-click="{{revertChanges}}">✗</button>
+            <button class="toolbar-button revert" on-click="{{revertChanges}}">↩</button>
             <label class="toolbar-label">Revert</label>
+          </div>
+          <div class="toolbar-item">
+            <button class="toolbar-button" on-click="{{clearConfig}}">✗</button>
+            <label class="toolbar-label">Clear</label>
           </div>
         </template>
 
@@ -227,7 +234,7 @@
         </div>
 
         <div class="toolbar-item" disabled?="{{!isContainer}}">
-          <button class="toolbar-button" on-click="{{changeDirection}}">↷</button>
+          <button class="toolbar-button" on-click="{{changeDirection}}">⤷/⤵</button>
           <label class="toolbar-label">Direction</label>
         </div>
 
