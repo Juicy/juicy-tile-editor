@@ -119,6 +119,9 @@
     },
     preventTextSelection: function(ev) {
       ev.preventDefault();
+    },
+    refreshTiles: function(){
+      // debugger
     }
   });
 })();

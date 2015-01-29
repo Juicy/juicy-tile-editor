@@ -18,7 +18,9 @@
     "polymer": "Polymer/polymer",
     "core-selector": "Polymer/core-selector",
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
-    "juicy-popover": "Juicy/juicy-popover#gh-pages"
+    "juicy-popover": "Juicy/juicy-popover#gh-pages",
+    "core-icon": "Polymer/core-icon#~0.5.2",
+    "core-icon-button": "Polymer/core-icon-button#~0.5.2"
   },
   "devDependencies": {
     "core-localstorage": "Polymer/core-localstorage#0.4.1",
