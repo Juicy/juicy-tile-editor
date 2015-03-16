@@ -52,10 +52,13 @@
     return treeNodes.filter(function(elem){return elem.parentNode === null;});
   }
 
-  function getChildOfContaining( parent, node ){
+  function getTileOfContaining( parent, node ){
     var elem = node;
     while( elem && elem.parentNode != parent ){
       elem = elem.parentNode;
+    }
+    if(elem && elem.hasAttribute("juicytile")){
+      elem = parent.tiles[elem.getAttribute('juicytile')];
     }
     return elem;
   }
@@ -83,7 +86,7 @@
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
-    highlightedElement: null,
+    highlightedTile: null,
     selectedItems: [],
     selectedElements: [],
     sortableTilesModel: null,
@@ -132,16 +135,17 @@
       // this.tileLists = this.parentRoot.getElementsByTagName('juicy-tile-list');
       this.attachTileLists();
 
-      this.$.elementEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
+      this.$.tileEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
       // trigger change manually to start listening,
       // if needed according to initial state of selectionMode
       this.selectionModeChanged();
     },
     detached: function () {
-      this.$.elementEdited.hide();
-      this.$.elementRollover.hide();
-      this.$.elementSelected.hide();
+      this.$.tileEdited.hide();
+      this.highlightedTile = null;
+      this.$.tileRollover.hide();
+      this.$.tileSelected.hide();
       this.selectionMode = false;
       this.unlisten(); //changing property in "detached" callback does not execute "selectionModeChanged" (Polymer 0.2.3)
     },
@@ -162,41 +166,46 @@
       var editor = this;
       // Highlight hovered tile
       this.mouseOverListener = function (ev) {
-        // editor.highlightedElement = null;
-        var highlightedElement = getChildOfContaining(this, ev.target);
-        if (highlightedElement) {
-          if (editor.highlightedElement !== highlightedElement) {
-            editor.highlightedElement = highlightedElement;
-            editor.$.elementRollover.show( highlightedElement);
+        // editor.highlightedTile = null;
+        var highlightedTile = getTileOfContaining(this, ev.target);
+        if (highlightedTile) {
+          if (editor.highlightedTile !== highlightedTile) {
+            editor.highlightedTile = highlightedTile;
+            editor.$.tileRollover.show( highlightedTile);
           }
           ev.stopImmediatePropagation();
         }
       };
       // Remove highlight
       this.mouseOutListener = function (ev) {
-        this.$.elementRollover.hide();
+        editor.highlightedTile = null;
+        this.$.tileRollover.hide();
       }.bind(this);
 
       // Attach clicked tile for editing
       // Expand selection if cmd/ctrl/shift button pressed
       this.clickListener = function (ev) {
-        if (editor.highlightedElement) {
+          // var tile = getTileOfContaining(this,  ev.target);
+          // console.log(tile);
+          // return true;
 
-          var elementKey = keyOf( this.elements, editor.highlightedElement);
-          if( !elementKey ){// Element is inside nested <juicy-tile-list>
+
+        if (editor.highlightedTile) {
+          //TODO (tomalec): replace with native this.contains()
+          var inHere = keyOf( this.tiles, editor.highlightedTile);
+          if( !inHere ){// Element is inside nested <juicy-tile-list>
             return false; 
           }
           ev.preventDefault();
           ev.stopImmediatePropagation();
 
           editor.treeRefresh();
-          // ??? cantWe simply use editedElement?
-          // var highlightedItem = this.items[ this.elements.indexOf(editor.highlightedElement) ];
-          var highlightedItem = this.items[ elementKey ];
+          // TODO(tomalec) unify  .allItems and .tiles
+          var highlightedItem = this.allItems[ editor.highlightedTile.id ];
           if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
             if(editor.editedTiles == this) {
               //expand group
-              var index = editor.selectedItems.indexOf(highlightedItem); // elementKey?
+              var index = editor.selectedItems.indexOf(highlightedItem);
               if(index == -1) {
                 editor.treeHighlightExtendAction(highlightedItem);
                 editor.$.treeView.highlightBranch(highlightedItem, true);
@@ -245,12 +254,14 @@
         list = this.tileLists[ listNo ];
         shadowContainer = list.$.container; // list.shadowRoot.getElementById("container");
 
+        // TODO (tomalec) unify virtual groups and real items selection.
         list.addEventListener('mouseover', this.mouseOverListener);
         shadowContainer.addEventListener('mouseover', this.mouseOverListener);
         list.addEventListener('mouseout', this.mouseOutListener);
         shadowContainer.addEventListener('mouseout', this.mouseOutListener);
 
         list.addEventListener('click', this.clickListener, true);
+        // shadowContainer.addEventListener('click', this.clickListener, true);
       }
 
       window.addEventListener('contextmenu', this.contextMenuListener);
@@ -277,40 +288,26 @@
     toggleSelectionMode: function () {
       this.selectionMode = !this.selectionMode;
     },
-    getItemElement: function (item) {
-      //FIXME I may not work (tomalec)
-      var model = this.editedTiles;
-      if (item.name) {
-        if (item.name === "root") {
-          return model.$.container;
-        }
-        else {
-          return model.elements[item.name];
-        }
-      }
-      else {
-        return model.elements[item.index];
-      }
-    },
     revertAction: function() {
       this.selectedItems.length = 0; //TODO solve this better (put changes on a stack?). Currently I need to clear selection because `this.editedTiles.setupChanged()` recreates `setup`, which results in `this.selectedItems` pointing to objects that are not referenced anymore [Marcin]
-      this.$.elementEdited.show();
-      this.$.elementRollover.hide();
-      this.$.elementSelected.hide();
+      this.$.tileEdited.show();
+      this.highlightedTile = null;
+      this.$.tileRollover.hide();
+      this.$.tileSelected.hide();
       this.treeChangedAction();
     },
-    treeHighlightAction: function (item, tiles) {
+    treeHighlightAction: function (item, tileList) {
       if(item.detail) {  //is tree event
-        tiles = item.detail.tiles;
+        tileList = item.detail.tiles;
         item = item.detail.branch;
       }
-      this.editedTiles = tiles;
-      var element = this.getItemElement(item);
-      this.$.elementEdited.show(element);
+      this.editedTiles = tileList;
+      var tile = tileList.tiles[item.id];
+      this.$.tileEdited.show(tile);
       this.selectedItems.length = 0;
       this.selectedItems.push(item);
       this.selectedElements.length = 0;
-      this.selectedElements.push(element);
+      this.selectedElements.push(tile);
     },
     /**
      * [treeRefresh description]
@@ -337,9 +334,8 @@
         item = item.detail.branch;
       }
       this.selectedItems.push(item);
-      var elem = this.editedTiles.elements[item.name || item.index];
-      this.selectedElements.push(elem);
-      this.$.elementSelected.show(this.selectedElements);
+      this.selectedElements.push( this.editedTiles.tiles[item.id] );
+      this.$.tileSelected.show(this.selectedElements);
     },
     treeHighlightRemoveAction: function(item) {
       if(item.detail) {  //is tree event
@@ -348,7 +344,7 @@
       var index = this.selectedItems.indexOf(item);
       this.selectedItems.splice(index, 1);
       this.selectedElements.splice(index, 1);
-      this.$.elementSelected.show(this.selectedElements);
+      this.$.tileSelected.show(this.selectedElements);
     },
     treeChangedAction: function() {
       this.treeRefresh();

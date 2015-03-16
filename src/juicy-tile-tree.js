@@ -8,12 +8,16 @@
      * @returns {String}
      */
     toDisplayName: function(branch) {
-        if (branch.item && branch.item.name != void 0) { //container
-          return branch.item.name;
+        if (branch.item && branch.item.items != void 0) { //container
+          return branch.item.id;
         }
-        else if (branch.item && branch.item.index != void 0) { //element
+        else if (branch.item) { //element
           var txt = "";
-          var elem = branch.node.elements[ branch.item.index];
+          //TODO: use some kind of this.elements (which will not contain groups)
+          var elem = branch.node.querySelector('[juicytile="'+branch.item.id+'"]');
+          if(!elem){
+            return branch.item.id;
+          }
           var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
           if(header) {
             txt = header.textContent;
