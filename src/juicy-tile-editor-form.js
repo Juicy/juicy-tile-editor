@@ -43,12 +43,12 @@
       var current = this.selectedItems[0];
       var setup = {
         priority: current.priority,
-        gutter: 0,
-        index: current.index
-      }
+        gutter: 0
+      };
 
       var model = this.editedTiles;
       var newContainer = model.createNewContainer(null, current.container, setup, true);
+      // performant heavy // may cause lots of repaints
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
         model.moveToContainer(this.selectedItems[i], newContainer, true);
       }
@@ -86,11 +86,8 @@
       var model = this.editedTiles;
       var elements = [];
       for (var i = 0, ilen = container.items.length; i < ilen; i++) {
-        if (container.items[i].index != void 0) {
-          elements.push(model.elements[container.items[i].index])
-        }
-        else if (container.items[i].name != void 0) {
-          elements.push(model.elements[container.items[i].name])
+        if (container.items[i].id) {
+          elements.push(model.tiles[container.items[i].id]);
         }
       }
       return elements;
