@@ -125,6 +125,7 @@
       ev.preventDefault();
     },
     refreshTiles: function(){
+      this.fire('juicy-tile-tree-refresh-tiles');
       // debugger
     }
   });

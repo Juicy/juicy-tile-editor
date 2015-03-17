@@ -349,6 +349,10 @@
     treeChangedAction: function() {
       this.treeRefresh();
       this.$.treeView.highlightBranch(this.selectedItems[0]);
+    },
+    refreshTiles: function(e){
+      this.$.form.refresh();
+      e.stopImmediatePropagation();
     }
   });
 })();

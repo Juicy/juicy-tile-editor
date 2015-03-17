@@ -22,7 +22,9 @@
         margin-left: 10px;
       }
     </style>
-    <juicy-tile-editor-form selectedItems="{{selectedItems}}" editedTiles="{{editedTiles}}"
+    <juicy-tile-editor-form id="form"
+      selectedItems="{{selectedItems}}" 
+      editedTiles="{{editedTiles}}"
       on-juicy-tile-editor-revert="{{revertAction}}"
       on-juicy-tile-editor-form-tree-changed="{{treeChangedAction}}"></juicy-tile-editor-form>
 
@@ -31,7 +33,8 @@
       <juicy-tile-tree id="treeView" tree="{{ tree }}"
         on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
         on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
-        on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"></juicy-tile-tree>
+        on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
+        on-juicy-tile-tree-refresh-tiles="{{refreshTiles}}"></juicy-tile-tree>
     </div>
 
     <juicy-highlight id="tileEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></juicy-highlight>
