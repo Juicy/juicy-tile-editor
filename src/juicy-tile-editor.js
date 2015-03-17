@@ -25,26 +25,27 @@
       var parent = element.parentNode,
           parentIndex = -1,
           //
-          prevNode = element,
-          childNo, parentTreeNode;
+          child = element,
+          childId, parentTreeNode;
 
       while(parent){
         parentIndex = elementsArray.indexOf(parent);
         if( parentIndex > -1){
           //treeNodes[parentIndex].branches.push(treeNodes[index]);
-          childNo = Array.prototype.indexOf.call(parent.elements, prevNode);
+          childId = child.getAttribute("juicytile");
+          // childId = Array.prototype.indexOf.call(parent.tiles, child);
           parentTreeNode = treeNodes[parentIndex];
           //push to array, or create it
-          if( parentTreeNode.branches[ childNo ] ){
-            parentTreeNode.branches[ childNo ].push( treeNodes[index]);
+          if( parentTreeNode.branches[ childId ] ){
+            parentTreeNode.branches[ childId ].push( treeNodes[index]);
           } else {
-            parentTreeNode.branches[ childNo ] = [ treeNodes[index] ];
+            parentTreeNode.branches[ childId ] = [ treeNodes[index] ];
           }
           treeNodes[index].parentNode = treeNodes[parentIndex];
           return; 
         }
         //
-        prevNode = parent;
+        child = parent;
         parent = parent.parentNode;
       }
     });
