@@ -33,7 +33,7 @@
     gutter: null,
     oversize: 0,
     priority: null,
-    innerHTML: null,
+    content: null,
     layout: null,
     newGroupFromSelection: function () {
       if (!this.selectedItems.length > 1) {
@@ -297,7 +297,7 @@
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");
-      this.innerHTML = this.getCommonValue("innerHTML") || ""; //set innerHTML to empty string if undefined is returned
+      this.content = this.getCommonValue("content") || ""; //set content to empty string if undefined is returned
       this.layout = this.editedTiles ? this.editedTiles.getAttribute('layout') : '';
       this.isSelection = (this.selectedItems.length > 0);
       this.isSingleSelection = (this.selectedItems.length == 1);
