@@ -210,7 +210,7 @@
       }
     },
     setCommonValue: function (propName, val) {
-      if (val !== "" && this.selectedItems.length) {
+      if (this.selectedItems.length) {
         for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
           this.selectedItems[i][propName] = val;
         }
