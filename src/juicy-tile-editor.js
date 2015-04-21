@@ -354,6 +354,9 @@
     refreshTiles: function(e){
       this.$.form.refresh();
       e.stopImmediatePropagation();
+    },
+    moveToOtherSide: function (e) {
+        this.$.sidebar.classList.toggle("right");
     }
   });
 })();
