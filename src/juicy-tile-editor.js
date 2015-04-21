@@ -371,6 +371,9 @@
         }
       // }
       e.stopImmediatePropagation();
+    },
+    moveToOtherSide: function (e) {
+        this.$.sidebar.classList.toggle("right");
     }
   });
 })();

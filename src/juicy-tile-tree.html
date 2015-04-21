@@ -7,52 +7,59 @@
 
 <polymer-element name="juicy-tile-tree" attributes="tree">
   <template>
-    <style>
-      ul {
-        list-style: none;
-        padding: 0 0 0 calc( 1em + 3px );
-      }
+      <style>
+          ul {
+              margin-top:0px;
+              list-style: none;
+              padding: 0 0 0 calc( 1em + 3px );
+          }
 
-      #root{
-        padding: 0;
-      }
+          #root {
+              padding: 0;
+          }
 
-      li span {
-        cursor: default;
-        white-space: nowrap;
-      }
+          li {
+              white-space:nowrap;
+          }
 
-      li span.highlight {
-        background-color: blue;
-        color: white;
-      }
+          li span {
+              cursor: default;
+              white-space: nowrap;
+          }
 
-      core-icon-button, juicy-toggle-icon-button {
-        /*padding: 1px 1px 1px 1px;*/
-        margin: 1px;
-        line-height: 1em;
-      }
-      core-icon[role=img]{
-        height: 1em;
-        width: 1em;
-        padding: 1px;
+          li span.highlight {
+              background-color: blue;
+              color: white;
+          }
 
-      }
-      juicy-toggle-icon-button /deep/ core-icon[role=img]{
-        height: 1em;
-        width: 1em;
-        /*padding: 1px;
-        margin: 1px;*/
-      }
+          core-icon-button, juicy-toggle-icon-button {
+              /*padding: 1px 1px 1px 1px;*/
+              margin: 1px;
+              line-height: 1em;
+          }
 
-      .expand[checked] ~ ul {
-        display: none;
-      }
+          core-icon[role=img] {
+              height: 1em;
+              width: 1em;
+              padding: 1px;
+          }
 
-      .blurred{
-        opacity: 0.5;
-      }
-    </style>
+          juicy-toggle-icon-button /deep/ core-icon[role=img] {
+              height: 1em;
+              width: 1em;
+              /*padding: 1px;
+              margin: 1px;*/
+          }
+
+          .expand[checked] ~ ul {
+              display: none;
+          }
+
+          .blurred {
+              opacity: 0.5;
+          }
+      </style>
+
     <ul id="root" on-mousedown="{{preventTextSelection}}">
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
