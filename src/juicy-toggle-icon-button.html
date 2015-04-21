@@ -25,10 +25,12 @@
         checked="{{checked}}" 
         disabled?="{{disabled}}" 
         value="{{value}}">
+        <!-- value="[[value]]"> -->
     </label>
   </template>
   <script>
     Polymer({
+      // value: null, 
       publish:{
         checked: {
           value: false,
@@ -39,6 +41,9 @@
           reflect: true
         }
       }
+      // ,created: function(){
+      //   this.value = {};
+      // }
     });
   </script>
 </polymer-element>

@@ -351,8 +351,25 @@
       this.treeRefresh();
       this.$.treeView.highlightBranch(this.selectedItems[0]);
     },
-    refreshTiles: function(e){
-      this.$.form.refresh();
+    refreshTileList: function(e){
+      var listEditedByForm = this.$.form.editedTiles;
+      // // refresh specific tile list if given
+      // if(e.detail && e.detail.refresh){
+      //   e.detail.refresh();
+      //   // refresh from if needed
+      //   if(e.detail === listEditedByForm){
+      //     this.$.form.refresh();
+      //   }
+      // } else {
+        var listNo = this.tileLists.length;
+        while(listNo--){
+          this.tileLists[listNo].refresh();
+          // refresh form if needed
+          if(listEditedByForm && this.tileLists[listNo] === listEditedByForm){
+            this.$.form.refresh();
+          }
+        }
+      // }
       e.stopImmediatePropagation();
     }
   });

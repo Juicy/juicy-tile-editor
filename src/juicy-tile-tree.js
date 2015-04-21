@@ -124,9 +124,9 @@
     preventTextSelection: function(ev) {
       ev.preventDefault();
     },
-    refreshTiles: function(){
-      this.fire('juicy-tile-tree-refresh-tiles');
-      // debugger
+    refreshTileList: function(ev){
+      // this.fire('juicy-tile-tree-refresh-tile-list', ev.target.value);
+      this.fire('juicy-tile-tree-refresh-tile-list');
     }
   });
 })();
