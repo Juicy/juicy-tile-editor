@@ -25,7 +25,7 @@
           else {
             txt = elem.textContent;
           }
-          txt = txt.trim();
+          txt = txt.trim().replace(/\s+/gi, " ");
           if(!txt) {
             txt = "<" + elem.nodeName.toLowerCase() + ">";
           }
