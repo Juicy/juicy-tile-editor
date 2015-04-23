@@ -104,9 +104,13 @@
 
       .toolbar-button {
         height: 20px;
-        display: inline-block;
+        display: block;
         white-space: nowrap;
         box-sizing: border-box;
+        border-radius:1px;
+        border: none;
+        padding: 0px;
+        margin: 0px;
       }
 
       .toolbar-button * {
@@ -126,6 +130,10 @@
         margin: 0 0 0 -1px;
       }
 
+      input.toolbar-button {
+          padding:0px 4px;
+      }
+
       .toolbar-button-background {
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.1);
@@ -136,12 +144,11 @@
       }
       .directionGroup{
         background-color: #e5e7ed;
-        box-shadow: 0px 0 7px black inset;
-        border-radius: 3px;
+        border-radius: 1px;
+        height:20px;
       }
-      /*.toolbar-button*/
-      .direction{
-        border-radius: 3px;
+      .directionGroup .toolbar-button {
+          float:left;
       }
       /*.toolbar-button*/
       .direction:not([checked]){
@@ -207,7 +214,7 @@
             <label class="toolbar-label">Revert</label>
           </div>
           <div class="toolbar-item">
-            <button class="toolbar-button" on-click="{{clearConfig}}">✗</button>
+            <button class="toolbar-button" on-click="{{clearConfig}}">✕</button>
             <label class="toolbar-label">Clear</label>
           </div>
         </template>
@@ -248,7 +255,7 @@
         <h4>Container</h4>
 
         <div class="toolbar-item" disabled?="{{!isContainer && !isRoot}}">
-          <button class="toolbar-button" on-click="{{deleteContainer}}">⧉</button>
+          <button class="toolbar-button" on-click="{{deleteContainer}}">⊠</button>
           <label class="toolbar-label">Ungroup</label>
         </div>
 
@@ -329,12 +336,12 @@
         <h4>Selection</h4>
 
         <div class="toolbar-item" disabled?="{{!isSelection}}">
-          <button class="toolbar-button" title="Move selected elements to the same group (CTRL+M)" on-click="{{moveSelectionToEditedItemContainer}}">⧉</button>
+          <button class="toolbar-button" title="Move selected elements to the same group (CTRL+M)" on-click="{{moveSelectionToEditedItemContainer}}">◲</button>
           <label class="toolbar-label">Move to group</label>
         </div>
 
         <div class="toolbar-item" disabled?="{{!isSelection}}">
-          <button class="toolbar-button" title="Create a new group from selected elements (CTRL+G)" on-click="{{newGroupFromSelection}}">⧈</button>
+          <button class="toolbar-button" title="Create a new group from selected elements (CTRL+G)" on-click="{{newGroupFromSelection}}">◻</button>
           <label class="toolbar-label">New group</label>
         </div>
 

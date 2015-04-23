@@ -84,6 +84,17 @@
     return root;
   }
 
+  function applySidebarPosition(bar, css) {
+      if (css) {
+          bar.classList.add(css);
+      }
+
+      bar.style.left = "";
+      bar.style.right = "";
+      bar.style.top = "";
+      bar.style.bottom = "";
+  }
+
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
@@ -119,6 +130,7 @@
       return lists;
     },
     domReady: function () {// doReady instead of attached to make sure `attrChanged` will not be triggered afterwards
+      var that = this;
 
       // get root element to provide scope where we will be searching for juicy-tile-lists
       if( document.contains(this) ){
@@ -141,6 +153,37 @@
       // trigger change manually to start listening,
       // if needed according to initial state of selectionMode
       this.selectionModeChanged();
+      
+      this.$.sidebarDrag.addEventListener("whenDragStops", function (args) {
+          var edge = 80;
+          var event = args.detail;
+          var bar = that.$.sidebar;
+          var size = that.$.sidebarDrag.getScreenSize();
+          var x = size.x, y = size.y;
+          var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
+
+          for (var i = 0; i < classes.length; i++) {
+              bar.classList.remove(classes[i]);
+          }
+
+          if (event.y < edge && event.x < edge) {
+              applySidebarPosition(bar, "left-top");
+          } else if (event.y < edge && event.x > (x - edge)) {
+              applySidebarPosition(bar, "right-top");
+          } else if (event.y > (y - edge) && event.x < edge) {
+              applySidebarPosition(bar, "left-bottom");
+          } else if (event.y > (y - edge) && event.x > (x - edge)) {
+              applySidebarPosition(bar, "right-bottom");
+          } else if (event.y < edge) {
+              applySidebarPosition(bar, "top");
+          } else if (event.y > (y - edge)) {
+              applySidebarPosition(bar, "bottom");
+          } else if (event.x > (x - edge)) {
+              applySidebarPosition(bar, "right");
+          } else if (event.x < edge) {
+              applySidebarPosition(bar, "left");
+          }
+      });
     },
     detached: function () {
       this.$.tileEdited.hide();
@@ -372,8 +415,19 @@
       // }
       e.stopImmediatePropagation();
     },
-    moveToOtherSide: function (e) {
-        this.$.sidebar.classList.toggle("right");
+    moveToNextPosition: function (e) {
+        var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
+        var bar = this.$.sidebar;
+
+        for (var i = 0; i < classes.length; i++) {
+            if (bar.classList.contains(classes[i])) {
+                var ni = ((i + 1) >= classes.length) ? 0 : (i + 1);
+
+                bar.classList.remove(classes[i]);
+                bar.classList.add(classes[ni]);
+                break;
+            }
+        }
     }
   });
 })();

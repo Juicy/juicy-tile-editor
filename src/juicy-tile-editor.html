@@ -2,26 +2,87 @@
 <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html">
 <link rel="import" href="juicy-tile-editor-form.html">
 <link rel="import" href="juicy-tile-tree.html">
+<link rel="import" href="juicy-draggable.html" />
 
 <polymer-element name="juicy-tile-editor" attributes="selectionMode">
   <template>
     <style>
         .sidebar {
             position: fixed;
-            top: 135px;
-            left: 5px;
-            width: 200px;
-            height: calc(100% - 140px);
+            width: 220px;
             background: white;
             border: 1px solid black;
-            opacity: 0.8;
+            opacity: 0.85;
             overflow: auto;
             padding:0px 5px;
+            height:220px;
+        }
+
+        .sidebar h1 {
+            cursor: move;
+        }
+
+        :host.max-height .sidebar {
+            top: 35px;
+        }
+
+        .sidebar.left {
+            left:5px;
+            top: 65px;
+            height: calc(100% - 70px);
         }
 
         .sidebar.right {
+            right:5px;
+            top: 65px;
+            height: calc(100% - 70px);
+        }
+
+        .sidebar.top {
+            height:150px;
+            top:5px;
+            left:5px;
+            width: calc(100% - 15px);
+        }
+
+        .sidebar.bottom {
+            top:initial;
+            height:150px;
+            bottom:5px;
+            left:5px;
+            width: calc(100% - 15px);
+        }
+
+        .sidebar.left-top {
+            left:5px;
+            width:220px;
+            height:220px;
+            top:5px;
+        }
+
+        .sidebar.right-top {
             left:initial;
             right:5px;
+            width:220px;
+            height:220px;
+            top:5px;
+        }
+
+        .sidebar.left-bottom {
+            left:5px;
+            width:220px;
+            height:220px;
+            bottom:5px;
+            top:initial;
+        }
+
+        .sidebar.right-bottom {
+            left:initial;
+            right:5px;
+            width:220px;
+            height:220px;
+            bottom:5px;
+            top:initial;
         }
 
         .sidebar /deep/ #menu {
@@ -33,17 +94,23 @@
             font-size: 20px;
         }
 
-        .sidebar h1 .actions {
+        .sidebar .actions {
             float:right;
-            margin: -4px 4px 0px 0px;
+            margin: 7px 0px 0px 0px;
         }
 
-        .sidebar h1 .actions a {
+        .sidebar .actions a {
             text-decoration:none;
             color:#7f899c;
+            display:block;
+            width:25px;
+            height:25px;
+            text-align:center;
+            line-height:25px;
+            background-color:#F0F0F0;
         }
 
-        .sidebar h1 .actions a:hover {
+        .sidebar .actions a:hover {
             color:#333333;
         }
     </style>
@@ -54,18 +121,21 @@
       on-juicy-tile-editor-revert="{{revertAction}}"
       on-juicy-tile-editor-form-tree-changed="{{treeChangedAction}}"></juicy-tile-editor-form>
 
-    <div class="sidebar" id="sidebar">
-      <h1>
-          <span class="actions">
-              <a href="javascript:" title="Move to other side" on-click="{{moveToOtherSide}}">⇔</a>
-          </span>
-         Elements
-      </h1>
-      <juicy-tile-tree id="treeView" tree="{{ tree }}"
-                 on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
-                 on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
-                 on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
-                 on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"></juicy-tile-tree></div>
+      <juicy-draggable elementid="sidebar" handleid="sidebarHeader" position="fixed" id="sidebarDrag">
+          <div class="sidebar left" id="sidebar">
+              <span class="actions">
+                  <a href="javascript:" title="Move to next position" on-click="{{moveToNextPosition}}">⇔</a>
+              </span>
+              <h1 id="sidebarHeader">
+                  Elements
+              </h1>
+              <juicy-tile-tree id="treeView" tree="{{ tree }}"
+                               on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
+                               on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
+                               on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
+                               on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"></juicy-tile-tree>
+          </div>
+      </juicy-draggable>
 
     <juicy-highlight id="tileEdited" overlay strokeWidth="3" strokeColor="#33579F" strokeOffset="3"></juicy-highlight>
     <juicy-highlight id="tileRollover" strokeWidth="1" strokeColor="#222222" strokeOffset="4"></juicy-highlight>
