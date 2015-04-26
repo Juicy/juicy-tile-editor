@@ -84,9 +84,24 @@
     return root;
   }
 
+    
+  function saveSidebarPosition(position) {
+      window.localStorage.setItem("juicy-tile-editor-sidebar-position", position);
+  }
+
+  function restoreSidebarPosition(bar) {
+      var position = window.localStorage.getItem("juicy-tile-editor-sidebar-position");
+
+      if (position) {
+          bar.className = "sidebar";
+          bar.classList.add(position);
+      }
+  }
+
   function applySidebarPosition(bar, css) {
       if (css) {
           bar.classList.add(css);
+          saveSidebarPosition(css);
       }
 
       bar.style.left = "";
@@ -160,11 +175,13 @@
           var bar = that.$.sidebar;
           var size = that.$.sidebarDrag.getScreenSize();
           var x = size.x, y = size.y;
-          var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
+          //var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
 
-          for (var i = 0; i < classes.length; i++) {
+          /*for (var i = 0; i < classes.length; i++) {
               bar.classList.remove(classes[i]);
-          }
+          }*/
+
+          bar.className = "sidebar";
 
           if (event.y < edge && event.x < edge) {
               applySidebarPosition(bar, "left-top");
@@ -184,6 +201,8 @@
               applySidebarPosition(bar, "left");
           }
       });
+
+      restoreSidebarPosition(this.$.sidebar);
     },
     detached: function () {
       this.$.tileEdited.hide();
@@ -425,6 +444,7 @@
 
                 bar.classList.remove(classes[i]);
                 bar.classList.add(classes[ni]);
+                saveSidebarPosition(classes[ni]);
                 break;
             }
         }
