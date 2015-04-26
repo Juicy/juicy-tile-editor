@@ -8,6 +8,13 @@
 <polymer-element name="juicy-tile-tree" attributes="tree">
   <template>
       <style>
+          :host {
+              overflow:auto;
+              height:calc(100% - 45px);
+              position:relative;
+              display:block;
+          }
+
           ul {
               margin-top:0px;
               list-style: none;

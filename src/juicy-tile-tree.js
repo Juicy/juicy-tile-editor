@@ -80,25 +80,37 @@
       }
       return false; //a branch of a leaf (branch is inherited from prototype)
     },
+    highlightElement: function (span) {
+        var top = span.offsetTop;
+
+        if (top > (this.scrollTop + this.clientHeight) || top < this.scrollTop) {
+            this.scrollTop = top;
+        }
+
+        span.classList.add("highlight");
+    },
     highlightBranch: function (branch, expand) {
+      var that = this;
       if (!expand) {
         this.highlightedBranches.length = 0;
       }
       this.highlightedBranches.push(branch);
 
-      //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
-      Array.prototype.forEach.call(this.$.root.querySelectorAll('span'), function (span) {
-        var isNestedTiles = this.isNestedTilesLabel(span);
-        if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
-          span.classList.add("highlight");
-        }
-        else if (!isNestedTiles && span.templateInstance.model.item == branch) {
-          span.classList.add("highlight");
-        }
-        else if (!expand) {
-          span.classList.remove("highlight");
-        }
-      }.bind(this));
+      setTimeout(function () {
+          //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
+          Array.prototype.forEach.call(that.$.root.querySelectorAll('span'), function (span) {
+              var isNestedTiles = this.isNestedTilesLabel(span);
+              if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
+                  that.highlightElement(span);
+              }
+              else if (!isNestedTiles && span.templateInstance.model.item == branch) {
+                  that.highlightElement(span);
+              }
+              else if (!expand) {
+                  span.classList.remove("highlight");
+              }
+          }.bind(that));
+      });
     },
     unhighlightBranch: function (branch) {
       this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);

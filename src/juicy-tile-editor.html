@@ -113,11 +113,6 @@
         .sidebar .actions a:hover {
             color:#333333;
         }
-
-        .sidebar .sidebar-container {
-            overflow:auto;
-            height:calc(100% - 45px);
-        }
     </style>
 
     <juicy-tile-editor-form id="form"
@@ -134,13 +129,11 @@
               <h1 id="sidebarHeader">
                   Elements
               </h1>
-              <div class="sidebar-container">
-                  <juicy-tile-tree id="treeView" tree="{{ tree }}"
-                                   on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
-                                   on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
-                                   on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
-                                   on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"></juicy-tile-tree>
-              </div>
+              <juicy-tile-tree id="treeView" tree="{{ tree }}"
+                            on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
+                            on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
+                            on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
+                            on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"></juicy-tile-tree>
           </div>
       </juicy-draggable>
 
