@@ -35,7 +35,7 @@
     priority: null,
     content: null,
     layout: null,
-    newGroupFromSelection: function () {
+    newGroupFromSelection: function (width) {
       if (!this.selectedItems.length > 1) {
         return;
       }
@@ -57,11 +57,23 @@
       this.selectedItems.push(newContainer);
 
       var dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
-      newContainer.width = dimensions.width;
+
+      if (width) {
+          newContainer.width = width;
+      } else {
+          newContainer.width = dimensions.width;
+      }
+      
       newContainer.height = dimensions.height;
 
       this.refresh();
       this.fire('juicy-tile-editor-form-tree-changed');
+    },
+    newInlineGroupFromSelection: function () {
+        this.newGroupFromSelection();
+    },
+    newBlockGroupFromSelection: function () {
+        this.newGroupFromSelection("100%");
     },
     moveSelectionToEditedItemContainer: function () {
       if (!this.selectedItems.length > 1) {

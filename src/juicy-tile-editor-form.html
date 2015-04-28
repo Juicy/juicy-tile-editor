@@ -113,6 +113,23 @@
         margin: 0px;
       }
 
+        .toolbar-button-half {
+            float:left;
+            width:50%;
+        }
+
+        .toolbar-button-set .toolbar-button {
+            border-radius:0px;
+        }
+
+        .toolbar-button-set .toolbar-button:first-child {
+            border-radius:1px 0px 0px 1px;
+        }
+
+        .toolbar-button-set .toolbar-button:last-child {
+            border-radius:0px 1px 1px 0px;
+        }
+
       .toolbar-button * {
         height: 20px;
         box-sizing: border-box;
@@ -163,6 +180,7 @@
       .toolbar-label {
         font-size: 10px;
         text-align: center;
+        display:block;
       }
 
       .sidebar {
@@ -341,7 +359,10 @@
         </div>
 
         <div class="toolbar-item" disabled?="{{!isSelection}}">
-          <button class="toolbar-button" title="Create a new group from selected elements (CTRL+G)" on-click="{{newGroupFromSelection}}">◻</button>
+            <div class="toolbar-button-set">
+                <button class="toolbar-button toolbar-button-half" title="Create a new group from selected elements (CTRL+G)" on-click="{{newInlineGroupFromSelection}}">◻</button>
+                <button class="toolbar-button toolbar-button-half" title="Create a new line group from selected elements" on-click="{{newBlockGroupFromSelection}}">▭</button>
+            </div>
           <label class="toolbar-label">New group</label>
         </div>
 
