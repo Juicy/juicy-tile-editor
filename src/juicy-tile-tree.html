@@ -32,6 +32,7 @@
           li span {
               cursor: default;
               white-space: nowrap;
+              padding:0px 2px;
           }
 
           li span.highlight {
@@ -96,8 +97,7 @@
                   
                   <template if="{{ !branch.branches[ item.id ] }}">
                     <!-- without nested juicy-tile-list -->
-                    <core-icon class="blurred" icon="remove" title="tile"></core-icon
-                    ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
+                    <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
                     ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.id ] }}">
