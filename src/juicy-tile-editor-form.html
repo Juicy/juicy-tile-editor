@@ -272,6 +272,11 @@
       <div class="editableGroup">
         <h4>Container</h4>
 
+          <div class="toolbar-item" data-applyvalue="id" disabled?="{{!isSingleSelection}}">
+              <input placeholder="multiple" type="text" class="handle toolbar-button" value="{{id}}" update-on="input" />
+              <label class="toolbar-label">ID</label>
+          </div>
+
         <div class="toolbar-item" disabled?="{{!isContainer && !isRoot}}">
           <button class="toolbar-button" on-click="{{deleteContainer}}">⊠</button>
           <label class="toolbar-label">Ungroup</label>

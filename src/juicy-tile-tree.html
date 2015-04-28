@@ -84,7 +84,7 @@
                   <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
                   ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}"
-                    ><core-icon icon="folder" title="group"></core-icon> {{ {node: branch.node, item: item} | toDisplayName }}</span>
+                    ><core-icon icon="folder" title="group"></core-icon> {{ {node: branch.node, item: item, id: item.id, id: item.id} | toDisplayName }}</span>
 
                   <ul class="group">
                     <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -98,13 +98,13 @@
                     <!-- without nested juicy-tile-list -->
                     <core-icon class="blurred" icon="remove" title="tile"></core-icon
                     ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                    ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item} | toDisplayName }}</span>
+                    ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.id ] }}">
                     <!-- with nested juicy-tile-list -->
                   <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                  ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊛<!-- contains juicy-tile-list inside -->{{ {node: branch.node, item: item} | toDisplayName }}</span>
+                  ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊛<!-- contains juicy-tile-list inside -->{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
                     <ul class="group">
                       <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
                     </ul>

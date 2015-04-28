@@ -23,6 +23,7 @@
     selectedItems: [],
     editedTiles: null,
     itemName: null,
+    id: null,
     background: null,
     width: null,
     widthAuto: null,
@@ -297,6 +298,7 @@
       }
     },
     selectedItemsChanged: function () {
+      this.id = this.getCommonValue("id");
       this.itemName = this.getCommonValue("itemName");
       this.background = this.getCommonValue("background");
       this.width = this.getCommonValue("width");
