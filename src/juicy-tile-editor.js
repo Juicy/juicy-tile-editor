@@ -163,7 +163,7 @@
       // this.tileLists = this.parentRoot.getElementsByTagName('juicy-tile-list');
       this.attachTileLists();
 
-      this.$.tileEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
+      //this.$.tileEdited.show(this.selectedElements.length ? this.selectedElements[0] : null);
 
       // trigger change manually to start listening,
       // if needed according to initial state of selectionMode

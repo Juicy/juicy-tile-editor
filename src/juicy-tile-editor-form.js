@@ -317,7 +317,8 @@
       this.isSingleSelection = (this.selectedItems.length == 1);
       this.isContainer = this.isContainerInSelection();
       this.isRoot = this.isRootInSelection();
-      this.getSource();
+      //this.getSource();
+      this.refresh();
 
       Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
         if (this.isSelection && !this.isSingleSelection) {
