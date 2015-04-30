@@ -120,6 +120,32 @@
           }.bind(that));
       });
     },
+    openBranch: function (branch) {
+        var that = this;
+        var element = null;
+
+        Array.prototype.forEach.call(that.$.root.querySelectorAll('span'), function (span) {
+            var isNestedTiles = this.isNestedTilesLabel(span);
+
+            if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
+                element = span;
+            } else if (!isNestedTiles && span.templateInstance.model.item == branch) {
+                element = span;
+            }
+        }.bind(that));
+
+        while (element) {
+            if (element.tagName == "LI") {
+                var btn = element.querySelector(".expand");
+
+                if (btn) {
+                    btn.removeAttribute("checked");
+                }
+            }
+
+            element = element.parentNode;
+        }
+    },
     unhighlightBranch: function (branch) {
       this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
 

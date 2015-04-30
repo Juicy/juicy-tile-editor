@@ -290,6 +290,7 @@
           }
           else {
             editor.treeHighlightAction(highlightedItem, this);
+            editor.$.treeView.openBranch(highlightedItem);
             editor.$.treeView.highlightBranch(highlightedItem);
           }
         }
@@ -411,7 +412,9 @@
     treeRefresh: function() {
       // notify observer/two-way-binding/tempalte only once
       // Idea calculate this only once
-      this.tree = reducedInductedSpanningTree(this.tileLists);
+        if (!this.tree.length) {
+            this.tree = reducedInductedSpanningTree(this.tileLists);
+        }
     },
     treeHighlightExtendAction: function(item) {
       if(item.detail) {  //is tree event

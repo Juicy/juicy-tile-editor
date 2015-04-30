@@ -72,7 +72,7 @@
       <template repeat="{{ tree as branch }}" id="recursive">
         <!-- branch -->
         <li>
-          <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(branch) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+          <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
           ><span 
             on-tap="{{tapAction}}" 
             on-mouseover="{{hoverAction}}" 
@@ -87,7 +87,7 @@
                 <template if="{{ item.items }}">
                   <!-- group -->
                   
-                  <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+                  <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
                   ><span 
                     on-tap="{{tapAction}}" 
@@ -112,7 +112,7 @@
                   </template>
                   <template if="{{ branch.branches[ item.id ] }}">
                     <!-- with nested juicy-tile-list -->
-                  <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+                  <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
                   ><span 
                     on-tap="{{tapAction}}" 
