@@ -7,40 +7,32 @@
      * @param {Object} branch {node: {branchnode} [, item: branchnode.node.setup.items[n]]}
      * @returns {String}
      */
-    toDisplayName: function(branch) {
-        if (branch.item && branch.item.items != void 0) { //container
-          return branch.item.id;
-        }
-        else if (branch.item) { //element
-          var txt = "";
-          //TODO: use some kind of this.elements (which will not contain groups)
-          var elem = branch.node.querySelector('[juicytile="'+branch.item.id+'"]');
-          if(!elem){
-            return branch.item.id;
-          }
-          var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
-          if(header) {
-            txt = header.textContent;
-          }
-          else {
-            txt = elem.textContent;
-          }
-          txt = txt.trim().replace(/\s+/gi, " ");
-          if(!txt) {
-            txt = "<" + elem.nodeName.toLowerCase() + ">";
-          }
-          if(txt.length > 23) {
-            txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
-          }
-          return txt;
-        }
-        else if(branch.node) { //juicy-tile-list root
-          return branch.node.id;
-        }
-        else { //error
-          return "Unnamed element";
-        }
-      },
+    toRootName: function(node) {
+      return node.id || node.getAttribute("name");
+    },
+    toDisplayName: function(item, branch) {
+      var txt = "";
+      //TODO: use some kind of this.elements (which will not contain groups)
+      var elem = branch.node.querySelector('[juicytile="'+item.id+'"]');
+      if(!elem){
+        return item.id;
+      }
+      var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
+      if(header) {
+        txt = header.textContent;
+      }
+      else {
+        txt = elem.textContent;
+      }
+      txt = txt.trim().replace(/\s+/gi, " ");
+      if(!txt) {
+        txt = "<" + elem.nodeName.toLowerCase() + ">";
+      }
+      if(txt.length > 23) {
+        txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
+      }
+      return txt;
+    },
     tapAction: function (ev, index, target) {
       var eventName;
       var model = target.templateInstance.model;
