@@ -71,6 +71,22 @@
         this.fire(eventName, {branch: model.item, tiles: model.branch.node});
       }
     },
+    hoverBlurAction: function (eventName, ev, index, target) {
+        var model = target.templateInstance.model;
+        var isNestedTiles = this.isNestedTilesLabel(target);
+
+        if (isNestedTiles) {
+            this.fire(eventName, { branch: model.branch.node.setup, tiles: model.branch.node });
+        } else {
+            this.fire(eventName, { branch: model.item, tiles: model.branch.node });
+        }
+    },
+    hoverAction: function (ev, index, target) {
+        this.hoverBlurAction("juicy-tile-tree-hover", ev, index, target);
+    },
+    blurAction: function (ev, index, target) {
+        this.hoverBlurAction("juicy-tile-tree-blur", ev, index, target);
+    },
     isNestedTilesLabel: function(elem) {
       var model = elem.templateInstance.model;
       var proto = Object.getPrototypeOf(model);

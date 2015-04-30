@@ -133,13 +133,15 @@
                             on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
                             on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
                             on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
-                            on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"></juicy-tile-tree>
+                            on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"
+                            on-juicy-tile-tree-hover="{{treeHoverAction}}"
+                            on-juicy-tile-tree-blur="{{treeBlurAction}}"></juicy-tile-tree>
           </div>
       </juicy-draggable>
 
-    <juicy-highlight id="tileEdited" strokeWidth="2" strokeColor="#fd7f02" strokeOffset="4"></juicy-highlight>
-    <juicy-highlight id="tileRollover" strokeWidth="1" strokeColor="#222222" strokeOffset="4"></juicy-highlight>
-    <juicy-highlight id="tileSelected" strokeWidth="1" strokeColor="#fd7f02" strokeOffset="3"></juicy-highlight>
+    <juicy-highlight id="tileEdited" strokeWidth="2" strokeColor="#fd7f02" strokeOffset="2" fill="rgba(253, 127, 2, 0.1)"></juicy-highlight>
+    <juicy-highlight id="tileRollover" strokeWidth="1" strokeColor="#1E90FF" strokeOffset="2" fill="rgba(0,191,255, 0.2)"></juicy-highlight>
+    <juicy-highlight id="tileSelected" strokeWidth="1" strokeColor="#fd7f02" strokeOffset="2" fill="#FF0000"></juicy-highlight>
   </template>
   <script src="juicy-tile-editor.js"></script>
 </polymer-element>

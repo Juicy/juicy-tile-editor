@@ -203,6 +203,15 @@
       });
 
       restoreSidebarPosition(this.$.sidebar);
+
+      /*window.addEventListener("beforeunload", function (e) {
+          if (that.$.form.modified) {
+              var message = "You have unsaved layout setup changes!";
+
+              (e || window.event).returnValue = message;
+              return message;
+          }
+      });*/
     },
     detached: function () {
       this.$.tileEdited.hide();
@@ -371,6 +380,18 @@
       this.selectedItems.push(item);
       this.selectedElements.length = 0;
       this.selectedElements.push(tile);
+    },
+    treeHoverAction: function (item, tileList) {
+        if (item.detail) {  //is tree event
+            tileList = item.detail.tiles;
+            item = item.detail.branch;
+        }
+
+        var tile = tileList.tiles[item.id];
+        this.$.tileRollover.show(tile);
+    },
+    treeBlurAction: function (item, tileList) {
+        this.$.tileRollover.hide();
     },
     /**
      * [treeRefresh description]

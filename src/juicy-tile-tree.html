@@ -73,7 +73,7 @@
         <!-- branch -->
         <li>
           <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(branch) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
-          ><span on-tap="{{tapAction}}" class="{{ branch | getBranchClassName }}"><core-icon icon="view-quilt" title="juicy-tile-list"><!-- <core-icon icon="dashboard" title="juicy-tile-list"> --></core-icon>{{ {node: branch.node}  | toDisplayName }}</span>
+          ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ branch | getBranchClassName }}"><core-icon icon="view-quilt" title="juicy-tile-list"><!-- <core-icon icon="dashboard" title="juicy-tile-list"> --></core-icon>{{ {node: branch.node}  | toDisplayName }}</span>
 
           <ul class="branch">
             <template repeat="{{ branch.node.setup.items as item }}" id="item">
@@ -84,7 +84,7 @@
                   
                   <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                  ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}"
+                  ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}"
                     ><core-icon icon="folder" title="group"></core-icon> {{ {node: branch.node, item: item, id: item.id, id: item.id} | toDisplayName }}</span>
 
                   <ul class="group">
@@ -98,13 +98,13 @@
                   <template if="{{ !branch.branches[ item.id ] }}">
                     <!-- without nested juicy-tile-list -->
                     <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                    ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
+                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}">{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.id ] }}">
                     <!-- with nested juicy-tile-list -->
                   <juicy-toggle-icon-button class="expand" on-tap="{{ expandNode(item) }}" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                   ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                  ><span on-tap="{{tapAction}}" class="{{ item | getBranchClassName }}">⊛<!-- contains juicy-tile-list inside -->{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
+                  ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}">⊛<!-- contains juicy-tile-list inside -->{{ {node: branch.node, item: item, id: item.id} | toDisplayName }}</span>
                     <ul class="group">
                       <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
                     </ul>
