@@ -175,29 +175,27 @@
           var bar = that.$.sidebar;
           var size = that.$.sidebarDrag.getScreenSize();
           var x = size.x, y = size.y;
-          //var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
-
-          /*for (var i = 0; i < classes.length; i++) {
-              bar.classList.remove(classes[i]);
-          }*/
 
           bar.className = "sidebar";
 
-          if (event.y < edge && event.x < edge) {
+          var ex = event.mouseEvent.clientX;
+          var ey = event.mouseEvent.clientY;
+
+          if (ey < edge && ex < edge) {
               applySidebarPosition(bar, "left-top");
-          } else if (event.y < edge && event.x > (x - edge)) {
+          } else if (ey < edge && ex > (x - edge)) {
               applySidebarPosition(bar, "right-top");
-          } else if (event.y > (y - edge) && event.x < edge) {
+          } else if (ey > (y - edge) && ex < edge) {
               applySidebarPosition(bar, "left-bottom");
-          } else if (event.y > (y - edge) && event.x > (x - edge)) {
+          } else if (ey > (y - edge) && ex > (x - edge)) {
               applySidebarPosition(bar, "right-bottom");
-          } else if (event.y < edge) {
+          } else if (ey < edge) {
               applySidebarPosition(bar, "top");
-          } else if (event.y > (y - edge)) {
+          } else if (ey > (y - edge)) {
               applySidebarPosition(bar, "bottom");
-          } else if (event.x > (x - edge)) {
+          } else if (ex > (x - edge)) {
               applySidebarPosition(bar, "right");
-          } else if (event.x < edge) {
+          } else if (ex < edge) {
               applySidebarPosition(bar, "left");
           }
       });
