@@ -108,7 +108,7 @@
                   <template if="{{ !branch.branches[ item.id ] }}">
                     <!-- without nested juicy-tile-list -->
                     <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}">{{ item.itemName || toDisplayName(item, branch) }}</span>
+                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}">{{ item.itemName || toDisplayName(item, branch) }}</span>
                   </template>
                   <template if="{{ branch.branches[ item.id ] }}">
                     <!-- with nested juicy-tile-list -->
