@@ -2,138 +2,120 @@
 <link rel="import" href="../../core-icon/core-icon.html">
 <link rel="import" href="../../core-icon-button/core-icon-button.html">
 <link rel="import" href="juicy-toggle-icon-button.html">
-  <!-- load default set -->
-  <link rel="import" href="../../core-icons/core-icons.html">
+<!-- load default set -->
+<link rel="import" href="../../core-icons/core-icons.html">
 
 <polymer-element name="juicy-tile-tree" attributes="tree">
-  <template>
-      <style>
-          :host {
-              overflow:auto;
-              height:calc(100% - 45px);
-              position:relative;
-              display:block;
-          }
+    <template>
+        <style>
+            :host {
+                overflow: auto;
+                height: calc(100% - 45px);
+                position: relative;
+                display: block;
+            }
 
-          ul {
-              margin-top:0px;
-              list-style: none;
-              padding: 0 0 0 calc( 1em + 3px );
-          }
+            ul {
+                margin-top: 0px;
+                list-style: none;
+                padding: 0 0 0 calc( 1em + 3px );
+            }
 
-          #root {
-              padding: 0;
-          }
+            #root {
+                padding: 0;
+            }
 
-          li {
-              white-space:nowrap;
-          }
+            li {
+                white-space: nowrap;
+            }
 
-          li span {
-              cursor: default;
-              white-space: nowrap;
-              padding:0px 2px;
-          }
+            li span {
+                cursor: default;
+                white-space: nowrap;
+                padding: 0px 2px;
+            }
 
-          li span.highlight {
-              background-color: #7f86a7;
-              color: white;
-          }
+            li span.highlight {
+                background-color: #7f86a7;
+                color: white;
+            }
 
-          core-icon-button, juicy-toggle-icon-button {
-              /*padding: 1px 1px 1px 1px;*/
-              margin: 1px;
-              line-height: 1em;
-          }
+            core-icon-button, juicy-toggle-icon-button {
+                margin: 1px;
+                line-height: 1em;
+            }
 
-          core-icon[role=img] {
-              height: 1em;
-              width: 1em;
-              padding: 1px;
-          }
+            core-icon[role=img] {
+                height: 1em;
+                width: 1em;
+                padding: 1px;
+            }
 
-          juicy-toggle-icon-button /deep/ core-icon[role=img] {
-              height: 1em;
-              width: 1em;
-              /*padding: 1px;
-              margin: 1px;*/
-          }
+            juicy-toggle-icon-button /deep/ core-icon[role=img] {
+                height: 1em;
+                width: 1em;
+            }
 
-          .expand[checked] ~ ul {
-              display: none;
-          }
+            .expand[checked] ~ ul {
+                display: none;
+            }
 
-          .blurred {
-              opacity: 0.5;
-          }
-      </style>
+            .blurred {
+                opacity: 0.5;
+            }
+        </style>
 
-    <ul id="root" on-mousedown="{{preventTextSelection}}">
-      <template repeat="{{ tree as branch }}" id="recursive">
-        <!-- branch -->
-        <li>
-          <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
-          ><span 
-            on-tap="{{tapAction}}" 
-            on-mouseover="{{hoverAction}}" 
-            on-mouseout="{{blurAction}}" 
-            class="{{ branch | getBranchClassName }}"
-            title="{{ toRootName(branch.node) }}"><core-icon icon="view-quilt" title="juicy-tile-list"><!-- <core-icon icon="dashboard" title="juicy-tile-list"> --></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node) }}</span>
+        <ul id="root" on-mousedown="{{preventTextSelection}}">
+            <template repeat="{{ tree as branch }}" id="recursive">
+                <!-- branch -->
+                <li>
+                    <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ branch | getBranchClassName }}"
+                    title="{{ toRootName(branch.node) }}"><core-icon icon="view-quilt" title="juicy-tile-list"></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node) }}</span>
 
-          <ul class="branch">
-            <template repeat="{{ branch.node.setup.items as item }}" id="item">
-              <!-- item -->
-              <li>
-                <template if="{{ item.items }}">
-                  <!-- group -->
+                    <ul class="branch">
+                        <template repeat="{{ branch.node.setup.items as item }}" id="item">
+                            <!-- item -->
+                            <li>
+                                <template if="{{ item.items }}">
+                                    <!-- group -->
                   
-                  <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
-                  ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                  ><span 
-                    on-tap="{{tapAction}}" 
-                    on-mouseover="{{hoverAction}}" 
-                    on-mouseout="{{blurAction}}" 
-                    class="{{ item | getBranchClassName }}"
-                    title="{{item.id}}"
-                    ><core-icon icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span>
+                                    <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+                                    ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
+                                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                    ><core-icon icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span>
 
-                  <ul class="group">
-                    <template repeat="{{ item.items as item }}" ref="item"></template>
-                  </ul>
-                </template>
+                                    <ul class="group">
+                                        <template repeat="{{ item.items as item }}" ref="item"></template>
+                                    </ul>
+                                </template>
 
-                <template if="{{ !item.items }}" id="element">
-                  <!-- real element -->
+                                <template if="{{ !item.items }}" id="element">
+                                    <!-- real element -->
                   
-                  <template if="{{ !branch.branches[ item.id ] }}">
-                    <!-- without nested juicy-tile-list -->
-                    <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}">{{ item.itemName || toDisplayName(item, branch) }}</span>
-                  </template>
-                  <template if="{{ branch.branches[ item.id ] }}">
-                    <!-- with nested juicy-tile-list -->
-                  <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
-                  ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                  ><span 
-                    on-tap="{{tapAction}}" 
-                    on-mouseover="{{hoverAction}}" 
-                    on-mouseout="{{blurAction}}" 
-                    class="{{ item | getBranchClassName }}"
-                    title="{{item.id}}"
-                    >⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span>
-                    <ul class="group">
-                      <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
+                                    <template if="{{ !branch.branches[ item.id ] }}">
+                                        <!-- without nested juicy-tile-list -->
+                                        <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
+                                        ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}">{{ item.itemName || toDisplayName(item, branch) }}</span>
+                                    </template>
+                                    <template if="{{ branch.branches[ item.id ] }}">
+                                        <!-- with nested juicy-tile-list -->
+                                        <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
+                                        ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
+                                        ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                        >⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span>
+                                        <ul class="group">
+                                            <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
+                                        </ul>
+                                    </template>
+                                </template>
+                            </li>
+                        </template>
                     </ul>
-                  </template>
-                </template>
-              </li>
+                </li>
             </template>
-          </ul>
-        </li>
-      </template>
-    </ul>
-
-    <shadow></shadow>
-  </template>
-  <script src="juicy-tile-tree.js"></script>
+        </ul>
+        <shadow></shadow>
+    </template>
+    <script src="juicy-tile-tree.js"></script>
 </polymer-element>
