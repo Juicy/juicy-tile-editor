@@ -19,20 +19,51 @@
                 element['on' + eventName] = null;
             }
         }
+
         var currentElement;
+        var currentDropSelector;
+        var currentDropElement;
+        var currentOptions;
         var fairlyHighZIndex = '10';
 
-        function draggable(element, handle) {
-            handle = handle || element;
-            setPositionType(element);
-            setDraggableListeners(element);
+        function draggable(options) {
+            var element = options.element;
+            var handle = options.handle || element;
+            var position = options.position;
+            var dropSelector = options.dropSelector;
+            var dragElement = setPositionType(element, position, options.dragHelperClass);
+
+            setDraggableListeners(dragElement);
             addEventListener(handle, 'mousedown', function (event) {
-                startDragging(event, element);
+                if (position == "static") {
+                    copyElement(element, dragElement);
+                }
+
+                currentOptions = options;
+                startDragging(event, dragElement);
             });
+
+            return dragElement;
         }
 
-        function setPositionType(element) {
-            element.style.position = 'absolute';
+        function setPositionType(element, position, dragHelperClass) {
+            if (position == "static") {
+                var div = document.createElement("div");
+                
+                div.className = dragHelperClass;
+                div.style.position = "fixed";
+                element.parentNode.insertBefore(div, element);
+
+                return div;
+            }
+
+            if (!position) {
+                position = "absolute";
+            }
+
+            element.style.position = position;
+
+            return element;
         }
 
         function setDraggableListeners(element) {
@@ -46,10 +77,19 @@
             element.whenDragStops = addListener(element, 'stop');
         }
 
+        function copyElement(from, to) {
+            var rec = from.getBoundingClientRect();
+            to.innerText = from.innerText;
+            to.style.width = inPixels(from.offsetWidth);
+            to.style.height = inPixels(from.offsetHeight);
+            to.style.left = inPixels(rec.left);
+            to.style.top = inPixels(rec.top);
+        }
+
         function startDragging(event, element) {
             currentElement && sendToBack(currentElement);
             currentElement = bringToFront(element);
-
+            currentElement.classList.add(currentOptions.draggingClass);
 
             var initialPosition = getInitialPosition(currentElement);
             currentElement.style.left = inPixels(initialPosition.left);
@@ -61,6 +101,20 @@
             if (!okToGoOn) return;
 
             addDocumentListeners();
+        }
+
+        function stopDragging(event) {
+            removeDocumentListeners();
+
+            var left = parseInt(currentElement.style.left, 10);
+            var top = parseInt(currentElement.style.top, 10);
+
+            if (currentDropElement) {
+                currentDropElement.classList.remove(currentOptions.dragHoverClass);
+            }
+
+            triggerEvent('stop', { x: left, y: top, mouseEvent: event, dropElement: currentDropElement, dragElement: currentElement });
+            currentElement.classList.remove(currentOptions.draggingClass);
         }
 
         function addListener(element, type) {
@@ -93,14 +147,16 @@
         function addDocumentListeners() {
             addEventListener(document, 'selectstart', cancelDocumentSelection);
             addEventListener(document, 'mousemove', repositionElement);
-            addEventListener(document, 'mouseup', removeDocumentListeners);
+            addEventListener(document, 'mouseup', stopDragging);
         }
 
         function getInitialPosition(element) {
-            var boundingClientRect = element.getBoundingClientRect();
+            var rec = element.getBoundingClientRect();
+            var style = element.currentStyle || window.getComputedStyle(element);
+
             return {
-                top: boundingClientRect.top,
-                left: boundingClientRect.left
+                top: rec.top - parseInt(style.marginTop),
+                left: rec.left - parseInt(style.marginLeft)
             };
         }
 
@@ -131,41 +187,73 @@
             currentElement.lastXPosition = event.clientX;
             currentElement.lastYPosition = event.clientY;
 
+            highlightDropElement(event);
+
             triggerEvent('drag', { x: elementNewXPosition, y: elementNewYPosition, mouseEvent: event });
         }
 
-        function removeDocumentListeners(event) {
+        function highlightDropElement(event) {
+            currentDropElement = null;
+
+            if (!currentOptions.dropSelector) {
+                return null;
+            }
+
+            var items = document.querySelectorAll(currentOptions.dropSelector);
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var rec = item.getBoundingClientRect();
+                var x = event.clientX;
+                var y = event.clientY;
+
+                if (x >= rec.left && x <= rec.right && y >= rec.top && y <= rec.bottom) {
+                    currentDropElement = item;
+                    item.classList.add(currentOptions.dragHoverClass);
+                } else {
+                    item.classList.remove(currentOptions.dragHoverClass);
+                }
+            }
+        }
+
+        function removeDocumentListeners() {
             removeEventListener(document, 'selectstart', cancelDocumentSelection);
             removeEventListener(document, 'mousemove', repositionElement);
-            removeEventListener(document, 'mouseup', removeDocumentListeners);
-
-            var left = parseInt(currentElement.style.left, 10);
-            var top = parseInt(currentElement.style.top, 10);
-            triggerEvent('stop', { x: left, y: top, mouseEvent: event });
+            removeEventListener(document, 'mouseup', stopDragging);
         }
 
         return draggable;
     })();
 
-    function getElementInsideContainer(container, childID) {
-        var elm = {};
-        var elms = container.getElementsByTagName("*");
-        for (var i = 0; i < elms.length; i++) {
-            if (elms[i].id === childID) {
-                elm = elms[i];
-                break;
-            }
-        }
-        return elm;
-    }
-
     Polymer("juicy-draggable", {
         domReady: function () {
-            var element = getElementInsideContainer(this, this.elementId);
-            var handle = getElementInsideContainer(this, this.handleId);
+            var element = null;
+            var handle = null;
             var that = this;
 
-            draggable(element, handle);
+            if (!this.elementId) {
+                element = this.children[0];
+            } else {
+                element = this.querySelector("#" + this.elementId);
+            }
+
+            if (this.handleId) {
+                handle = this.querySelector("#" + this.handleId);
+            }
+
+            this.dragHelperClass = this.dragHelperClass || "drag-helper";
+            this.dragHoverClass = this.dragHoverClass || "drag-hover";
+            this.draggingClass = this.draggingClass || "dragging";
+
+            element = draggable({
+                element: element, 
+                handle: handle, 
+                position: this.position, 
+                dropSelector: this.dropSelector,
+                dragHelperClass: this.dragHelperClass,
+                dragHoverClass: this.dragHoverClass,
+                draggingClass: this.draggingClass
+            });
 
             element.whenDragStarts(function (e) {
                 that.fire("whenDragStarts", e);
@@ -178,8 +266,6 @@
             element.whenDragStops(function (e) {
                 that.fire("whenDragStops", e);
             });
-
-            element.style.position = this.position || "absolute";
         },
         getScreenSize: function () {
             var w = window;
