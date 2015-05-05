@@ -112,7 +112,7 @@
         var dragItems = document.querySelectorAll("#divDropable juicy-draggable");
 
         for (var i = 0; i < dragItems.length; i++) {
-            dragItems[i].addEventListener("whenDragStops", function (e) {
+            dragItems[i].addEventListener("juicy-draggable-stop", function (e) {
                 if (e.detail.dropElement) {
                     e.detail.dropElement.appendChild(e.detail.dragElement.parentNode);
                 } else {
