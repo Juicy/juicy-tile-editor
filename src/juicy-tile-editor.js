@@ -169,7 +169,11 @@
       // if needed according to initial state of selectionMode
       this.selectionModeChanged();
       
-      this.$.sidebarDrag.addEventListener("whenDragStops", function (args) {
+      this.$.sidebarDrag.addEventListener("juicy-draggable-stop", function (args) {
+          if (args.detail.dragElement != that.$.sidebar) {
+              return;
+          }
+
           var edge = 80;
           var event = args.detail;
           var bar = that.$.sidebar;
@@ -470,6 +474,15 @@
                 break;
             }
         }
+    },
+    treeItemDragStop: function (e) {
+        var item = e.detail.item;
+        var branch = e.detail.branch;
+        var form = this.$.form;
+
+        form.selectedItems.length = 0;
+        form.selectedItems.push(branch, item);
+        form.moveSelectionToEditedItemContainer();
     }
   });
 })();

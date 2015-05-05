@@ -1,9 +1,10 @@
-<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-icon/core-icon.html">
-<link rel="import" href="../../core-icon-button/core-icon-button.html">
-<link rel="import" href="juicy-toggle-icon-button.html">
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../core-icon/core-icon.html" />
+<link rel="import" href="../../core-icon-button/core-icon-button.html" />
+<link rel="import" href="juicy-toggle-icon-button.html" />
 <!-- load default set -->
-<link rel="import" href="../../core-icons/core-icons.html">
+<link rel="import" href="../../core-icons/core-icons.html" />
+<link rel="import" href="juicy-draggable.html" />
 
 <polymer-element name="juicy-tile-tree" attributes="tree">
     <template>
@@ -63,6 +64,31 @@
             .blurred {
                 opacity: 0.5;
             }
+
+            .drag-helper {
+                display: none;
+                background-color: #fff5bc;
+                border: #ffd800;
+                color: black;
+                padding: 1px 4px;
+                line-height: normal;
+                opacity: 0.8;
+            }
+
+            .drag-helper.dragging {
+                display: block;
+            }
+
+            juicy-draggable {
+                cursor: move;
+            }
+
+            .drop-folder.drag-hover {
+                background-color: #bdf337;
+                padding: 5px;
+                margin: -5px 0px -5px -5px;
+                color: #404040;
+            }
         </style>
 
         <ul id="root" on-mousedown="{{preventTextSelection}}">
@@ -76,14 +102,14 @@
                     <ul class="branch">
                         <template repeat="{{ branch.node.setup.items as item }}" id="item">
                             <!-- item -->
-                            <li>
+                            <li class="drop">
                                 <template if="{{ item.items }}">
                                     <!-- group -->
                   
                                     <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                                     ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
-                                    ><core-icon icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span>
+                                    ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                    ><core-icon class="drop-folder" icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span></juicy-draggable>
 
                                     <ul class="group">
                                         <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -96,14 +122,15 @@
                                     <template if="{{ !branch.branches[ item.id ] }}">
                                         <!-- without nested juicy-tile-list -->
                                         <juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                        ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}">{{ item.itemName || toDisplayName(item, branch) }}</span>
+                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                        >{{ item.itemName || toDisplayName(item, branch) }}</span></juicy-draggable>
                                     </template>
                                     <template if="{{ branch.branches[ item.id ] }}">
                                         <!-- with nested juicy-tile-list -->
                                         <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                                         ><juicy-toggle-icon-button on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                        ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
-                                        >⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span>
+                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                        >⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span></juicy-draggable>
                                         <ul class="group">
                                             <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
                                         </ul>

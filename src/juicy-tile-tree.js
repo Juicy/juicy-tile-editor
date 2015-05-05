@@ -173,6 +173,16 @@
     refreshTileList: function(ev){
       // this.fire('juicy-tile-tree-refresh-tile-list', ev.target.value);
       this.fire('juicy-tile-tree-refresh-tile-list');
+    },
+    itemDragStop: function (e) {
+        if (!e.detail.dropElement) {
+            return;
+        }
+
+        var item = e.target.templateInstance.model.item;
+        var branch = e.detail.dropElement.templateInstance.model.item;
+
+        this.fire("juicy-tile-tree-drag-item-stop", { item: item, branch: branch });
     }
   });
 })();

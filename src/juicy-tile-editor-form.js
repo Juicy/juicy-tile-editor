@@ -81,14 +81,15 @@
       }
 
       var current = this.selectedItems[0];
+      var container = current.items ? current : current.container;
       var model = this.editedTiles;
       for (var i = 1, ilen = this.selectedItems.length; i < ilen; i++) {
-        model.moveToContainer(this.selectedItems[i], current.container, true);
+        model.moveToContainer(this.selectedItems[i], container, true);
       }
 
-      var dimensions = model.getMinimumDimensions(this.getContainerChildElements(current.container));
-      this.selectedItems[0].container.width = dimensions.width;
-      this.selectedItems[0].container.height = dimensions.height;
+      var dimensions = model.getMinimumDimensions(this.getContainerChildElements(container));
+      container.width = dimensions.width;
+      container.height = dimensions.height;
 
       this.refresh();
       this.fire('juicy-tile-editor-form-tree-changed');

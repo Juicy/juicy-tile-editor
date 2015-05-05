@@ -32,15 +32,42 @@
             var position = options.position;
             var dropSelector = options.dropSelector;
             var dragElement = setPositionType(element, position, options.dragHelperClass);
+            var on = 0;
+            var started = false;
 
             setDraggableListeners(dragElement);
-            addEventListener(handle, 'mousedown', function (event) {
+
+            addEventListener(document, "mousemove", function (event) {
+                if (on != 2 || started) {
+                    return;
+                }
+
                 if (position == "static") {
                     copyElement(element, dragElement);
                 }
 
                 currentOptions = options;
                 startDragging(event, dragElement);
+                started = true;
+            });
+
+            addEventListener(handle, "mousemove", function (event) {
+                event.preventDefault();
+            });
+
+            addEventListener(handle, "mousedown", function (event) {
+                on = 1;
+
+                setTimeout(function () {
+                    if (on == 1) {
+                        on = 2;
+                    }
+                }, 50);
+            });
+
+            addEventListener(document, "mouseup", function (event) {
+                on = 0;
+                started = false;
             });
 
             return dragElement;
@@ -87,6 +114,8 @@
         }
 
         function startDragging(event, element) {
+            clearSelection();
+
             currentElement && sendToBack(currentElement);
             currentElement = bringToFront(element);
             currentElement.classList.add(currentOptions.draggingClass);
@@ -174,6 +203,7 @@
         function repositionElement(event) {
             event.preventDefault && event.preventDefault();
             event.returnValue = false;
+
             var style = currentElement.style;
             var elementXPosition = parseInt(style.left, 10);
             var elementYPosition = parseInt(style.top, 10);
@@ -222,6 +252,11 @@
             removeEventListener(document, 'mouseup', stopDragging);
         }
 
+        function clearSelection() {
+            if (window.getSelection) window.getSelection().removeAllRanges();
+            else if (document.selection) document.selection.empty();
+        }
+
         return draggable;
     })();
 
@@ -256,15 +291,15 @@
             });
 
             element.whenDragStarts(function (e) {
-                that.fire("whenDragStarts", e);
+                that.fire("juicy-draggable-start", e);
             });
 
             element.whenDragging(function (e) {
-                that.fire("whenDragging", e);
+                that.fire("juicy-draggable-move", e);
             });
 
             element.whenDragStops(function (e) {
-                that.fire("whenDragStops", e);
+                that.fire("juicy-draggable-stop", e);
             });
         },
         getScreenSize: function () {
