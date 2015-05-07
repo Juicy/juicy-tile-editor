@@ -298,6 +298,22 @@
         this.fire('juicy-tile-editor-revert');
       }
     },
+    unhideAll: function () {
+        this.unhideItems(this.editedTiles.allItems.root.items)
+        this.editedTiles.refresh();
+    },
+    unhideItems: function (items) {
+        if (!items) {
+            return;
+        }
+
+        for (var i = 0; i < items.length; i++) {
+            items[i].hidden = false;
+            this.unhideItems(items[i].items);
+        }
+
+        this.editedTiles.refresh();
+    },
     selectedItemsChanged: function () {
       this.itemName = this.getCommonValue("itemName");
       this.background = this.getCommonValue("background");

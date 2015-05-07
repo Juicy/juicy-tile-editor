@@ -447,6 +447,13 @@
           <label class="toolbar-label">Priority</label>
         </div>
       </div>
+
+        <div class="editableGroup">
+            <div class="toolbar-item" disabled?="{{!isSelection}}">
+                <button type="button" class="toolbar-button" title="Show all elements" on-click="{{unhideAll}}">◎</button>
+                <label class="toolbar-label">Unhide</label>
+            </div>
+        </div>
     </div>
   </template>
   <script src="juicy-tile-editor-form.js"></script>
