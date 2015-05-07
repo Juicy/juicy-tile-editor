@@ -24,6 +24,7 @@
     editedTiles: null,
     itemName: null,
     background: null,
+    border: null,
     width: null,
     widthAuto: null,
     height: null,
@@ -300,6 +301,7 @@
     selectedItemsChanged: function () {
       this.itemName = this.getCommonValue("itemName");
       this.background = this.getCommonValue("background");
+      this.border = this.getCommonValue("border");
       this.width = this.getCommonValue("width");
       this.widthAuto = this.getCommonValue("widthAuto") || false;
       this.height = this.getCommonValue("height");
