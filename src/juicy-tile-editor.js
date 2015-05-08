@@ -208,7 +208,7 @@
 
       setTimeout(function () {
           that.treeRefresh();
-      }, 100);
+      });
 
       /*window.addEventListener("beforeunload", function (e) {
           if (that.$.form.modified) {
