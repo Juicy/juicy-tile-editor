@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,7 @@
 
   <style>
     body {
-      padding: 2em;
+      padding: 50px 20px 20px 20px;
     }
     * {
       margin:0px;
@@ -63,9 +63,14 @@
     }
 
     #aboveOverlay {
-      position: relative;
+      position: fixed;
       z-index: 100;
-      background-color: #fff;
+      width:100%;
+      left:0px;
+      top:0px;
+      padding:8px;
+      background-color:#252526;
+      color:white;
     }
     iframe{float:right}
   </style>
@@ -78,13 +83,13 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
   allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
 
 <template bind>
+    <template if="{{editingMode}}">
+        <div id="aboveOverlay">
+            <juicy-tile-editor selectionmode></juicy-tile-editor>
+        </div>
+    </template>
   <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
   <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
-  <template if="{{editingMode}}">
-    <div id="aboveOverlay">
-      <juicy-tile-editor selectionMode></juicy-tile-editor>
-    </div>
-  </template>
   <core-localstorage name="st1" value="{{setup}}"></core-localstorage>
   <juicy-tiles-setup-sync storedValue="{{setup}}"></juicy-tiles-setup-sync>
   <juicy-tile-list id="st1" setup="[[setup]]">
