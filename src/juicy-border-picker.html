@@ -95,14 +95,14 @@
                     <template if="{{item == borderStyle}}">
                         <li class="selected">
                             <a href="javascript:" class="{{item}}" on-click="{{applyStyle}}">
-                                <span class="{{item}}" style="border-style:{{item}}"></span>
+                                <span class="{{item}}" style="border-bottom-style:{{item}}"></span>
                             </a>
                         </li>
                     </template>
                     <template if="{{item != borderStyle}}">
                         <li>
                             <a href="javascript:" class="{{item}}" on-click="{{applyStyle}}">
-                                <span class="{{item}}" style="border-style:{{item}}"></span>
+                                <span class="{{item}}" style="border-bottom-style:{{item}}"></span>
                             </a>
                         </li>
                     </template>
