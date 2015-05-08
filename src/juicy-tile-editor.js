@@ -206,6 +206,10 @@
 
       restoreSidebarPosition(this.$.sidebar);
 
+      setTimeout(function () {
+          that.treeRefresh();
+      }, 100);
+
       /*window.addEventListener("beforeunload", function (e) {
           if (that.$.form.modified) {
               var message = "You have unsaved layout setup changes!";
