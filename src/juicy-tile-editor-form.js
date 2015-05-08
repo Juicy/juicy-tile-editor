@@ -22,6 +22,7 @@
     isSingleSelection: false,
     selectedItems: [],
     editedTiles: null,
+    itemId: null,
     itemName: null,
     background: null,
     border: null,
@@ -326,6 +327,7 @@
         }
     },
     selectedItemsChanged: function () {
+      this.itemId = this.getCommonValue("id");
       this.itemName = this.getCommonValue("itemName");
       this.background = this.getCommonValue("background");
       this.border = this.getCommonValue("border");

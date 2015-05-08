@@ -284,7 +284,14 @@
       </div>
 
       <div class="editableGroup">
-        <h4>Container</h4>
+        <h4>
+            <template if="{{isSingleSelection}}">
+                {{itemId}}
+            </template>
+            <template if="{{!isSingleSelection}}">
+                Container
+            </template>
+        </h4>
 
           <div class="toolbar-item" data-applyvalue="itemName" disabled?="{{!isSingleSelection}}">
               <input placeholder="multiple" type="text" class="handle toolbar-button" value="{{itemName}}" update-on="input" />
