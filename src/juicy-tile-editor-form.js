@@ -299,8 +299,21 @@
       }
     },
     unhideAll: function () {
-        this.unhideItems(this.editedTiles.allItems.root.items)
-        this.editedTiles.refresh();
+        this.unhideListItems(this.editedTiles);
+    },
+    unhideListItems: function (list) {
+        for (var i in list.allItems) {
+            var item = list.allItems[i]
+            this.unhideItems(item.items);
+        }
+
+        var lists = list.querySelectorAll("juicy-tile-list, juicy-tile-grid");
+
+        for (var i = 0; i < lists.length; i++) {
+            this.unhideListItems(lists[i]);
+        }
+
+        list.refresh();
     },
     unhideItems: function (items) {
         if (!items) {
@@ -311,8 +324,6 @@
             items[i].hidden = false;
             this.unhideItems(items[i].items);
         }
-
-        this.editedTiles.refresh();
     },
     selectedItemsChanged: function () {
       this.itemName = this.getCommonValue("itemName");
