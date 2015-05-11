@@ -299,6 +299,53 @@
         this.fire('juicy-tile-editor-revert');
       }
     },
+    resetStyles: function () {
+        var groups = [];
+
+        for (var i = 0; i < this.selectedItems.length; i++) {
+            this.resetItemStyles(this.selectedItems[i], true, groups);
+        }
+
+        for (var i = 0; i < groups.length; i++) {
+            this.editedTiles.deleteContainer(groups[i], true);
+        }
+
+        this.selectedItemsChanged();
+        this.refresh();
+        this.fire('juicy-tile-editor-form-tree-changed');
+    },
+    resetItemStyles: function (item, isSelected, groups) {
+        if (item.items) {
+            for (var i = 0; i < item.items.length; i++) {
+                this.resetItemStyles(item.items[i], false, groups);
+            }
+
+            if (!isSelected) {
+                groups.push(item);
+            }
+        }
+
+        for (var i in this.editedTiles.defaultTileSetup) {
+            item[i] = this.editedTiles.defaultTileSetup[i];
+        }
+
+        var skip = ["id", "items", "container", "direction"];
+
+        for (var i in item) {
+            if (skip.indexOf(i) >= 0) {
+                continue;
+            }
+
+            if (i == "gutter") {
+                item[i] = 0;
+                continue;
+            }
+
+            if (typeof this.editedTiles.defaultTileSetup[i] == "undefined") {
+                delete item[i];
+            }
+        }
+    },
     unhideAll: function () {
         this.unhideListItems(this.editedTiles);
     },

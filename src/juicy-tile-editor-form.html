@@ -466,6 +466,10 @@
                 <button type="button" class="toolbar-button" title="Show all elements" on-click="{{unhideAll}}">◎</button>
                 <label class="toolbar-label">Unhide</label>
             </div>
+            <div class="toolbar-item" disabled?="{{!isSelection}}">
+                <button type="button" class="toolbar-button" title="Reset styles for selected elements" on-click="{{resetStyles}}">↻</button>
+                <label class="toolbar-label">Reset</label>
+            </div>
         </div>
     </div>
   </template>
