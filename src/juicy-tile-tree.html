@@ -20,32 +20,39 @@
             ul {
                 margin-top: 0px;
                 list-style: none;
-                padding: 0 0 0 calc( 1em + 3px );
-            }
-
-            #root {
                 padding: 0;
             }
 
             li {
                 white-space: nowrap;
+                position: relative;
             }
 
-            li span {
+            .element-label {
                 cursor: default;
-                white-space: nowrap;
                 padding: 1px 4px 2px 4px;
                 border-radius: 2px;
             }
-
-            li span.highlight {
-                background-color: #7f86a7;
+            
+            .element-label.highlight {
+                background-color: #01629E;
                 color: white;
             }
+            
+            .element-label span.txt {
+                white-space: nowrap;
+                position: relative;
+            }
+            
 
             core-icon-button, juicy-toggle-icon-button {
-                margin: 1px;
                 line-height: 1em;
+            }
+            
+            juicy-toggle-icon-button.expand {
+                position: absolute;
+                top: 6px;
+                left: -17px;
             }
 
             core-icon[role=img] {
@@ -93,21 +100,99 @@
             }
 
             .visibility {
-                float: right;
-                margin-top: 3px;
-                opacity: 0;
-                position: relative;
+                position: absolute;
+                top: 4px;
+                right: 4px;
+                display: none;
+                background-color: #252526;
                 padding: 0px 2px 2px 2px;
                 border-radius: 2px;
             }
 
             .visibility[checked] {
-                opacity: 1;
+                display: block;
             }
 
             li:hover > .visibility {
-                opacity: 1;
-                transition: opacity 0.2s;
+                display: block;
+            }
+            
+            
+            /* indentation of tree levels */
+            
+            ul .element-label,
+            ul .expand {
+                padding-left: calc(1 * 14px + 6px);
+            }
+            
+            ul ul .element-label,
+            ul ul .expand {
+                padding-left: calc(2 * 14px + 6px);
+            }
+            
+            ul ul ul .element-label,
+            ul ul ul .expand {
+                padding-left: calc(3 * 14px + 6px);
+            }
+            
+            ul ul ul ul .element-label,
+            ul ul ul ul .expand {
+                padding-left: calc(4 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul .element-label,
+            ul ul ul ul ul .expand {
+                padding-left: calc(5 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul .expand {
+                padding-left: calc(6 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul .expand {
+                padding-left: calc(7 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(8 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(9 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(10 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(11 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(12 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(13 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(14 * 14px + 6px);
+            }
+            
+            ul ul ul ul ul ul ul ul ul ul ul ul ul ul .element-label,
+            ul ul ul ul ul ul ul ul ul ul ul ul ul ul .expand {
+                padding-left: calc(15 * 14px + 6px);
             }
         </style>
 
@@ -116,8 +201,9 @@
                 <!-- branch -->
                 <li>
                     <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
-                    ><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ branch | getBranchClassName }}"
-                    title="{{ toRootName(branch.node) }}"><core-icon icon="view-quilt" title="juicy-tile-list"></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node) }}</span>
+                    ><div on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ branch | getBranchClassName }}"
+                    title="{{ toRootName(branch.node) }}"
+                    ><span class="txt"><core-icon icon="view-quilt" title="juicy-tile-list"></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node) }}</span></div>
 
                     <ul class="branch">
                         <template repeat="{{ branch.node.setup.items as item }}" id="item">
@@ -128,8 +214,9 @@
                   
                                     <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                                     ><juicy-toggle-icon-button class="visibility" on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                    ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
-                                    ><core-icon class="drop-folder" icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span></juicy-draggable>
+                                    ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"
+                                    ><div on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                    ><span class="txt"><core-icon class="drop-folder" icon="folder" title="group"></core-icon> {{ item.itemName || item.id }}</span></span></div></juicy-draggable>
 
                                     <ul class="group">
                                         <template repeat="{{ item.items as item }}" ref="item"></template>
@@ -142,15 +229,17 @@
                                     <template if="{{ !branch.branches[ item.id ] }}">
                                         <!-- without nested juicy-tile-list -->
                                         <juicy-toggle-icon-button class="visibility" on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
-                                        >{{ item.itemName || toDisplayName(item, branch) }}</span></juicy-draggable>
+                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"
+                                        ><div on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                        ><span class="txt">{{ item.itemName || toDisplayName(item, branch) }}</span></div></juicy-draggable>
                                     </template>
                                     <template if="{{ branch.branches[ item.id ] }}">
                                         <!-- with nested juicy-tile-list -->
                                         <juicy-toggle-icon-button class="expand" iconOn="chevron-right" iconOff="expand-more"></juicy-toggle-icon-button
                                         ><juicy-toggle-icon-button class="visibility" on-tap="{{ refreshTileList }}" iconOff="visibility" iconOn="visibility-off" checked="{{item.hidden}}"></juicy-toggle-icon-button
-                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"><span on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
-                                        >⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span></juicy-draggable>
+                                        ><juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder"
+                                        ><div on-tap="{{tapAction}}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" class="{{ item | getBranchClassName }}" title="{{item.id}}"
+                                        ><span class="txt">⊛<!-- contains juicy-tile-list inside -->{{ item.itemName || toDisplayName(item, branch) }}</span></div></juicy-draggable>
                                         <ul class="group">
                                             <template repeat="{{ branch.branches[ item.id ] as branch }}" ref="recursive"></template>
                                         </ul>

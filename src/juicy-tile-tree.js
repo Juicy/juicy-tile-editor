@@ -88,14 +88,14 @@
       }
       return false; //a branch of a leaf (branch is inherited from prototype)
     },
-    highlightElement: function (span) {
-        var top = span.offsetTop;
+    highlightElement: function (elem) {
+        var top = elem.offsetTop;
 
         if (top > (this.scrollTop + this.clientHeight) || top < this.scrollTop) {
             this.scrollTop = top;
         }
 
-        span.classList.add("highlight");
+        elem.classList.add("highlight");
     },
     highlightBranch: function (branch, expand) {
       var that = this;
@@ -105,17 +105,17 @@
       this.highlightedBranches.push(branch);
 
       setTimeout(function () {
-          //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
-          Array.prototype.forEach.call(that.$.root.querySelectorAll('span'), function (span) {
-              var isNestedTiles = this.isNestedTilesLabel(span);
-              if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
-                  that.highlightElement(span);
+          //I need to refresh element classes imperatively because Polymer only observes on filter parameter changes [warpech]
+          Array.prototype.forEach.call(that.$.root.querySelectorAll('.element-label'), function (elem) {
+              var isNestedTiles = this.isNestedTilesLabel(elem);
+              if (isNestedTiles && elem.templateInstance.model.branch.node.setup == branch) {
+                  that.highlightElement(elem);
               }
-              else if (!isNestedTiles && span.templateInstance.model.item == branch) {
-                  that.highlightElement(span);
+              else if (!isNestedTiles && elem.templateInstance.model.item == branch) {
+                  that.highlightElement(elem);
               }
               else if (!expand) {
-                  span.classList.remove("highlight");
+                  elem.classList.remove("highlight");
               }
           }.bind(that));
       });
@@ -124,13 +124,13 @@
         var that = this;
         var element = null;
 
-        Array.prototype.forEach.call(that.$.root.querySelectorAll('span'), function (span) {
-            var isNestedTiles = this.isNestedTilesLabel(span);
+        Array.prototype.forEach.call(that.$.root.querySelectorAll('.element-label'), function (elem) {
+            var isNestedTiles = this.isNestedTilesLabel(elem);
 
-            if (isNestedTiles && span.templateInstance.model.branch.node.setup == branch) {
-                element = span;
-            } else if (!isNestedTiles && span.templateInstance.model.item == branch) {
-                element = span;
+            if (isNestedTiles && elem.templateInstance.model.branch.node.setup == branch) {
+                element = elem;
+            } else if (!isNestedTiles && elem.templateInstance.model.item == branch) {
+                element = elem;
             }
         }.bind(that));
 
@@ -149,10 +149,10 @@
     unhighlightBranch: function (branch) {
       this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
 
-      //I need to refresh span classes imperatively because Polymer only observes on filter parameter changes [warpech]
-      Array.prototype.forEach.call(this.$.root.querySelectorAll('span.highlight'), function (span) {
-        if (span.templateInstance.model.item === branch) {
-          span.classList.remove("highlight");
+      //I need to refresh element classes imperatively because Polymer only observes on filter parameter changes [warpech]
+      Array.prototype.forEach.call(this.$.root.querySelectorAll('.element-label.highlight'), function (elem) {
+        if (elem.templateInstance.model.item === branch) {
+          elem.classList.remove("highlight");
         }
       });
     },
@@ -161,10 +161,10 @@
     },
     getBranchClassName: function (branch) {
       if (this.isBranchHighlighted(branch)) {
-        return "highlight";
+        return "element-label highlight";
       }
       else {
-        return "";
+        return "element-label";
       }
     },
     preventTextSelection: function(ev) {
