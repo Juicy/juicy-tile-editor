@@ -25,7 +25,7 @@
     itemId: null,
     itemName: null,
     background: null,
-    border: null,
+    outline: null,
     width: null,
     widthAuto: null,
     height: null,
@@ -377,7 +377,7 @@
       this.itemId = this.getCommonValue("id");
       this.itemName = this.getCommonValue("itemName");
       this.background = this.getCommonValue("background");
-      this.border = this.getCommonValue("border");
+      this.outline = this.getCommonValue("outline");
       this.width = this.getCommonValue("width");
       this.widthAuto = this.getCommonValue("widthAuto") || false;
       this.height = this.getCommonValue("height");

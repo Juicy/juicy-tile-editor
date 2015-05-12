@@ -340,16 +340,16 @@
           <label class="toolbar-label">Background</label>
         </div>
 
-          <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="border">
+          <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="outline">
               <juicy-popover>
                   <button class="handle toolbar-button toolbar-button-background">
-                      <span style="margin-top: -10px; width: 100%; display: inline-block; border-bottom: {{border}}"></span>
+                      <span style="margin-top: -10px; width: 100%; display: inline-block; border-bottom: {{outline}}"></span>
                   </button>
                   <div class="expandable">
-                      <juicy-border-picker value="{{border}}" on-juicy-border-picker-value-changed="{{applyChange}}"></juicy-border-picker>
+                      <juicy-border-picker value="{{outline}}" on-juicy-border-picker-value-changed="{{applyChange}}"></juicy-border-picker>
                   </div>
               </juicy-popover>
-              <label class="toolbar-label">Border</label>
+              <label class="toolbar-label">Outline</label>
           </div>
 
         <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="gutter">
