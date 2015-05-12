@@ -1,5 +1,6 @@
 (function () {
-  Polymer('juicy-tile-tree', {
+    Polymer('juicy-tile-tree', {
+    collapsed: {},
     tree: [],
     highlightedBranches: [],
     /**
