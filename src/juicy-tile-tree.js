@@ -89,13 +89,21 @@
       return false; //a branch of a leaf (branch is inherited from prototype)
     },
     highlightElement: function (elem) {
-        var top = elem.offsetTop;
+        var top = 0;
+
+        elem.classList.add("highlight");
+
+        while (elem != null && elem != this.$.root) {
+            if (elem.tagName == "LI") {
+                top += (elem.offsetTop || 0);
+            }
+
+            elem = elem.parentNode;
+        }
 
         if (top > (this.scrollTop + this.clientHeight) || top < this.scrollTop) {
             this.scrollTop = top;
         }
-
-        elem.classList.add("highlight");
     },
     highlightBranch: function (branch, expand) {
       var that = this;
