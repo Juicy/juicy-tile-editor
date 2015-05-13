@@ -207,7 +207,7 @@
                 <li class="{{ {collapsed: collapsed[toRootName(branch.node)]} | tokenList}}">
                     <div class="{{ branch | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{ toRootName(branch.node) }}">
                         <juicy-toggle-icon-button class="expand" iconon="chevron-right" iconoff="expand-more" checked="{{collapsed[toRootName(branch.node)]}}"></></juicy-toggle-icon-button>
-                        <div on-tap="{{tapAction}}" class="txt"><core-icon icon="view-quilt" title="juicy-tile-list"></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node) }}</div>
+                        <div on-tap="{{tapAction}}" class="txt"><core-icon icon="view-quilt" title="juicy-tile-list"></core-icon>{{ branch.node.setup.itemName || toRootName(branch.node, true) }}</div>
                     </div>
                     <ul class="branch">
                         <template repeat="{{ branch.node.setup.items as item }}" id="item">

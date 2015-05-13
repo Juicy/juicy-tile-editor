@@ -8,8 +8,15 @@
      * @param {Object} branch {node: {branchnode} [, item: branchnode.node.setup.items[n]]}
      * @returns {String}
      */
-    toRootName: function(node) {
-      return node.id || node.getAttribute("name");
+    toRootName: function (node, short) {
+        var name = node.id || node.getAttribute("name");
+
+        if (short && /[/]/gi.test(name)) {
+            name = name.split("/");
+            name = name[name.length - 1];
+        }
+
+        return name;
     },
     toDisplayName: function(item, branch) {
       var txt = "";
