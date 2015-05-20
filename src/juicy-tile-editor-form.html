@@ -122,9 +122,9 @@
         font-size: 15px;
       }
 
-        .toolbar-button-half {
+        .toolbar-button-set.size-four .toolbar-button {
             float:left;
-            width:50%;
+            width:25%;
         }
 
         .toolbar-button-set .toolbar-button {
@@ -285,11 +285,6 @@
 
       <div class="editableGroup">
 
-        <div class="toolbar-item" disabled?="{{!isContainer && !isRoot}}">
-          <button class="toolbar-button" on-click="{{deleteContainer}}">⊠</button>
-          <label class="toolbar-label">Ungroup</label>
-        </div>
-
         <div class="toolbar-item" disabled?="{{!isContainer}}">
           <div class="directionGroup">
             <button 
@@ -384,11 +379,13 @@
         </div>
 
         <div class="toolbar-item" disabled?="{{!isSelection}}">
-            <div class="toolbar-button-set">
-                <button class="toolbar-button toolbar-button-half" title="Create a new group from selected elements (CTRL+G)" on-click="{{newInlineGroupFromSelection}}">◻</button>
-                <button class="toolbar-button toolbar-button-half" title="Create a new line group from selected elements" on-click="{{newBlockGroupFromSelection}}">▭</button>
+            <div class="toolbar-button-set size-four">
+                <button class="toolbar-button" on-click="{{deleteContainer}}" disabled?="{{!isRemovable}}" title="Ungroup selected item">⊠</button>
+                <button class="toolbar-button" title="Create a new group from selected elements (CTRL+G)" disabled?="{{!isGroupable}}" on-click="{{newInlineGroupFromSelection}}">◻</button>
+                <button class="toolbar-button" title="Create a new line group from selected elements" disabled?="{{!isGroupable}}" on-click="{{newBlockGroupFromSelection}}">▭</button>
+                <button class="toolbar-button" title="Create a new empty group after selected element" disabled?="{{!isGroupable}}" on-click="{{newBlockEmptyGroup}}">▱</button>
             </div>
-          <label class="toolbar-label">New group</label>
+          <label class="toolbar-label">Group actions</label>
         </div>
 
         <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">

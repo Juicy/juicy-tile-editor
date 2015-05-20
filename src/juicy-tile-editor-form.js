@@ -37,7 +37,7 @@
     priority: null,
     content: null,
     layout: null,
-    newGroupFromSelection: function (width) {
+    newGroupFromSelection: function (width, isEmpty) {
       if (!this.selectedItems.length > 1) {
         return;
       }
@@ -50,15 +50,24 @@
 
       var model = this.editedTiles;
       var newContainer = model.createNewContainer(null, current.container, setup, true);
-      // performant heavy // may cause lots of repaints
-      for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
-        model.moveToContainer(this.selectedItems[i], newContainer, true);
+      var dimensions = null;
+
+      if (!isEmpty) {
+          // performant heavy // may cause lots of repaints
+          for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+              model.moveToContainer(this.selectedItems[i], newContainer, true);
+          }
+
+          dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
+      } else {
+          dimensions = {
+              width: "100%",
+              height: "36px"
+          };
       }
 
       this.selectedItems.length = 0; //change edited item to the new container
       this.selectedItems.push(newContainer);
-
-      var dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
 
       if (width) {
           newContainer.width = width;
@@ -76,6 +85,9 @@
     },
     newBlockGroupFromSelection: function () {
         this.newGroupFromSelection("100%");
+    },
+    newBlockEmptyGroup: function () {
+        this.newGroupFromSelection("100%", true);
     },
     moveSelectionToEditedItemContainer: function () {
       if (!this.selectedItems.length > 1) {
@@ -212,6 +224,14 @@
         }
       }
       return false;
+    },
+    isGroupableInSelection: function () {
+        for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
+            if (!this.selectedItems[i].container || !this.selectedItems[i].container.items) {
+                return false;
+            }
+        }
+        return true;
     },
     getCommonValue: function (propName) {
       if (this.selectedItems.length) {
@@ -394,6 +414,8 @@
       this.isSingleSelection = (this.selectedItems.length == 1);
       this.isContainer = this.isContainerInSelection();
       this.isRoot = this.isRootInSelection();
+      this.isGroupable = this.isGroupableInSelection();
+      this.isRemovable = (this.isContainer && !this.isRoot) && this.isGroupable;
       //this.getSource();
       this.refresh();
 
