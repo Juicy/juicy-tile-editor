@@ -20,6 +20,10 @@
             }
         }
 
+        function isDisabled(element) {
+            return element.hasAttribute("data-draggable-disabled");
+        }
+
         var currentElement;
         var currentDropSelector;
         var currentDropElement;
@@ -38,6 +42,10 @@
             setDraggableListeners(dragElement);
 
             addEventListener(document, "mousemove", function (event) {
+                if (isDisabled(element)) {
+                    return;
+                }
+
                 if (on != 2 || started) {
                     return;
                 }
@@ -52,10 +60,18 @@
             });
 
             addEventListener(handle, "mousemove", function (event) {
+                if (isDisabled(element)) {
+                    return;
+                }
+
                 event.preventDefault();
             });
 
             addEventListener(handle, "mousedown", function (event) {
+                if (isDisabled(element)) {
+                    return;
+                }
+
                 on = 1;
 
                 setTimeout(function () {
@@ -261,6 +277,8 @@
     })();
 
     Polymer("juicy-draggable", {
+        disabled: false,
+        element: null,
         domReady: function () {
             var element = null;
             var handle = null;
@@ -279,6 +297,7 @@
             this.dragHelperClass = this.dragHelperClass || "drag-helper";
             this.dragHoverClass = this.dragHoverClass || "drag-hover";
             this.draggingClass = this.draggingClass || "dragging";
+            this.element = element;
 
             element = draggable({
                 element: element, 
@@ -311,6 +330,13 @@
             var y = w.innerHeight || e.clientHeight || g.clientHeight;
 
             return { x: x, y: y };
+        },
+        disabledChanged: function () {
+            if (this.disabled) {
+                this.element.setAttribute("data-draggable-disabled", "disabled");
+            } else {
+                this.element.removeAttribute("data-draggable-disabled");
+            }
         }
     });
 })();

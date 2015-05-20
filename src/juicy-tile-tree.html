@@ -258,7 +258,7 @@
                                     <div class="{{ item | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{item.id}}">
                                         <juicy-toggle-icon-button class="expand" iconon="chevron-right" iconoff="expand-more" checked="{{collapsed[item.id]}}"></juicy-toggle-icon-button>
                                         <template bind ref="item-visibility"></template>
-                                        <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder">
+                                        <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder" disabled?="{{editItem == item}}">
                                             <div on-tap="{{tapAction}}" class="txt">
                                                 <core-icon class="drop-folder" icon="folder" title="group"></core-icon>
                                                 <template bind ref="item-name"></template>
@@ -277,9 +277,10 @@
                                         <!-- without nested juicy-tile-list -->
                                         <div class="{{ item | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{item.id}}">
                                             <template bind ref="item-visibility"></template>
-                                            <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder">
+                                            <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder" disabled?="{{editItem == item}}">
                                                 <div on-tap="{{tapAction}}" class="txt">
-                                                    <template bind ref="item-name"></template>
+                                                    <template bind ref="item-name">
+                                                    </template>
                                                 </div>
                                             </juicy-draggable>
                                         </div>
@@ -289,9 +290,10 @@
                                         <div class="{{ item | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{item.id}}">
                                             <juicy-toggle-icon-button class="expand" iconon="chevron-right" iconoff="expand-more" checked="{{collapsed[item.id]}}"></juicy-toggle-icon-button>
                                             <template bind ref="item-visibility"></template>
-                                            <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder">
+                                            <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-folder" disabled?="{{editItem == item}}">
                                                 <div on-tap="{{tapAction}}" class="txt">
-                                                    <template bind ref="item-name"></template>
+                                                    <template bind ref="item-name">
+                                                    </template>
                                                 </div>
                                             </juicy-draggable>
                                         </div>
