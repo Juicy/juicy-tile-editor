@@ -18,29 +18,6 @@
 
         return name;
     },
-    toDisplayName: function(item, branch) {
-      var txt = "";
-      //TODO: use some kind of this.elements (which will not contain groups)
-      var elem = branch.node.querySelector('[juicytile="'+item.id+'"]');
-      if(!elem){
-        return item.id;
-      }
-      var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
-      if(header) {
-        txt = header.textContent;
-      }
-      else {
-        txt = elem.textContent;
-      }
-      txt = txt.trim().replace(/\s+/gi, " ");
-      if(!txt) {
-        txt = "<" + elem.nodeName.toLowerCase() + ">";
-      }
-      if(txt.length > 23) {
-        txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
-      }
-      return txt;
-    },
     tapAction: function (ev, index, target) {
       var eventName;
       var model = target.templateInstance.model;

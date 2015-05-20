@@ -115,6 +115,81 @@
       bar.style.bottom = "";
   }
 
+  function getItemDisplayName(item, branch) {
+      var txt = "";
+      var elem = branch.node.querySelector('[juicytile="' + item.id + '"]');
+
+      if (!elem) {
+          return item.id;
+      }
+      var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
+
+      if (header) {
+          txt = header.textContent;
+      } else {
+          txt = elem.textContent;
+      }
+
+      txt = txt.trim().replace(/\s+/gi, " ");
+
+      if (!txt) {
+          txt = "<" + elem.nodeName.toLowerCase() + ">";
+      }
+
+      if (txt.length > 23) {
+          txt = txt.substr(0, 20) + " \u2026"; //'HORIZONTAL ELLIPSIS' (U+2026)
+      }
+
+      return txt;
+  }
+
+  function getRootItemDisplayName(node, short) {
+      var name = node.id || node.getAttribute("name") || node.localName || node.tagName.toLowerCase();
+
+      if (short && /[/]/gi.test(name)) {
+          name = name.split("/");
+          name = name[name.length - 1];
+      }
+
+      return name;
+  }
+
+  function setItemName(item, branch) {
+      if (!item.itemName) {
+          item.itemName = getItemDisplayName(item, branch);
+      }
+
+      var items = item.items;
+
+      if (items) {
+          for (var i = 0; i < items.length; i++) {
+              setItemName(items[i], branch);
+          }
+      }
+
+      if (branch && branch.branches[item.id]) {
+          var branches = branch.branches[item.id];
+
+          for (var i = 0; i < branches.length; i++) {
+              setBranchName(branches[i]);
+          }
+      }
+  }
+
+  function setBranchName(branch) {
+      if (!branch.node.setup.itemName) {
+          branch.node.setup.itemName = getRootItemDisplayName(branch.node, true);
+      }
+
+      var items = branch.node.setup.items;
+
+      if (items) {
+          for (var i = 0; i < items.length; i++) {
+              setItemName(items[i], branch);
+          }
+      }
+  }
+
   Polymer('juicy-tile-editor', {
     selectionMode: false,
     editedElement: null,
@@ -427,8 +502,16 @@
     treeRefresh: function() {
       // notify observer/two-way-binding/tempalte only once
       // Idea calculate this only once
-        if (!this.tree.length) {
-            this.tree = reducedInductedSpanningTree(this.tileLists);
+        if (this.tree.length) {
+            return;
+        }
+
+        this.tree = reducedInductedSpanningTree(this.tileLists);
+
+        for (var i = 0; i < this.tree.length; i++) {
+            var branch = this.tree[i];
+
+            setBranchName(branch);
         }
     },
     treeHighlightExtendAction: function(item) {
