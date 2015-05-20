@@ -50,18 +50,30 @@
         this.fire(eventName, {branch: model.item, tiles: model.branch.node});
       }
     },
-    nameDblclickAction: function (ev, index, target) {
+    nameDblclickAction: function (property, ev, index, target) {
         if (target.classList.contains("active")) {
             return;
         }
     
         var model = target.templateInstance.model;
 
-        this.editItem = model.item;
-        this.editBranch = model.branch;
+        if (property == "item") {
+            this.editItem = model.item;
+            this.editBranch = null;
+        } else {
+            this.editItem = null;
+            this.editBranch = model.branch;
+        }
+
         target.focus();
         target.selectionStart = 0;
         target.selectionEnd = target.value.length;
+    },
+    itemNameDblclickAction: function (ev, index, target) {
+        this.nameDblclickAction("item", ev, index, target);
+    },
+    branchNameDblclickAction: function (ev, index, target) {
+        this.nameDblclickAction("branch", ev, index, target);
     },
     nameBlurAction: function (ev, index, target) {
         this.editItem = null;
