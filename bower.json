@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-editor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/Juicy/juicy-tile-editor",
   "description": "<juicy-tile-editor> is an editor form for <juicy-tile-list>",
   "license": "MIT",
