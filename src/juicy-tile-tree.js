@@ -2,6 +2,8 @@
     Polymer('juicy-tile-tree', {
     collapsed: {},
     tree: [],
+    editItem: null,
+    editBranch: null,
     highlightedBranches: [],
     /**
      * Converts branch object to a display name string. Can be overloaded
@@ -47,6 +49,29 @@
       else {
         this.fire(eventName, {branch: model.item, tiles: model.branch.node});
       }
+    },
+    nameDblclickAction: function (ev, index, target) {
+        if (target.classList.contains("active")) {
+            return;
+        }
+    
+        var model = target.templateInstance.model;
+
+        this.editItem = model.item;
+        this.editBranch = model.branch;
+        target.focus();
+        target.selectionStart = 0;
+        target.selectionEnd = target.value.length;
+    },
+    nameBlurAction: function (ev, index, target) {
+        this.editItem = null;
+        this.editBranch = null;
+        this.fire("juicy-tile-tree-item-name-changed");
+    },
+    nameKeypressAction: function (ev, index, target) {
+        if (ev.which == 13) {
+            target.blur();
+        }
     },
     hoverBlurAction: function (eventName, ev, index, target) {
         var model = target.templateInstance.model;
@@ -153,16 +178,17 @@
       return this.highlightedBranches.indexOf(branch) > -1;
     },
     getBranchClassName: function (branch) {
-      if (this.isBranchHighlighted(branch)) {
-        return "element-label highlight";
-      }
-      else {
-        return "element-label";
-      }
+        var css = ["element-label"];
+
+        if (this.isBranchHighlighted(branch)) {
+            css.push("highlight");
+        }
+
+        return css.join(" ");
     },
-    preventTextSelection: function(ev) {
+    /*preventTextSelection: function(ev) {
       ev.preventDefault();
-    },
+    },*/
     refreshTileList: function(ev){
       // this.fire('juicy-tile-tree-refresh-tile-list', ev.target.value);
       this.fire('juicy-tile-tree-refresh-tile-list');

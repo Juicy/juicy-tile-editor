@@ -556,6 +556,9 @@
       // }
       e.stopImmediatePropagation();
     },
+    refreshForm: function (e) {
+        this.$.form.refresh();
+    },
     moveToNextPosition: function (e) {
         var classes = ["left-top", "top", "right-top", "right", "right-bottom", "bottom", "left-bottom", "left"];
         var bar = this.$.sidebar;
