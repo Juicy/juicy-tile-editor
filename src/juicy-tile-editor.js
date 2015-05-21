@@ -282,6 +282,8 @@
           } else if (ex < edge) {
               applySidebarPosition(bar, "left");
           }
+
+          bar.style.zIndex = "";
       });
 
       this.$.sidebarResize.addEventListener("juicy-resizable-stop", function () {

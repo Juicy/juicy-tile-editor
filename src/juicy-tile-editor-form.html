@@ -235,6 +235,7 @@
                 min-width: 15px;
                 border-left: 1px solid #C0C0C0;
                 border-radius: 0px 1px 1px 0px;
+                margin-left: -1px;
             }
 
             .drop-down .expandable button {
@@ -279,7 +280,7 @@
                         <button class="toolbar-button" on-click="{{clearConfig}}">
                             <i class="jte-icon-eraser"></i>
                         </button>
-                        <juicy-popover>
+                        <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                             <button class="handle toolbar-button">
                                 <i class="jte-icon-angle-down"></i>
                             </button>
@@ -297,7 +298,7 @@
                 </div>
 
                 <div class="toolbar-item">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <button class="handle toolbar-button">
                             <i class="jte-icon-wrench"></i>
                         </button>
@@ -337,7 +338,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="gutter">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <input class="handle toolbar-button val" placeholder="multiple" value="{{gutter | toNumber}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{gutterIncrease}}">+</button>
@@ -349,7 +350,7 @@
 
                 <div class="toolbar-item" title="Supported only for virtual groups in juicy-tile-list or in juicy-tile-grid with absolute layout.">
                     <div class="toolbar-item-wrapper" disabled?="{{!isContainer || layout!='absolute'}}" data-applyvalue="oversize">
-                        <juicy-popover>
+                        <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                             <input class="handle toolbar-button val" placeholder="multiple" value="{{oversize}}">
                             <div class="expandable">
                                 <button class="editable" on-click="{{oversizeIncrease}}">+</button>
@@ -367,7 +368,7 @@
                         <button class="toolbar-button" title="Create a new line group from selected elements" on-click="{{newBlockGroupFromSelection}}">
                             <i class="jte-icon-plus-squared-alt"></i>
                         </button>
-                        <juicy-popover>
+                        <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                             <button class="toolbar-button handle">
                                 <i class="jte-icon-angle-down"></i>
                             </button>
@@ -408,7 +409,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isSingleSelection || !isGroup}}" data-applyvalue="content">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <button class="handle toolbar-button">
                             <i class="jte-icon-code"></i>
                         </button>
@@ -423,7 +424,7 @@
             <div class="editableGroup">
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="background">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
                         <div class="expandable">
                             <juicy-color-picker value="{{background}}" on-juicy-color-picker-value-changed="{{applyChange}}"></juicy-color-picker>
@@ -433,7 +434,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="outline">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <button class="handle toolbar-button toolbar-button-background">
                             <span style="margin-top: -10px; width: 100%; display: inline-block; border-bottom: {{outline}}"></span>
                         </button>
@@ -445,7 +446,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <input placeholder="multiple" class="handle toolbar-button val" value="{{width}}" disabled?="{{widthAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
@@ -464,7 +465,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="height">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <input placeholder="multiple" class="handle toolbar-button val" value="{{height}}" disabled?="{{heightAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
@@ -489,7 +490,7 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isSingleSelection}}" data-applyvalue="priority">
-                    <juicy-popover>
+                    <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <input class="handle toolbar-button val" value="{{priority}}" disabled>
                         <div class="expandable">
                             <button class="editable" on-click="{{priorityIncrease}}" disabled?="{{!isSingleSelection}}">+</button>

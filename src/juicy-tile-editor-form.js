@@ -420,6 +420,12 @@
           input.setAttribute('placeholder', '');
         }
       }.bind(this));
+    },
+    popoverExpand: function () {
+        this.style.zIndex = 1;
+    },
+    popoverCollapse: function () {
+        this.style.zIndex = "";
     }
   });
 })();
