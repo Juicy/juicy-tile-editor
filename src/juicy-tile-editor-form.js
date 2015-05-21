@@ -385,33 +385,6 @@
             }
         }
     },
-    unhideAll: function () {
-        this.unhideListItems(this.editedTiles);
-    },
-    unhideListItems: function (list) {
-        for (var i in list.allItems) {
-            var item = list.allItems[i]
-            this.unhideItems(item.items);
-        }
-
-        var lists = list.querySelectorAll("juicy-tile-list, juicy-tile-grid");
-
-        for (var i = 0; i < lists.length; i++) {
-            this.unhideListItems(lists[i]);
-        }
-
-        list.refresh();
-    },
-    unhideItems: function (items) {
-        if (!items) {
-            return;
-        }
-
-        for (var i = 0; i < items.length; i++) {
-            items[i].hidden = false;
-            this.unhideItems(items[i].items);
-        }
-    },
     selectedItemsChanged: function () {
       this.itemId = this.getCommonValue("id");
       this.itemName = this.getCommonValue("itemName");

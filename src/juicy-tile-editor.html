@@ -8,6 +8,7 @@
 
 <polymer-element name="juicy-tile-editor" attributes="selectionMode">
   <template>
+      <link href="css/jte-fontawesome.css" rel="stylesheet" />
     <style>
         juicy-tile-editor-form {
             display: block;
@@ -121,7 +122,7 @@
 
         .sidebar .actions {
             float:right;
-            margin: 7px 5px 0px 0px;
+            margin: 1px;
         }
 
         .sidebar .actions a {
@@ -172,6 +173,13 @@
         .sidebar.top .resize-right {
             display: none;
         }
+
+        #sidebarHeader {
+            margin: 0px;
+            font-size: 16px;
+            background-color: #444444;
+            padding: 3px 4px;
+        }
     </style>
 
       <juicy-tile-editor-form id="form"
@@ -188,7 +196,9 @@
                 <div class="resize-right"></div>
                 <div class="resize-left"></div>
                 <span class="actions">
-                    <a href="javascript:" title="Move to next position" on-click="{{moveToNextPosition}}">⇔</a>
+                    <a href="javascript:" title="Unhide all elements" on-click="{{unhideAll}}">
+                        <i class="jte-icon-eye"></i>
+                    </a>
                 </span>
                 <h1 id="sidebarHeader">
                     Elements

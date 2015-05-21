@@ -1,8 +1,8 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-icon-button/core-icon-button.html">
 
 <polymer-element name="juicy-toggle-icon-button" attributes="iconOn iconOff altOn altOff checked disabled value" >
   <template>
+      <link href="css/jte-fontawesome.css" rel="stylesheet" />
     <style>
       :host{
         display: inline-block;
@@ -16,21 +16,23 @@
       }
     </style>
     <label>
-      <core-icon-button 
-        icon="{{checked? iconOn : iconOff}}" 
-        alt="{{checked? iconOn : iconOff}}" 
-        disabled?="{{disabled}}"></core-icon-button>
-      <input 
-        type="checkbox" 
-        checked="{{checked}}" 
-        disabled?="{{disabled}}" 
+        <template if="{{checked}}">
+            <i class="jte-icon {{iconOn}}"></i>
+        </template>
+        <template if="{{!checked}}">
+            <i class="jte-icon {{iconOff}}"></i>
+        </template>
+      <input
+        type="checkbox"
+        checked="{{checked}}"
+        disabled?="{{disabled}}"
         value="{{value}}">
         <!-- value="[[value]]"> -->
     </label>
   </template>
   <script>
     Polymer({
-      // value: null, 
+      // value: null,
       publish:{
         checked: {
           value: false,

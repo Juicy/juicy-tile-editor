@@ -205,7 +205,7 @@
       // this.fire('juicy-tile-tree-refresh-tile-list', ev.target.value);
       this.fire('juicy-tile-tree-refresh-tile-list');
     },
-    itemDragStop: function (e) {
+    itemDragStop: function (e, index, target) {
         if (!e.detail.dropElement) {
             return;
         }
@@ -213,6 +213,11 @@
         var item = e.target.templateInstance.model.item;
         var branch = e.detail.dropElement.templateInstance.model.item;
 
+        if (item == branch) {
+            return;
+        }
+
+        this.tapAction(e, index, target);
         this.fire("juicy-tile-tree-drag-item-stop", { item: item, branch: branch });
     }
   });
