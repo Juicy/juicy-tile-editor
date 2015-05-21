@@ -11,7 +11,8 @@
             .editablesContainer {
                 display: flex;
                 font-family: 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
-                width: 1100px;
+                max-width: 1200px;
+                min-width: 800px;
             }
 
             .editableGroup {
@@ -399,8 +400,8 @@
                     <label class="toolbar-label">To group</label>
                 </div>
 
-                <div class="toolbar-item">
-                    <button class="toolbar-button" on-click="{{deleteContainer}}" disabled?="{{!isRemovable}}" title="Ungroup selected item">
+                <div class="toolbar-item" disabled?="{{!isRemovable}}">
+                    <button class="toolbar-button" on-click="{{deleteContainer}}" title="Ungroup selected item">
                         <i class="jte-icon-minus-squared-alt"></i>
                     </button>
                     <label class="toolbar-label">Ungroup</label>
