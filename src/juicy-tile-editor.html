@@ -132,6 +132,7 @@
             text-align:center;
             line-height:25px;
             background-color:#F0F0F0;
+            float:left;
         }
 
         .sidebar .actions a:hover {
@@ -194,6 +195,12 @@
                 <div class="resize-right"></div>
                 <div class="resize-left"></div>
                 <span class="actions">
+                    <a href="javascript:" title="Expand all items" on-click="{{expandAll}}">
+                        <i class="jte-icon-angle-down"></i>
+                    </a>
+                    <a href="javascript:" title="Collapse all items" on-click="{{collapseAll}}">
+                        <i class="jte-icon-angle-up"></i>
+                    </a>
                     <a href="javascript:" title="Unhide all elements" on-click="{{unhideAll}}">
                         <i class="jte-icon-eye"></i>
                     </a>

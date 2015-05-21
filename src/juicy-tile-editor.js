@@ -616,6 +616,17 @@
             items[i].hidden = false;
             this.unhideItems(items[i].items);
         }
+    },
+    expandAll: function () {
+        this.expandCollapseAll(true);
+    },
+    collapseAll: function () {
+        this.expandCollapseAll(false);
+    },
+    expandCollapseAll: function (expanded) {
+        for (var i in this.$.treeView.collapsed) {
+            this.$.treeView.collapsed[i] = !expanded;
+        }
     }
   });
 })();
