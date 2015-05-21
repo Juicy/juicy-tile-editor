@@ -21,6 +21,7 @@
     isSelection: false,
     isSingleSelection: false,
     selectedItems: [],
+    tileLists: null,
     editedTiles: null,
     itemId: null,
     itemName: null,
@@ -119,6 +120,16 @@
       }
       return elements;
     },
+    refreshModified: function () {
+        for (var i = 0; i < this.tileLists.length; i++) {
+            if (this.tileLists[i].sync && this.tileLists[i].sync.isModified()) {
+                this.modified = true;
+                return;
+            }
+        }
+
+        this.modified = false;
+    },
     gutterIncrease: function () {
       this.gutter++;
     },
@@ -143,7 +154,7 @@
     refresh: function () {
       if (this.editedTiles) {
         this.editedTiles.refresh();
-        this.modified = this.editedTiles.sync && this.editedTiles.sync.isModified();
+        this.refreshModified();
         this.getSource();
       }
     },
@@ -197,7 +208,7 @@
       this.direction = element.value;
       this.refresh();
     },
-    stackItems: function () {
+    /*stackItems: function () {
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
         if (this.selectedItems[i].items) {
           this.selectedItems[i].direction = "rightDown";
@@ -208,7 +219,7 @@
         }
       }
       this.refresh();
-    },
+    },*/
     isContainerInSelection: function() {
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
         if (this.selectedItems[i].items) {
@@ -281,26 +292,34 @@
       }
     },
     saveChanges: function () {
-      var editedTiles = this.editedTiles;
-      editedTiles.sync.save();
+        for (var i = 0; i < this.tileLists.length; i++) {
+            var list = this.tileLists[i];
 
-      this.modified = false;// editedTiles.sync.isModified();
-      this.fire('juicy-tile-editor-save');
+            list.sync.save();
+        }
+
+        this.modified = false;
+        this.fire('juicy-tile-editor-save');
     },
     /**
      * Reverts setup and refresh tiles
      */
     revertChanges: function () {
-      this.editedTiles.sync.revert();
-      this.modified = false;// this.editedTiles.sync.isModified();
-      this.fire('juicy-tile-editor-revert');
-      this.getSource();
+        for (var i = 0; i < this.tileLists.length; i++) {
+            var list = this.tileLists[i];
+
+            list.sync.revert();
+        }
+
+        this.modified = false;
+        this.fire('juicy-tile-editor-revert');
+        this.getSource();
     },
     clearConfig: function () {
       this.editedTiles.sync.clear();
-      this.modified = false;// this.editedTiles.sync.isModified();
-      this.fire('juicy-tile-editor-clear');
+      this.refreshModified();
       this.getSource();
+      this.fire('juicy-tile-editor-clear');
     },
     applyLayout: function () {
       this.editedTiles.setAttribute('layout', this.layout);
@@ -315,7 +334,7 @@
     applySource: function () {
       if (this.editedTiles) {
         this.editedTiles.setup = JSON.parse(this.source);
-        this.modified = this.editedTiles.sync.isModified();
+        this.refreshModified();
         this.fire('juicy-tile-editor-revert');
       }
     },
@@ -415,6 +434,7 @@
       this.isContainer = this.isContainerInSelection();
       this.isRoot = this.isRootInSelection();
       this.isGroupable = this.isGroupableInSelection();
+      this.isGroup = (this.isContainer && !this.isRoot);
       this.isRemovable = (this.isContainer && !this.isRoot) && this.isGroupable;
       //this.getSource();
       this.refresh();

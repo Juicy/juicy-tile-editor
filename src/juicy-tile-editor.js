@@ -459,6 +459,9 @@
       this.$.tileSelected.hide();
       this.treeChangedAction();
     },
+    clearAction: function () {
+        this.treeChangedAction();
+    },
     treeHighlightAction: function (item, tileList) {
       if(item.detail) {  //is tree event
         tileList = item.detail.tiles;
@@ -529,9 +532,11 @@
       this.selectedElements.splice(index, 1);
       this.$.tileSelected.show(this.selectedElements);
     },
-    treeChangedAction: function() {
-      this.treeRefresh();
-      this.$.treeView.highlightBranch(this.selectedItems[0]);
+    treeChangedAction: function () {
+        setTimeout((function () {
+            this.treeRefresh();
+            this.$.treeView.highlightBranch(this.selectedItems[0]);
+        }).bind(this));
     },
     refreshTileList: function(e){
       var listEditedByForm = this.$.form.editedTiles;
