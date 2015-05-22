@@ -347,19 +347,6 @@
                     </juicy-popover>
                     <label class="toolbar-label">Gutter</label>
                 </div>
-
-                <div class="toolbar-item" title="Supported only for virtual groups in juicy-tile-list or in juicy-tile-grid with absolute layout.">
-                    <div class="toolbar-item-wrapper" disabled?="{{!isContainer || layout!='absolute'}}" data-applyvalue="oversize">
-                        <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                            <input class="handle toolbar-button val" placeholder="multiple" value="{{oversize}}">
-                            <div class="expandable">
-                                <button class="editable" on-click="{{oversizeIncrease}}">+</button>
-                                <button class="editable" on-click="{{oversizeDecrease}}">-</button>
-                            </div>
-                        </juicy-popover>
-                        <label class="toolbar-label">Oversize</label>
-                    </div>
-                </div>
             </div>
 
             <div class="editableGroup">
@@ -423,6 +410,19 @@
             </div>
             <div class="editableGroup">
 
+                <div class="toolbar-item" title="Supported only for virtual groups in juicy-tile-list or in juicy-tile-grid with absolute layout.">
+                    <div class="toolbar-item-wrapper" disabled?="{{!isSelection}}" data-applyvalue="oversize">
+                        <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
+                            <input class="handle toolbar-button val" placeholder="multiple" value="{{oversize}}">
+                            <div class="expandable">
+                                <button class="editable" on-click="{{oversizeIncrease}}">+</button>
+                                <button class="editable" on-click="{{oversizeDecrease}}">-</button>
+                            </div>
+                        </juicy-popover>
+                        <label class="toolbar-label">Oversize</label>
+                    </div>
+                </div>
+
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="background">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                         <button class="handle toolbar-button toolbar-button-background" style='background: {{background}}'>&nbsp;</button>
@@ -444,6 +444,8 @@
                     </juicy-popover>
                     <label class="toolbar-label">Outline</label>
                 </div>
+            </div>
+            <div class="editableGroup">
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
