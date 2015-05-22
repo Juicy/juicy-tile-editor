@@ -1,6 +1,6 @@
 (function () {
     Polymer('juicy-tile-tree', {
-    collapsed: {},
+    expanded: {},
     tree: [],
     editItem: null,
     editBranch: null,
@@ -169,7 +169,7 @@
                 var btn = element.querySelector(".expand");
 
                 if (btn) {
-                    btn.removeAttribute("checked");
+                    btn.setAttribute("checked", "checked");
                 }
             }
 

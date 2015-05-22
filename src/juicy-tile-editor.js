@@ -624,8 +624,8 @@
         this.expandCollapseAll(false);
     },
     expandCollapseAll: function (expanded) {
-        for (var i in this.$.treeView.collapsed) {
-            this.$.treeView.collapsed[i] = !expanded;
+        for (var i in this.$.treeView.expanded) {
+            this.$.treeView.expanded[i] = expanded;
         }
     }
   });
