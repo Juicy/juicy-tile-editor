@@ -219,6 +219,16 @@
 
         this.tapAction(e, index, target);
         this.fire("juicy-tile-tree-drag-item-stop", { item: item, branch: branch });
+    },
+    getFullId: function (item) {
+        var r = [];
+
+        while (item) {
+            r.push(item.id);
+            item = item.container;
+        }
+
+        return r.join("-");
     }
   });
 })();

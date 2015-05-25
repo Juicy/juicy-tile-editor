@@ -236,11 +236,11 @@
                     <ul class="branch">
                         <template repeat="{{ branch.node.setup.items as item }}" id="item">
                             <!-- item -->
-                            <li class="drop {{ {collapsed: !expanded[item.id]} | tokenList}}">
+                            <li class="drop {{ {collapsed: !expanded[getFullId(item)]} | tokenList}}">
                                 <template if="{{ item.items }}">
                                     <!-- group -->
                                     <div class="drop-item {{ item | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{item.id}}">
-                                        <juicy-toggle-icon-button class="expand" iconon="jte-icon-angle-down" iconoff="jte-icon-angle-right" checked="{{expanded[item.id]}}"></juicy-toggle-icon-button>
+                                        <juicy-toggle-icon-button class="expand" iconon="jte-icon-angle-down" iconoff="jte-icon-angle-right" checked="{{expanded[getFullId(item)]}}"></juicy-toggle-icon-button>
                                         <template bind ref="item-visibility"></template>
                                         <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{editItem == item}}">
                                             <div on-tap="{{tapAction}}" class="txt">
@@ -271,7 +271,7 @@
                                     <template if="{{ branch.branches[ item.id ] }}">
                                         <!-- with nested juicy-tile-list -->
                                         <div class="{{ item | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{item.id}}">
-                                            <juicy-toggle-icon-button class="expand" iconon="jte-icon-angle-down" iconoff="jte-icon-angle-right" checked="{{expanded[item.id]}}"></juicy-toggle-icon-button>
+                                            <juicy-toggle-icon-button class="expand" iconon="jte-icon-angle-down" iconoff="jte-icon-angle-right" checked="{{expanded[getFullId(item)]}}"></juicy-toggle-icon-button>
                                             <template bind ref="item-visibility"></template>
                                             <juicy-draggable on-juicy-draggable-stop="{{ itemDragStop }}" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{editItem == item}}">
                                                 <div on-tap="{{tapAction}}" class="txt">
