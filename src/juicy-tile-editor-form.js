@@ -295,7 +295,9 @@
         for (var i = 0; i < this.tileLists.length; i++) {
             var list = this.tileLists[i];
 
-            list.sync.save();
+            if (list.sync.isModified()) {
+                list.sync.save();
+            }
         }
 
         this.modified = false;
