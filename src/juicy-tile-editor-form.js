@@ -423,11 +423,13 @@
         }
       }.bind(this));
     },
-    popoverExpand: function () {
-        this.style.zIndex = 1;
+    popoverExpand: function (ev, index, target) {
+        var index = this.style.zIndex || 0;
+        this.style.zIndex = parseInt(index) + 1;
     },
-    popoverCollapse: function () {
-        this.style.zIndex = "";
+    popoverCollapse: function (ev, index, target) {
+        var index = this.style.zIndex || 0;
+        this.style.zIndex = parseInt(index) - 1;
     }
   });
 })();
