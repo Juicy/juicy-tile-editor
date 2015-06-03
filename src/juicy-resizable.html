@@ -64,8 +64,9 @@
 
         JuicyResizablePrototype.startResize = function (e) {
             var rect = this.resizeElement.getBoundingClientRect();
-            var event = new Event("juicy-resizable-start", { detail: e });
+            var event = new Event("juicy-resizable-start");
 
+            event.detail = e;
             this.resizeOffset = {
                 left: rect.left,
                 right: rect.right
@@ -84,7 +85,7 @@
             e.preventDefault();
 
             var w = null;
-            var event = new Event("juicy-resizable-handle", { detail: e });
+            var event = new Event("juicy-resizable-handle");
 
             if (this.isRight) {
                 w = parseInt(e.clientX - this.resizeOffset.left + 2);
@@ -92,13 +93,15 @@
                 w = parseInt(this.resizeOffset.right - e.clientX);
             }
 
+            event.detail = e;
             this.resizeElement.style.width = w + "px";
             this.dispatchEvent(event);
         };
 
         JuicyResizablePrototype.stopResize = function (e) {
-            var event = new Event("juicy-resizable-stop", { detail: e });
+            var event = new Event("juicy-resizable-stop");
 
+            event.detail = e;
             this.down = false;
 
             if (this.rightHandle) {
