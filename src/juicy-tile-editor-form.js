@@ -430,6 +430,9 @@
     popoverCollapse: function (ev, index, target) {
         var index = this.style.zIndex || 0;
         this.style.zIndex = parseInt(index) - 1;
+    },
+    closeClick: function (ev, index, target) {
+        this.fire("juicy-tile-editor-form-close");
     }
   });
 })();

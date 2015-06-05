@@ -627,6 +627,9 @@
         for (var i in this.$.treeView.expanded) {
             this.$.treeView.expanded[i] = expanded;
         }
+    },
+    closeClick: function () {
+        this.fire("juicy-tile-editor-close");
     }
   });
 })();

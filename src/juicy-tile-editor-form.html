@@ -257,6 +257,20 @@
                 height: 1px;
                 margin: 10px 0;
             }
+
+            .editableGroup:last-child {
+                position: absolute;
+                right: 0;
+            }
+
+            .editableGroup:last-child .toolbar-button {
+                background-color: transparent;
+                color: #e5e7ed;
+            }
+
+            .editableGroup:last-child .toolbar-button:hover {
+                color: white;
+            }
         </style>
         <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
             <div class="editableGroup" disable?="{{!editedTiles.sync}}">
@@ -500,6 +514,15 @@
                         </div>
                     </juicy-popover>
                     <label class="toolbar-label">Priority</label>
+                </div>
+            </div>
+
+            <div class="editableGroup">
+                <div class="toolbar-item">
+                    <button type="button" class="toolbar-button" title="Close editor" on-click="{{closeClick}}">
+                        <i class="jte-icon-cancel"></i>
+                    </button>
+                    <label class="toolbar-label">&nbsp;</label>
                 </div>
             </div>
         </div>
