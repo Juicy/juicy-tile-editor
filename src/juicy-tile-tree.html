@@ -224,8 +224,8 @@
         <ul id="root">
             <template repeat="{{ tree as branch }}" id="recursive">
                 <!-- branch -->
-                <li class="{{ {collapsed: !expanded[toRootName(branch.node)]} | tokenList}}">
-                    <div class="{{ branch | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{ toRootName(branch.node) }}">
+                <li class="drop {{ {collapsed: !expanded[toRootName(branch.node)]} | tokenList}}">
+                    <div class="drop-item {{ branch | getBranchClassName }}" on-mouseover="{{hoverAction}}" on-mouseout="{{blurAction}}" title="{{ toRootName(branch.node) }}">
                         <juicy-toggle-icon-button class="expand" iconon="jte-icon-angle-down" iconoff="jte-icon-angle-right" checked="{{expanded[toRootName(branch.node)]}}"></juicy-toggle-icon-button>
                         <div on-tap="{{tapAction}}" class="txt">
                             <i class="jte-icon jte-icon-th-large" title="juicy-tile-list"></i>

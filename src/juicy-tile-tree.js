@@ -210,8 +210,14 @@
             return;
         }
 
+        var branch = null;
         var item = e.target.templateInstance.model.item;
-        var branch = e.detail.dropElement.templateInstance.model.item;
+
+        if (this.isNestedTilesLabel(e.detail.dropElement)) {
+            branch = e.detail.dropElement.templateInstance.model.branch.node.setup;
+        } else {
+            branch = e.detail.dropElement.templateInstance.model.item;
+        }
 
         if (item == branch) {
             return;
