@@ -83,6 +83,11 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
     <div id="aboveOverlay">
       <juicy-tile-editor selectionMode></juicy-tile-editor>
     </div>
+      <script>
+          document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
+              e.target.templateInstance.model.editingMode = false;
+          });
+      </script>
   </template>
 
   <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>

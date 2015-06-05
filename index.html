@@ -81,6 +81,11 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
         <div id="aboveOverlay">
             <juicy-tile-editor selectionmode></juicy-tile-editor>
         </div>
+        <script>
+            document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
+                e.target.templateInstance.model.editingMode = false;
+            });
+        </script>
     </template>
   <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
   <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
