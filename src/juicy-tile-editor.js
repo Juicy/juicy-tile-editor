@@ -630,6 +630,8 @@
     },
     closeClick: function () {
         this.fire("juicy-tile-editor-close");
+    },
+    modifiedChanged: function () {
     }
   });
 })();

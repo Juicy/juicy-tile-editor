@@ -17,7 +17,6 @@
   }
   
   Polymer('juicy-tile-editor-form', {
-    modified: false,
     isSelection: false,
     isSingleSelection: false,
     selectedItems: [],
