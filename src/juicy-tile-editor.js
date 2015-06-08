@@ -1,4 +1,6 @@
 (function () {
+    var groupCounter = 1;
+
   /**
    * Produced inducted, reduced, spanning trees for given set of nodes.
    * @param  {Array-Like<Element>} elements array of DOM elements
@@ -115,12 +117,19 @@
       bar.style.bottom = "";
   }
 
-  function getItemDisplayName(item, branch) {
+  function getItemDisplayName(item, branch, usedNames) {
       var txt = "";
       var elem = branch.node.querySelector('[juicytile="' + item.id + '"]');
 
       if (!elem) {
-          return item.id;
+          var name = null;
+
+          while (!name || usedNames.indexOf(name) >= 0) {
+              name = "Group " + groupCounter++;
+          }
+
+          return name;
+          //return item.id;
       }
       var header = elem.querySelector("h1, h2, h3, h4, h5, h6");
 
@@ -154,16 +163,18 @@
       return name;
   }
 
-  function setItemName(item, branch) {
+  function setItemName(item, branch, usedNames) {
       if (!item.itemName) {
-          item.itemName = getItemDisplayName(item, branch);
+          item.itemName = getItemDisplayName(item, branch, usedNames);
       }
+
+      usedNames.push(item.itemName);
 
       var items = item.items;
 
       if (items) {
           for (var i = 0; i < items.length; i++) {
-              setItemName(items[i], branch);
+              setItemName(items[i], branch, usedNames);
           }
       }
 
@@ -171,21 +182,27 @@
           var branches = branch.branches[item.id];
 
           for (var i = 0; i < branches.length; i++) {
-              setBranchName(branches[i]);
+              setBranchName(branches[i], usedNames);
           }
       }
   }
 
-  function setBranchName(branch) {
+  function setBranchName(branch, usedNames) {
+      if (!usedNames) {
+          usedNames = [];
+      }
+
       if (!branch.node.setup.itemName) {
           branch.node.setup.itemName = getRootItemDisplayName(branch.node, true);
       }
+
+      usedNames.push(branch.node.setup.itemName);
 
       var items = branch.node.setup.items;
 
       if (items) {
           for (var i = 0; i < items.length; i++) {
-              setItemName(items[i], branch);
+              setItemName(items[i], branch, usedNames);
           }
       }
   }
