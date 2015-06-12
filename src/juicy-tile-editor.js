@@ -208,6 +208,7 @@
   }
 
   Polymer('juicy-tile-editor', {
+    closeReady: false,
     selectionMode: false,
     editedElement: null,
     highlightedTile: null,
@@ -312,6 +313,12 @@
       setTimeout(function () {
           that.treeRefresh();
       });
+
+      this.closeReady = false;
+
+      setTimeout(function () {
+          that.closeReady = true;
+      }, 200);
 
       /*window.addEventListener("beforeunload", function (e) {
           if (that.$.form.modified) {
@@ -646,7 +653,9 @@
         }
     },
     closeClick: function () {
-        this.fire("juicy-tile-editor-close");
+        if (this.closeReady) {
+            this.fire("juicy-tile-editor-close");
+        }
     },
     modifiedChanged: function () {
     }
