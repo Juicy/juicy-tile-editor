@@ -20,7 +20,7 @@
     body {
       padding: 50px 20px 20px 20px;
     }
-    * {
+    *{
       margin:0px;
       padding:0px;
     }
@@ -30,7 +30,8 @@
       display: block;
       box-shadow:     inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
     }
-    body>juicy-tile-grid{
+    .markdown-body>juicy-tile-grid{
+      padding: 1em;
       margin: 2em 0 2em 200px;
     }
     juicy-tile-grid>*{
@@ -66,6 +67,10 @@
       position: fixed;
       z-index: 100;
     }
+    .markdown-body div h4,
+    .markdown-body juicy-tile-grid div p{
+      margin: 0;
+    }
     iframe{float:right}
   </style>
 </head>
@@ -93,21 +98,23 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
   <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>
   <juicy-tiles-setup-sync storedValue="{{setup}}"></juicy-tiles-setup-sync>
   <juicy-tile-grid id="st1" setup="[[setup]]">
-    <div>0</div>
+    <div>0
+        <p><code>widthFlexible: false</code> - Tile will have fixed size width, will not adapt to the container resize</p>
+    </div>
     <div>
         <button>1</button>
-        <p><code>heightAdaptive: true</code> - adapt to row-siblings dynamic height change</p>
+        <p><code>widthFlexible: true</code> - Tile will have flex size width, will do adapt to the container resize</p>
     </div>
     <div>
       <h4>2</h4>
         <p>
-            <code>heightDynamic: true</code>Dynamically change height after tile was packed.
+            <code>heightFlexible: true</code>Dynamically change height after tile was packed.
             <button onclick="addMore( this )">Add more content</button>
             <div id="ieHierarchyRequestErrorWorkaround"></div>
         </p>
     </div>
     <section>
-        <p>3: <code>heightAdaptive: true</code></p>
+        <p>3: <code>widthFlexible: true</code></p>
     </section>
     <div>
         4
@@ -172,7 +179,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
         {
           "id": 0,
           "priority": 0.9,
-          "height": 50,
+          "height": 200,
           "width": 200
         },
         {
@@ -180,21 +187,22 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
           "priority": 0.8,
           "height": 100,
           "width": 200,
-          "heightAdaptive": true
+          "widthFlexible": true
         },
         {
           "id": 2,
           "priority": 0.7,
           "height": 100,
+          "heightFlexible": true,
           "width": 200,
-          "heightDynamic": true
+          "widthFlexible": true
         },
         {
           "id": 3,
           "priority": 0.6,
           "height": 50,
           "width": 200,
-          "heightAdaptive": true
+          "widthFlexible": true
         },
         {
           "name": "virtual group",
@@ -202,6 +210,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
           "gutter": 10,
           "height": 100,
           "width": 400,
+          "widthFlexible": true,
           "innerHTML": "<div style=\"background: rgba(191, 81, 236, 0.5); position: relative; top: -8px; left: -8px; height: calc(100% + 2 * 8px ); width: calc(100% + 2 * 8px ); font-size: 100px;\"><marquee title=\"old school test\">☃</marquee></div>",
           "items": [
               {
@@ -222,7 +231,8 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
           "id": 6,
           "priority": 0.5,
           "height": 150,
-          "width": 400
+          "width": 400,
+          "widthFlexible": true
         },
         {
           "id": 7,
@@ -280,7 +290,7 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
   });
 
 
-  addMore = function( button ){
+  var addMore = function( button ){
       // var newOne = button.ownerDocument.createElement("div");
       // newOne.innerHTML = "<p><code>&lt;juicy-tile-grid&gt;</code> uses native CSS Grid to adapt to changes</p>";
       // button.parentNode.appendChild( newOne );

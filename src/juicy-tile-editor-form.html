@@ -468,6 +468,11 @@
                             <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
                             <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
                             <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
+                            <div title="Supported only in juicy-tile-grid with grid layout.">
+                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                    <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
+                                </div>
+                            </div>
                             <hr>
                             <div class="button-column">
                                 <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
@@ -489,8 +494,7 @@
                             <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
                             <div title="Supported only in juicy-tile-grid with grid layout.">
                                 <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                    <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
-                                    <label class="editable"><input id="heightAdaptiveCheckbox" type="checkbox" data-applyvalue="heightAdaptive" checked="{{heightAdaptive}}"> adaptive</label>
+                                    <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
                                 </div>
                             </div>
                             <hr>

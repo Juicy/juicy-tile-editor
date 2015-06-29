@@ -26,6 +26,6 @@
   "devDependencies": {
     "core-localstorage": "Polymer/core-localstorage#0.4.1",
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
-    "juicy-tile-grid": "Juicy/juicy-tile-grid#gh-pages"
+    "juicy-tile-grid": "Juicy/juicy-tile-grid#fractions"
   }
 }
