@@ -15,7 +15,7 @@
     }
     obj[property] = power;
   }
-  
+
   Polymer('juicy-tile-editor-form', {
     isSelection: false,
     isSingleSelection: false,
@@ -74,7 +74,7 @@
       } else {
           newContainer.width = dimensions.width;
       }
-      
+
       newContainer.height = dimensions.height;
 
       this.refresh();
@@ -272,9 +272,17 @@
         node = node.parentNode;
       }
     },
-    toNumber: { 
+    toNumber: {
       toModel: function(arg){
         return parseInt(arg, 10) || 0;
+      },
+      toDOM: function(arg){
+        return arg;
+      }
+    },
+    toNumberOrPercentage: {
+      toModel: function(arg){
+        return arg.indexOf("%")>-1 ? arg : parseInt(arg, 10) || 0;
       },
       toDOM: function(arg){
         return arg;

@@ -1,4 +1,4 @@
-﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../core-selector/core-selector.html" />
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
@@ -463,7 +463,7 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width}}" disabled?="{{widthAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width | toNumberOrPercentage}}" disabled?="{{widthAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
                             <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
@@ -487,7 +487,7 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="height">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height}}" disabled?="{{heightAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height | toNumberOrPercentage}}" disabled?="{{heightAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
                             <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
