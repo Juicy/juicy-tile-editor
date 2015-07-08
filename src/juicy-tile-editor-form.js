@@ -335,7 +335,6 @@
     applySource: function () {
       if (this.editedTiles) {
         this.editedTiles.setup = JSON.parse(this.source);
-        this.editedTiles.onSetupChanged();
         this.refreshModified();
         this.fire('juicy-tile-editor-revert');
       }
