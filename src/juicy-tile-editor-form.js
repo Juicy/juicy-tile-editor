@@ -37,6 +37,8 @@
     priority: null,
     content: null,
     layout: null,
+    actualWidth: null,
+    actualHeight: null,
     newGroupFromSelection: function (width, isEmpty) {
       if (!this.selectedItems.length > 1) {
         return;
@@ -429,6 +431,15 @@
           input.setAttribute('placeholder', '');
         }
       }.bind(this));
+
+      if (!this.editor || this.editor.selectedElements.length != 1) {
+          this.actualWidth = "N/A";
+          this.actualHeight = "N/A";
+      } else if (this.editor.selectedElements.length) {
+          var rec = this.editor.selectedElements[0].getBoundingClientRect();
+          this.actualWidth = parseInt(rec.width) + "px";
+          this.actualHeight = parseInt(rec.height) + "px";
+      }
     },
     popoverExpand: function (ev, index, target) {
         var index = this.style.zIndex || 0;
