@@ -366,7 +366,7 @@
         if (highlightedTile) {
           if (editor.highlightedTile !== highlightedTile) {
             editor.highlightedTile = highlightedTile;
-            editor.$.tileRollover.show(highlightedTile, editor.getHighlightContent);
+            editor.$.tileRollover.show(highlightedTile);
           }
           ev.stopImmediatePropagation();
         }
@@ -502,7 +502,7 @@
       }
       this.editedTiles = tileList;
       var tile = tileList.tiles[item.id];
-      this.$.tileEdited.show(tile);
+      this.$.tileEdited.show(tile, this.getHighlightContent);
       this.selectedItems.length = 0;
       this.selectedItems.push(item);
       this.selectedElements.length = 0;
@@ -515,7 +515,7 @@
         }
 
         var tile = tileList.tiles[item.id];
-        this.$.tileRollover.show(tile, this.getHighlightContent);
+        this.$.tileRollover.show(tile);
     },
     treeBlurAction: function (item, tileList) {
         this.$.tileRollover.hide();
@@ -554,7 +554,7 @@
       }
       this.selectedItems.push(item);
       this.selectedElements.push( this.editedTiles.tiles[item.id] );
-      this.$.tileSelected.show(this.selectedElements);
+      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent);
     },
     treeHighlightRemoveAction: function(item) {
       if(item.detail) {  //is tree event
@@ -563,7 +563,7 @@
       var index = this.selectedItems.indexOf(item);
       this.selectedItems.splice(index, 1);
       this.selectedElements.splice(index, 1);
-      this.$.tileSelected.show(this.selectedElements);
+      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent);
     },
     treeChangedAction: function () {
         setTimeout((function () {
