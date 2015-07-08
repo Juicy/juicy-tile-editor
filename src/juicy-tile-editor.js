@@ -351,6 +351,12 @@
         this.unlisten();
       }
     },
+    getHighlightContent: function (el) {
+        var rec = el.getBoundingClientRect();
+        var html = ["<div style='background-color:rgba(230, 67, 94, 0.7); padding:1px; font-size:11px; line-height:11px;'>Size: ", rec.width, "x", rec.height, "</div>"].join("");
+
+        return html;
+    },
     listen: function () {
       var editor = this;
       // Highlight hovered tile
@@ -360,7 +366,7 @@
         if (highlightedTile) {
           if (editor.highlightedTile !== highlightedTile) {
             editor.highlightedTile = highlightedTile;
-            editor.$.tileRollover.show( highlightedTile);
+            editor.$.tileRollover.show(highlightedTile, editor.getHighlightContent);
           }
           ev.stopImmediatePropagation();
         }
@@ -509,7 +515,7 @@
         }
 
         var tile = tileList.tiles[item.id];
-        this.$.tileRollover.show(tile);
+        this.$.tileRollover.show(tile, this.getHighlightContent);
     },
     treeBlurAction: function (item, tileList) {
         this.$.tileRollover.hide();
