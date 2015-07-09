@@ -352,7 +352,7 @@
       }
     },
     getHighlightContent: function (el) {
-        var setup = this.editedTiles.allItems[el.id];
+        var setup = this.editedTiles.allItems[el.id] || this.editedTiles.allItems["root"];
         var rec = el.getBoundingClientRect();
         var html = ["<div style='background-color:rgba(230, 67, 94, 0.7); padding:1px; font-size:11px; line-height:11px;'>Size: [", rec.width, ", ", rec.height, "]<br/>Setup: [", setup.width, ", ", setup.height, "]</div>"].join("");
 
