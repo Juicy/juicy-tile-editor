@@ -352,8 +352,9 @@
       }
     },
     getHighlightContent: function (el) {
+        var setup = this.editedTiles.allItems[el.id];
         var rec = el.getBoundingClientRect();
-        var html = ["<div style='background-color:rgba(230, 67, 94, 0.7); padding:1px; font-size:11px; line-height:11px;'>Size: ", rec.width, "x", rec.height, "</div>"].join("");
+        var html = ["<div style='background-color:rgba(230, 67, 94, 0.7); padding:1px; font-size:11px; line-height:11px;'>Size: [", rec.width, ", ", rec.height, "]<br/>Setup: [", setup.width, ", ", setup.height, "]</div>"].join("");
 
         return html;
     },
@@ -502,7 +503,7 @@
       }
       this.editedTiles = tileList;
       var tile = tileList.tiles[item.id];
-      this.$.tileEdited.show(tile, this.getHighlightContent);
+      this.$.tileEdited.show(tile, this.getHighlightContent.bind(this));
       this.selectedItems.length = 0;
       this.selectedItems.push(item);
       this.selectedElements.length = 0;
@@ -554,7 +555,7 @@
       }
       this.selectedItems.push(item);
       this.selectedElements.push( this.editedTiles.tiles[item.id] );
-      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent);
+      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent.bind(this));
     },
     treeHighlightRemoveAction: function(item) {
       if(item.detail) {  //is tree event
@@ -563,7 +564,7 @@
       var index = this.selectedItems.indexOf(item);
       this.selectedItems.splice(index, 1);
       this.selectedElements.splice(index, 1);
-      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent);
+      this.$.tileSelected.show(this.selectedElements, this.getHighlightContent.bind(this));
     },
     treeChangedAction: function () {
         setTimeout((function () {
