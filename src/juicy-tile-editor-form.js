@@ -304,7 +304,7 @@
         for (var i = 0; i < this.tileLists.length; i++) {
             var list = this.tileLists[i];
 
-            if (list.sync.isModified()) {
+            if (list.sync && list.sync.isModified()) {
                 list.sync.save();
             }
         }
