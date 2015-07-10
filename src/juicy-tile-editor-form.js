@@ -432,11 +432,12 @@
         }
       }.bind(this));
 
-      if (!this.editor || this.editor.selectedElements.length != 1) {
+      if (this.selectedItems.length != 1) {
           this.actualWidth = "N/A";
           this.actualHeight = "N/A";
-      } else if (this.editor.selectedElements.length) {
-          var rec = this.editor.selectedElements[0].getBoundingClientRect();
+      } else {
+          var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+          var rec = tile.getBoundingClientRect();
           this.actualWidth = parseInt(rec.width) + "px";
           this.actualHeight = parseInt(rec.height) + "px";
       }

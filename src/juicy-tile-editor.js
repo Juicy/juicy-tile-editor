@@ -315,7 +315,6 @@
       });
 
       this.closeReady = false;
-      this.editor = this;
 
       setTimeout(function () {
           that.closeReady = true;
