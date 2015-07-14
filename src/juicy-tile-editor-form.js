@@ -33,6 +33,7 @@
     heightAuto: null,
     heightFlexible: null,
     gutter: null,
+    tightGroup: null,
     oversize: 0,
     priority: null,
     content: null,
@@ -79,7 +80,7 @@
 
       newContainer.height = dimensions.height;
 
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     newInlineGroupFromSelection: function () {
@@ -107,7 +108,7 @@
       container.width = dimensions.width;
       container.height = dimensions.height;
 
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     getContainerChildElements: function (container) {
@@ -134,10 +135,8 @@
     gutterIncrease: function () {
       this.gutter++;
     },
-    gutterDecrease: function () {
-      if (this.gutter >= 1) {
-        this.gutter--;
-      }
+    gutterIncrease: function () {
+      this.gutter++;
     },
     oversizeIncrease: function () {
       if (this.oversize >= 1) {
@@ -152,9 +151,9 @@
         this.oversize--;
       }
     },
-    refresh: function () {
+    refresh: function (hard) {
       if (this.editedTiles) {
-        this.editedTiles.refresh();
+        this.editedTiles.refresh(hard);
         this.refreshModified();
         this.getSource();
       }
@@ -201,7 +200,7 @@
       var deleteElement = this.selectedItems[0];
       this.selectedItems[0] = deleteElement.container;
       this.editedTiles.deleteContainer(deleteElement, true);
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     changeDirection: function(event, i, element){
@@ -256,12 +255,12 @@
         return val;
       }
     },
-    setCommonValue: function (propName, val) {
+    setCommonValue: function (propName, val, hard) {
       if (this.selectedItems.length) {
         for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
           this.selectedItems[i][propName] = val;
         }
-        this.refresh();
+        this.refresh(hard);
       }
     },
     setValueFromButton: function (ev) {
@@ -294,7 +293,7 @@
       var node = ev.target;
       while (node) {
         if (node.dataset && node.dataset.applyvalue) {
-          this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue]);
+          this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue], !!node.dataset.hardrefresh);
           break;
         }
         node = node.parentNode;
@@ -334,7 +333,7 @@
     },
     applyLayout: function () {
       this.editedTiles.setAttribute('layout', this.layout);
-      this.editedTiles.refresh();
+      this.editedTiles.refresh(true);
     },
     getSource: function () {
       this.source = this.editedTiles ? JSON.stringify(this.editedTiles.setup) : '';
@@ -361,7 +360,7 @@
         }
 
         this.selectedItemsChanged();
-        this.refresh();
+        this.refresh(true);
         this.fire('juicy-tile-editor-form-tree-changed');
     },
     resetItemStyles: function (item, isSelected, groups) {
@@ -408,6 +407,7 @@
       this.heightAuto = this.getCommonValue("heightAuto") || false;
       this.heightFlexible = this.getCommonValue("heightFlexible") || false;
       this.gutter = this.getCommonValue("gutter");
+      this.tightGroup = this.getCommonValue("tightGroup") || false;
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");
@@ -421,6 +421,7 @@
       this.isGroup = (this.isContainer && !this.isRoot);
       this.isRemovable = (this.isContainer && !this.isRoot) && this.isGroupable;
       //this.getSource();
+      // ??? (tomalec): why do we need this?
       this.refresh();
 
       Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
