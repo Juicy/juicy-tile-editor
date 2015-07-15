@@ -29,9 +29,11 @@
     width: null,
     widthAuto: null,
     widthFlexible: null,
+    widthDynamic: null,
     height: null,
     heightAuto: null,
     heightFlexible: null,
+    heightDynamic: null,
     gutter: null,
     tightGroup: null,
     oversize: 0,
@@ -403,9 +405,11 @@
       this.width = this.getCommonValue("width");
       this.widthAuto = this.getCommonValue("widthAuto") || false;
       this.widthFlexible = this.getCommonValue("widthFlexible") || false;
+      this.widthDynamic = this.getCommonValue("widthDynamic") || false;
       this.height = this.getCommonValue("height");
       this.heightAuto = this.getCommonValue("heightAuto") || false;
       this.heightFlexible = this.getCommonValue("heightFlexible") || false;
+      this.heightDynamic = this.getCommonValue("heightDynamic") || false;
       this.gutter = this.getCommonValue("gutter");
       this.tightGroup = this.getCommonValue("tightGroup") || false;
       this.oversize = this.getCommonValue("oversize");

@@ -485,9 +485,12 @@
                                 <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
                             </div>
                             <div title="Supported only in juicy-tile-grid with grid layout.">
-                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                    <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
-                                </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
+                              </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> dynamic</label>
+                              </div>
                             </div>
                             <div class="description">
                                 Actual width: <span>{{actualWidth}}</span>
@@ -514,9 +517,12 @@
                                 <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
                             </div>
                             <div title="Supported only in juicy-tile-grid with grid layout.">
-                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                    <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
-                                </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
+                              </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
+                              </div>
                             </div>
                             <div class="description">
                                 Actual height: <span>{{actualHeight}}</span>
