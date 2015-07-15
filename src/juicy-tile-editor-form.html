@@ -1,4 +1,4 @@
-﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../core-selector/core-selector.html" />
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
@@ -79,7 +79,9 @@
                 box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
                 padding: 5px;
                 max-width: 144px;
+                min-width: 100px;
                 white-space: normal;
+                color: black;
             }
 
             .expandable.wide {
@@ -94,6 +96,12 @@
 
             .drop-down .expandable {
                 max-width: none;
+            }
+
+            .expandable .description {
+                font-size: 13px;
+                padding-left: 5px;
+                margin-top: 5px;
             }
 
             .sourceActions {
@@ -208,15 +216,17 @@
 
             .button-column {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
+                flex-wrap: wrap;
             }
 
             .button-column button {
                 margin-top: 4px;
+                width: 70px;
             }
 
-            .button-column button:first-child {
-                margin-top: 0;
+            .button-column button:nth-child(odd) {
+                margin-right: 4px;
             }
 
             .drop-down {
@@ -361,6 +371,10 @@
                     </juicy-popover>
                     <label class="toolbar-label">Gutter</label>
                 </div>
+
+                <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="tightGroup">
+                  <label class="editable"><input id="tightGroupCheckbox" type="checkbox" data-applyvalue="tightGroup" data-hardrefresh="true" checked="{{tightGroup}}"> tight</label>
+                </div>
             </div>
 
             <div class="editableGroup">
@@ -463,12 +477,25 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width}}" disabled?="{{widthAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width | toNumberOrPercentage}}" disabled?="{{widthAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
                             <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
-                            <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
-                            <hr>
+                            <div>
+                                <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
+                            </div>
+                            <div title="Supported only in juicy-tile-grid with grid layout.">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
+                              </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> dynamic</label>
+                              </div>
+                            </div>
+                            <div class="description">
+                                Actual width: <span>{{actualWidth}}</span>
+                            </div>
+                            <hr />
                             <div class="button-column">
                                 <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
                                 <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
@@ -482,18 +509,25 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="height">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height}}" disabled?="{{heightAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height | toNumberOrPercentage}}" disabled?="{{heightAuto}}">
                         <div class="expandable">
                             <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
                             <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
-                            <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
-                            <div title="Supported only in juicy-tile-grid with grid layout.">
-                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                    <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
-                                    <label class="editable"><input id="heightAdaptiveCheckbox" type="checkbox" data-applyvalue="heightAdaptive" checked="{{heightAdaptive}}"> adaptive</label>
-                                </div>
+                            <div>
+                                <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
                             </div>
-                            <hr>
+                            <div title="Supported only in juicy-tile-grid with grid layout.">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
+                              </div>
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                                  <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
+                              </div>
+                            </div>
+                            <div class="description">
+                                Actual height: <span>{{actualHeight}}</span>
+                            </div>
+                            <hr />
                             <div class="button-column">
                                 <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
                                 <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>

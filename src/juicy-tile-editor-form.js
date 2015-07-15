@@ -15,7 +15,7 @@
     }
     obj[property] = power;
   }
-  
+
   Polymer('juicy-tile-editor-form', {
     isSelection: false,
     isSingleSelection: false,
@@ -28,15 +28,20 @@
     outline: null,
     width: null,
     widthAuto: null,
+    widthFlexible: null,
+    widthDynamic: null,
     height: null,
     heightAuto: null,
+    heightFlexible: null,
     heightDynamic: null,
-    heightAdaptive: null,
     gutter: null,
+    tightGroup: null,
     oversize: 0,
     priority: null,
     content: null,
     layout: null,
+    actualWidth: null,
+    actualHeight: null,
     newGroupFromSelection: function (width, isEmpty) {
       if (!this.selectedItems.length > 1) {
         return;
@@ -74,10 +79,10 @@
       } else {
           newContainer.width = dimensions.width;
       }
-      
+
       newContainer.height = dimensions.height;
 
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     newInlineGroupFromSelection: function () {
@@ -105,7 +110,7 @@
       container.width = dimensions.width;
       container.height = dimensions.height;
 
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     getContainerChildElements: function (container) {
@@ -132,10 +137,8 @@
     gutterIncrease: function () {
       this.gutter++;
     },
-    gutterDecrease: function () {
-      if (this.gutter >= 1) {
-        this.gutter--;
-      }
+    gutterIncrease: function () {
+      this.gutter++;
     },
     oversizeIncrease: function () {
       if (this.oversize >= 1) {
@@ -150,9 +153,9 @@
         this.oversize--;
       }
     },
-    refresh: function () {
+    refresh: function (hard) {
       if (this.editedTiles) {
-        this.editedTiles.refresh();
+        this.editedTiles.refresh(hard);
         this.refreshModified();
         this.getSource();
       }
@@ -199,7 +202,7 @@
       var deleteElement = this.selectedItems[0];
       this.selectedItems[0] = deleteElement.container;
       this.editedTiles.deleteContainer(deleteElement, true);
-      this.refresh();
+      this.refresh(true);
       this.fire('juicy-tile-editor-form-tree-changed');
     },
     changeDirection: function(event, i, element){
@@ -254,12 +257,12 @@
         return val;
       }
     },
-    setCommonValue: function (propName, val) {
+    setCommonValue: function (propName, val, hard) {
       if (this.selectedItems.length) {
         for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
           this.selectedItems[i][propName] = val;
         }
-        this.refresh();
+        this.refresh(hard);
       }
     },
     setValueFromButton: function (ev) {
@@ -272,9 +275,17 @@
         node = node.parentNode;
       }
     },
-    toNumber: { 
+    toNumber: {
       toModel: function(arg){
         return parseInt(arg, 10) || 0;
+      },
+      toDOM: function(arg){
+        return arg;
+      }
+    },
+    toNumberOrPercentage: {
+      toModel: function(arg){
+        return arg.indexOf("%")>-1 ? arg : parseInt(arg, 10) || 0;
       },
       toDOM: function(arg){
         return arg;
@@ -284,7 +295,7 @@
       var node = ev.target;
       while (node) {
         if (node.dataset && node.dataset.applyvalue) {
-          this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue]);
+          this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue], !!node.dataset.hardrefresh);
           break;
         }
         node = node.parentNode;
@@ -294,7 +305,7 @@
         for (var i = 0; i < this.tileLists.length; i++) {
             var list = this.tileLists[i];
 
-            if (list.sync.isModified()) {
+            if (list.sync && list.sync.isModified()) {
                 list.sync.save();
             }
         }
@@ -324,7 +335,7 @@
     },
     applyLayout: function () {
       this.editedTiles.setAttribute('layout', this.layout);
-      this.editedTiles.refresh();
+      this.editedTiles.refresh(true);
     },
     getSource: function () {
       this.source = this.editedTiles ? JSON.stringify(this.editedTiles.setup) : '';
@@ -351,7 +362,7 @@
         }
 
         this.selectedItemsChanged();
-        this.refresh();
+        this.refresh(true);
         this.fire('juicy-tile-editor-form-tree-changed');
     },
     resetItemStyles: function (item, isSelected, groups) {
@@ -393,11 +404,14 @@
       this.outline = this.getCommonValue("outline");
       this.width = this.getCommonValue("width");
       this.widthAuto = this.getCommonValue("widthAuto") || false;
+      this.widthFlexible = this.getCommonValue("widthFlexible") || false;
+      this.widthDynamic = this.getCommonValue("widthDynamic") || false;
       this.height = this.getCommonValue("height");
       this.heightAuto = this.getCommonValue("heightAuto") || false;
+      this.heightFlexible = this.getCommonValue("heightFlexible") || false;
       this.heightDynamic = this.getCommonValue("heightDynamic") || false;
-      this.heightAdaptive = this.getCommonValue("heightAdaptive") || false;
       this.gutter = this.getCommonValue("gutter");
+      this.tightGroup = this.getCommonValue("tightGroup") || false;
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");
@@ -411,6 +425,7 @@
       this.isGroup = (this.isContainer && !this.isRoot);
       this.isRemovable = (this.isContainer && !this.isRoot) && this.isGroupable;
       //this.getSource();
+      // ??? (tomalec): why do we need this?
       this.refresh();
 
       Array.prototype.forEach.call(this.shadowRoot.querySelectorAll('input[placeholder]'), function (input) {
@@ -421,6 +436,16 @@
           input.setAttribute('placeholder', '');
         }
       }.bind(this));
+
+      if (this.selectedItems.length != 1 || !this.editedTiles) {
+          this.actualWidth = "N/A";
+          this.actualHeight = "N/A";
+      } else {
+          var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+          var rec = tile.getBoundingClientRect();
+          this.actualWidth = parseInt(rec.width) + "px";
+          this.actualHeight = parseInt(rec.height) + "px";
+      }
     },
     popoverExpand: function (ev, index, target) {
         var index = this.style.zIndex || 0;
