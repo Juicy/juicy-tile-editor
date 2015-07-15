@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-editor&gt; for grid</title>
+    <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
+
+    <!-- Importing Web Component's Polyfill
+    <script src="../../platform/platform.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">-->
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../../juicy-tile-grid/src/juicy-tile-grid.html">
+    <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
+    <link rel="import" href="../../src/juicy-tile-editor.html">
+
+    <link rel="import" href="../../../core-localstorage/core-localstorage.html">
+
+    <style>
+        body {
+            padding: 50px 20px 20px 20px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        juicy-tile-grid {
+            display: block;
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+        }
+
+        .markdown-body > juicy-tile-grid {
+            padding: 1em;
+            margin: 2em 0 2em 200px;
+        }
+
+        juicy-tile-grid label {
+            background-color: #F0F0F0;
+            display: block;
+        }
+
+        juicy-tile-grid input[type=text] {
+            display: block;
+            width: 100%;
+            padding: 3px 0px;
+        }
+
+        #aboveOverlay {
+            position: fixed;
+            z-index: 100;
+        }
+
+        .markdown-body div h4,
+        .markdown-body section h4,
+        .markdown-body juicy-tile-grid div p {
+            margin: 0;
+        }
+
+        iframe {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <article class="markdown-body">
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+
+        <template bind>
+            <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+            <p>
+                This example shows how to set up horizontal form with static label and dynamic input.
+            </p>
+            <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
+            <template if="{{editingMode}}">
+                <div id="aboveOverlay">
+                    <juicy-tile-editor selectionmode></juicy-tile-editor>
+                </div>
+                <script>
+                    document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
+                        e.target.templateInstance.model.editingMode = false;
+                    });
+                </script>
+            </template>
+
+            <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
+            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
+            <juicy-tile-grid id="st1" setup="[[setup]]">
+                <div>
+                    <small>Static width (150px)</small>
+                </div>
+                <div>
+                    <small>Flexible width (100% - 160px)</small>
+                </div>
+                <div>
+                    <label>First name</label>
+                </div>
+                <div>
+                    <input type="text" />
+                </div>
+                <div>
+                    <label>Last name</label>
+                </div>
+                <div>
+                    <input type="text" />
+                </div>
+            </juicy-tile-grid>
+        </template>
+        <script type="text/javascript">
+            model = {
+                editingMode: true,
+                setup: {
+                    "gutter": 25,
+                    "width": 800,
+                    "name": "root",
+                    "heightAuto": true,
+                    "id": "root",
+                    "itemName": "root",
+                    "items": [
+                        {
+                            "gutter": 10,
+                            "id": "root_0",
+                            "priority": 0.8,
+                            "width": "100%",
+                            "height": 30,
+                            "hidden": false,
+                            "itemName": "Group 1",
+                            "widthFlexible": false,
+                            "items": [
+                                { "id": 0, "priority": 0.9, "height": 30, "width": 150, "itemName": "First name", "hidden": false },
+                                { "id": 1, "priority": 0.8, "height": 30, "width": 640, "widthFlexible": true, "itemName": "input", "hidden": false }
+                            ]
+                        },
+                        {
+                            "gutter": 10,
+                            "id": "root_1",
+                            "priority": 0.7,
+                            "width": "100%",
+                            "height": 30,
+                            "hidden": false,
+                            "itemName": "Group 2",
+                            "heightAuto": false,
+                            "items": [
+                                { "id": 2, "priority": 0.7, "height": 30, "width": 150, "itemName": "Last name", "hidden": false },
+                                { "id": 3, "priority": 0.6, "height": 30, "width": 640, "widthFlexible": true, "itemName": "input", "hidden": false }
+                            ]
+                        },
+                        {
+                            "gutter": 10,
+                            "id": "root_2",
+                            "priority": 0.7,
+                            "width": "100%",
+                            "height": 30,
+                            "hidden": false,
+                            "itemName": "Group 3",
+                            "heightAuto": false,
+                            "items": [
+                                { "id": 4, "priority": 0.7, "height": 30, "width": 150, "itemName": "Last name", "hidden": false },
+                                { "id": 5, "priority": 0.6, "height": 30, "width": 640, "widthFlexible": true, "itemName": "input", "hidden": false }
+                            ]
+                        }
+                    ]
+                }
+            };
+            document.addEventListener("polymer-ready", function () {
+                document.querySelector("template").bindingDelegate = new PolymerExpressions();
+                document.querySelector("template").model = model;
+            });
+        </script>
+    </article>
+</body>
+</html>

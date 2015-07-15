@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-editor&gt; for grid</title>
+    <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
+
+    <!-- Importing Web Component's Polyfill
+    <script src="../../platform/platform.js"></script>
+    <link rel="import" href="../../polymer/polymer.html">-->
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../../juicy-tile-grid/src/juicy-tile-grid.html">
+    <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
+    <link rel="import" href="../../src/juicy-tile-editor.html">
+
+    <link rel="import" href="../../../core-localstorage/core-localstorage.html">
+
+    <style>
+        body {
+            padding: 50px 20px 20px 20px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        juicy-tile-grid {
+            display: block;
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+        }
+
+        .markdown-body > juicy-tile-grid {
+            padding: 1em;
+            margin: 2em 0 2em 200px;
+        }
+
+        juicy-tile-grid h1 {
+            display: block;
+            margin: 0px!important;
+            font-size: 18px!important;
+        }
+
+        juicy-tile-grid a {
+            display: block;
+        }
+
+        juicy-tile-grid table {
+            width: 100%;
+            display: table!important;
+        }
+
+        #aboveOverlay {
+            position: fixed;
+            z-index: 100;
+        }
+
+        .markdown-body div h4,
+        .markdown-body section h4,
+        .markdown-body juicy-tile-grid div p {
+            margin: 0;
+        }
+
+        iframe {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <article class="markdown-body">
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+
+        <template bind>
+            <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+            <p>
+                This example shows how to set up static menu section and content secion with dymanic height and flexible width.
+            </p>
+            <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
+            <template if="{{editingMode}}">
+                <div id="aboveOverlay">
+                    <juicy-tile-editor selectionmode></juicy-tile-editor>
+                </div>
+                <script>
+                    document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
+                        e.target.templateInstance.model.editingMode = false;
+                    });
+                </script>
+            </template>
+
+            <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
+            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
+            <juicy-tile-grid id="st1" setup="[[setup]]">
+                <div>
+                    <small>Static 25%</small>
+                </div>
+                <div>
+                    <small>Flexible 75%, Dynamic height</small>
+                </div>
+                <div>
+                    <h1>Menu</h1>
+                </div>
+                <div>
+                    <a href="javascript:addRow()">Add row</a>
+                </div>
+                <div>
+                    <a href="javascript:removeRow()">Remove row</a>
+                </div>
+                <div>
+                    <a href="javascript:modifyRow()">Modify row</a>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Column X</th>
+                                <th>Column Y</th>
+                                <th>Column Z</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Value X1</td>
+                                <td>Value Y1</td>
+                                <td>Value Z1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </juicy-tile-grid>
+        </template>
+        <script type="text/javascript">
+            model = {
+                editingMode: true,
+                setup: { "id": "root", "direction": "rightDown", "gutter": 25, "items": [{ "gutter": 0, "items": [{ "width": "100%", "height": 25, "priority": 0.5, "id": "0", "itemName": "Caption", "hidden": false }, { "width": "100%", "height": 31, "priority": 0.3673469387755103, "id": "2", "itemName": "Menu", "hidden": false, "heightAuto": true }, { "width": "100%", "height": 25, "priority": 0.3148688046647231, "id": "3", "itemName": "Add row", "hidden": false, "heightAuto": false }, { "width": "100%", "height": 25, "priority": 0.269887546855477, "id": "4", "itemName": "Remove row", "hidden": false, "heightAuto": false }, { "width": "100%", "height": 25, "priority": 0.23133218301898031, "id": "5", "itemName": "Modify row", "hidden": false, "heightAuto": false }], "id": "root_0", "priority": 0.5, "width": "25%", "height": 250, "hidden": false, "itemName": "Group 1", "heightAuto": false }, { "gutter": 0, "items": [{ "width": "100%", "height": 25, "priority": 0.4285714285714286, "id": "1", "itemName": "Caption", "hidden": false }, { "width": "100%", "height": 335, "priority": 0.19828472830198315, "id": "6", "itemName": "Table", "hidden": false, "heightDynamic": true, "heightAuto": true, "widthFlexible": true }], "id": "root_1", "priority": 0.4285714285714286, "width": "75%", "height": 128, "hidden": false, "itemName": "Group 2", "widthFlexible": true, "heightDynamic": true }], "width": 1000, "heightAuto": true, "itemName": "root" }
+            };
+            document.addEventListener("polymer-ready", function () {
+                document.querySelector("template").bindingDelegate = new PolymerExpressions();
+                document.querySelector("template").model = model;
+            });
+
+            function addRow() {
+                var html = '<tr><td>*</td><td>Value X*</td><td>Value Y*</td><td>Value Z*</td></tr>';
+
+                document.querySelector("tbody").innerHTML += html;
+            }
+
+            function removeRow() {
+                var tr = document.querySelector("tbody tr");
+
+                tr.parentNode.removeChild(tr);
+            }
+
+            function modifyRow() {
+                var tds = document.querySelectorAll("tbody tr:first-child td");
+
+                for (var i = 0, l = tds.length; i < l; i++) {
+                    tds[i].innerHTML += " modified";
+                }
+            }
+        </script>
+    </article>
+</body>
+</html>
