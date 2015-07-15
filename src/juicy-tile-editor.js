@@ -503,6 +503,7 @@
       this.editedTiles = tileList;
       var tile = tileList.tiles[item.id];
       this.$.tileEdited.show(tile, this.getHighlightContent.bind(this));
+      this.$.tileSelected.hide();
       this.selectedItems.length = 0;
       this.selectedItems.push(item);
       this.selectedElements.length = 0;

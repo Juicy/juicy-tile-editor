@@ -433,7 +433,7 @@
         }
       }.bind(this));
 
-      if (this.selectedItems.length != 1) {
+      if (this.selectedItems.length != 1 || !this.editedTiles) {
           this.actualWidth = "N/A";
           this.actualHeight = "N/A";
       } else {
