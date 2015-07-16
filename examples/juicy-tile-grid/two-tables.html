@@ -28,14 +28,15 @@
 
         juicy-tile-grid {
             /*width: 300px;
-        height: 150px;*/
+    height: 150px;*/
             display: block;
             box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
         }
 
-        .markdown-body{
+        .markdown-body {
             margin: 2em 0 2em 250px;
         }
+
         .markdown-body > juicy-tile-grid {
             padding: 1em;
         }
@@ -106,7 +107,8 @@
                 </script>
             </template>
 
-            <juicy-tiles-setup-sync storedvalue="{{json}}"></juicy-tiles-setup-sync>
+            <core-localstorage name="juicy-tiles-two-tables" value="{{storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="grid" setup="[[json]]">
                 <div>A title goes here</div>
                 <div>
@@ -261,12 +263,13 @@
                     }]
                 }
             };
+
+            model.storedValue = JSON.parse(JSON.stringify(model.json));
+
             document.addEventListener("polymer-ready", function() {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
                 document.querySelector("template").model = model;
-
             });
-
 
             var addMore = function(index) {
                 var tbody = document.querySelectorAll("tbody")[index];

@@ -93,8 +93,8 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
       </script>
   </template>
 
-  <core-localstorage name="juicy-tiles" value="{{setup}}"></core-localstorage>
-  <juicy-tiles-setup-sync storedValue="{{setup}}"></juicy-tiles-setup-sync>
+  <core-localstorage name="juicy-tiles-grid" value="{{storedValue}}"></core-localstorage>
+  <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
   <juicy-tile-grid id="st1" setup="[[setup]]">
     <div>0
         <p><code>widthFlexible: false</code> - Tile will have fixed size width, will not adapt to the container resize</p>
@@ -287,6 +287,9 @@ allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></
       ]
     }
   };
+
+  model.storedValue = JSON.parse(JSON.stringify(model.setup));
+
   document.addEventListener("polymer-ready", function(){
     document.querySelector("template").bindingDelegate = new PolymerExpressions();
     document.querySelector("template").model = model;

@@ -30,7 +30,7 @@
             display: block;
             box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
         }
-        
+
         .markdown-body{
             margin: 2em 0 2em 250px;
         }
@@ -87,14 +87,14 @@
                     <juicy-tile-editor selectionmode></juicy-tile-editor>
                 </div>
                 <script>
-                    document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function(e) {
+                    document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
                         e.target.templateInstance.model.editingMode = false;
                     });
                 </script>
             </template>
 
-            <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
-            <juicy-tiles-setup-sync storedvalue="{{json}}"></juicy-tiles-setup-sync>
+            <core-localstorage name="juicy-tiles-menu-content" value="{{storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="grid" setup="[[json]]">
                 <small>Static width 25%</small>
                 <small>Flexible width 75%, Dynamic height</small>
@@ -197,7 +197,8 @@
                         "priority": 0.5,
                         "width": "25%",
                         "height": 250,
-                        "itemName": "Group: Side menu"
+                        "itemName": "Group: Side menu",
+                        "tightGroup": true
                     }, {
                         "gutter": 0,
                         "items": [{
@@ -229,7 +230,10 @@
                     "itemName": "root"
                 }
             };
-            document.addEventListener("polymer-ready", function() {
+
+            model.storedValue = JSON.parse(JSON.stringify(model.json));
+
+            document.addEventListener("polymer-ready", function () {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
                 document.querySelector("template").bindingDelegate.stringify = JSON.stringify;
                 document.querySelector("template").model = model;
