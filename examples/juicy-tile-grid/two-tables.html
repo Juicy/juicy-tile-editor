@@ -102,7 +102,8 @@
                 </script>
             </template>
 
-            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
+            <core-localstorage name="juicy-tiles-two-tables" value="{{storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="st1" setup="[[setup]]">
                 <div>
                     <div>A title goes here</div>
@@ -176,14 +177,73 @@
         <script type="text/javascript">
             model = {
                 editingMode: true,
-                setup: { "gutter": 25, "width": 1000, "items": [{ "gutter": 20, "items": [{ "id": 0, "priority": 1, "height": 30, "width": "100%", "itemName": "Title", "hidden": false, "widthFlexible": true }, { "id": 2, "priority": 0.7, "height": 50, "heightDynamic": true, "width": "50%", "itemName": "Table 1", "hidden": false, "widthFlexible": true }, { "id": 3, "priority": 0.7, "height": 50, "heightDynamic": true, "width": "50%", "itemName": "Table 2", "hidden": false, "widthFlexible": true }], "id": "root_0", "priority": 1, "width": "75%", "height": 100, "hidden": false, "itemName": "Group 1", "widthFlexible": true, "heightAuto": false, "heightDynamic": true, "tightGroup": true }, { "gutter": 15, "items": [{ "id": 1, "priority": 0.95, "height": 30, "width": "100%", "itemName": "Buttons", "hidden": false, "widthFlexible": true, "heightDynamic": true }, { "id": 4, "priority": 0.8, "height": 30, "width": "100%", "itemName": "Tile #0", "hidden": false, "widthFlexible": true }], "id": "root_1", "priority": 0.9375, "width": "25%", "height": 100, "hidden": false, "itemName": "Group 2", "widthFlexible": true, "heightAuto": true, "tightGroup": true }, { "gutter": 10, "items": [{ "id": 5, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #1", "hidden": false, "widthFlexible": true }, { "id": 6, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #2", "hidden": false, "widthFlexible": true }, { "id": 7, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #3", "hidden": false, "widthFlexible": true }], "id": "root_2", "priority": 0.8, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 3", "widthFlexible": true, "tightGroup": true }], "name": "root", "heightAuto": true, "id": "root", "itemName": "root" }
+                setup: {
+                    "gutter": 25,
+                    "width": 1000,
+                    "items": [
+                        {
+                            "gutter": 20,
+                            "id": "root_0",
+                            "priority": 1,
+                            "width": "75%",
+                            "height": 100,
+                            "hidden": false,
+                            "itemName": "Group 1",
+                            "widthFlexible": true,
+                            "heightAuto": false,
+                            "heightDynamic": true,
+                            "tightGroup": true,
+                            "items": [
+                              { "id": 0, "priority": 1, "height": 30, "width": "100%", "itemName": "Title", "hidden": false, "widthFlexible": true },
+                              { "id": 2, "priority": 0.7, "height": 50, "heightDynamic": true, "width": "50%", "itemName": "Table 1", "hidden": false, "widthFlexible": true },
+                              { "id": 3, "priority": 0.7, "height": 50, "heightDynamic": true, "width": "50%", "itemName": "Table 2", "hidden": false, "widthFlexible": true }
+                            ]
+                        },
+                        {
+                            "gutter": 15,
+                            "id": "root_1",
+                            "priority": 0.9375,
+                            "width": "25%",
+                            "height": 100,
+                            "hidden": false,
+                            "itemName": "Group 2",
+                            "widthFlexible": true,
+                            "heightAuto": true,
+                            "tightGroup": true,
+                            "items": [
+                                { "id": 1, "priority": 0.95, "height": 30, "width": "100%", "itemName": "Buttons", "hidden": false, "widthFlexible": true, "heightDynamic": true },
+                                { "id": 4, "priority": 0.8, "height": 30, "width": "100%", "itemName": "Tile #0", "hidden": false, "widthFlexible": true }
+                            ]
+                        },
+                        {
+                            "gutter": 10,
+                            "id": "root_2",
+                            "priority": 0.8,
+                            "width": "100%",
+                            "height": 30,
+                            "hidden": false,
+                            "itemName": "Group 3",
+                            "widthFlexible": true,
+                            "tightGroup": true,
+                            "items": [
+                                { "id": 5, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #1", "hidden": false, "widthFlexible": true },
+                                { "id": 6, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #2", "hidden": false, "widthFlexible": true },
+                                { "id": 7, "priority": 0.8, "height": 30, "width": "33%", "itemName": "Tile #3", "hidden": false, "widthFlexible": true }
+                            ]
+                        }],
+                    "name": "root",
+                    "heightAuto": true,
+                    "id": "root",
+                    "itemName": "root"
+                }
             };
+
+            model.storedValue = JSON.parse(JSON.stringify(model.setup));
+
             document.addEventListener("polymer-ready", function () {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
                 document.querySelector("template").model = model;
-
             });
-
 
             var addMore = function (index) {
                 var tbody = document.querySelectorAll("tbody")[index];

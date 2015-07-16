@@ -86,8 +86,8 @@
                 </script>
             </template>
 
-            <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
-            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
+            <core-localstorage name="juicy-tiles-label-input" value="{{storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="st1" setup="[[setup]]">
                 <div>
                     <small>Static width (150px)</small>
@@ -165,6 +165,9 @@
                     ]
                 }
             };
+
+            model.storedValue = JSON.parse(JSON.stringify(model.setup));
+
             document.addEventListener("polymer-ready", function () {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
                 document.querySelector("template").model = model;

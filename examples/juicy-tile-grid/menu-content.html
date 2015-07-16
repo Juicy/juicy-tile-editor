@@ -90,8 +90,8 @@
                 </script>
             </template>
 
-            <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
-            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
+            <core-localstorage name="juicy-tiles-menu-content" value="{{storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="st1" setup="[[setup]]">
                 <div>
                     <small>Static 25%</small>
@@ -136,8 +136,50 @@
         <script type="text/javascript">
             model = {
                 editingMode: true,
-                setup: { "id": "root", "direction": "rightDown", "gutter": 25, "items": [{ "gutter": 0, "items": [{ "width": "100%", "height": 25, "priority": 0.5, "id": "0", "itemName": "Caption", "hidden": false }, { "width": "100%", "height": 31, "priority": 0.3673469387755103, "id": "2", "itemName": "Menu", "hidden": false, "heightAuto": true }, { "width": "100%", "height": 25, "priority": 0.3148688046647231, "id": "3", "itemName": "Add row", "hidden": false, "heightAuto": false }, { "width": "100%", "height": 25, "priority": 0.269887546855477, "id": "4", "itemName": "Remove row", "hidden": false, "heightAuto": false }, { "width": "100%", "height": 25, "priority": 0.23133218301898031, "id": "5", "itemName": "Modify row", "hidden": false, "heightAuto": false }], "id": "root_0", "priority": 0.5, "width": "25%", "height": 250, "hidden": false, "itemName": "Group 1", "heightAuto": false }, { "gutter": 0, "items": [{ "width": "100%", "height": 25, "priority": 0.4285714285714286, "id": "1", "itemName": "Caption", "hidden": false }, { "width": "100%", "height": 335, "priority": 0.19828472830198315, "id": "6", "itemName": "Table", "hidden": false, "heightDynamic": true, "heightAuto": true, "widthFlexible": true }], "id": "root_1", "priority": 0.4285714285714286, "width": "75%", "height": 128, "hidden": false, "itemName": "Group 2", "widthFlexible": true, "heightDynamic": true }], "width": 1000, "heightAuto": true, "itemName": "root" }
+                setup: {
+                    "id": "root",
+                    "direction": "rightDown",
+                    "gutter": 25,
+                    "items": [
+                        {
+                            "gutter": 0,
+                            "id": "root_0",
+                            "priority": 0.5,
+                            "width": "25%",
+                            "height": 250,
+                            "hidden": false,
+                            "itemName": "Group 1",
+                            "heightAuto": false,
+                            "items": [
+                                { "width": "100%", "height": 25, "priority": 0.5, "id": "0", "itemName": "Caption", "hidden": false },
+                                { "width": "100%", "height": 31, "priority": 0.3673469387755103, "id": "2", "itemName": "Menu", "hidden": false, "heightAuto": true },
+                                { "width": "100%", "height": 25, "priority": 0.3148688046647231, "id": "3", "itemName": "Add row", "hidden": false, "heightAuto": false },
+                                { "width": "100%", "height": 25, "priority": 0.269887546855477, "id": "4", "itemName": "Remove row", "hidden": false, "heightAuto": false },
+                                { "width": "100%", "height": 25, "priority": 0.23133218301898031, "id": "5", "itemName": "Modify row", "hidden": false, "heightAuto": false }
+                            ]
+                        },
+                        {
+                            "gutter": 0,
+                            "id": "root_1",
+                            "priority": 0.4285714285714286,
+                            "width": "75%", "height": 128,
+                            "hidden": false,
+                            "itemName": "Group 2",
+                            "widthFlexible": true,
+                            "heightDynamic": true,
+                            "items": [
+                                { "width": "100%", "height": 25, "priority": 0.4285714285714286, "id": "1", "itemName": "Caption", "hidden": false },
+                                { "width": "100%", "height": 335, "priority": 0.19828472830198315, "id": "6", "itemName": "Table", "hidden": false, "heightDynamic": true, "heightAuto": true, "widthFlexible": true }
+                            ]
+                        }],
+                    "width": 1000,
+                    "heightAuto": true,
+                    "itemName": "root"
+                }
             };
+
+            model.storedValue = JSON.parse(JSON.stringify(model.setup));
+
             document.addEventListener("polymer-ready", function () {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
                 document.querySelector("template").model = model;
