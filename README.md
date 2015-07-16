@@ -2,10 +2,10 @@
 
 `<juicy-tile-editor>` is a Polymer Element that adds an editor to control the setup of [`<juicy-tile-list>`](http://github.com/juicy-tile-list) and [`<juicy-tile-grid>`](http://github.com/juicy-tile-grid)
 
-## Demo
+## Demos
 
 [Check it live!](http://juicy.github.io/juicy-tile-editor)
-> [`juicy-tile-grid` example](http://juicy.github.io/juicy-tile-editor/examples/juicy-tiles-grid-editor.html)
+> [`juicy-tile-grid` examples](http://juicy.github.io/juicy-tile-editor/examples/juicy-tiles-grid)
 
 ## Usage
 
