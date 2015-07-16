@@ -30,10 +30,12 @@
             display: block;
             box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
         }
-
+        
+        .markdown-body{
+            margin: 2em 0 2em 250px;
+        }
         .markdown-body > juicy-tile-grid {
             padding: 1em;
-            margin: 2em 0 2em 200px;
         }
 
         juicy-tile-grid h1 {
@@ -92,54 +94,69 @@
             </template>
 
             <!--core-localstorage name="juicy-tiles-static-dynamic-input" value="{{setup}}"></core-localstorage>-->
-            <juicy-tiles-setup-sync storedvalue="{{setup}}"></juicy-tiles-setup-sync>
-            <juicy-tile-grid id="st1" setup="[[setup]]">
-                <div>
-                    <small>Static width 25%</small>
-                </div>
-                <div>
-                    <small>Flexible width 75%, Dynamic height</small>
-                </div>
-                <div>
-                    <h1>Menu</h1>
-                </div>
-                <div>
-                    <a href="javascript:addRow()">Add row</a>
-                </div>
-                <div>
-                    <a href="javascript:removeRow()">Remove row</a>
-                </div>
-                <div>
-                    <a href="javascript:modifyRow()">Modify row</a>
-                </div>
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Column X</th>
-                                <th>Column Y</th>
-                                <th>Column Z</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Value X1</td>
-                                <td>Value Y1</td>
-                                <td>Value Z1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <juicy-tiles-setup-sync storedvalue="{{json}}"></juicy-tiles-setup-sync>
+            <juicy-tile-grid id="grid" setup="[[json]]">
+                <small>Static width 25%</small>
+                <small>Flexible width 75%, Dynamic height</small>
+                <h1>Menu</h1>
+                <a href="javascript:addRow()">Add row</a>
+                <a href="javascript:removeRow()">Remove row</a>
+                <a href="javascript:modifyRow()">Modify row</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Column X</th>
+                            <th>Column Y</th>
+                            <th>Column Z</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Value X1</td>
+                            <td>Value Y1</td>
+                            <td>Value Z1</td>
+                        </tr>
+                    </tbody>
+                </table>
             </juicy-tile-grid>
+            <h3>Code</h3>
+            <h4>HTML:</h4>
+            <pre><code>&lt;juicy-tile-grid id="grid" setup="[[json]]"&gt;
+    &lt;small&gt;Static width 25%&lt;/small&gt;
+    &lt;small&gt;Flexible width 75%, Dynamic height&lt;/small&gt;
+    &lt;h1&gt;Menu&lt;/h1&gt;
+    &lt;a href="javascript:addRow()"&gt;Add row&lt;/a&gt;
+    &lt;a href="javascript:removeRow()"&gt;Remove row&lt;/a&gt;
+    &lt;a href="javascript:modifyRow()"&gt;Modify row&lt;/a&gt;
+    &lt;table&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;#&lt;/th&gt;
+                &lt;th&gt;Column X&lt;/th&gt;
+                &lt;th&gt;Column Y&lt;/th&gt;
+                &lt;th&gt;Column Z&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;1&lt;/td&gt;
+                &lt;td&gt;Value X1&lt;/td&gt;
+                &lt;td&gt;Value Y1&lt;/td&gt;
+                &lt;td&gt;Value Z1&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/juicy-tile-grid&gt;</code></pre>
+            <h4>JSON:</h4>
+
+            <pre><code>{{stringify(json, undefined, 4)}}</code></pre>
         </template>
         <script type="text/javascript">
             model = {
                 editingMode: true,
-                setup: {
-                    "id": "root",
-                    "direction": "rightDown",
+                json: {
                     "gutter": 25,
                     "items": [{
                         "gutter": 0,
@@ -148,15 +165,13 @@
                             "height": 25,
                             "priority": 0.5,
                             "id": "0",
-                            "itemName": "Caption",
-                            "hidden": false
+                            "itemName": "Caption"
                         }, {
                             "width": "100%",
                             "height": 31,
                             "priority": 0.3673469387755103,
                             "id": "2",
                             "itemName": "Menu",
-                            "hidden": false,
                             "heightAuto": true
                         }, {
                             "width": "100%",
@@ -164,32 +179,25 @@
                             "priority": 0.3148688046647231,
                             "id": "3",
                             "itemName": "Add row",
-                            "hidden": false,
                             "heightAuto": false
                         }, {
                             "width": "100%",
                             "height": 25,
                             "priority": 0.269887546855477,
                             "id": "4",
-                            "itemName": "Remove row",
-                            "hidden": false,
-                            "heightAuto": false
+                            "itemName": "Remove row"
                         }, {
                             "width": "100%",
                             "height": 25,
                             "priority": 0.23133218301898031,
                             "id": "5",
-                            "itemName": "Modify row",
-                            "hidden": false,
-                            "heightAuto": false
+                            "itemName": "Modify row"
                         }],
                         "id": "root_0",
                         "priority": 0.5,
                         "width": "25%",
                         "height": 250,
-                        "hidden": false,
-                        "itemName": "Group: Side menu",
-                        "heightAuto": false
+                        "itemName": "Group: Side menu"
                     }, {
                         "gutter": 0,
                         "items": [{
@@ -198,7 +206,6 @@
                             "priority": 0.4285714285714286,
                             "id": "1",
                             "itemName": "Caption",
-                            "hidden": false,
                             "widthFlexible": true
                         }, {
                             "width": "100%",
@@ -206,7 +213,6 @@
                             "priority": 0.19828472830198315,
                             "id": "6",
                             "itemName": "Table",
-                            "hidden": false,
                             "heightDynamic": true,
                             "heightAuto": true,
                             "widthFlexible": true
@@ -215,18 +221,17 @@
                         "priority": 0.4285714285714286,
                         "width": "75%",
                         "height": 128,
-                        "hidden": false,
                         "itemName": "Group: dynamic content",
                         "widthFlexible": true,
                         "heightDynamic": true
                     }],
                     "width": 500,
-                    "heightAuto": true,
                     "itemName": "root"
                 }
             };
             document.addEventListener("polymer-ready", function() {
                 document.querySelector("template").bindingDelegate = new PolymerExpressions();
+                document.querySelector("template").bindingDelegate.stringify = JSON.stringify;
                 document.querySelector("template").model = model;
             });
 
