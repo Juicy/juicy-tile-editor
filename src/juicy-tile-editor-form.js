@@ -27,11 +27,11 @@
     background: null,
     outline: null,
     width: null,
-    widthAuto: null,
+    precalculateWidth: null,
     widthFlexible: null,
     widthDynamic: null,
     height: null,
-    heightAuto: null,
+    precalculateHeight: null,
     heightFlexible: null,
     heightDynamic: null,
     gutter: null,
@@ -169,14 +169,14 @@
     heightIncrease: function () {
       if (this.height == 'auto') { //turn off auto
         this.height = 32;
-        this.heightAuto = false;
+        this.precalculateHeight = false;
       }
       powerIncrease(this, "height");
     },
     heightDecrease: function () {
       if (this.height == 'auto') { //turn off auto
         this.height = 32;
-        this.heightAuto = false;
+        this.precalculateHeight = false;
       }
       powerDecrease(this, "height");
     },
@@ -214,7 +214,7 @@
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
         if (this.selectedItems[i].items) {
           this.selectedItems[i].direction = "rightDown";
-          this.selectedItems[i].heightAuto = true;
+          this.selectedItems[i].precalculateHeight = true;
           for (var j = 0, jlen = this.selectedItems[i].items.length; j < jlen; j++) {
             this.selectedItems[i].items[j].width = "100%";
           }
@@ -403,11 +403,11 @@
       this.background = this.getCommonValue("background");
       this.outline = this.getCommonValue("outline");
       this.width = this.getCommonValue("width");
-      this.widthAuto = this.getCommonValue("widthAuto") || false;
+      this.precalculateWidth = this.getCommonValue("precalculateWidth") || false;
       this.widthFlexible = this.getCommonValue("widthFlexible") || false;
       this.widthDynamic = this.getCommonValue("widthDynamic") || false;
       this.height = this.getCommonValue("height");
-      this.heightAuto = this.getCommonValue("heightAuto") || false;
+      this.precalculateHeight = this.getCommonValue("precalculateHeight") || false;
       this.heightFlexible = this.getCommonValue("heightFlexible") || false;
       this.heightDynamic = this.getCommonValue("heightDynamic") || false;
       this.gutter = this.getCommonValue("gutter");

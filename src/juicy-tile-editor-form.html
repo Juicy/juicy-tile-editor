@@ -477,12 +477,12 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width | toNumberOrPercentage}}" disabled?="{{widthAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width | toNumberOrPercentage}}" disabled?="{{precalculateWidth}}">
                         <div class="expandable">
-                            <button class="editable" on-click="{{widthIncrease}}" disabled?="{{widthAuto}}">+</button>
-                            <button class="editable" on-click="{{widthDecrease}}" disabled?="{{widthAuto}}">-</button>
+                            <button class="editable" on-click="{{widthIncrease}}" disabled?="{{precalculateWidth}}">+</button>
+                            <button class="editable" on-click="{{widthDecrease}}" disabled?="{{precalculateWidth}}">-</button>
                             <div>
-                                <label class="editable"><input id="widthAutoCheckbox" type="checkbox" data-applyvalue="widthAuto" checked="{{widthAuto}}"> auto</label>
+                                <label class="editable"><input id="precalculateWidthCheckbox" type="checkbox" data-applyvalue="precalculateWidth" checked="{{precalculateWidth}}"> precalculate</label>
                             </div>
                             <div title="Supported only in juicy-tile-grid with grid layout.">
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
@@ -497,10 +497,10 @@
                             </div>
                             <hr />
                             <div class="button-column">
-                                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
-                                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
-                                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
-                                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+                                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{precalculateWidth}}">100%</button>
+                                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{precalculateWidth}}">75%</button>
+                                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{precalculateWidth}}">50%</button>
+                                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{precalculateWidth}}">25%</button>
                             </div>
                         </div>
                     </juicy-popover>
@@ -509,12 +509,12 @@
 
                 <div class="toolbar-item" disabled?="{{!isSelection}}" data-applyvalue="height">
                     <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height | toNumberOrPercentage}}" disabled?="{{heightAuto}}">
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height | toNumberOrPercentage}}" disabled?="{{precalculateHeight}}">
                         <div class="expandable">
-                            <button class="editable" on-click="{{heightIncrease}}" disabled?="{{heightAuto}}">+</button>
-                            <button class="editable" on-click="{{heightDecrease}}" disabled?="{{heightAuto}}">-</button>
+                            <button class="editable" on-click="{{heightIncrease}}" disabled?="{{precalculateHeight}}">+</button>
+                            <button class="editable" on-click="{{heightDecrease}}" disabled?="{{precalculateHeight}}">-</button>
                             <div>
-                                <label class="editable"><input id="heightAutoCheckbox" type="checkbox" data-applyvalue="heightAuto" checked="{{heightAuto}}"> auto</label>
+                                <label class="editable"><input id="precalculateHeightCheckbox" type="checkbox" data-applyvalue="precalculateHeight" checked="{{precalculateHeight}}"> precalculate</label>
                             </div>
                             <div title="Supported only in juicy-tile-grid with grid layout.">
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
@@ -529,10 +529,10 @@
                             </div>
                             <hr />
                             <div class="button-column">
-                                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">100%</button>
-                                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">75%</button>
-                                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">50%</button>
-                                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{widthAuto}}">25%</button>
+                                <button value="100%" on-click="{{setValueFromButton}}" disabled?="{{precalculateHeight}}">100%</button>
+                                <button value="75%" on-click="{{setValueFromButton}}" disabled?="{{precalculateHeight}}">75%</button>
+                                <button value="50%" on-click="{{setValueFromButton}}" disabled?="{{precalculateHeight}}">50%</button>
+                                <button value="25%" on-click="{{setValueFromButton}}" disabled?="{{precalculateHeight}}">25%</button>
                             </div>
                         </div>
                     </juicy-popover>
