@@ -37,6 +37,7 @@
     gutter: null,
     tightGroup: null,
     rightToLeft: null,
+    bottomUp: null,
     oversize: 0,
     priority: null,
     content: null,
@@ -210,6 +211,18 @@
       this.selectedItems[0].direction = element.value;
       this.direction = element.value;
       this.refresh();
+    },
+    changeRightToLeft: function (event, i, element) {
+        var value = !!(element.value / 1);
+        this.selectedItems[0].rightToLeft = value;
+        this.rightToLeft = value;
+        this.refresh();
+    },
+    changeBottomUp: function (event, i, element) {
+        var value = !!(element.value / 1);
+        this.selectedItems[0].bottomUp = value;
+        this.bottomUp = value;
+        this.refresh();
     },
     /*stackItems: function () {
       for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
@@ -414,6 +427,7 @@
       this.gutter = this.getCommonValue("gutter");
       this.tightGroup = this.getCommonValue("tightGroup") || false;
       this.rightToLeft = this.getCommonValue("rightToLeft") || false;
+      this.bottomUp = this.getCommonValue("bottomUp") || false;
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");

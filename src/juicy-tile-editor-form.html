@@ -186,10 +186,12 @@
             .direction:not([checked]) {
                 /*box-shadow: 0px 0 7px black inset;*/
                 background-color: transparent;
+                color: #C0C0C0;
             }
             /*.toolbar-button*/
             .direction[checked] {
                 box-shadow: 0px 0 7px black;
+                color: black;
             }
 
             .toolbar-label {
@@ -357,22 +359,80 @@
                                 title="Horizontal direction: packing from left to right then from top to bottom"
                                 on-click="{{ changeDirection }}"
                                 role="radio"
-                                aria-checked?="{{!direction || direction == 'rightDown'}}"
-                                checked?="{{!direction || direction == 'rightDown'}}"
-                                value="rightDown">
-                            <i class="jte-icon-align-left"></i>
+                                aria-checked?="{{!direction || direction == 'horizontal'}}"
+                                checked?="{{!direction || direction == 'horizontal'}}"
+                                value="horizontal">
+                            <template if="{{rightToLeft}}">
+                                <i class="jte-icon-align-right"></i>
+                            </template>
+                            <template if="{{!rightToLeft}}">
+                                <i class="jte-icon-align-left"></i>
+                            </template>
                         </button>
                         <button class="toolbar-button direction"
                                 title="Vertical direction: packing from top to bottom then from left to right"
                                 on-click="{{ changeDirection }}"
                                 role="radio"
-                                aria-checked?="{{direction == 'downRight'}}"
-                                checked?="{{direction == 'downRight'}}"
-                                value="downRight">
-                            <span class="icon-rotate"><i class="jte-icon-align-left"></i></span>
+                                aria-checked?="{{direction == 'vertical'}}"
+                                checked?="{{direction == 'vertical'}}"
+                                value="vertical">
+                            <template if="{{bottomUp}}">
+                                <span class="icon-rotate"><i class="jte-icon-align-right"></i></span>
+                            </template>
+                            <template if="{{!bottomUp}}">
+                                <span class="icon-rotate"><i class="jte-icon-align-left"></i></span>
+                            </template>
                         </button>
                     </div>
                     <label class="toolbar-label">Direction</label>
+                </div>
+
+                <div class="toolbar-item" disabled?="{{!isContainer}}">
+                    <div class="directionGroup">
+                        <button class="toolbar-button direction"
+                                title=""
+                                on-click="{{ changeRightToLeft }}"
+                                role="radio"
+                                aria-checked?="{{!rightToLeft}}"
+                                checked?="{{!rightToLeft}}"
+                                value="0">
+                            <i class="jte-icon-right"></i>
+                        </button>
+                        <button class="toolbar-button direction"
+                                title=""
+                                on-click="{{ changeRightToLeft }}"
+                                role="radio"
+                                aria-checked?="{{rightToLeft}}"
+                                checked?="{{rightToLeft}}"
+                                value="1">
+                            <i class="jte-icon-left"></i>
+                        </button>
+                    </div>
+                    <label class="toolbar-label">Horizontal</label>
+                </div>
+
+                <div class="toolbar-item" disabled?="{{!isContainer}}">
+                    <div class="directionGroup">
+                        <button class="toolbar-button direction"
+                                title=""
+                                on-click="{{ changeBottomUp }}"
+                                role="radio"
+                                aria-checked?="{{!bottomUp}}"
+                                checked?="{{!bottomUp}}"
+                                value="0">
+                            <i class="jte-icon-down"></i>
+                        </button>
+                        <button class="toolbar-button direction"
+                                title=""
+                                on-click="{{ changeBottomUp }}"
+                                role="radio"
+                                aria-checked?="{{bottomUp}}"
+                                checked?="{{bottomUp}}"
+                                value="1">
+                            <i class="jte-icon-up"></i>
+                        </button>
+                    </div>
+                    <label class="toolbar-label">Vertical</label>
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="gutter">
@@ -388,10 +448,6 @@
 
                 <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="tightGroup">
                     <label class="editable"><input id="tightGroupCheckbox" type="checkbox" data-applyvalue="tightGroup" data-hardrefresh="true" checked="{{tightGroup}}"> tight</label>
-                </div>
-
-                <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="tightGroup">
-                    <label class="editable"><input id="rightToLeftCheckbox" type="checkbox" data-applyvalue="rightToLeft" data-hardrefresh="true" checked="{{rightToLeft}}"> reverse</label>
                 </div>
             </div>
 

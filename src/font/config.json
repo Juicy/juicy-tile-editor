@@ -103,6 +103,30 @@
       "src": "fontawesome"
     },
     {
+      "uid": "f06941dfcb90dc24b987d810898c4310",
+      "css": "down",
+      "code": 59421,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "f6d72aa5ef8e8f0e553012af9a29a87e",
+      "css": "left",
+      "code": 59422,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "fb94e23ae1e7660aa63cc5f351ec7560",
+      "css": "right",
+      "code": 59423,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "720f98e7580b7987c8dc542513d1d440",
+      "css": "up",
+      "code": 59424,
+      "src": "fontawesome"
+    },
+    {
       "uid": "aa0d9175a3919a260a4012d560e9f01e",
       "css": "right-hand",
       "code": 59397,
