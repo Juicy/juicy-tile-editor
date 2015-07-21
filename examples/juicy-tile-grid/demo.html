@@ -240,40 +240,39 @@
             </div>
             <h1>Reversing</h1>
             <p>
-                Reversing tiles with <code>rightToLeft</code> property.
+                Reversing tiles with <code>rightToLeft</code> and <code>bottomUp</code> properties.
                 <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
             </p>
             <juicy-tile-grid id="st5" setup="[[setup5]]">
-                <div>
-                    <div>1</div>
-                </div>
-                <div>
-                    <div>2</div>
-                </div>
-                <div>
-                    <div>3</div>
-                </div>
-                <div>
-                    <div>4</div>
-                </div>
-                <div>
-                    <div>5</div>
-                </div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
             </juicy-tile-grid>
             <div class="highlight highlight-js">
                 <pre>setup: { 
     "id": "root", 
     "direction": "horizontal", 
     "gutter": 20, 
-    "rightToLeft": true, 
+    "rightToLeft": true,
+    "bottomUp": true,
     "width": 990,
     "precalculateHeight": true,
     "items": [
-        { "width": "20%", "height": 30, "priority": 0.5, "id": "0", "hidden": false, "widthFlexible": true }, 
-        { "width": "20%", "height": 30, "priority": 0.4, "id": "1", "hidden": false, "widthFlexible": true }, 
-        { "width": "20%", "height": 30, "priority": 0.3, "id": "2", "hidden": false, "widthFlexible": true }, 
-        { "width": "20%", "height": 30, "priority": 0.2, "id": "3", "hidden": false, "widthFlexible": true }, 
-        { "width": "20%", "height": 30, "priority": 0.1, "id": "4", "hidden": false, "widthFlexible": true }
+        { "width": "20%", "height": 30, "priority": 1.0, "id": "0", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.9, "id": "1", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.8, "id": "2", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.7, "id": "3", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.6, "id": "4", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.5, "id": "5", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.4, "id": "6", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.3, "id": "7", "hidden": false, "widthFlexible": true }, 
+        { "width": "20%", "height": 30, "priority": 0.2, "id": "8", "hidden": false, "widthFlexible": true }
     ]
 }</pre>
             </div>
@@ -286,7 +285,7 @@
                 setup2: { "id": "root", "direction": "horizontal", "gutter": 20, "items": [{ "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_0_0", "priority": 1, "width": "25%", "height": 30, "hidden": false, "itemName": "Group 2", "widthFlexible": true }, { "width": "75%", "height": 30, "priority": 0.75, "id": "0", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_0", "priority": 0.5, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 1", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_1_0", "priority": 1, "width": "35%", "height": 30, "hidden": false, "itemName": "Group 3", "widthFlexible": true }, { "width": "65%", "height": 30, "priority": 0.7307692307692308, "id": "1", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_1", "priority": 0.46153846153846156, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 2", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_6_0", "priority": 1, "width": "45%", "height": 30, "hidden": false, "itemName": "Group 4", "widthFlexible": true }, { "width": "55%", "height": 30, "priority": 0.7130177514792899, "id": "2", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_6", "priority": 0.42603550295857995, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 7", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_2_0", "priority": 1, "width": "55%", "height": 30, "hidden": false, "itemName": "Group 5", "widthFlexible": true }, { "width": "45%", "height": 30, "priority": 0.6966317705962677, "id": "3", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_2", "priority": 0.39326354119253537, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 3", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_3_0", "priority": 1, "width": "65%", "height": 30, "hidden": false, "itemName": "Group 6", "widthFlexible": true }, { "width": "35%", "height": 30, "priority": 0.6815062497811701, "id": "4", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_3", "priority": 0.3630124995623404, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 4", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_4_0", "priority": 1, "width": "75%", "height": 30, "hidden": false, "itemName": "Group 8", "widthFlexible": true }, { "width": "25%", "height": 30, "priority": 0.667544230567234, "id": "5", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_4", "priority": 0.33508846113446805, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 5", "widthFlexible": true }, { "gutter": 0, "items": [{ "gutter": 0, "items": [], "id": "root_5_0", "priority": 1, "width": "85%", "height": 30, "hidden": false, "itemName": "Group 9", "widthFlexible": true }, { "width": "15%", "height": 30, "priority": 0.6546562128312929, "id": "6", "itemName": "<div>", "hidden": false, "widthFlexible": true }], "id": "root_5", "priority": 0.30931242566258593, "width": "100%", "height": 30, "hidden": false, "itemName": "Group 6", "widthFlexible": true }], "width": 990, "precalculateHeight": true, "itemName": "st2" },
                 setup3: { "id": "root", "direction": "horizontal", "gutter": 20, "items": [{ "priority": 0.5, "id": "0", "itemName": "<div>", "hidden": false, "precalculateWidth": true, "precalculateHeight": true, "widthFlexible": true }, { "priority": 0.4, "id": "1", "itemName": "<div>", "hidden": false, "precalculateWidth": true, "precalculateHeight": true, "widthFlexible": true }, { "priority": 0.32000000000000006, "id": "2", "itemName": "<div>", "hidden": false, "precalculateWidth": true, "precalculateHeight": true, "widthFlexible": true }, { "priority": 0.25600000000000006, "id": "3", "itemName": "<div>", "hidden": false, "widthFlexible": true, "precalculateWidth": true, "precalculateHeight": true }, { "priority": 0.20480000000000007, "id": "4", "itemName": "<div>", "hidden": false, "precalculateWidth": true, "precalculateHeight": true, "heightFlexible": false, "widthFlexible": true }], "width": 990, "precalculateHeight": true, "itemName": "st2" },
                 setup4: { "id": "root", "direction": "horizontal", "gutter": 20, "items": [{ "width": "20%", "height": 30, "priority": 1, "id": "4", "itemName": "5", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.725, "id": "0", "itemName": "1", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.4, "id": "1", "itemName": "2", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.32000000000000006, "id": "2", "itemName": "3", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.25600000000000006, "id": "3", "itemName": "4", "hidden": false, "widthFlexible": true }], "width": 990, "precalculateHeight": true, "itemName": "st2" },
-                setup5: { "id": "root", "direction": "horizontal", "gutter": 20, "rightToLeft": true, "items": [{ "width": "20%", "height": 30, "priority": 0.725, "id": "0", "itemName": "1", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.4, "id": "1", "itemName": "2", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.32000000000000006, "id": "2", "itemName": "3", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.25600000000000006, "id": "3", "itemName": "4", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.1, "id": "4", "itemName": "5", "hidden": false, "widthFlexible": true }], "width": 990, "precalculateHeight": true, "itemName": "st2" },
+                setup5: { "id": "root", "direction": "horizontal", "gutter": 20, "rightToLeft": true, "bottomUp": true, "items": [{ "width": "20%", "height": 30, "priority": 1.0, "id": "0", "itemName": "1", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.9, "id": "1", "itemName": "2", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.8, "id": "2", "itemName": "3", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.7, "id": "3", "itemName": "4", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.6, "id": "4", "itemName": "5", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.5, "id": "5", "itemName": "6", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.4, "id": "6", "itemName": "7", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.3, "id": "7", "itemName": "8", "hidden": false, "widthFlexible": true }, { "width": "20%", "height": 30, "priority": 0.2, "id": "8", "itemName": "9", "hidden": false, "widthFlexible": true }], "width": 990, "precalculateHeight": true, "itemName": "st2" },
             };
 
             document.addEventListener("polymer-ready", function () {
