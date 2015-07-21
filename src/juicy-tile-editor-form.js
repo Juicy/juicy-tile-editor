@@ -36,6 +36,7 @@
     heightDynamic: null,
     gutter: null,
     tightGroup: null,
+    rightToLeft: null,
     oversize: 0,
     priority: null,
     content: null,
@@ -412,6 +413,7 @@
       this.heightDynamic = this.getCommonValue("heightDynamic") || false;
       this.gutter = this.getCommonValue("gutter");
       this.tightGroup = this.getCommonValue("tightGroup") || false;
+      this.rightToLeft = this.getCommonValue("rightToLeft") || false;
       this.oversize = this.getCommonValue("oversize");
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");

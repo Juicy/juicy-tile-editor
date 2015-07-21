@@ -19,3 +19,12 @@
 .jte-icon-angle-up:before { content: '\e811'; } /* '' */
 .jte-icon-angle-left:before { content: '\e812'; } /* '' */
 .jte-icon-cancel:before { content: '\e813'; } /* '' */
+.jte-icon-resize-vertical:before { content: '\e814'; } /* '' */
+.jte-icon-resize-horizontal:before { content: '\e815'; } /* '' */
+.jte-icon-level-up:before { content: '\e816'; } /* '' */
+.jte-icon-level-down:before { content: '\e817'; } /* '' */
+.jte-icon-exchange:before { content: '\e818'; } /* '' */
+.jte-icon-align-left:before { content: '\e819'; } /* '' */
+.jte-icon-align-center:before { content: '\e81a'; } /* '' */
+.jte-icon-align-right:before { content: '\e81b'; } /* '' */
+.jte-icon-align-justify:before { content: '\e81c'; } /* '' */

@@ -281,6 +281,18 @@
             .editableGroup:last-child .toolbar-button:hover {
                 color: white;
             }
+
+            .icon-rotate {
+                -ms-transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+                transform: rotate(90deg);
+                display: inline-block;
+            }
+
+            .icon-rotate i {
+                position: relative;
+                bottom: -3px;
+            }
         </style>
         <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
             <div class="editableGroup" disable?="{{!editedTiles.sync}}">
@@ -342,20 +354,22 @@
                 <div class="toolbar-item" disabled?="{{!isContainer}}">
                     <div class="directionGroup">
                         <button class="toolbar-button direction"
+                                title="Horizontal direction: packing from left to right then from top to bottom"
                                 on-click="{{ changeDirection }}"
                                 role="radio"
                                 aria-checked?="{{!direction || direction == 'rightDown'}}"
                                 checked?="{{!direction || direction == 'rightDown'}}"
                                 value="rightDown">
-                            <i class="jte-icon-right-hand"></i>
+                            <i class="jte-icon-align-left"></i>
                         </button>
                         <button class="toolbar-button direction"
+                                title="Vertical direction: packing from top to bottom then from left to right"
                                 on-click="{{ changeDirection }}"
                                 role="radio"
                                 aria-checked?="{{direction == 'downRight'}}"
                                 checked?="{{direction == 'downRight'}}"
                                 value="downRight">
-                            <i class="jte-icon-down-hand"></i>
+                            <span class="icon-rotate"><i class="jte-icon-align-left"></i></span>
                         </button>
                     </div>
                     <label class="toolbar-label">Direction</label>
@@ -373,7 +387,11 @@
                 </div>
 
                 <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="tightGroup">
-                  <label class="editable"><input id="tightGroupCheckbox" type="checkbox" data-applyvalue="tightGroup" data-hardrefresh="true" checked="{{tightGroup}}"> tight</label>
+                    <label class="editable"><input id="tightGroupCheckbox" type="checkbox" data-applyvalue="tightGroup" data-hardrefresh="true" checked="{{tightGroup}}"> tight</label>
+                </div>
+
+                <div class="toolbar-item" disabled?="{{!isContainer}}" data-applyvalue="tightGroup">
+                    <label class="editable"><input id="rightToLeftCheckbox" type="checkbox" data-applyvalue="rightToLeft" data-hardrefresh="true" checked="{{rightToLeft}}"> reverse</label>
                 </div>
             </div>
 
