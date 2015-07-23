@@ -5,7 +5,7 @@
 ## Demos
 
 [Check it live!](http://juicy.github.io/juicy-tile-editor)
-> [`juicy-tile-grid` examples](http://juicy.github.io/juicy-tile-editor/examples/juicy-tiles-grid)
+> [`juicy-tile-grid` examples](http://juicy.github.io/juicy-tile-editor/examples/juicy-tile-grid/)
 
 ## Usage
 
