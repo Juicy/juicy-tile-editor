@@ -168,6 +168,28 @@
     widthDecrease: function () {
       powerDecrease(this, "width");
     },
+    widthCalculate: function () {
+        if (!this.selectedItems.length || !this.editedTiles) {
+            return;
+        }
+
+        var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+        var item = this.selectedItems[0];
+
+        this.precalculateWidth = true;
+        item.precalculateWidth = true;
+
+        setTimeout(function () {
+            var rec = tile.getBoundingClientRect();
+
+            item.precalculateWidth = false;
+            item.width = parseInt(rec.width);
+            this.precalculateWidth = false;
+            this.width = item.width;
+
+            this.calculateActualSize();
+        }.bind(this));
+    },
     heightIncrease: function () {
       if (this.height == 'auto') { //turn off auto
         this.height = 32;
@@ -181,6 +203,28 @@
         this.precalculateHeight = false;
       }
       powerDecrease(this, "height");
+    },
+    heightCalculate: function () {
+        if (!this.selectedItems.length || !this.editedTiles) {
+            return;
+        }
+
+        var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+        var item = this.selectedItems[0];
+
+        this.precalculateHeight = true;
+        item.precalculateHeight = true;
+
+        setTimeout(function () {
+            var rec = tile.getBoundingClientRect();
+
+            item.precalculateHeight = false;
+            item.height = parseInt(rec.height);
+            this.precalculateHeight = false;
+            this.height = item.height;
+
+            this.calculateActualSize();
+        }.bind(this));
     },
     priorityIncrease: function () {
       if (!this.selectedItems.length == 1) {
@@ -453,15 +497,7 @@
         }
       }.bind(this));
 
-      if (this.selectedItems.length != 1 || !this.editedTiles) {
-          this.actualWidth = "N/A";
-          this.actualHeight = "N/A";
-      } else {
-          var tile = this.editedTiles.tiles[this.selectedItems[0].id];
-          var rec = tile.getBoundingClientRect();
-          this.actualWidth = parseInt(rec.width) + "px";
-          this.actualHeight = parseInt(rec.height) + "px";
-      }
+      this.calculateActualSize();
     },
     popoverExpand: function (ev, index, target) {
         var index = this.style.zIndex || 0;
@@ -473,6 +509,17 @@
     },
     closeClick: function (ev, index, target) {
         this.fire("juicy-tile-editor-form-close");
+    },
+    calculateActualSize: function () {
+        if (this.selectedItems.length != 1 || !this.editedTiles) {
+            this.actualWidth = "N/A";
+            this.actualHeight = "N/A";
+        } else {
+            var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+            var rec = tile.getBoundingClientRect();
+            this.actualWidth = parseInt(rec.width) + "px";
+            this.actualHeight = parseInt(rec.height) + "px";
+        }
     }
   });
 })();

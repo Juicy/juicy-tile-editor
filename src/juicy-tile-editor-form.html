@@ -78,7 +78,7 @@
                 border: 1px solid rgba(0, 0, 0, .2);
                 box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
                 padding: 5px;
-                max-width: 144px;
+                max-width: 151px;
                 min-width: 100px;
                 white-space: normal;
                 color: black;
@@ -224,7 +224,7 @@
 
             .button-column button {
                 margin-top: 4px;
-                width: 70px;
+                width: 73px;
             }
 
             .button-column button:nth-child(odd) {
@@ -555,15 +555,16 @@
                         <div class="expandable">
                             <button class="editable" on-click="{{widthIncrease}}" disabled?="{{precalculateWidth}}">+</button>
                             <button class="editable" on-click="{{widthDecrease}}" disabled?="{{precalculateWidth}}">-</button>
-                            <div>
+                            <button class="editable" on-click="{{widthCalculate}}" disabled?="{{precalculateWidth}}">calculate</button>
+                            <!--<div>
                                 <label class="editable"><input id="precalculateWidthCheckbox" type="checkbox" data-applyvalue="precalculateWidth" checked="{{precalculateWidth}}"> precalculate</label>
-                            </div>
+                            </div>-->
                             <div title="Supported only in juicy-tile-grid with grid layout.">
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
                                   <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
                               </div>
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                  <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> dynamic</label>
+                                  <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> resize with content</label>
                               </div>
                             </div>
                             <div class="description">
@@ -587,15 +588,16 @@
                         <div class="expandable">
                             <button class="editable" on-click="{{heightIncrease}}" disabled?="{{precalculateHeight}}">+</button>
                             <button class="editable" on-click="{{heightDecrease}}" disabled?="{{precalculateHeight}}">-</button>
-                            <div>
+                            <button class="editable" on-click="{{heightCalculate}}" disabled?="{{precalculateHeight}}">calculate</button>
+                            <!--<div>
                                 <label class="editable"><input id="precalculateHeightCheckbox" type="checkbox" data-applyvalue="precalculateHeight" checked="{{precalculateHeight}}"> precalculate</label>
-                            </div>
+                            </div>-->
                             <div title="Supported only in juicy-tile-grid with grid layout.">
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
                                   <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
                               </div>
                               <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
-                                  <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> dynamic</label>
+                                  <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> resize with content</label>
                               </div>
                             </div>
                             <div class="description">
