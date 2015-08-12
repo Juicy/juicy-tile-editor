@@ -190,6 +190,9 @@
             this.calculateActualSize();
         }.bind(this));
     },
+    widthChanged: function () {
+        this.precalculateWidth = false;
+    },
     heightIncrease: function () {
       if (this.height == 'auto') { //turn off auto
         this.height = 32;
@@ -225,6 +228,9 @@
 
             this.calculateActualSize();
         }.bind(this));
+    },
+    heightChanged: function () {
+        this.precalculateHeight = false;
     },
     priorityIncrease: function () {
       if (!this.selectedItems.length == 1) {
