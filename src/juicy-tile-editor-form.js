@@ -191,7 +191,10 @@
         }.bind(this));
     },
     widthChanged: function () {
-        this.precalculateWidth = false;
+        if (this.precalculateWidth) {
+            this.precalculateWidth = false;
+            this.setCommonValue("precalculateWidth", false, false);
+        }
     },
     heightIncrease: function () {
       if (this.height == 'auto') { //turn off auto
@@ -230,7 +233,10 @@
         }.bind(this));
     },
     heightChanged: function () {
-        this.precalculateHeight = false;
+        if (this.precalculateHeight) {
+            this.precalculateHeight = false;
+            this.setCommonValue("precalculateHeight", false, false);
+        }
     },
     priorityIncrease: function () {
       if (!this.selectedItems.length == 1) {
