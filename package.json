@@ -1,6 +1,6 @@
 {
   "name": "juicy-tile-editor",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "<juicy-tile-editor> is an editor form for <juicy-tile-list>",
   "main": "src/juicy-tile-editor.html",
   "directories": {
