@@ -512,7 +512,7 @@
             </div>
             <div class="editableGroup">
 
-                <div class="toolbar-item" title="Supported only for virtual groups in juicy-tile-list or in juicy-tile-grid with absolute layout.">
+                <div class="toolbar-item">
                     <div class="toolbar-item-wrapper" disabled?="{{!isSelection}}" data-applyvalue="oversize">
                         <juicy-popover on-juicy-popover-expand="{{popoverExpand}}" on-juicy-popover-collapse="{{popoverCollapse}}">
                             <input class="handle toolbar-button val" placeholder="multiple" value="{{oversize}}">
@@ -556,11 +556,11 @@
                             <button class="editable" on-click="{{widthIncrease}}">+</button>
                             <button class="editable" on-click="{{widthDecrease}}">-</button>
                             <button class="editable" on-click="{{widthCalculate}}">calculate</button>
-                            <div title="Supported only in juicy-tile-grid with grid layout.">
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                            <div title="Supported only in juicy-tile-grid.">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
                                   <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
                               </div>
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
                                   <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> resize with content</label>
                               </div>
                             </div>
@@ -586,11 +586,11 @@
                             <button class="editable" on-click="{{heightIncrease}}">+</button>
                             <button class="editable" on-click="{{heightDecrease}}">-</button>
                             <button class="editable" on-click="{{heightCalculate}}">calculate</button>
-                            <div title="Supported only in juicy-tile-grid with grid layout.">
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                            <div title="Supported only in juicy-tile-grid.">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
                                   <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
                               </div>
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST' || layout=='absolute'}}">
+                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
                                   <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> resize with content</label>
                               </div>
                             </div>

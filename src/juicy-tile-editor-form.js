@@ -41,7 +41,6 @@
     oversize: 0,
     priority: null,
     content: null,
-    layout: null,
     actualWidth: null,
     actualHeight: null,
     newGroupFromSelection: function (width, isEmpty) {
@@ -403,10 +402,6 @@
       this.getSource();
       this.fire('juicy-tile-editor-clear');
     },
-    applyLayout: function () {
-      this.editedTiles.setAttribute('layout', this.layout);
-      this.editedTiles.refresh(true);
-    },
     getSource: function () {
       this.source = this.editedTiles ? JSON.stringify(this.editedTiles.setup) : '';
     },
@@ -488,7 +483,6 @@
       this.priority = this.getCommonValue("priority");
       this.direction = this.getCommonValue("direction");
       this.content = this.getCommonValue("content") || ""; //set content to empty string if undefined is returned
-      this.layout = this.editedTiles ? this.editedTiles.getAttribute('layout') : '';
       this.isSelection = (this.selectedItems.length > 0);
       this.isSingleSelection = (this.selectedItems.length == 1);
       this.isContainer = this.isContainerInSelection();
