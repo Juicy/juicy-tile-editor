@@ -353,8 +353,8 @@
     getHighlightContent: function (el) {
         var setup = this.editedTiles.allItems[el.id] || this.editedTiles.allItems["root"];
         var rec = el.getBoundingClientRect();
-        var w = rec.width > parseInt(rec.width) ? rec.width.toFixed(2) : rec.width;
-        var h = rec.height > parseInt(rec.height) ? rec.height.toFixed(2) : rec.height;
+        var w = Math.round(rec.width);
+        var h = Math.round(rec.height);
         var html = ["<div style='background-color:rgb(260, 97, 124); padding:1px 2px; font-size:11px; line-height:11px;'>", w, " x ", h, "</div>"].join("");
 
         return html;
