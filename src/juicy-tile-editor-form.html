@@ -4,298 +4,299 @@
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
 <link rel="import" href="juicy-border-picker.html" />
 
-<polymer-element name="juicy-tile-editor-form" attributes="selectedItems editedTiles tileLists modified">
+<dom-module id="juicy-tile-editor-form">
+    <style>
+        .editablesContainer {
+            display: flex;
+            font-family: 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            min-width: 800px;
+        }
+
+        .editableGroup {
+            flex: 1 1 auto;
+            display: flex;
+        }
+
+        label {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        juicy-popover label.editable {
+            color: black;
+        }
+
+        .val {
+            display: inline-block;
+            width: 60px;
+        }
+
+        .toolbar-item[disabled],
+        button[disabled],
+        div[disabled] {
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        button {
+            min-height: 1.45em;
+            min-width: 1.45em;
+            display: inline-block;
+            padding: 0 2px;
+            margin: 0;
+            vertical-align: top;
+            line-height: 1;
+            font-size: 14px;
+            color: #243140;
+            text-align: center;
+            text-shadow: 0 1px rgba(255,255,255,0.2);
+            background: #e5e7ed;
+            border: 0;
+            border-radius: 2px;
+            cursor: pointer;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            color: #243140;
+            background: #dcdfe7;
+        }
+
+        button:active,
+        .expanded button.handle {
+            color: #1d2938;
+            background: #cdd1dc;
+        }
+
+        .expandable {
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, .2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            padding: 5px;
+            max-width: 151px;
+            min-width: 100px;
+            white-space: normal;
+            color: black;
+        }
+
+        .expandable.wide {
+            width: auto;
+            max-width: none;
+        }
+
+        .expandable textarea {
+            width: 40em;
+            height: 5em;
+        }
+
+        .drop-down .expandable {
+            max-width: none;
+        }
+
+        .expandable .description {
+            font-size: 13px;
+            padding-left: 5px;
+            margin-top: 5px;
+        }
+
+        .sourceActions {
+            text-align: right;
+        }
+
+        h4 {
+            margin: 0;
+            display: inline;
+            font-weight: normal;
+        }
+
+        .toolbar-item {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .toolbar-item-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toolbar-button {
+            height: 25px;
+            min-width: 30px;
+            display: block;
+            white-space: nowrap;
+            box-sizing: border-box;
+            border-radius: 1px;
+            border: none;
+            padding: 0px;
+            margin: 0px;
+            font-size: 15px;
+        }
+
+        .toolbar-button * {
+            height: 20px;
+            box-sizing: border-box;
+        }
+
+        .toolbar-button input {
+            background-color: transparent;
+        }
+
+        .toolbar-button input {
+            border: 1px solid #333;
+            font-size: 12px;
+        }
+
+        input.toolbar-button {
+            font-size: 12px;
+        }
+
+        .toolbar-button button {
+            margin: 0 0 0 -1px;
+        }
+
+        input.toolbar-button {
+            padding: 0px 4px;
+        }
+
+        .toolbar-button-background {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        /*.toolbar-button*/
+        .revert {
+            transform: scale(1, -1);
+        }
+
+        .directionGroup {
+            background-color: #e5e7ed;
+            border-radius: 1px;
+            height: 25px;
+        }
+
+        .directionGroup .toolbar-button {
+            float: left;
+        }
+        /*.toolbar-button*/
+        .direction:not([checked]) {
+            /*box-shadow: 0px 0 7px black inset;*/
+            background-color: transparent;
+            color: #C0C0C0;
+        }
+        /*.toolbar-button*/
+        .direction[checked] {
+            box-shadow: 0px 0 7px black;
+            color: black;
+        }
+
+        .toolbar-label {
+            font-size: 11px;
+            text-align: center;
+            display: block;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 150px;
+            left: 10px;
+            width: 200px;
+            height: calc(100% - 160px);
+            background: white;
+            border: 1px solid black;
+            opacity: 0.8;
+            overflow: auto;
+        }
+
+        .sidebar /deep/ #menu {
+            margin-left: 10px;
+        }
+
+        .button-column {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .button-column button {
+            margin-top: 4px;
+            width: 73px;
+        }
+
+        .button-column button:nth-child(odd) {
+            margin-right: 4px;
+        }
+
+        .drop-down {
+            white-space: nowrap;
+            font-size: 0px;
+        }
+
+        .drop-down button {
+            display: inline-block;
+            font-size: 11px;
+            border-radius: 1px 0px 0px 1px;
+        }
+
+        .drop-down .handle {
+            vertical-align: middle;
+            min-width: 15px;
+            border-left: 1px solid #C0C0C0;
+            border-radius: 0px 1px 1px 0px;
+            margin-left: -1px;
+        }
+
+        .drop-down .expandable button {
+            display: block;
+            background-color: transparent;
+            border-radius: 0px;
+            width: 100%;
+            text-align: left;
+            padding: 0px 4px;
+        }
+
+        .drop-down .expandable button:hover {
+            background-color: #F0F0F0;
+        }
+
+        hr {
+            border: 0;
+            background-color: #ddd;
+            height: 1px;
+            margin: 10px 0;
+        }
+
+        .editableGroup:last-child {
+            position: absolute;
+            right: 0;
+        }
+
+        .editableGroup:last-child .toolbar-button {
+            background-color: transparent;
+            color: #e5e7ed;
+        }
+
+        .editableGroup:last-child .toolbar-button:hover {
+            color: white;
+        }
+
+        .icon-rotate {
+            -ms-transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+            display: inline-block;
+        }
+
+        .icon-rotate i {
+            position: relative;
+            bottom: -3px;
+        }
+    </style>
     <template>
         <link href="css/jte-fontawesome.css" rel="stylesheet" />
-        <style>
-            .editablesContainer {
-                display: flex;
-                font-family: 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
-                max-width: 1200px;
-                min-width: 800px;
-            }
 
-            .editableGroup {
-                flex: 1 1 auto;
-                display: flex;
-            }
-
-            label {
-                display: inline-block;
-                white-space: nowrap;
-            }
-
-            juicy-popover label.editable {
-                color: black;
-            }
-
-            .val {
-                display: inline-block;
-                width: 60px;
-            }
-
-            .toolbar-item[disabled],
-            button[disabled],
-            div[disabled] {
-                opacity: 0.25;
-                pointer-events: none;
-            }
-
-            button {
-                min-height: 1.45em;
-                min-width: 1.45em;
-                display: inline-block;
-                padding: 0 2px;
-                margin: 0;
-                vertical-align: top;
-                line-height: 1;
-                font-size: 14px;
-                color: #243140;
-                text-align: center;
-                text-shadow: 0 1px rgba(255,255,255,0.2);
-                background: #e5e7ed;
-                border: 0;
-                border-radius: 2px;
-                cursor: pointer;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-            }
-
-            button:hover {
-                color: #243140;
-                background: #dcdfe7;
-            }
-
-            button:active,
-            .expanded button.handle {
-                color: #1d2938;
-                background: #cdd1dc;
-            }
-
-            .expandable {
-                background: #fff;
-                border: 1px solid rgba(0, 0, 0, .2);
-                box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-                padding: 5px;
-                max-width: 151px;
-                min-width: 100px;
-                white-space: normal;
-                color: black;
-            }
-
-            .expandable.wide {
-                width: auto;
-                max-width: none;
-            }
-
-            .expandable textarea {
-                width: 40em;
-                height: 5em;
-            }
-
-            .drop-down .expandable {
-                max-width: none;
-            }
-
-            .expandable .description {
-                font-size: 13px;
-                padding-left: 5px;
-                margin-top: 5px;
-            }
-
-            .sourceActions {
-                text-align: right;
-            }
-
-            h4 {
-                margin: 0;
-                display: inline;
-                font-weight: normal;
-            }
-
-            .toolbar-item {
-                display: flex;
-                flex-direction: column;
-                margin-left: 10px;
-            }
-
-            .toolbar-item-wrapper {
-                display: flex;
-                flex-direction: column;
-            }
-
-            .toolbar-button {
-                height: 25px;
-                min-width: 30px;
-                display: block;
-                white-space: nowrap;
-                box-sizing: border-box;
-                border-radius: 1px;
-                border: none;
-                padding: 0px;
-                margin: 0px;
-                font-size: 15px;
-            }
-
-            .toolbar-button * {
-                height: 20px;
-                box-sizing: border-box;
-            }
-
-            .toolbar-button input {
-                background-color: transparent;
-            }
-
-            .toolbar-button input {
-                border: 1px solid #333;
-                font-size: 12px;
-            }
-
-            input.toolbar-button {
-                font-size: 12px;
-            }
-
-            .toolbar-button button {
-                margin: 0 0 0 -1px;
-            }
-
-            input.toolbar-button {
-                padding: 0px 4px;
-            }
-
-            .toolbar-button-background {
-                background: white;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-            }
-            /*.toolbar-button*/
-            .revert {
-                transform: scale(1, -1);
-            }
-
-            .directionGroup {
-                background-color: #e5e7ed;
-                border-radius: 1px;
-                height: 25px;
-            }
-
-            .directionGroup .toolbar-button {
-                float: left;
-            }
-            /*.toolbar-button*/
-            .direction:not([checked]) {
-                /*box-shadow: 0px 0 7px black inset;*/
-                background-color: transparent;
-                color: #C0C0C0;
-            }
-            /*.toolbar-button*/
-            .direction[checked] {
-                box-shadow: 0px 0 7px black;
-                color: black;
-            }
-
-            .toolbar-label {
-                font-size: 11px;
-                text-align: center;
-                display: block;
-            }
-
-            .sidebar {
-                position: fixed;
-                top: 150px;
-                left: 10px;
-                width: 200px;
-                height: calc(100% - 160px);
-                background: white;
-                border: 1px solid black;
-                opacity: 0.8;
-                overflow: auto;
-            }
-
-            .sidebar /deep/ #menu {
-                margin-left: 10px;
-            }
-
-            .button-column {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .button-column button {
-                margin-top: 4px;
-                width: 73px;
-            }
-
-            .button-column button:nth-child(odd) {
-                margin-right: 4px;
-            }
-
-            .drop-down {
-                white-space: nowrap;
-                font-size: 0px;
-            }
-
-            .drop-down button {
-                display: inline-block;
-                font-size: 11px;
-                border-radius: 1px 0px 0px 1px;
-            }
-
-            .drop-down .handle {
-                vertical-align: middle;
-                min-width: 15px;
-                border-left: 1px solid #C0C0C0;
-                border-radius: 0px 1px 1px 0px;
-                margin-left: -1px;
-            }
-
-            .drop-down .expandable button {
-                display: block;
-                background-color: transparent;
-                border-radius: 0px;
-                width: 100%;
-                text-align: left;
-                padding: 0px 4px;
-            }
-
-            .drop-down .expandable button:hover {
-                background-color: #F0F0F0;
-            }
-
-            hr {
-                border: 0;
-                background-color: #ddd;
-                height: 1px;
-                margin: 10px 0;
-            }
-
-            .editableGroup:last-child {
-                position: absolute;
-                right: 0;
-            }
-
-            .editableGroup:last-child .toolbar-button {
-                background-color: transparent;
-                color: #e5e7ed;
-            }
-
-            .editableGroup:last-child .toolbar-button:hover {
-                color: white;
-            }
-
-            .icon-rotate {
-                -ms-transform: rotate(90deg);
-                -webkit-transform: rotate(90deg);
-                transform: rotate(90deg);
-                display: inline-block;
-            }
-
-            .icon-rotate i {
-                position: relative;
-                bottom: -3px;
-            }
-        </style>
         <div class="editablesContainer" on-click="{{applyChange}}" on-keyup="{{applyChange}}">
             <div class="editableGroup" disable?="{{!editedTiles.sync}}">
                 <div class="toolbar-item" disabled?="{{!modified}}">
@@ -557,12 +558,12 @@
                             <button class="editable" on-click="{{widthDecrease}}">-</button>
                             <button class="editable" on-click="{{widthCalculate}}">calculate</button>
                             <div title="Supported only in juicy-tile-grid.">
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
-                                  <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
-                              </div>
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
-                                  <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> resize with content</label>
-                              </div>
+                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
+                                    <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible}}"> flexible</label>
+                                </div>
+                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
+                                    <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic}}"> resize with content</label>
+                                </div>
                             </div>
                             <div class="description">
                                 Actual width: <span>{{actualWidth}}</span>
@@ -587,12 +588,12 @@
                             <button class="editable" on-click="{{heightDecrease}}">-</button>
                             <button class="editable" on-click="{{heightCalculate}}">calculate</button>
                             <div title="Supported only in juicy-tile-grid.">
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
-                                  <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
-                              </div>
-                              <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
-                                  <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> resize with content</label>
-                              </div>
+                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
+                                    <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible}}"> flexible</label>
+                                </div>
+                                <div disabled?="{{ editedTiles.tagName == 'JUICY-TILE-LIST'}}">
+                                    <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic}}"> resize with content</label>
+                                </div>
                             </div>
                             <div class="description">
                                 Actual height: <span>{{actualHeight}}</span>
@@ -632,4 +633,8 @@
         </div>
     </template>
     <script src="juicy-tile-editor-form.js"></script>
+</dom-module>
+<polymer-element name="" attributes="selectedItems editedTiles tileLists modified">
+    
+    
 </polymer-element>
