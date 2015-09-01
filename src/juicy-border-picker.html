@@ -3,7 +3,7 @@
 
 <dom-module id="juicy-border-picker">
     <style>
-        ul {
+        :host ul {
             border: none;
             padding: 0px;
             margin: 0px;
@@ -11,29 +11,30 @@
             margin: 5px 0px;
         }
 
-        ul li {
+        :host ul li {
         }
 
-        ul li:hover {
+        :host ul li:hover {
             background-color: #F0F0F0;
         }
 
-        ul li.selected {
+        :host ul li.selected {
             background-color: #F1F1F1;
         }
 
-        ul li a {
+        :host ul li a {
             display: block;
             padding: 10px 0px;
         }
 
-        ul li a span {
+        :host ul li a span {
             display: block;
             border-color: #444444;
             border-bottom-width: 4px;
         }
 
-        input, select {
+        :host input, 
+        :host select {
             height: 25px;
             min-width: 25px;
             width: 100%;
@@ -49,31 +50,31 @@
             border: 1px solid #C0C0C0;
         }
 
-        input.width {
+        :host input.width {
             width: 60%;
             float: left;
         }
 
-        select.width {
+        :host select.width {
             width: 40%;
             float: left;
         }
 
-        div.width {
+        :host div.width {
             overflow: auto;
         }
 
-        div.value {
+        :host div.value {
             margin-top: 10px;
             overflow: auto;
         }
 
-        div.value input {
+        :host div.value input {
             width: calc(100% - 25px);
             float: left;
         }
 
-        div.value button {
+        :host div.value button {
             height: 25px;
             width: 22px;
             float: left;
@@ -83,42 +84,42 @@
     <template>
         <div class="container">
             <div class="width">
-                <input type="text" value="{{borderWidth}}" class="width" />
-                <select class="width" value="{{borderWidthUnit}}">
+                <input type="text" value="{{borderWidth::change}}" class="width" />
+                <select class="width" value="{{borderWidthUnit::change}}">
                     <option value="px">px</option>
                     <option value="em">em</option>
                     <option value="%">%</option>
                 </select>
             </div>
             <ul>
-                <template repeat="{{item in borderStyles}}">
-                    <template if="{{item == borderStyle}}">
+                <template is="dom-repeat" items="{{borderStyles}}" as="item">
+                    <template is="dom-if" if="{{compare(item, borderStyle)}}">
                         <li class="selected">
-                            <a href="javascript:" class="{{item}}" on-click="{{applyStyle}}">
-                                <span class="{{item}}" style="border-bottom-style:{{item}}"></span>
+                            <a href="javascript:" data-style$="{{item}}" on-click="applyStyle">
+                                <span class="{{item}}" style$="{{getBorderStyle(item)}}"></span>
                             </a>
                         </li>
                     </template>
-                    <template if="{{item != borderStyle}}">
+                    <template is="dom-if" if="{{!compare(item, borderStyle)}}">
                         <li>
-                            <a href="javascript:" class="{{item}}" on-click="{{applyStyle}}">
-                                <span class="{{item}}" style="border-bottom-style:{{item}}"></span>
+                            <a href="javascript:" data-style$="{{item}}" on-click="applyStyle">
+                                <span class="{{item}}" style$="{{getBorderStyle(item)}}"></span>
                             </a>
                         </li>
                     </template>
                 </template>
             </ul>
-            <juicy-color-picker value="{{borderColor}}" on-juicy-color-picker-value-changed="{{refreshValue}}"></juicy-color-picker>
+            <juicy-color-picker value="{{borderColor::change}}" on-change="refreshValueAsync"></juicy-color-picker>
             <div class="value">
-                <input type="text" value="{{value}}" readonly="readonly" />
-                <button type="button" on-click="{{clearBorder}}">x</button>
+                <input type="text" value="[[value]]" readonly="readonly" />
+                <button type="button" on-click="clearBorder">x</button>
             </div>
         </div>
     </template>
     <script>
         Polymer({
             is: "juicy-border-picker",
-            borderStyles: ["solid", "dashed", "dotted", "double"],
+            //borderStyles: ["solid", "dashed", "dotted", "double"],
             inParse: false,
             properties: {
                 pallete: {
@@ -132,6 +133,10 @@
                     type: String,
                     value: null,
                     observer: "borderStyleChanged"
+                },
+                borderStyles: {
+                    type: Array,
+                    value: ["solid", "dashed", "dotted", "double"]
                 },
                 borderWidth: {
                     type: Number,
@@ -151,12 +156,14 @@
             },
             ready: function () {
             },
-            resetInParse: function () {
-                var that = this;
+            resetInParse: function (fire) {
+                if (fire) {
+                    this.fire("change");
+                }
 
                 setTimeout(function () {
-                    that.inParse = false;
-                }, 500);
+                    this.inParse = false;
+                }.bind(this), 500);
             },
             refreshValue: function () {
                 if (this.inParse) {
@@ -164,8 +171,12 @@
                 }
 
                 this.inParse = true;
-                this.value = [this.borderStyle, this.borderWidth + this.borderWidthUnit, this.borderColor].join(" ");
-                this.resetInParse();
+                this.set("value", [this.borderStyle, this.borderWidth + this.borderWidthUnit, this.borderColor].join(" "));
+                console.log("refreshValue", this.value);
+                this.resetInParse(true);
+            },
+            refreshValueAsync: function () {
+                setTimeout(this.refreshValue.bind(this));
             },
             parseValue: function () {
                 if (this.inParse) {
@@ -173,10 +184,10 @@
                 }
 
                 this.inParse = true;
-                this.borderStyle = "";
-                this.borderWidth = "0";
-                this.borderWidthUnit = "px";
-                this.borderColor = "";
+                this.set("borderStyle", "");
+                this.set("borderWidth", "0");
+                this.set("borderWidthUnit", "px");
+                this.set("borderColor", "");
 
                 if (!this.value) {
                     this.resetInParse();
@@ -191,44 +202,54 @@
                     if (!item) {
                         continue;
                     } else if (/^\d+[.]?\d*\w+$/gi.test(item)) {
-                        this.borderWidth = parseFloat(item);
-                        this.borderWidthUnit = item.replace(/[\d\W]/gi, "");
+                        this.set("borderWidth", parseFloat(item));
+                        this.set("borderWidthUnit", item.replace(/[\d\W]/gi, ""));
                     } else if (this.borderStyles.indexOf(item) >= 0) {
-                        this.borderStyle = item;
+                        this.set("borderStyle", item);
                     } else {
-                        this.borderColor = item;
+                        this.set("borderColor", item);
                     }
                 }
 
                 this.resetInParse();
             },
             valueChanged: function () {
+                if (this.value == 5) {
+                    var a = "!!";
+                }
+                console.log("valueChanged", this.value);
                 if (this.inParse) {
                     return;
                 }
 
-                this.fire("juicy-border-picker-value-changed");
+                this.fire("change");
                 this.parseValue();
             },
             borderStyleChanged: function () {
-                this.refreshValue();
+                this.refreshValueAsync();
             },
             borderWidthChanged: function () {
-                this.refreshValue();
+                this.refreshValueAsync();
             },
             borderWidthUnitChanged: function () {
-                this.refreshValue();
+                this.refreshValueAsync();
             },
             borderColorChanged: function () {
-                this.refreshValue();
+                this.refreshValueAsync();
             },
             applyStyle: function (e) {
-                this.borderStyle = e.target.className;
-                this.refreshValue();
+                this.set("borderStyle", e.currentTarget.dataset["style"]);
+                this.refreshValueAsync();
             },
             clearBorder: function () {
-                this.value = "";
+                this.set("value", "");
                 this.valueChanged();
+            },
+            compare: function (value1, value2) {
+                return value1 == value2;
+            },
+            getBorderStyle: function (value) {
+                return "border-bottom-style:" + value + ";";
             }
         });
     </script>

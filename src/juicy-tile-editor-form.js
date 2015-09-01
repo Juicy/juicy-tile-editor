@@ -47,8 +47,8 @@
             editedTiles: { type: Array, value: null },
             tileLists: { type: Array, value: null },
             modified: { type: Boolean, value: false },
-            height: { type: Number, observer: "heightChanged" },
-            width: { type: Number, observer: "widthChanged" },
+            height: { type: String, observer: "heightChanged" },
+            width: { type: String, observer: "widthChanged" },
             isRemovable: { type: Boolean, value: true },
             isGroup: { type: Boolean, value: false },
             direction: { type: String, value: null }
@@ -83,7 +83,8 @@
             }
 
             this.selectedItems.length = 0; //change edited item to the new container
-            this.selectedItems.push(newContainer);
+            //this.selectedItems.push(newContainer);
+            this.push("selectedItems", newContainer);
 
             if (width) {
                 newContainer.width = width;
@@ -199,6 +200,8 @@
             }.bind(this));
         },
         widthChanged: function () {
+            this.set("width", this.toNumberOrPercentage.toModel(this.width));
+
             if (this.precalculateWidth) {
                 this.set("precalculateWidth", false);
                 this.setCommonValue("precalculateWidth", false, false);
@@ -241,6 +244,8 @@
             }.bind(this));
         },
         heightChanged: function () {
+            this.set("height", this.toNumberOrPercentage.toModel(this.height));
+
             if (this.precalculateHeight) {
                 this.set("precalculateHeight", false);
                 this.setCommonValue("precalculateHeight", false, false);
@@ -269,19 +274,19 @@
             this.refresh(true);
             this.fire('juicy-tile-editor-form-tree-changed');
         },
-        changeDirection: function (event, i, element) {
+        changeDirection: function (event, i) {
             this.selectedItems[0].direction = element.value;
-            this.direction = element.value;
+            this.direction = event.currentTarget.value;
             this.refresh();
         },
-        changeRightToLeft: function (event, i, element) {
-            var value = !!(element.value / 1);
+        changeRightToLeft: function (event, i) {
+            var value = !!(event.currentTarget.value / 1);
             this.selectedItems[0].rightToLeft = value;
             this.set("rightToLeft", value);
             this.refresh();
         },
-        changeBottomUp: function (event, i, element) {
-            var value = !!(element.value / 1);
+        changeBottomUp: function (event, i) {
+            var value = !!(event.currentTarget.value / 1);
             this.selectedItems[0].bottomUp = value;
             this.set("bottomUp", value);
             this.refresh();
@@ -322,7 +327,7 @@
             }
         },
         setCommonValue: function (propName, val, hard) {
-            if (this.selectedItems.length) {
+            if (this.selectedItems && this.selectedItems.length) {
                 for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
                     this.selectedItems[i][propName] = val;
                 }
@@ -349,6 +354,12 @@
         },
         toNumberOrPercentage: {
             toModel: function (arg) {
+                if (typeof arg === "number") {
+                    return arg;
+                } else if (!arg) {
+                    return "";
+                }
+
                 return arg.indexOf("%") > -1 ? arg : parseInt(arg, 10) || 0;
             },
             toDOM: function (arg) {
@@ -520,6 +531,24 @@
                 this.actualWidth = parseInt(rec.width) + "px";
                 this.actualHeight = parseInt(rec.height) + "px";
             }
+        },
+        getIsHorizontalDirection: function (direction) {
+            return !direction || direction == "horizontal";
+        },
+        getIsVerticalDirection: function (direction) {
+            return direction === "vertical";
+        },
+        getNotOrNot: function (value1, value2) {
+            return !value1 || !value2;
+        },
+        getBackgroundStyle: function (background) {
+            return "background: " + background + ";";
+        },
+        getOutlineStyle: function (outline) {
+            return "margin-top: -10px; width: 100%; display: inline-block; border-bottom: " + outline + ";";
+        },
+        getIsJuicyTileList: function (tagName) {
+            return tagName == "JUICY-TILE-LIST";
         }
     });
 })();

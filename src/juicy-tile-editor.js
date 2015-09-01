@@ -497,14 +497,18 @@
                 tileList = e.detail.tiles;
                 item = e.detail.branch;
             }
+
             this.editedTiles = tileList;
             var tile = tileList.tiles[item.id];
             this.$.tileEdited.show(tile, this.getHighlightContent.bind(this));
             this.$.tileSelected.hide();
             this.selectedItems.length = 0;
-            this.selectedItems.push(item);
+            //this.selectedItems.push(item);
+            this.push("selectedItems", item);
             this.selectedElements.length = 0;
             this.selectedElements.push(tile);
+
+            this.$.form.selectedItemsChanged(this.selectedItems, this.selectedItems);
         },
         treeHoverAction: function (e, tileList) {
             var item = e;
@@ -552,8 +556,10 @@
             if (item.detail) {  //is tree event
                 item = item.detail.branch;
             }
-            this.selectedItems.push(item);
-            this.selectedElements.push(this.editedTiles.tiles[item.id]);
+            //this.selectedItems.push(item);
+            this.push("selectedItems", item);
+            //this.selectedElements.push(this.editedTiles.tiles[item.id]);
+            this.push("selectedElements", this.editedTiles.tiles[item.id]);
             this.$.tileSelected.show(this.selectedElements, this.getHighlightContent.bind(this));
         },
         treeHighlightRemoveAction: function (item) {
@@ -561,7 +567,8 @@
                 item = item.detail.branch;
             }
             var index = this.selectedItems.indexOf(item);
-            this.selectedItems.splice(index, 1);
+            //this.selectedItems.splice(index, 1);
+            this.splice("selectedItems", index, 1);
             this.selectedElements.splice(index, 1);
             this.$.tileSelected.show(this.selectedElements, this.getHighlightContent.bind(this));
         },
@@ -616,7 +623,9 @@
             var form = this.$.form;
 
             form.selectedItems.length = 0;
-            form.selectedItems.push(branch, item);
+            //form.selectedItems.push(branch, item);
+            form.push("selectedItems", branch);
+            form.push("selectedItems", item);
             form.moveSelectionToEditedItemContainer();
         },
         unhideAll: function () {
