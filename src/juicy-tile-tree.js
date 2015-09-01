@@ -117,7 +117,8 @@
             var branch = elem.branch;
             var item = elem.item;
 
-            if (branch && branch.node && branch.node.setup) {
+            //if (branch && branch.node && branch.node.setup) {
+            if (branch.items) {
                 return true;
             } else {
                 return false;
@@ -151,20 +152,20 @@
         highlightBranch: function (branch, expand) {
             var that = this;
             if (!expand) {
-                this.highlightedBranches.length = 0;
+                //this.highlightedBranches.length = 0;
+                this.splice("highlightedBranches", this.highlightedBranches.length);
             }
-            this.highlightedBranches.push(branch);
+            //this.highlightedBranches.push(branch);
+            this.push("highlightedBranches", branch);
 
             setTimeout(function () {
                 //I need to refresh element classes imperatively because Polymer only observes on filter parameter changes [warpech]
                 Array.prototype.forEach.call(that.$.root.querySelectorAll('.element-label'), function (elem) {
                     var isNestedTiles = this.isNestedTilesLabel(elem);
-                    var branch = elem.branch;
-                    var item = elem.item;
 
-                    if (isNestedTiles && branch.node.setup == branch) {
+                    if (isNestedTiles && elem.branch.node.setup == branch) {
                         that.highlightElement(elem);
-                    } else if (!isNestedTiles && item == branch) {
+                    } else if (!isNestedTiles && elem.item == branch) {
                         that.highlightElement(elem);
                     } else if (!expand) {
                         elem.classList.remove("highlight");
@@ -201,7 +202,8 @@
             }
         },
         unhighlightBranch: function (branch) {
-            this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
+            //this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
+            this.splice("highlightedBranches", this.highlightedBranches.indexOf(branch), 1);
 
             //I need to refresh element classes imperatively because Polymer only observes on filter parameter changes [warpech]
             Array.prototype.forEach.call(this.$.root.querySelectorAll('.element-label.highlight'), function (elem) {
