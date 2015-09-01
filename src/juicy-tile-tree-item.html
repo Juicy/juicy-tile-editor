@@ -7,14 +7,15 @@
                 <div class$="{{getBranchClassName(item, tree.highlightedBranches)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{item.id}}" branch="[[branch]]" item="[[item]]">
                     <juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right" 
                                                 checked="{{getIsExpanded(expanded, item)}}" on-click="setIsExpanded" item="[[item]]"></juicy-toggle-icon-button>
-                    <template is="dom-if" if="{{!getIsItemEdited(tree.editItem, item)}}" restamp="true">
+                    <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                         <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                   checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                     </template>
-                    <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(tree.editItem, item)}}">
+                    <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
                         <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
-                            <input type="text" class$="{{getInputClassName(tree.editItem, item)}}" readonly?="{{!getIsItemEdited(tree.editItem, item)}}" value="{{item.itemName}}"
-                                    on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction" />
+                            <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
+                                    on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                                    branch="[[branch]]" item="[[item]]" />
                         </div>
                     </juicy-draggable>
                 </div>
@@ -31,14 +32,15 @@
                 <template is="dom-if" if="{{!getHasBranches(branch, item)}}">
                     <!-- without nested juicy-tile-list -->
                     <div class$="{{getBranchClassName(item, tree.highlightedBranches)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{item.id}}" branch="[[branch]]" item="[[item]]">
-                        <template is="dom-if" if="{{!getIsItemEdited(tree.editItem, item)}}" restamp="true">
+                        <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                       checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
-                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(tree.editItem, item)}}">
+                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
-                                <input type="text" class="item-name {{getInputClassName(tree.editItem, item)}}" readonly?="{{editItem != item}}" value="{{item.itemName}}"
-                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction" />
+                                <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
+                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                                       branch="[[branch]]" item="[[item]]" />
                             </div>
                         </juicy-draggable>
                     </div>
@@ -48,14 +50,15 @@
                     <div class$="{{getBranchClassName(item, tree.highlightedBranches)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{item.id}}" branch="[[branch]]" item="[[item]]">
                         <juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right"
                                                   checked="{{getIsExpanded(expanded, item)}}" item="[[item]]" on-click="setIsExpanded"></juicy-toggle-icon-button>
-                        <template is="dom-if" if="{{!getIsItemEdited(tree.editItem, item)}}" restamp="true">
+                        <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                       checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
-                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(tree.editItem, item}}">
+                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item}}">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
-                                <input type="text" class="item-name {{getInputClassName(tree.editItem, item)}}" readonly?="{{!getIsItemEdited(tree.editItem, item)}}" value="{{item.itemName}}"
-                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction" />
+                                <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
+                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                                       branch="[[branch]]" item="[[item]]" />
                             </div>
                         </juicy-draggable>
                     </div>
@@ -83,6 +86,14 @@
                 },
                 expanded: {
                     type: Object
+                },
+                editItem: {
+                    type: Object,
+                    value: null
+                },
+                editBranch: {
+                    type: Object,
+                    value: null
                 }
             },
             getLiClass: function (expanded, item) {
@@ -107,7 +118,7 @@
             getInputClassName: function (editItem, item) {
                 var css = ["item-name"];
 
-                if (editItem == item) {
+                if (this.tree.editItem == item) {
                     css.push("active");
                 }
 
@@ -130,19 +141,28 @@
                 return this.tree.tapAction(ev, index);
             },
             itemNameDblclickAction: function (ev, index) {
-                return this.tree.itemNameDblclickAction(ev, index);
+                this.tree.itemNameDblclickAction(ev, index);
+
+                this.set("editItem", this.tree.editItem);
+                this.set("editBranch", this.tree.editBranch);
             },
             nameBlurAction: function (ev, index) {
-                return this.tree.nameBlurAction(ev, index);
+                this.tree.nameBlurAction(ev, index);
+
+                this.set("editItem", this.tree.editItem);
+                this.set("editBranch", this.tree.editBranch);
             },
             nameKeypressAction: function (ev, index) {
-                return this.tree.nameKeypressAction(ev, index);
+                this.tree.nameKeypressAction(ev, index);
+
+                this.set("editItem", this.tree.editItem);
+                this.set("editBranch", this.tree.editBranch);
             },
             getIsExpanded: function (expanded, item) {
                 return !!this.tree.expanded[this.tree.getFullId(item)];
             },
             getIsItemEdited: function (editItem, item) {
-                return editItem == item
+                return this.tree.editItem == item
             },
             getHasBranches: function (branch, item) {
                 return branch.branches[item.id];

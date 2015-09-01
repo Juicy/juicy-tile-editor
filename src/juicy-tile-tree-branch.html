@@ -8,8 +8,9 @@
                         checked="{{getIsExpanded(expanded, branch)}}" on-click="setIsExpanded" branch="{{branch}}"></juicy-toggle-icon-button>
                     <div on-tap="tapAction" class="txt" branch="{{branch}}" item="{{item}}">
                         <i class="jte-icon jte-icon-th-large" title="juicy-tile-list"></i>
-                        <input type="text" class$="{{getInputClassName(tree.editBranch, branch)}}" readonly?="{{!getIsBranchEdited(tree.editBranch, branch)}}" value="{{branch.node.setup.itemName}}"
-                               on-dblclick="branchNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction" />
+                        <input type="text" class$="{{getInputClassName(editBranch, branch)}}" readonly$="{{!getIsBranchEdited(editBranch, branch)}}" value="{{branch.node.setup.itemName::change}}"
+                               on-dblclick="branchNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                               branch="{{branch}}" />
                     </div>
                 </div>
                 <ul class="branch">
@@ -35,6 +36,10 @@
                 },
                 branches: {
                     type: Array
+                },
+                editBranch: {
+                    type: Object,
+                    value: null
                 }
             },
             getLiClass: function (expanded, branch) {
@@ -55,7 +60,7 @@
             getInputClassName: function (editBranch, branch) {
                 var css = ["item-name"];
                 
-                if (editBranch == branch) {
+                if (this.tree.editBranch == branch) {
                     css.push("active");
                 }
 
@@ -80,13 +85,16 @@
                 return this.tree.tapAction(ev, index);
             },
             nameBlurAction: function (ev, index) {
-                return this.tree.nameBlurAction(ev, index);
+                this.tree.nameBlurAction(ev, index);
+                this.set("editBranch", this.tree.editBranch);
             },
             nameKeypressAction: function (ev, index) {
-                return this.tree.nameKeypressAction(ev, index);
+                this.tree.nameKeypressAction(ev, index);
+                this.set("editBranch", this.tree.editBranch);
             },
             branchNameDblclickAction: function (ev, index) {
-                return this.tree.branchNameDblclickAction(ev, index);
+                this.tree.branchNameDblclickAction(ev, index);
+                this.set("editBranch", this.tree.editBranch);
             },
             setIsExpanded: function (ev, index) {
                 var branch = ev.currentTarget.branch;

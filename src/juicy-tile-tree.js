@@ -69,11 +69,15 @@
             var item = ev.currentTarget.item;
 
             if (property == "item") {
-                this.editItem = model.item;
-                this.editBranch = null;
+                this.set("editItem", item);
+                this.set("editBranch", null);
+                //this.editItem = model.item;
+                //this.editBranch = null;
             } else {
-                this.editItem = null;
-                this.editBranch = model.branch;
+                this.set("editItem", null);
+                this.set("editBranch", branch);
+                //this.editItem = null;
+                //this.editBranch = model.branch;
             }
 
             target.focus();
@@ -104,7 +108,7 @@
             if (isNestedTiles) {
                 this.fire(eventName, { branch: branch.node.setup, tiles: branch.node });
             } else {
-                this.fire(eventName, { branch: item, tiles: branch.node });
+                this.fire(eventName, { branch: item || branch.node.setup, tiles: branch.node });
             }
         },
         hoverAction: function (ev, index) {
