@@ -185,10 +185,10 @@
                                 editedtiles="{{editedTiles}}"
                                 tilelists="{{tileLists}}"
                                 modified="{{modified}}"
-                                on-juicy-tile-editor-revert="{{revertAction}}"
-                                on-juicy-tile-editor-form-tree-changed="{{treeChangedAction}}"
-                                on-juicy-tile-editor-clear="{{clearAction}}"
-                                on-juicy-tile-editor-form-close="{{closeClick}}"></juicy-tile-editor-form>
+                                on-juicy-tile-editor-revert="revertAction"
+                                on-juicy-tile-editor-form-tree-changed="treeChangedAction"
+                                on-juicy-tile-editor-clear="clearAction"
+                                on-juicy-tile-editor-form-close="closeClick"></juicy-tile-editor-form>
 
         <juicy-draggable elementid="sidebar" handleid="sidebarHeader" position="fixed" id="sidebarDrag">
             <juicy-resizable righthandle=".resize-right" lefthandle=".resize-left" id="sidebarResize">
@@ -196,28 +196,28 @@
                     <div class="resize-right"></div>
                     <div class="resize-left"></div>
                     <span class="actions">
-                        <a href="javascript:" title="Expand all items" on-click="{{expandAll}}">
+                        <a href="javascript:" title="Expand all items" on-click="expandAll">
                             <i class="jte-icon-angle-down"></i>
                         </a>
-                        <a href="javascript:" title="Collapse all items" on-click="{{collapseAll}}">
+                        <a href="javascript:" title="Collapse all items" on-click="collapseAll">
                             <i class="jte-icon-angle-up"></i>
                         </a>
-                        <a href="javascript:" title="Unhide all elements" on-click="{{unhideAll}}">
+                        <a href="javascript:" title="Unhide all elements" on-click="unhideAll">
                             <i class="jte-icon-eye"></i>
                         </a>
                     </span>
                     <h1 id="sidebarHeader">
                         Elements
                     </h1>
-                    <juicy-tile-tree id="treeView" tree="{{ tree }}"
-                                     on-juicy-tile-tree-highlight="{{treeHighlightAction}}"
-                                     on-juicy-tile-tree-highlight-extend="{{treeHighlightExtendAction}}"
-                                     on-juicy-tile-tree-highlight-remove="{{treeHighlightRemoveAction}}"
-                                     on-juicy-tile-tree-refresh-tile-list="{{refreshTileList}}"
-                                     on-juicy-tile-tree-hover="{{treeHoverAction}}"
-                                     on-juicy-tile-tree-blur="{{treeBlurAction}}"
-                                     on-juicy-tile-tree-drag-item-stop="{{treeItemDragStop}}"
-                                     on-juicy-tile-tree-item-name-changed="{{refreshForm}}"></juicy-tile-tree>
+                    <juicy-tile-tree id="treeView" tree="{{tree}}"
+                                     on-juicy-tile-tree-highlight="treeHighlightAction"
+                                     on-juicy-tile-tree-highlight-extend="treeHighlightExtendAction"
+                                     on-juicy-tile-tree-highlight-remove="treeHighlightRemoveAction"
+                                     on-juicy-tile-tree-refresh-tile-list="refreshTileList"
+                                     on-juicy-tile-tree-hover="treeHoverAction"
+                                     on-juicy-tile-tree-blur="treeBlurAction"
+                                     on-juicy-tile-tree-drag-item-stop="treeItemDragStop"
+                                     on-juicy-tile-tree-item-name-changed="refreshForm"></juicy-tile-tree>
                 </div>
             </juicy-resizable>
         </juicy-draggable>

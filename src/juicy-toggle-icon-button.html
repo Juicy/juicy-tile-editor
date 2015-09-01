@@ -11,40 +11,41 @@
             input {
                 display: none;
             }
+
+            label {
+                cursor: pointer;
+            }
         </style>
         <label>
-            <template if="{{checked}}">
-                <i class="jte-icon {{iconOn}}"></i>
+            <template is="dom-if" if="{{checked}}" restamp="true">
+                <i class$="{{getOnClass(checked, iconOn)}}"></i>
             </template>
-            <template if="{{!checked}}">
-                <i class="jte-icon {{iconOff}}"></i>
+            <template is="dom-if" if="{{!checked}}" restamp="true">
+                <i class$="{{getOffClass(checked, iconOff)}}"></i>
             </template>
-            <input type="checkbox"
-                   checked="{{checked}}"
-                   disabled?="{{disabled}}"
-                   value="{{value}}">
-            <!-- value="[[value]]"> -->
+            <input type="checkbox" checked="{{checked::change}}" disabled?="{{disabled}}" value="{{value}}" />
         </label>
     </template>
     <script>
         Polymer({
             is: "juicy-toggle-icon-button",
-            publish: {
-                checked: {
-                    value: false,
-                    reflect: true
-                },
-                disabled: {
-                    value: false,
-                    reflect: true
-                }
+            ready: function () {
             },
             properties: {
                 iconOn: { type: String },
                 iconOff: { type: String },
-                checked: { type: Boolean },
-                disabled: { type: Boolean },
+                checked: { type: Boolean, value: false, observer: "checkedChanged" },
+                disabled: { type: Boolean, value: false },
                 value: { type: String }
+            },
+            getOnClass: function (checked, icon) {
+                return ["jte-icon", this.iconOn].join(" ");
+            },
+            getOffClass: function (checked, icon) {
+                return ["jte-icon", this.iconOff].join(" ");
+            },
+            checkedChanged: function () {
+                this.fire("change");
             }
         });
     </script>

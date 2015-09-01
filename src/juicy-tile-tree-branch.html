@@ -1,0 +1,108 @@
+﻿<dom-module id="juicy-tile-tree-branch">
+    <template>
+        <template is="dom-repeat" items="{{branches}}" as="branch" id="recursive">
+            <!-- branch -->
+            <li class$="{{getLiClass(expanded, branch)}}">
+                <div class$="{{getBranchClassName(branch)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{toRootName(branch.node)}}" branch="{{branch}}" item="{{item}}">
+                    <juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right" 
+                        checked="{{getIsExpanded(tree, branch)}}" on-change="setIsExpanded" branch="{{branch}}"></juicy-toggle-icon-button>
+                    <div on-tap="tapAction" class="txt" branch="{{branch}}" item="{{item}}">
+                        <i class="jte-icon jte-icon-th-large" title="juicy-tile-list"></i>
+                        <input type="text" class$="{{getInputClassName(tree.editBranch, branch)}}" readonly?="{{!getIsBranchEdited(tree.editBranch, branch)}}" value="{{branch.node.setup.itemName}}"
+                               on-dblclick="branchNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction" />
+                    </div>
+                </div>
+                <ul class="branch">
+                    <template is="dom-repeat" items="{{branch.node.setup.items}}" as="item" id="item">
+                        <juicy-tile-tree-item tree="{{tree}}" expanded="{{expanded}}" branch="{{branch}}" item="{{item}}"></juicy-tile-tree-item>
+                    </template>
+                </ul>
+            </li>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: "juicy-tile-tree-branch",
+            attached: function () {
+                debugger;
+            },
+            properties: {
+                tree: {
+                    type: Object
+                },
+                expanded: {
+                    type: Object,
+                    notify: true
+                },
+                branches: {
+                    type: Array
+                }
+            },
+            getLiClass: function (expanded, branch) {
+                var css = ["drop"];
+                var id = this.tree.toRootName(branch.node);
+
+                if (this.expanded[id]) {
+                    css.push("exapnded");
+                } else {
+                    css.push("collapsed");
+                }
+
+                return css.join(" ");
+            },
+            getBranchClassName: function (branch) {
+                return this.tree.getBranchClassName(branch);
+            },
+            getInputClassName: function (editBranch, branch) {
+                var css = ["item-name"];
+                
+                if (editBranch == branch) {
+                    css.push("active");
+                }
+
+                return css.join(" ");
+            },
+            toRootName: function (node) {
+                return this.tree.toRootName(node);
+            },
+            getIsExpanded: function (tree, branch) {
+                return !!this.expanded[tree.toRootName(branch.node)];
+            },
+            getIsBranchEdited: function (editBranch, branch) {
+                return editBranch == branch;
+            },
+            hoverAction: function (ev, index) {
+                return this.tree.hoverAction(ev, index);
+            },
+            blurAction: function (ev, index, target) {
+                return this.tree.blurAction(ev, index);
+            },
+            tapAction: function (ev, index, target) {
+                return this.tree.tapAction(ev, index);
+            },
+            nameBlurAction: function (ev, index) {
+                return this.tree.nameBlurAction(ev, index);
+            },
+            nameKeypressAction: function (ev, index) {
+                return this.tree.nameKeypressAction(ev, index);
+            },
+            branchNameDblclickAction: function (ev, index) {
+                return this.tree.branchNameDblclickAction(ev, index);
+            },
+            setIsExpanded: function (ev, index) {
+                var branch = ev.currentTarget.branch;
+
+                if (!branch) {
+                    return;
+                }
+
+                var value = ev.currentTarget.checked;
+                var id = this.tree.toRootName(branch.node);
+
+                this.expanded[id] = value;
+                this.notifyPath("expanded", {});
+                this.notifyPath("expanded", this.expanded);
+            }
+        });
+    </script>
+</dom-module>
