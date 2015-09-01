@@ -34,7 +34,7 @@
             properties: {
                 iconOn: { type: String },
                 iconOff: { type: String },
-                checked: { type: Boolean, value: false, observer: "checkedChanged" },
+                checked: { type: Boolean, value: false, observer: "checkedChanged", reflectToAttribute: true },
                 disabled: { type: Boolean, value: false },
                 value: { type: String }
             },

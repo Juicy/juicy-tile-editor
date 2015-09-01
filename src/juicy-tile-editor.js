@@ -490,10 +490,12 @@
         clearAction: function () {
             this.treeChangedAction();
         },
-        treeHighlightAction: function (item, tileList) {
-            if (item.detail) {  //is tree event
-                tileList = item.detail.tiles;
-                item = item.detail.branch;
+        treeHighlightAction: function (e, tileList) {
+            var item = e;
+
+            if (e.detail) {  //is tree event
+                tileList = e.detail.tiles;
+                item = e.detail.branch;
             }
             this.editedTiles = tileList;
             var tile = tileList.tiles[item.id];

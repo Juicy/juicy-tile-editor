@@ -30,7 +30,7 @@
         tapAction: function (ev, index) {
             var eventName;
             var branch = ev.currentTarget.branch;
-            var item = ev.currentTarget.item;
+            var item = ev.currentTarget.item || branch;
             var isNestedTiles = this.isNestedTilesLabel(ev.currentTarget);
             if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 if (this.isBranchHighlighted(item)) {
@@ -169,7 +169,7 @@
 
                     if (isNestedTiles && elem.branch.node.setup == branch) {
                         that.highlightElement(elem);
-                    } else if (!isNestedTiles && elem.item == branch) {
+                    } else if (!isNestedTiles && (elem.item == branch || (!elem.item && elem.branch == branch))) {
                         that.highlightElement(elem);
                     } else if (!expand) {
                         elem.classList.remove("highlight");

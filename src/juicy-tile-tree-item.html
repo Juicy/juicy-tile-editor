@@ -9,7 +9,7 @@
                                                 checked="{{getIsExpanded(expanded, item)}}" on-click="setIsExpanded" item="[[item]]"></juicy-toggle-icon-button>
                     <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                         <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
-                                                  checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
+                                                  checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                     </template>
                     <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
                         <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
@@ -34,7 +34,7 @@
                     <div class$="{{getBranchClassName(item, tree.highlightedBranches)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{item.id}}" branch="[[branch]]" item="[[item]]">
                         <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
-                                                      checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
+                                                      checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
                         <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
@@ -52,7 +52,7 @@
                                                   checked="{{getIsExpanded(expanded, item)}}" item="[[item]]" on-click="setIsExpanded"></juicy-toggle-icon-button>
                         <template is="dom-if" if="{{!getIsItemEdited(editItem, item)}}" restamp="true">
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
-                                                      checked="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
+                                                      checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
                         <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item}}">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
