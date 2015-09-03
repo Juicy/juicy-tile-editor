@@ -97,19 +97,7 @@
                 this.set("editBranch", this.tree.editBranch);
             },
             setIsExpanded: function (ev, index) {
-                var branch = ev.currentTarget.branch;
-
-                if (!branch) {
-                    return;
-                }
-
-                var value = ev.currentTarget.checked;
-                var id = this.tree.toRootName(branch.node);
-                var expanded = this.tree.expanded;
-
-                expanded[id] = value;
-                this.tree.notifyPath("expanded", {});
-                this.tree.notifyPath("expanded", expanded);
+                return this.tree.setIsExpanded(ev.currentTarget.branch, null, ev.currentTarget.checked);
             }
         });
     </script>

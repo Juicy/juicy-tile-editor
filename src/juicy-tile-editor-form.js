@@ -130,7 +130,9 @@
             var model = this.editedTiles;
             var elements = [];
             for (var i = 0, ilen = container.items.length; i < ilen; i++) {
-                if (container.items[i].id) {
+                var id = container.items[i].id;
+                
+                if (typeof id !== "undefined" && id !== null) {
                     elements.push(model.tiles[container.items[i].id]);
                 }
             }

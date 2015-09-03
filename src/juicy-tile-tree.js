@@ -177,33 +177,49 @@
                 }.bind(that));
             });
         },
+        setIsExpanded: function (branch, item, value) {
+            var expanded = this.expanded;
+            var id;
+
+            if (branch) {
+                id = this.toRootName(branch.node);
+            } else if (item) {
+                id = this.getFullId(item);
+            }
+
+            expanded[id] = value;
+            this.notifyPath("expanded", {});
+            this.notifyPath("expanded", expanded);
+        },
         openBranch: function (branch) {
-            var that = this;
             var element = null;
 
-            Array.prototype.forEach.call(that.$.root.querySelectorAll('.element-label'), function (elem) {
+            Array.prototype.forEach.call(this.$.root.querySelectorAll('.element-label'), function (elem) {
                 var isNestedTiles = this.isNestedTilesLabel(elem);
-                var branch = elem.branch;
-                var item = elem.item;
 
-                if (isNestedTiles && branch.node.setup == branch) {
+                if (isNestedTiles && elem.branch.node.setup == branch) {
                     element = elem;
-                } else if (!isNestedTiles && item == branch) {
+                } else if (!isNestedTiles && elem.item == branch) {
                     element = elem;
                 }
-            }.bind(that));
+            }.bind(this));
 
             while (element) {
                 if (element.tagName == "LI") {
                     var btn = element.querySelector(".expand");
 
                     if (btn) {
-                        btn.setAttribute("checked", "checked");
+                        this.setIsExpanded(btn.branch, btn.item, true);
                     }
                 }
 
                 element = element.parentNode;
             }
+
+            var expanded = this.expanded;
+            this.expanded[branch.id] = true;
+            this.notifyPath("expanded", {});
+            this.notifyPath("expanded", expanded);
         },
         unhighlightBranch: function (branch) {
             //this.highlightedBranches.splice(this.highlightedBranches.indexOf(branch), 1);
