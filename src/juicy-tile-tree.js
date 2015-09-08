@@ -230,7 +230,7 @@
                 css.push("highlight");
             }
 
-            if ((branch.items && branch.items.length) || (branch.node && branch.node.setup.items.length)) {
+            if (branch.items || (branch.node && branch.node.setup.items)) {
                 css.push("drop-item");
             }
 
