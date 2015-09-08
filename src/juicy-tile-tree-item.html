@@ -11,7 +11,8 @@
                         <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                   checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                     </template>
-                    <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
+                    <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}"
+                                    branch="[[branch]]" item="[[item]]">
                         <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
                             <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
                                     on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
@@ -36,11 +37,12 @@
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                       checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
-                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}">
+                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item)}}"
+                                        branch="[[branch]]" item="[[item]]">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
                                 <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
-                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
-                                       branch="[[branch]]" item="[[item]]" />
+                                        on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                                        branch="[[branch]]" item="[[item]]" />
                             </div>
                         </juicy-draggable>
                     </div>
@@ -54,11 +56,12 @@
                             <juicy-toggle-icon-button class="visibility" on-click="setVisibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off"
                                                       checked$="[[getVisibility(item, item.hidden)]]" value="[[item.itemName]]" item="[[item]]"></juicy-toggle-icon-button>
                         </template>
-                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item}}">
+                        <juicy-draggable on-juicy-draggable-stop="itemDragStop" position="static" dropselector="html /deep/ ul.branch li .drop-item" disabled?="{{getIsItemEdited(editItem, item}}"
+                                        branch="[[branch]]" item="[[item]]">
                             <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
                                 <input type="text" class$="{{getInputClassName(editItem, item)}}" readonly$="{{!getIsItemEdited(editItem, item)}}" value="{{item.itemName::change}}"
-                                       on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
-                                       branch="[[branch]]" item="[[item]]" />
+                                        on-dblclick="itemNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
+                                        branch="[[branch]]" item="[[item]]" />
                             </div>
                         </juicy-draggable>
                     </div>

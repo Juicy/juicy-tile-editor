@@ -230,6 +230,10 @@
                 css.push("highlight");
             }
 
+            if ((branch.items && branch.items.length) || (branch.node && branch.node.setup.items.length)) {
+                css.push("drop-item");
+            }
+
             return css.join(" ");
         },
         /*preventTextSelection: function(ev) {

@@ -44,7 +44,7 @@
             isRoot: { type: Boolean, value: false },
             isGroupable: { type: Boolean, value: false },
             selectedItems: { type: Array, value: [], observer: "selectedItemsChanged" },
-            editedTiles: { type: Array, value: null },
+            editedTiles: { type: Object, value: null },
             tileLists: { type: Array, value: null },
             modified: { type: Boolean, value: false },
             height: { type: String, observer: "heightChanged" },
