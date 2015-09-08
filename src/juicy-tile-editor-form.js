@@ -184,7 +184,7 @@
                 return;
             }
 
-            var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+            var tile = this.getSelectedTile();
             var item = this.selectedItems[0];
 
             this.set("precalculateWidth", true);
@@ -228,7 +228,7 @@
                 return;
             }
 
-            var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+            var tile = this.getSelectedTile();
             var item = this.selectedItems[0];
 
             this.set("precalculateHeight", true);
@@ -528,7 +528,7 @@
                 this.actualWidth = "N/A";
                 this.actualHeight = "N/A";
             } else {
-                var tile = this.editedTiles.tiles[this.selectedItems[0].id];
+                var tile = this.getSelectedTile();
                 var rec = tile.getBoundingClientRect();
                 this.actualWidth = parseInt(rec.width) + "px";
                 this.actualHeight = parseInt(rec.height) + "px";
@@ -551,6 +551,21 @@
         },
         getIsJuicyTileList: function (tagName) {
             return tagName == "JUICY-TILE-LIST";
+        },
+        getTileId: function (tile) {
+            var id = tile.id;
+
+            if (typeof id === "undefined" || id === null) {
+                id = tile.node.setup.id;
+            }
+
+            return id;
+        },
+        getSelectedTile: function () {
+            var id = this.getTileId(this.selectedItems[0]);
+            var tile = this.editedTiles.tiles[id];
+            
+            return tile;
         }
     });
 })();

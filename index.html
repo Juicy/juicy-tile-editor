@@ -15,7 +15,7 @@
     <link rel="import" href="src/juicy-tile-editor.html">
 
     <link rel="import" href="../core-localstorage/core-localstorage.html">
-    
+
     <style>
         body {
             padding: 50px 20px 20px 20px;
@@ -90,7 +90,7 @@
                 </div>
                 <script>
                     document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
-                        e.target.templateInstance.model.editingMode = false;
+                        document.querySelector("template#root").set("model.editingMode", false);
                     });
                 </script>
             </template>
@@ -132,16 +132,18 @@
                         </juicy-tile-list>
                     </section>
                 </div>
-                <juicy-tile-list setup="{{model.setup2}}">
-                    <div>Subitem 0 </div>
-                    <div>
-                        <button>Subitem 1</button>
-                    </div>
-                    <div>
-                        <input value="Subitem2">
-                    </div>
-                    <section>Subitem 3</section>
-                </juicy-tile-list>
+                <div>
+                    <juicy-tile-list setup="{{model.setup2}}">
+                        <div>Subitem 0 </div>
+                        <div>
+                            <button>Subitem 1</button>
+                        </div>
+                        <div>
+                            <input value="Subitem2">
+                        </div>
+                        <section>Subitem 3</section>
+                    </juicy-tile-list>
+                </div>
             </juicy-tile-list>
         </template>
         <script type="text/javascript">
@@ -150,7 +152,16 @@
                 setup: {
                     gutter: 16,
                     items: [
-                      { "width": 128, "height": 100, "priority": 0.5, "id": 0, hidden: false },
+                        /*{
+                            gutter: 0,
+                            height: 100,
+                            id: "root_0",
+                            itemName: "Group 2",
+                            items: [{ "width": 128, "height": 100, "priority": 0.5, "id": 0, hidden: false }],
+                            priority: 0.5,
+                            width: "100%"
+                        },*/
+                        { "width": 128, "height": 100, "priority": 0.5, "id": 0, hidden: false },
                       {
                           "width": 512, "height": 100, "priority": 0.48, "gutter": 8,
                           "innerHTML": "<div style=\"background: rgba(191, 81, 236, 0.5); position: relative; top: -8px; left: -8px; height: calc(100% + 2 * 8px ); width: calc(100% + 2 * 8px ); font-size: 100px;\"></div>",

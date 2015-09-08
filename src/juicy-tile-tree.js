@@ -31,7 +31,7 @@
             var eventName;
             var branch = ev.currentTarget.branch;
             var item = ev.currentTarget.item || branch;
-            var isNestedTiles = this.isNestedTilesLabel(ev.currentTarget);
+            var isBranchTile = this.isBranchLabel(ev.currentTarget);
             if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
                 if (this.isBranchHighlighted(item)) {
                     eventName = 'juicy-tile-tree-highlight-remove';
@@ -44,14 +44,14 @@
             }
             else {
                 eventName = 'juicy-tile-tree-highlight';
-                if (isNestedTiles) {
+                if (isBranchTile) {
                     this.highlightBranch(branch.node.setup);
                 }
                 else {
                     this.highlightBranch(item);
                 }
             }
-            if (isNestedTiles) {
+            if (isBranchTile) {
                 this.fire(eventName, { branch: branch.node.setup, tiles: branch.node });
             }
             else {
@@ -103,9 +103,9 @@
         hoverBlurAction: function (eventName, ev, index) {
             var branch = ev.currentTarget.branch;
             var item = ev.currentTarget.item;
-            var isNestedTiles = this.isNestedTilesLabel(ev.currentTarget);
+            var isBranchTile = this.isBranchLabel(ev.currentTarget);
 
-            if (isNestedTiles) {
+            if (isBranchTile) {
                 this.fire(eventName, { branch: branch.node.setup, tiles: branch.node });
             } else {
                 this.fire(eventName, { branch: item || branch.node.setup, tiles: branch.node });
@@ -117,24 +117,12 @@
         blurAction: function (ev, index) {
             this.hoverBlurAction("juicy-tile-tree-blur", ev, index);
         },
-        isNestedTilesLabel: function (elem) {
-            var branch = elem.branch;
-            var item = elem.item;
-
-            //if (branch && branch.node && branch.node.setup) {
-            if (branch.items) {
-                return true;
-            } else {
-                return false;
-            }
-
-            /*var model = elem.templateInstance.model;
-            var proto = Object.getPrototypeOf(model);
-
-            if (model.item === proto.item) { //a nested tiles (item is inherited from prototype)
+        isBranchLabel: function (elem) {
+            if (elem.classList.contains("juicy-tile-tree-branch")) {
                 return true;
             }
-            return false; //a branch of a leaf (branch is inherited from prototype)*/
+
+            return false;
         },
         highlightElement: function (elem) {
             var top = 0;
@@ -165,11 +153,11 @@
             setTimeout(function () {
                 //I need to refresh element classes imperatively because Polymer only observes on filter parameter changes [warpech]
                 Array.prototype.forEach.call(that.$.root.querySelectorAll('.element-label'), function (elem) {
-                    var isNestedTiles = this.isNestedTilesLabel(elem);
+                    var isBranchTile = this.isBranchLabel(elem);
 
-                    if (isNestedTiles && elem.branch.node.setup == branch) {
+                    if (isBranchTile && elem.branch.node.setup == branch) {
                         that.highlightElement(elem);
-                    } else if (!isNestedTiles && (elem.item == branch || (!elem.item && elem.branch == branch))) {
+                    } else if (!isBranchTile && (elem.item == branch || (!elem.item && elem.branch == branch))) {
                         that.highlightElement(elem);
                     } else if (!expand) {
                         elem.classList.remove("highlight");
@@ -195,11 +183,11 @@
             var element = null;
 
             Array.prototype.forEach.call(this.$.root.querySelectorAll('.element-label'), function (elem) {
-                var isNestedTiles = this.isNestedTilesLabel(elem);
+                var isBranchTile = this.isBranchLabel(elem);
 
-                if (isNestedTiles && elem.branch.node.setup == branch) {
+                if (isBranchTile && elem.branch.node.setup == branch) {
                     element = elem;
-                } else if (!isNestedTiles && elem.item == branch) {
+                } else if (!isBranchTile && elem.item == branch) {
                     element = elem;
                 }
             }.bind(this));
@@ -259,7 +247,7 @@
             var branch = null;
             var item = e.currentTarget.item;
 
-            if (this.isNestedTilesLabel(e.detail.dropElement)) {
+            if (this.isBranchLabel(e.detail.dropElement)) {
                 branch = e.detail.dropElement.branch.node.setup;
             } else {
                 branch = e.detail.dropElement.item;

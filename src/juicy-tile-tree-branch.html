@@ -3,18 +3,18 @@
         <template is="dom-repeat" items="{{branches}}" as="branch" id="recursive">
             <!-- branch -->
             <li class$="{{getLiClass(expanded, branch)}}">
-                <div class$="{{getBranchClassName(branch)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{toRootName(branch.node)}}" branch="{{branch}}" item="{{item}}">
+                <div class$="{{getBranchClassName(branch)}}" on-mouseover="hoverAction" on-mouseout="blurAction" title="{{toRootName(branch.node)}}" branch="[[branch]]" item="[[item]]">
                     <juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right" 
-                        checked="{{getIsExpanded(expanded, branch)}}" on-click="setIsExpanded" branch="{{branch}}"></juicy-toggle-icon-button>
-                    <div on-tap="tapAction" class="txt" branch="{{branch}}" item="{{item}}">
+                        checked="{{getIsExpanded(expanded, branch)}}" on-click="setIsExpanded" branch="[[branch]]"></juicy-toggle-icon-button>
+                    <div on-tap="tapAction" class="txt" branch="[[branch]]" item="[[item]]">
                         <i class="jte-icon jte-icon-th-large" title="juicy-tile-list"></i>
                         <input type="text" class$="{{getInputClassName(editBranch, branch)}}" readonly$="{{!getIsBranchEdited(editBranch, branch)}}" value="{{branch.node.setup.itemName::change}}"
                                on-dblclick="branchNameDblclickAction" on-blur="nameBlurAction" on-keypress="nameKeypressAction"
-                               branch="{{branch}}" />
+                               branch="[[branch]]" />
                     </div>
                 </div>
                 <ul class="branch">
-                    <template is="dom-repeat" items="{{branch.node.setup.items}}" as="item" id="item">
+                    <template is="dom-repeat" items="[[getBranchItems(branch, branch.node.setup.items)]]" as="item" id="item">
                         <juicy-tile-tree-item tree="[[tree]]" expanded="[[expanded]]" branch="[[branch]]" item="[[item]]"></juicy-tile-tree-item>
                     </template>
                 </ul>
@@ -41,6 +41,9 @@
                     type: Object,
                     value: null
                 }
+            },
+            getBranchItems: function (branch) {
+                return branch.node.setup.items;
             },
             getLiClass: function (expanded, branch) {
                 var css = ["drop"];

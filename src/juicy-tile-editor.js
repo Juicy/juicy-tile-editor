@@ -543,7 +543,7 @@
             // notify observer/two-way-binding/tempalte only once
             // Idea calculate this only once
             if (!this.tree.length) {
-                this.tree = reducedInductedSpanningTree(this.tileLists);
+                this.set("tree", reducedInductedSpanningTree(this.tileLists));
             }
 
             for (var i = 0; i < this.tree.length; i++) {
