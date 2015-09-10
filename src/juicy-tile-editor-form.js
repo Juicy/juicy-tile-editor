@@ -30,7 +30,7 @@
             precalculateHeight: { type: Boolean, value: null },
             heightFlexible: { type: Boolean, value: null },
             heightDynamic: { type: Boolean, value: null },
-            gutter: { type: Number, value: null },
+            gutter: { type: Number, value: 0, observer: "gutterChanged" },
             tightGroup: { type: Boolean, value: null },
             rightToLeft: { type: Boolean, value: null },
             bottomUp: { type: Boolean, value: null },
@@ -294,6 +294,9 @@
             this.selectedItems[0].bottomUp = value;
             this.set("bottomUp", value);
             this.refresh();
+        },
+        gutterChanged: function () {
+            this.set("gutter", this.toNumber.toModel(this.gutter));
         },
         isContainerInSelection: function () {
             for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {

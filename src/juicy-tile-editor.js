@@ -389,7 +389,6 @@
                     ev.preventDefault();
                     ev.stopImmediatePropagation();
 
-                    editor.treeRefresh();
                     // TODO(tomalec) unify  .allItems and .tiles
                     var highlightedItem = this.allItems[editor.highlightedTile.id];
                     if (ev.ctrlKey || ev.metaKey || ev.shiftKey) {
