@@ -1,17 +1,385 @@
-<link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="juicy-toggle-icon-button.html" />
-<link rel="import" href="juicy-draggable.html" />
-<link rel="import" href="juicy-tile-tree-item.html" />
-<link rel="import" href="juicy-tile-tree-branch.html" />
+﻿<link href="juicy-toggle-icon-button.html" rel="import" />
+<link href="css/jte-fontawesome.css" rel="stylesheet" />
+<link href="css/juicy-tile-tree.css" rel="stylesheet" />
 
-<dom-module id="juicy-tile-tree">
-    <template>
-        <link href="css/jte-fontawesome.css" rel="stylesheet" />
-        <link href="css/juicy-tile-tree.css" rel="stylesheet" />
-        <ul id="root" class="branch">
-            <juicy-tile-tree-branch tree="[[that]]" expanded="[[expanded]]" branches="[[tree]]"></juicy-tile-tree-branch>
-        </ul>
-        <shadow></shadow>
-    </template>
-    <script src="juicy-tile-tree.js"></script>
-</dom-module>
+<template id="juicy-tile-tree">
+    <ul id="container" class="juicy-tile-tree branch"></ul>
+</template>
+<script>
+    (function (scriptDocument) {
+        var JuicyTileTreePrototype = Object.create(HTMLElement.prototype);
+        var proto = JuicyTileTreePrototype;
+
+        proto.expanded = {};
+        proto.highlighted = {};
+        proto.activeUid = null;
+
+        proto.createdCallback = function () {
+        };
+
+        proto.attachedCallback = function () {
+            var root = this;//.createShadowRoot();
+            var template = scriptDocument.querySelector("#juicy-tile-tree");
+            var clone = document.importNode(template.content, true);
+
+            root.appendChild(clone);
+            this.$ = {
+                container: root.querySelector("#container")
+            };
+        };
+
+        proto.detachedCallback = function () {
+        };
+
+        proto.attributeChangedCallback = function (name, oldVal, newVal) {
+        };
+
+        proto.getBranchClass = function (branch) {
+            var css = ["drop"];
+            var uid = branch.uid;
+
+            if (this.expanded[uid]) {
+                css.push("expanded");
+            } else {
+                css.push("collapsed");
+            }
+
+            return css.join(" ");
+        };
+
+        proto.getLabelClass = function (item) {
+            var css = ["element-label"];
+
+            if (this.highlighted[item.uid]) {
+                css.push("highlight");
+            }
+
+            if (item.branches || item.items) {
+                css.push("drop-item");
+            }
+
+            return css.join(" ");
+        }
+
+        proto.getBranchInputClass = function (branch) {
+            var css = ["item-name"];
+
+            if (this.activeUid == branch.uid) {
+                css.push("active");
+            }
+
+            return css.join(" ");
+        };
+
+        proto.renderItem = function (item) {
+            var html = [];
+
+            html.push('<li data-uid="', item.uid, '" class="', this.getBranchClass(item), '">');
+
+            html.push('<div class="', this.getLabelClass(item), '" title="', item.title, '" data-uid="', item.uid, '">');
+
+            if (item.items || item.branches) {
+                html.push('<juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right"');
+
+                if (this.expanded[item.uid]) {
+                    html.push(' checked="checked"');
+                }
+
+                html.push('></juicy-toggle-icon-button>');
+            }
+
+            html.push('<juicy-toggle-icon-button class="visibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off" value="', item.name, '"></juicy-toggle-icon-button>');
+            html.push('<juicy-draggable position="static" dropselector="html /deep/ ul.branch li .drop-item"');
+
+            if (this.activeUid == item.uid) {
+                html.push(' disabled="true"');
+            }
+
+            html.push('>');
+            html.push('<div class="txt" data-uid="', item.uid, '">');
+            html.push('<input data-uid="', item.uid, '" type="text" class="', this.getBranchInputClass(item), '" ');
+
+            if (this.activeUid != item.uid) {
+                html.push('readonly="readonly" ');
+            }
+
+            html.push('value="', item.name, '" />');
+            html.push('</div></juicy-draggable></div>');
+
+            if (item.items) {
+                html.push('<ul class="juicy-tile-tree group">');
+
+                for (var i = 0; i < item.items.length; i++) {
+                    html.push(this.renderItem(item.items[i]));
+                }
+
+                html.push("</ul>");
+            } else if (item.branches) {
+                html.push('<ul class="juicy-tile-tree group">');
+
+                for (var i = 0; i < item.branches.length; i++) {
+                    html.push(this.renderBranch(item.branches[i]));
+                }
+
+                html.push("</ul>");
+            }
+
+            html.push("</li>");
+
+            return html.join("");
+        };
+
+        proto.renderBranch = function (branch) {
+            var html = [];
+
+            html.push('<li data-uid="', branch.uid, '" class="', this.getBranchClass(branch), '">');
+            html.push('<div class="', this.getLabelClass(branch), '" title="', branch.title, '" data-uid="', branch.uid, '">');
+            html.push('<juicy-toggle-icon-button class="expand" icon-on="jte-icon-angle-down" icon-off="jte-icon-angle-right" ');
+
+            if (this.expanded[branch.uid]) {
+                html.push('checked="true"');
+            }
+
+            html.push('></juicy-toggle-icon-button>');
+            html.push('<div class="txt" data-uid="', branch.uid, '">');
+            html.push('<i class="jte-icon jte-icon-th-large" title="juicy-tile-list"></i>');
+            html.push('<input data-uid="', branch.uid, '" type="text" class="', this.getBranchInputClass(branch), '" ');
+
+            if (this.activeUid != branch.uid) {
+                html.push('readonly="readonly" ');
+            }
+
+            html.push('value="', branch.name, '" />');
+            html.push('</div></div><ul class="juicy-tile-tree branch">');
+
+            for (var j = 0; j < branch.items.length; j++) {
+                html.push(this.renderItem(branch.items[j]));
+            }
+
+            html.push("</ul></li>");
+
+            return html.join("");
+        };
+
+        proto.attachEventHandlers = function () {
+            var labels = this.$.container.querySelectorAll(".element-label");
+            var expanders = this.$.container.querySelectorAll("juicy-toggle-icon-button.expand");
+            var txts = this.$.container.querySelectorAll("div.txt");
+            var inputs = this.$.container.querySelectorAll("input[type=text].item-name");
+            var visiblers = this.$.container.querySelectorAll("juicy-toggle-icon-button.visibility");
+            var draggables = this.$.container.querySelectorAll("juicy-draggable");
+
+            for (var i = 0, l = labels.length; i < l; i++) {
+                var label = labels[i];
+
+                label.addEventListener("mouseover", this.hoverAction.bind(this));
+                label.addEventListener("blurAction", this.blurAction.bind(this));
+            }
+
+            for (var i = 0, l = expanders.length; i < l; i++) {
+                var expander = expanders[i];
+
+                expander.addEventListener("click", this.setIsExpanded.bind(this));
+            }
+
+            for (var i = 0, l = txts.length; i < l; i++) {
+                var txt = txts[i];
+
+                txt.addEventListener("click", this.tapAction.bind(this));
+            }
+
+            for (var i = 0, l = inputs.length; i < l; i++) {
+                var input = inputs[i];
+
+                input.addEventListener("dblclick", this.branchNameDblclickAction.bind(this));
+                input.addEventListener("blur", this.nameBlurAction.bind(this));
+                input.addEventListener("keypress", this.nameKeypressAction.bind(this));
+            }
+
+            for (var i = 0, l = visiblers.length; i < l; i++) {
+                var visibler = visiblers[i];
+
+                visibler.addEventListener("click", this.setVisibility.bind(this));
+            }
+
+            for (var i = 0, l = draggables.length; i < l; i++) {
+                var draggable = draggables[i];
+
+                draggable.addEventListener("juicy-draggable-stop", this.itemDragStop.bind(this));
+            }
+        };
+
+        proto.render = function () {
+            var html = [];
+
+            for (var i = 0, l = this.tree.length; i < l; i++) {
+                html.push(this.renderBranch(this.tree[i]));
+            }
+
+            this.$.container.innerHTML = html.join("");
+            this.attachEventHandlers();
+        };
+
+        proto.hoverAction = function (e) {
+            var target = e.currentTarget;
+            var uid = target.dataset["uid"];
+            var e = new CustomEvent("juicy-tile-tree-hover");
+
+            e.uid = uid;
+            this.dispatchEvent(e);
+        };
+
+        proto.blurAction = function () {
+            //TODO;
+        };
+
+        proto.setIsExpanded = function (e) {
+            var target = e.currentTarget;
+            var collapsed = target.checked;
+
+            while (target && target.tagName != "LI") {
+                target = target.parentNode;
+            }
+
+            target.classList.toggle("expanded", !collapsed);
+            target.classList.toggle("collapsed", collapsed);
+            this.expanded[target.dataset["uid"]] = !collapsed;
+        };
+
+        proto.tapAction = function (e, index) {
+            var eventName;
+            var uid = e.currentTarget.dataset["uid"];
+
+            if (e.ctrlKey || e.metaKey || e.shiftKey) {
+                if (this.highlighted[uid]) {
+                    eventName = 'juicy-tile-tree-highlight-remove';
+                    this.highlighted[uid] = false;
+                } else {
+                    eventName = 'juicy-tile-tree-highlight-extend';
+                    this.highlighted[uid] = true;
+                }
+            } else {
+                this.highlighted = {};
+                this.highlighted[uid] = true;
+                eventName = 'juicy-tile-tree-highlight';
+            }
+
+            var e = new CustomEvent(eventName);
+
+            e.uid = uid;
+            this.dispatchEvent(e);
+
+            var txts = this.querySelectorAll("div.txt");
+
+            for (var i = 0; i < txts.length; i++) {
+                var container = txts[i];
+                var uid = container.dataset["uid"];
+                var is = this.highlighted[uid];
+
+                while (!container.classList.contains("element-label")) {
+                    container = container.parentNode;
+                }
+
+                container.classList.toggle("highlight", is);
+            }
+        };
+
+        proto.branchNameDblclickAction = function (e) {
+            var target = e.currentTarget;
+            var uid = target.dataset["uid"];
+
+            this.activeUid = uid;
+            target.classList.toggle("active", true);
+            target.removeAttribute("readonly");
+            target.focus();
+            target.selectionStart = 0;
+            target.selectionEnd = target.value.length;
+        };
+
+        proto.nameBlurAction = function (e) {
+            var target = e.currentTarget;
+
+            target.classList.toggle("active", false);
+            target.setAttribute("readonly", "readonly");
+            target.selectionStart = 0;
+            target.selectionEnd = 0;
+
+            if (this.activeUid) {
+                var event = new CustomEvent("juicy-tile-tree-item-name-changed");
+
+                event.uid = this.activeUid;
+                event.value = e.currentTarget.value;
+                this.activeUid = null;
+                this.dispatchEvent(event);
+            }
+        };
+
+        proto.nameKeypressAction = function (e) {
+            if (e.which == 13) {
+                this.nameBlurAction(e);
+            }
+        };
+
+        proto.setVisibility = function () {
+            //TODO;
+        };
+
+        proto.itemDragStop = function (event) {
+            if (!event.detail.dropElement) {
+                return;
+            }
+
+            var e = new CustomEvent("juicy-tile-tree-drag-item-stop");
+
+            e.dragUid = event.detail.dragElement.nextSibling.dataset["uid"];
+            e.dropUid = event.detail.dropElement.dataset["uid"];
+            this.dispatchEvent(e);
+        };
+
+        proto.openBranch = function (uid) {
+            var ids = uid.split("-");
+
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids.slice(0, i + 1).join("-");
+
+                this.expanded[id] = true;
+                
+                var li = this.querySelector("li[data-uid=" + id + "]");
+                var expander = this.querySelector("li[data-uid=" + id + "] juicy-toggle-icon-button.expand");
+
+                li.classList.toggle("collapsed", false);
+                li.classList.toggle("expanded", true);
+
+                if (expander) {
+                    expander.setAttribute("checked", true)
+                }
+            }
+        };
+
+        proto.highlightBranch = function (uid, extend) {
+            if (!extend) {
+                for (var i in this.highlighted) {
+                    var element = this.querySelector("div.element-label[data-uid=" + i + "]");
+
+                    if (element) {
+                        element.classList.toggle("highlight", false);
+                    }
+                }
+
+                this.highlighted = {};
+            }
+            
+            this.highlighted[uid] = true;
+            this.querySelector("div.element-label[data-uid=" + uid + "]").classList.toggle("highlight", true);
+        };
+
+        proto.unhighlightBranch = function (uid) {
+            this.highlighted[uid] = false;
+            this.querySelector("div.element-label[data-uid=" + uid + "]").classList.toggle("highlight", false);
+        };
+
+        window.JuicyTileTree = document.registerElement("juicy-tile-tree", {
+            prototype: JuicyTileTreePrototype
+        });
+    })(document.currentScript.ownerDocument);
+</script>

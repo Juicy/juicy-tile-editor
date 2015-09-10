@@ -260,6 +260,7 @@
 
             this.editedTiles.reprioritizeItem(this.selectedItems[0], true);
             this.set("priority", this.selectedItems[0].priority);
+            this.fire('juicy-tile-editor-form-tree-changed');
         },
         priorityDecrease: function () {
             if (!this.selectedItems.length == 1) {
@@ -268,6 +269,7 @@
 
             this.editedTiles.reprioritizeItem(this.selectedItems[0], false);
             this.set("priority", this.selectedItems[0].priority);
+            this.fire('juicy-tile-editor-form-tree-changed');
         },
         deleteContainer: function () {
             var deleteElement = this.selectedItems[0];

@@ -397,19 +397,19 @@
                             //expand group
                             var index = editor.selectedItems.indexOf(highlightedItem);
                             if (index == -1) {
-                                editor.treeHighlightExtendAction(highlightedItem);
-                                editor.$.treeView.highlightBranch(highlightedItem, true);
+                                editor.treeHighlightExtendAction(highlightedItem.uid);
+                                editor.$.treeView.highlightBranch(highlightedItem.uid, true);
                             }
                             else {
-                                editor.treeHighlightRemoveAction(highlightedItem);
-                                editor.$.treeView.unhighlightBranch(highlightedItem);
+                                editor.treeHighlightRemoveAction({ uid: highlightedItem.uid });
+                                editor.$.treeView.unhighlightBranch(highlightedItem.uid);
                             }
                         }
                     }
                     else {
-                        editor.treeHighlightAction(highlightedItem, this);
-                        editor.$.treeView.openBranch(highlightedItem);
-                        editor.$.treeView.highlightBranch(highlightedItem);
+                        editor.treeHighlightAction({ uid: highlightedItem.uid });
+                        editor.$.treeView.openBranch(highlightedItem.uid);
+                        editor.$.treeView.highlightBranch(highlightedItem.uid);
                     }
                 }
             };
@@ -490,16 +490,12 @@
         clearAction: function () {
             this.treeChangedAction();
         },
-        treeHighlightAction: function (e, tileList) {
-            var item = e;
+        treeHighlightAction: function (e) {
+            var obj = this.treeCollectionDictionary[e.uid];
+            var item = obj.item || obj.branch;
+            var tile = this.getTileFromDictionary(e.uid);
 
-            if (e.detail) {  //is tree event
-                tileList = e.detail.tiles;
-                item = e.detail.branch;
-            }
-
-            this.editedTiles = tileList;
-            var tile = tileList.tiles[item.id];
+            this.editedTiles = obj.tileList;
             this.$.tileEdited.show(tile, this.getHighlightContent.bind(this));
             this.$.tileSelected.hide();
             this.selectedItems.length = 0;
@@ -510,18 +506,11 @@
 
             this.$.form.selectedItemsChanged(this.selectedItems, this.selectedItems);
         },
-        treeHoverAction: function (e, tileList) {
-            var item = e;
-
-            if (e.detail) {  //is tree event
-                tileList = e.detail.tiles;
-                item = e.detail.branch;
-            }
-
-            var tile = tileList.tiles[item.id];
+        treeHoverAction: function (e) {
+            var tile = this.getTileFromDictionary(e.uid);
             this.$.tileRollover.show(tile);
         },
-        treeBlurAction: function (item, tileList) {
+        treeBlurAction: function (e) {
             this.$.tileRollover.hide();
         },
         /**
@@ -551,22 +540,26 @@
 
                 setBranchName(branch);
             }
+
+            this.$.treeView.tree = this.getTreeCollection();
+            this.$.treeView.render();
         },
-        treeHighlightExtendAction: function (item) {
-            if (item.detail) {  //is tree event
-                item = item.detail.branch;
-            }
+        treeHighlightExtendAction: function (e) {
+            var obj = this.treeCollectionDictionary[e.uid];
+            var item = obj.item || obj.branch;
+            var tile = this.getTileFromDictionary(e.uid);
+
             //this.selectedItems.push(item);
             this.push("selectedItems", item);
             //this.selectedElements.push(this.editedTiles.tiles[item.id]);
-            this.push("selectedElements", this.editedTiles.tiles[item.id]);
+            this.push("selectedElements", tile);
             this.$.tileSelected.show(this.selectedElements, this.getHighlightContent.bind(this));
         },
-        treeHighlightRemoveAction: function (item) {
-            if (item.detail) {  //is tree event
-                item = item.detail.branch;
-            }
+        treeHighlightRemoveAction: function (e) {
+            var obj = this.treeCollectionDictionary[e.uid];
+            var item = obj.item || obj.branch;
             var index = this.selectedItems.indexOf(item);
+
             //this.selectedItems.splice(index, 1);
             this.splice("selectedItems", index, 1);
             this.selectedElements.splice(index, 1);
@@ -575,7 +568,7 @@
         treeChangedAction: function () {
             setTimeout((function () {
                 this.treeRefresh();
-                this.$.treeView.highlightBranch(this.selectedItems[0]);
+                this.$.treeView.highlightBranch(this.selectedItems[0].uid);
             }).bind(this));
         },
         refreshTileList: function (e) {
@@ -617,16 +610,37 @@
                 }
             }
         },
+        treeItemNameChanged: function (e) {
+            var obj = this.treeCollectionDictionary[e.uid];
+
+            if (obj.item) {
+                obj.item.itemName = e.value;
+            } else {
+                obj.branch.node.setup.itemName = e.value;
+            }
+        },
         treeItemDragStop: function (e) {
-            var item = e.detail.item;
-            var branch = e.detail.branch;
+            var dragObj = this.treeCollectionDictionary[e.dragUid];
+            var dropObj = this.treeCollectionDictionary[e.dropUid];
+
+            if (dragObj.tileList != dropObj.tileList) {
+                alert("You can't drag times between juicy-tile-lists!");
+            }
+
             var form = this.$.form;
 
+            this.editedTiles = dropObj.tileList;
             form.selectedItems.length = 0;
-            //form.selectedItems.push(branch, item);
-            form.push("selectedItems", branch);
-            form.push("selectedItems", item);
+            form.push("selectedItems", dropObj.item || dropObj.branch.node.setup);
+            form.push("selectedItems", dragObj.item);
             form.moveSelectionToEditedItemContainer();
+
+            setTimeout(function () {
+                this.$.treeView.openBranch(dragObj.item.uid);
+                this.$.treeView.highlightBranch(dragObj.item.uid);
+                this.treeHighlightAction({ uid: dragObj.item.uid });
+            }.bind(this), 10);
+            //this.treeRefresh();
         },
         unhideAll: function () {
             for (var i = 0; i < this.tileLists.length; i++) {
@@ -671,6 +685,135 @@
         closeClick: function () {
             if (this.closeReady) {
                 this.fire("juicy-tile-editor-close");
+            }
+        },
+        getTreeCollection: function () {
+            var result = [];
+
+            this.treeCollectionDictionary = {};
+
+            for (var i = 0; i < this.tree.length; i++) {
+                var branch = this.tree[i];
+                var uid = branch.node.setup.id;
+                var r = {
+                    name: branch.node.setup.itemName,
+                    title: branch.node.setup.id,
+                    uid: uid,
+                    id: branch.node.setup.id,
+                    items: this.getTreeBranchItems(uid, branch)
+                };
+
+                this.treeCollectionDictionary[uid] = {
+                    branch: branch,
+                    tileList: branch.node,
+                    ref: r
+                };
+
+                branch.uid = uid;
+                branch.node.setup.uid = uid;
+                result.push(r);
+            }
+
+            return result;
+        },
+        getTreeBranchItems: function (parentId, branch) {
+            var result = [];
+
+            for (var i = 0; i < branch.node.setup.items.length; i++) {
+                var item = branch.node.setup.items[i];
+                var uid = parentId + "-" + item.id;
+                var r = {
+                    name: item.itemName,
+                    title: item.id,
+                    uid: uid,
+                    id: item.id,
+                    items: this.getTreeItemItems(uid, branch, item),
+                    branches: this.getTreeItemBranches(uid, branch, item)
+                };
+
+                this.treeCollectionDictionary[uid] = {
+                    branch: branch,
+                    item: item,
+                    tileList: branch.node,
+                    ref: r
+                };
+
+                item.uid = uid
+                result.push(r);
+            }
+
+            return result;
+        },
+        getTreeItemItems: function (parentId, branch, item) {
+            if (!item.items) {
+                return null;
+            }
+
+            var result = [];
+
+            for (var i = 0; i < item.items.length; i++) {
+                var child = item.items[i];
+                var uid = parentId + "-" + child.id;
+                var r = {
+                    name: child.itemName,
+                    title: child.id,
+                    uid: uid,
+                    id: child.id,
+                    items: this.getTreeItemItems(uid, branch, child),
+                    branches: this.getTreeItemBranches(uid, branch, child)
+                };
+
+                this.treeCollectionDictionary[uid] = {
+                    branch: branch,
+                    item: child,
+                    tileList: branch.node,
+                    ref: r
+                };
+
+                child.uid = uid;
+                result.push(r);
+            }
+
+            return result;
+        },
+        getTreeItemBranches: function (parentId, branch, item) {
+            if (!branch.branches[item.id]) {
+                return null;
+            }
+
+            var result = [];
+
+            for (var i = 0; i < branch.branches[item.id].length; i++) {
+                var child = branch.branches[item.id][i];
+                var uid = parentId + "-" + child.node.setup.id;
+                var r = {
+                    name: child.node.setup.itemName,
+                    title: child.node.setup.id,
+                    uid: uid,
+                    id: child.node.setup.id,
+                    items: this.getTreeBranchItems(uid, child)
+                };
+
+                this.treeCollectionDictionary[uid] = {
+                    branch: child,
+                    tileList: child.node,
+                    ref: r
+                };
+
+                child.uid = uid;
+                child.node.setup.uid = uid;
+                result.push(r);
+            }
+
+            return result;
+        },
+        getTileFromDictionary: function (uid) {
+            var obj = this.treeCollectionDictionary[uid];
+
+            if (obj.item) {
+                return obj.tileList.tiles[obj.item.id];
+            } else {
+                return obj.tileList.tiles[obj.branch.node.setup.id];
             }
         }
     });
