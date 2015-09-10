@@ -491,7 +491,6 @@
         },
         treeHighlightAction: function (e) {
             var obj = this.treeCollectionDictionary[e.uid];
-            var item = obj.item || obj.branch;
             var tile = this.getTileFromDictionary(e.uid);
 
             this.editedTiles = obj.tileList;
@@ -499,7 +498,7 @@
             this.$.tileSelected.hide();
             this.selectedItems.length = 0;
             //this.selectedItems.push(item);
-            this.push("selectedItems", item);
+            this.push("selectedItems", obj.item || obj.branch.node.setup);
             this.selectedElements.length = 0;
             this.selectedElements.push(tile);
 
@@ -623,7 +622,8 @@
             var dropObj = this.treeCollectionDictionary[e.dropUid];
 
             if (dragObj.tileList != dropObj.tileList) {
-                alert("You can't drag times between juicy-tile-lists!");
+                alert("You can't drag itimes between juicy-tile-lists!");
+                return;
             }
 
             var form = this.$.form;

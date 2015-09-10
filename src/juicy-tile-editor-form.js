@@ -25,8 +25,8 @@
             background: { type: String, value: null },
             outline: { type: String, value: null },
             precalculateWidth: { type: Boolean, value: null },
-            widthFlexible: { type: Boolean, value: null },
-            widthDynamic: { type: Boolean, value: null },
+            widthFlexible: { type: Boolean, value: null, notify: true },
+            widthDynamic: { type: Boolean, value: null, notify: true },
             precalculateHeight: { type: Boolean, value: null },
             heightFlexible: { type: Boolean, value: null },
             heightDynamic: { type: Boolean, value: null },
@@ -374,14 +374,16 @@
             }
         },
         applyChange: function (ev) {
-            var node = ev.target;
-            while (node) {
-                if (node.dataset && node.dataset.applyvalue) {
-                    this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue], !!node.dataset.hardrefresh);
-                    break;
+            setTimeout(function () {
+                var node = ev.target;
+                while (node) {
+                    if (node.dataset && node.dataset.applyvalue) {
+                        this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue], !!node.dataset.hardrefresh);
+                        break;
+                    }
+                    node = node.parentNode;
                 }
-                node = node.parentNode;
-            }
+            }.bind(this));
         },
         saveChanges: function () {
             for (var i = 0; i < this.tileLists.length; i++) {

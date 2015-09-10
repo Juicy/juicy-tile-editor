@@ -552,17 +552,17 @@
 
                 <div class="toolbar-item" disabled$="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width::keyup}}"  />
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width::keyup}}" />
                         <div class="expandable">
                             <button class="editable" on-click="widthIncrease">+</button>
                             <button class="editable" on-click="widthDecrease">-</button>
                             <button class="editable" on-click="widthCalculate">calculate</button>
                             <div title="Supported only in juicy-tile-grid.">
                                 <div disabled$="{{getIsJuicyTileList(editedTiles.tagName)}}">
-                                    <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked$="{{widthFlexible}}"> flexible</label>
+                                    <label class="editable"><input id="widthFlexibleCheckbox" type="checkbox" data-applyvalue="widthFlexible" checked="{{widthFlexible::change}}" on-change="applyChange" /> flexible</label>
                                 </div>
                                 <div disabled$="{{getIsJuicyTileList(editedTiles.tagName)}}">
-                                    <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked$="{{widthDynamic}}"> resize with content</label>
+                                    <label class="editable"><input id="widthDynamicCheckbox" type="checkbox" data-applyvalue="widthDynamic" checked="{{widthDynamic::change}}" on-change="applyChange" /> resize with content</label>
                                 </div>
                             </div>
                             <div class="description">
@@ -582,17 +582,17 @@
 
                 <div class="toolbar-item" disabled$="{{!isSelection}}" data-applyvalue="height">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height::keyup}}"  />
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height::keyup}}" />
                         <div class="expandable">
                             <button class="editable" on-click="heightIncrease">+</button>
                             <button class="editable" on-click="heightDecrease">-</button>
                             <button class="editable" on-click="heightCalculate">calculate</button>
                             <div title="Supported only in juicy-tile-grid.">
                                 <div disabled$="{{getIsJuicyTileList(editedTiles.tagName)}}">
-                                    <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked$="{{heightFlexible}}"> flexible</label>
+                                    <label class="editable"><input id="heightFlexibleCheckbox" type="checkbox" data-applyvalue="heightFlexible" checked="{{heightFlexible::change}}" on-change="applyChange" /> flexible</label>
                                 </div>
                                 <div disabled$="{{getIsJuicyTileList(editedTiles.tagName)}}">
-                                    <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked$="{{heightDynamic}}"> resize with content</label>
+                                    <label class="editable"><input id="heightDynamicCheckbox" type="checkbox" data-applyvalue="heightDynamic" checked="{{heightDynamic::change}}" on-change="applyChange" /> resize with content</label>
                                 </div>
                             </div>
                             <div class="description">
