@@ -14,8 +14,6 @@
     <link rel="import" href="../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
     <link rel="import" href="src/juicy-tile-editor.html">
 
-    <link rel="import" href="../core-localstorage/core-localstorage.html">
-
     <style>
         body {
             padding: 50px 20px 20px 20px;
@@ -84,7 +82,7 @@
                 allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
 
         <template is="dom-bind" id="root">
-            <template is="dom-if" if="{{model.editingMode}}">
+            <template is="dom-if" if="{{model.editingMode}}" restamp="true">
                 <div id="aboveOverlay">
                     <juicy-tile-editor selection-mode="true"></juicy-tile-editor>
                 </div>
@@ -96,9 +94,8 @@
             </template>
             <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
             <label><input type="checkbox" checked="{{model.editingMode::change}}"> Show editor (<span>{{model.editingMode}}</span>)</label>
-            <core-localstorage name="st1" value="{{model.setup}}"></core-localstorage>
-            <juicy-tiles-setup-sync storedvalue="{{model.setup}}"></juicy-tiles-setup-sync>
-            <juicy-tile-list id="st1" setup="[[model.setup]]">
+            <juicy-tiles-setup-sync name="juicy-tile-editor/index.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
+            <juicy-tile-list id="st1" setup="{{model.setup}}">
                 <div>Item 0 </div>
                 <div>
                     <button onclick="blockme()">Item 1</button>
@@ -204,7 +201,9 @@
                 }
             };
 
-            document.querySelector("template#root").model = model;
+            var template = document.querySelector("template#root");
+
+            template.model = model;
 
             function blockme() {
                 alert("I should get blocked when editor is opened");
