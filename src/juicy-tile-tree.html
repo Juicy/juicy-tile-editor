@@ -88,7 +88,7 @@
                 html.push('></juicy-toggle-icon-button>');
             }
 
-            html.push('<juicy-toggle-icon-button class="visibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off" value="', item.name, '"></juicy-toggle-icon-button>');
+            html.push('<juicy-toggle-icon-button class="visibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off" value="', item.uid, '"></juicy-toggle-icon-button>');
             html.push('<juicy-draggable position="static" dropselector="html /deep/ ul.branch li .drop-item"');
 
             if (this.activeUid == item.uid) {
@@ -325,8 +325,12 @@
             }
         };
 
-        proto.setVisibility = function () {
-            //TODO;
+        proto.setVisibility = function (e) {
+            var event = new CustomEvent("juicy-tile-tree-item-hidden-changed");
+
+            event.uid = e.currentTarget.value;
+            event.value = !e.currentTarget.checked;
+            this.dispatchEvent(event);
         };
 
         proto.itemDragStop = function (event) {

@@ -175,7 +175,8 @@
             margin: 0px;
             font-size: 16px;
             background-color: #444444;
-            padding: 3px 4px;
+            padding: 0px 4px;
+            position: static;
         }
     </style>
     <template>
@@ -217,7 +218,8 @@
                                      on-juicy-tile-tree-hover="treeHoverAction"
                                      on-juicy-tile-tree-blur="treeBlurAction"
                                      on-juicy-tile-tree-drag-item-stop="treeItemDragStop"
-                                     on-juicy-tile-tree-item-name-changed="treeItemNameChanged"></juicy-tile-tree>
+                                     on-juicy-tile-tree-item-name-changed="treeItemNameChanged"
+                                     on-juicy-tile-tree-item-hidden-changed="treeItemHiddenChanged"></juicy-tile-tree>
                 </div>
             </juicy-resizable>
         </juicy-draggable>

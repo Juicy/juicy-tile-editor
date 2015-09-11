@@ -38,6 +38,10 @@ juicy-tile-tree .element-label:hover .visibility {
     display: block;
 }
 
+juicy-tile-tree .element-label.active:hover .visibility {
+    display: none;
+}
+
 juicy-tile-tree .element-label.highlight .visibility {
     background-color: #01629e;
 }
@@ -89,7 +93,7 @@ juicy-tile-tree .visibility {
     top: 0px;
     right: 0px;
     display: none;
-    padding: 4px 6px 7px 6px;
+    padding: 7px 6px 7px 6px;
     border-radius: 2px;
     box-sizing: border-box;
     height: 26px;

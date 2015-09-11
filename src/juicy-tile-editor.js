@@ -281,7 +281,7 @@
                 var size = that.$.sidebarDrag.getScreenSize();
                 var x = size.x, y = size.y;
 
-                bar.className = "sidebar";
+                bar.className = "sidebar style-scope juicy-tile-editor";
 
                 var ex = event.mouseEvent.clientX;
                 var ey = event.mouseEvent.clientY;
@@ -617,6 +617,17 @@
                 obj.branch.node.setup.itemName = e.value;
             }
         },
+        treeItemHiddenChanged: function (e) {
+            var obj = this.treeCollectionDictionary[e.uid];
+
+            if (obj.item) {
+                obj.item.hidden = e.value;
+            } else {
+                obj.branch.node.setup.hidden = e.value;
+            }
+
+            this.$.form.selectedItemsChanged(this.selectedItems, this.selectedItems);
+        },
         treeItemDragStop: function (e) {
             var dragObj = this.treeCollectionDictionary[e.dragUid];
             var dropObj = this.treeCollectionDictionary[e.dropUid];
@@ -645,6 +656,8 @@
             for (var i = 0; i < this.tileLists.length; i++) {
                 this.unhideListItems(this.tileLists[i]);
             }
+
+            this.$.treeView.render();
         },
         unhideListItems: function (list) {
             for (var i in list.allItems) {
@@ -677,14 +690,31 @@
             this.expandCollapseAll(false);
         },
         expandCollapseAll: function (expanded) {
-            for (var i in this.$.treeView.expanded) {
+            for (var i in this.treeCollectionDictionary) {
                 this.$.treeView.expanded[i] = expanded;
             }
+
+            this.$.treeView.render();
         },
         closeClick: function () {
             if (this.closeReady) {
                 this.fire("juicy-tile-editor-close");
             }
+        },
+        getTreeUid: function (item) {
+            if (!this.treeUidCollection) {
+                this.treeUidCollection = new WeakMap();
+                this.treeUidCounter = 0;
+            }
+
+            var uid = this.treeUidCollection.get(item);
+
+            if (!uid) {
+                uid = this.treeUidCounter++;
+                this.treeUidCollection.set(item, uid);
+            }
+
+            return uid;
         },
         getTreeCollection: function () {
             var result = [];
@@ -693,7 +723,7 @@
 
             for (var i = 0; i < this.tree.length; i++) {
                 var branch = this.tree[i];
-                var uid = branch.node.setup.id;
+                var uid = branch.node.setup.id + this.getTreeUid(branch);
                 var r = {
                     name: branch.node.setup.itemName,
                     title: branch.node.setup.id,
@@ -720,7 +750,7 @@
 
             for (var i = 0; i < branch.node.setup.items.length; i++) {
                 var item = branch.node.setup.items[i];
-                var uid = parentId + "-" + item.id;
+                var uid = parentId + "-" + item.id + this.getTreeUid(item);
                 var r = {
                     name: item.itemName,
                     title: item.id,
@@ -752,7 +782,7 @@
 
             for (var i = 0; i < item.items.length; i++) {
                 var child = item.items[i];
-                var uid = parentId + "-" + child.id;
+                var uid = parentId + "-" + child.id + this.getTreeUid(child);
                 var r = {
                     name: child.itemName,
                     title: child.id,
@@ -784,7 +814,7 @@
 
             for (var i = 0; i < branch.branches[item.id].length; i++) {
                 var child = branch.branches[item.id][i];
-                var uid = parentId + "-" + child.node.setup.id;
+                var uid = parentId + "-" + child.node.setup.id + this.getTreeUid(child);
                 var r = {
                     name: child.node.setup.itemName,
                     title: child.node.setup.id,

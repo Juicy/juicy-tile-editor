@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
 
     <!-- Importing Web Component's Polyfill
-    <script src="../../platform/platform.js"></script>
-    <link rel="import" href="../../polymer/polymer.html">-->
+    <script src="../../platform/platform.js"></script> -->
+    <link rel="import" href="../../../polymer/polymer.html">
+
     <!-- Importing Custom Elements -->
     <link rel="import" href="../../../juicy-tile-grid/src/juicy-tile-grid.html">
     <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
@@ -71,15 +72,15 @@
         <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
                 allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
 
-        <template bind>
+        <template is="dom-bind" id="root">
             <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
             <p>
                 This example shows how to set up horizontal form with static label and dynamic input.
             </p>
-            <label><input type="checkbox" checked="{{editingMode}}"> Show editor ({{editingMode}})</label>
-            <template if="{{editingMode}}">
+            <label><input type="checkbox" checked="{{model.editingMode::change}}"> Show editor (<span>{{model.editingMode}}</span>)</label>
+            <template is="dom-if" if="{{model.editingMode}}" restamp="true">
                 <div id="aboveOverlay">
-                    <juicy-tile-editor selectionmode></juicy-tile-editor>
+                    <juicy-tile-editor selection-mode="true"></juicy-tile-editor>
                 </div>
                 <script>
                     document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
@@ -88,9 +89,9 @@
                 </script>
             </template>
 
-            <core-localstorage name="juicy-tiles-label-input" value="{{storedValue}}"></core-localstorage>
-            <juicy-tiles-setup-sync storedvalue="{{storedValue}}"></juicy-tiles-setup-sync>
-            <juicy-tile-grid id="grid" setup="[[json]]">
+            <core-localstorage name="juicy-tiles-label-input" value="{{model.storedValue}}"></core-localstorage>
+            <juicy-tiles-setup-sync storedvalue="{{model.storedValue}}"></juicy-tiles-setup-sync>
+            <juicy-tile-grid id="grid" setup="[[model.json]]">
                 <small>Static width (150px)</small>
                 <small>Flexible width (100% - 160px)</small>
                 <label>First name</label>
@@ -111,7 +112,7 @@
 &lt;/juicy-tile-grid&gt;</code></pre>
             <h4>JSON:</h4>
 
-            <pre><code>{{stringify(json, udefined, 4)}}</code></pre>
+            <pre><code>{{model.stringified}}</code></pre>
 
         </template>
         <script type="text/javascript">
@@ -163,12 +164,8 @@
             };
 
             model.storedValue = JSON.parse(JSON.stringify(model.json));
-
-            document.addEventListener("polymer-ready", function () {
-                document.querySelector("template").bindingDelegate = new PolymerExpressions();
-                document.querySelector("template").bindingDelegate.stringify = JSON.stringify;
-                document.querySelector("template").model = model;
-            });
+            model.stringified = JSON.stringify(model.json, undefined, 4);
+            document.querySelector("template#root").model = model;
         </script>
     </article>
 </body>
