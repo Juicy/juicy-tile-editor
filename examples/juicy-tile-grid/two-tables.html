@@ -15,8 +15,6 @@
     <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
     <link rel="import" href="../../src/juicy-tile-editor.html">
 
-    <link rel="import" href="../../../core-localstorage/core-localstorage.html">
-
     <style>
         body {
             padding: 50px 20px 20px 20px;
@@ -109,8 +107,7 @@
                 </script>
             </template>
 
-            <core-localstorage name="juicy-tiles-two-tables" value="{{model.storedValue}}"></core-localstorage>
-            <juicy-tiles-setup-sync storedvalue="{{model.storedValue}}"></juicy-tiles-setup-sync>
+            <juicy-tiles-setup-sync name="juicy-tile-editor/examples/juicy-tile-grid/two-tables.html" stored-value="{{model.storedValue}}" use-localstorage="true"></juicy-tiles-setup-sync>
             <juicy-tile-grid id="grid" setup="[[model.json]]">
                 <div>A title goes here</div>
                 <div>
