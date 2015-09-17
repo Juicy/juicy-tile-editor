@@ -2,8 +2,10 @@
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
 <link rel="import" href="juicy-border-picker.html" />
+<link rel="import" href="juicy-tile-editor-font.html" />
 
 <dom-module id="juicy-tile-editor-form">
+    <style include="juicy-tile-editor-font"></style>
     <style>
         .editablesContainer {
             display: flex;
@@ -294,8 +296,6 @@
         }
     </style>
     <template>
-        <link href="css/jte-fontawesome.css" rel="stylesheet" />
-
         <div class="editablesContainer" on-click="applyChange" on-keyup="applyChange">
             <div class="editableGroup" disable$="{{!editedTiles.sync}}">
                 <div class="toolbar-item" disabled$="{{!modified}}">

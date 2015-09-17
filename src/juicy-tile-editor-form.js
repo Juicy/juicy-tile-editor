@@ -531,14 +531,19 @@
             this.fire("juicy-tile-editor-form-close");
         },
         calculateActualSize: function () {
-            if (this.selectedItems.length != 1 || !this.editedTiles) {
-                this.actualWidth = "N/A";
-                this.actualHeight = "N/A";
-            } else {
-                var tile = this.getSelectedTile();
+            var tile = null;
+
+            if (this.selectedItems.length && this.editedTiles) {
+                tile = this.getSelectedTile();
+            }
+
+            if (tile) {
                 var rec = tile.getBoundingClientRect();
                 this.actualWidth = parseInt(rec.width) + "px";
                 this.actualHeight = parseInt(rec.height) + "px";
+            } else {
+                this.actualWidth = "N/A";
+                this.actualHeight = "N/A";
             }
         },
         getIsHorizontalDirection: function (direction) {
@@ -563,7 +568,11 @@
             var id = tile.id;
 
             if (typeof id === "undefined" || id === null) {
-                id = tile.node.setup.id;
+                if (tile.node) {
+                    id = tile.node.setup.id;
+                } else {
+                    id = tile.itemName;
+                }
             }
 
             return id;

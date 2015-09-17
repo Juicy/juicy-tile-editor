@@ -35,13 +35,20 @@
             line-height: 23px;
         }
 
-        .sidebar h1 {
+        .sidebar h1#sidebarHeader {
             cursor: move;
-            padding: 0 5px;
+            padding: 3px 5px;
+            font-family: 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
+            color: #FFF;
+            line-height: normal;
+            margin: 0px;
+            font-size: 16px;
+            background-color: #444444;
+            position: static;
         }
 
         :host.max-height .sidebar {
-            top: 35px;
+            top: 59px;
         }
 
         .sidebar.left {
@@ -111,11 +118,6 @@
             background-color: #252526;
         }
 
-        .sidebar h1 {
-            margin: 5px 0px 0px 0px;
-            font-size: 20px;
-        }
-
         .sidebar .actions {
             float: right;
             margin: 1px;
@@ -169,14 +171,6 @@
         .sidebar.bottom .resize-right,
         .sidebar.top .resize-right {
             display: none;
-        }
-
-        #sidebarHeader {
-            margin: 0px;
-            font-size: 16px;
-            background-color: #444444;
-            padding: 0px 4px;
-            position: static;
         }
     </style>
     <template>
