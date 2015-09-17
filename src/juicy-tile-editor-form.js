@@ -374,8 +374,9 @@
             }
         },
         applyChange: function (ev) {
+            var node = ev.target;
+
             setTimeout(function () {
-                var node = ev.target;
                 while (node) {
                     if (node.dataset && node.dataset.applyvalue) {
                         this.setCommonValue(node.dataset.applyvalue, this[node.dataset.applyvalue], !!node.dataset.hardrefresh);
