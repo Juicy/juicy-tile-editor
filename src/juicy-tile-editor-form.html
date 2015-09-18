@@ -437,7 +437,7 @@
 
                 <div class="toolbar-item" disabled$="{{!isContainer}}" data-applyvalue="gutter">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
-                        <input type="text" class="handle toolbar-button val" placeholder="multiple" value="{{gutter::keyup}}" />
+                        <input type="text" class="handle toolbar-button val" placeholder="multiple" value="{{gutter::input}}" />
                         <div class="expandable">
                             <button class="editable" on-click="gutterIncrease">+</button>
                             <button class="editable" on-click="gutterDecrease">-</button>
@@ -551,7 +551,7 @@
 
                 <div class="toolbar-item" disabled$="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width::keyup}}" />
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{width::input}}" />
                         <div class="expandable">
                             <button class="editable" on-click="widthIncrease">+</button>
                             <button class="editable" on-click="widthDecrease">-</button>
@@ -581,7 +581,7 @@
 
                 <div class="toolbar-item" disabled$="{{!isSelection}}" data-applyvalue="height">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
-                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height::keyup}}" />
+                        <input placeholder="multiple" class="handle toolbar-button val" value="{{height::input}}" />
                         <div class="expandable">
                             <button class="editable" on-click="heightIncrease">+</button>
                             <button class="editable" on-click="heightDecrease">-</button>
