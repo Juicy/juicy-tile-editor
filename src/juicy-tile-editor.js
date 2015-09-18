@@ -226,7 +226,8 @@
             /** Document | DocumentFragment document root, or shadow root containing this element. */
             parentRoot: { type: Object, value: null },
             /** {NodeList | Array} of <juicy-tile-list> elements we will bind to */
-            tileLists: { type: Array, value: [] }
+            tileLists: { type: Array, value: [] },
+            modified: { type: Boolean, value: false, notify: true }
         },
         /** 
          * Search document (and shadowRoot if any) for juicy-tile-lists to manage 

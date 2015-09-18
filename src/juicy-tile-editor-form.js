@@ -46,7 +46,7 @@
             selectedItems: { type: Array, value: [], observer: "selectedItemsChanged" },
             editedTiles: { type: Object, value: null },
             tileLists: { type: Array, value: null },
-            modified: { type: Boolean, value: false },
+            modified: { type: Boolean, value: false, notify: true },
             height: { type: String, observer: "heightChanged" },
             width: { type: String, observer: "widthChanged" },
             isRemovable: { type: Boolean, value: true },
@@ -141,12 +141,12 @@
         refreshModified: function () {
             for (var i = 0; i < this.tileLists.length; i++) {
                 if (this.tileLists[i].sync && this.tileLists[i].sync.isModified()) {
-                    this.modified = true;
+                    this.set("modified", true);
                     return;
                 }
             }
 
-            this.modified = false;
+            this.set("modified", false);
         },
         gutterIncrease: function () {
             this.set("gutter", this.gutter + 1);
