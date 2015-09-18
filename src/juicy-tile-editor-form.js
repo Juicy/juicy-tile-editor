@@ -187,8 +187,11 @@
             var tile = this.getSelectedTile();
             var item = this.selectedItems[0];
 
+            this.set("width", 1);
             this.set("precalculateWidth", true);
+            item.width = 1;
             item.precalculateWidth = true;
+            this.refresh(false);
 
             setTimeout(function () {
                 var rec = tile.getBoundingClientRect();
@@ -231,8 +234,11 @@
             var tile = this.getSelectedTile();
             var item = this.selectedItems[0];
 
+            this.set("height", 1);
             this.set("precalculateHeight", true);
+            item.height = 1;
             item.precalculateHeight = true;
+            this.refresh(false);
 
             setTimeout(function () {
                 var rec = tile.getBoundingClientRect();
