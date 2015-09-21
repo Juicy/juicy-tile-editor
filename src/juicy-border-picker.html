@@ -109,9 +109,9 @@
                     </template>
                 </template>
             </ul>
-            <juicy-color-picker value="{{borderColor::change}}" on-change="refreshValueAsync"></juicy-color-picker>
+            <juicy-color-picker value="{{borderColor::change}}" on-change="refreshBorderValueAsync"></juicy-color-picker>
             <div class="value">
-                <input type="text" value="[[value]]" readonly="readonly" />
+                <input type="text" value="[[borderValue]]" readonly="readonly" />
                 <button type="button" on-click="clearBorder">x</button>
             </div>
         </div>
@@ -125,9 +125,9 @@
                 pallete: {
                     type: String
                 },
-                value: {
+                borderValue: {
                     type: String,
-                    observer: "valueChanged"
+                    observer: "borderValueChanged"
                 },
                 borderStyle: {
                     type: String,
@@ -165,20 +165,19 @@
                     this.inParse = false;
                 }.bind(this), 500);
             },
-            refreshValue: function () {
+            refreshBorderValue: function () {
                 if (this.inParse) {
                     return;
                 }
 
                 this.inParse = true;
-                this.set("value", [this.borderStyle, this.borderWidth + this.borderWidthUnit, this.borderColor].join(" "));
-                console.log("refreshValue", this.value);
+                this.set("borderValue", [this.borderStyle, this.borderWidth + this.borderWidthUnit, this.borderColor].join(" "));
                 this.resetInParse(true);
             },
-            refreshValueAsync: function () {
-                setTimeout(this.refreshValue.bind(this));
+            refreshBorderValueAsync: function () {
+                setTimeout(this.refreshBorderValue.bind(this));
             },
-            parseValue: function () {
+            parseBorderValue: function () {
                 if (this.inParse) {
                     return;
                 }
@@ -189,12 +188,12 @@
                 this.set("borderWidthUnit", "px");
                 this.set("borderColor", "");
 
-                if (!this.value) {
+                if (!this.borderValue) {
                     this.resetInParse();
                     return;
                 }
 
-                var items = this.value.split(" ");
+                var items = this.borderValue.split(" ");
 
                 for (var i = 0; i < items.length; i++) {
                     var item = items[i];
@@ -213,37 +212,33 @@
 
                 this.resetInParse();
             },
-            valueChanged: function () {
-                if (this.value == 5) {
-                    var a = "!!";
-                }
-                console.log("valueChanged", this.value);
+            borderValueChanged: function () {
                 if (this.inParse) {
                     return;
                 }
 
                 this.fire("change");
-                this.parseValue();
+                this.parseBorderValue();
             },
             borderStyleChanged: function () {
-                this.refreshValueAsync();
+                this.refreshBorderValueAsync();
             },
             borderWidthChanged: function () {
-                this.refreshValueAsync();
+                this.refreshBorderValueAsync();
             },
             borderWidthUnitChanged: function () {
-                this.refreshValueAsync();
+                this.refreshBorderValueAsync();
             },
             borderColorChanged: function () {
-                this.refreshValueAsync();
+                this.refreshBorderValueAsync();
             },
             applyStyle: function (e) {
                 this.set("borderStyle", e.currentTarget.dataset["style"]);
-                this.refreshValueAsync();
+                this.refreshBorderValueAsync();
             },
             clearBorder: function () {
-                this.set("value", "");
-                this.valueChanged();
+                this.set("borderValue", "");
+                this.borderValueChanged();
             },
             compare: function (value1, value2) {
                 return value1 == value2;
