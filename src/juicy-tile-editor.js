@@ -397,7 +397,7 @@
                             //expand group
                             var index = editor.selectedItems.indexOf(highlightedItem);
                             if (index == -1) {
-                                editor.treeHighlightExtendAction(highlightedItem.uid);
+                                editor.treeHighlightExtendAction({ uid: highlightedItem.uid });
                                 editor.$.treeView.highlightBranch(highlightedItem.uid, true);
                             }
                             else {

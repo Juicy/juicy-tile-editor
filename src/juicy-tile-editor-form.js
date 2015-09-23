@@ -422,6 +422,9 @@
             this.editedTiles.sync.clear();
             this.refreshModified();
             this.getSource();
+
+            this.selectedItemsChanged();
+            this.refresh(true);
             this.fire('juicy-tile-editor-clear');
         },
         getSource: function () {

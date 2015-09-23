@@ -606,13 +606,21 @@
                 this.highlighted = {};
             }
 
-            this.highlighted[uid] = true;
-            this.querySelector("div.element-label[data-uid='" + uid + "']").classList.toggle("highlight", true);
+            var element = this.querySelector("div.element-label[data-uid='" + uid + "']");
+
+            if (element) {
+                this.highlighted[uid] = true;
+                element.classList.toggle("highlight", true);
+            }
         };
 
         proto.unhighlightBranch = function (uid) {
-            this.highlighted[uid] = false;
-            this.querySelector("div.element-label[data-uid='" + uid + "']").classList.toggle("highlight", false);
+            var element = this.querySelector("div.element-label[data-uid='" + uid + "']");
+
+            if (element) {
+                this.highlighted[uid] = false;
+                element.classList.toggle("highlight", false);
+            }
         };
 
         window.JuicyTileTree = document.registerElement("juicy-tile-tree", {
