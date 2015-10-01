@@ -58,6 +58,16 @@
                 return;
             }
 
+            // Check if all of the selected items belong to the same juicy-tile-list.
+            for (var i = 0; i < this.selectedItems.length; i++) {
+                var item = this.editedTiles.allItems[this.selectedItems[i].id];
+
+                if (!item || item.uid != this.selectedItems[i].uid) {
+                    alert("You can't group items from different juicy-tile-lists!");
+                    return;
+                }
+            }
+
             var current = this.selectedItems[0];
             var setup = {
                 priority: current.priority,
