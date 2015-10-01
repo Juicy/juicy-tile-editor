@@ -54,7 +54,7 @@
             direction: { type: String, value: null }
         },
         newGroupFromSelection: function (width, isEmpty) {
-            if (!this.selectedItems.length > 1) {
+            if (this.selectedItems.length < 2) {
                 return;
             }
 
@@ -83,13 +83,6 @@
                 for (var i = 0, ilen = this.selectedItems.length; i < ilen; i++) {
                     model.moveToContainer(this.selectedItems[i], newContainer, true);
                 }
-
-                dimensions = model.getMinimumDimensions(this.getContainerChildElements(newContainer));
-            } else {
-                dimensions = {
-                    width: "100%",
-                    height: "36px"
-                };
             }
 
             this.selectedItems.length = 0; //change edited item to the new container
@@ -99,10 +92,11 @@
             if (width) {
                 newContainer.width = width;
             } else {
-                newContainer.width = dimensions.width;
+                newContainer.width = "100%";
             }
 
-            newContainer.height = dimensions.height;
+            newContainer.height = 1;
+            newContainer.heightDynamic = true;
 
             this.refresh(true);
             this.fire('juicy-tile-editor-form-tree-changed');
@@ -127,10 +121,6 @@
             for (var i = 1, ilen = this.selectedItems.length; i < ilen; i++) {
                 model.moveToContainer(this.selectedItems[i], container, true);
             }
-
-            var dimensions = model.getMinimumDimensions(this.getContainerChildElements(container));
-            container.width = dimensions.width;
-            container.height = dimensions.height;
 
             this.refresh(true);
             this.fire('juicy-tile-editor-form-tree-changed');
