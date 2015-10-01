@@ -633,6 +633,10 @@
             var dragObj = this.treeCollectionDictionary[e.dragUid];
             var dropObj = this.treeCollectionDictionary[e.dropUid];
 
+            if (!dropObj) {
+                return;
+            }
+
             if (dragObj.tileList != dropObj.tileList) {
                 alert("You can't drag itimes between juicy-tile-lists!");
                 return;
