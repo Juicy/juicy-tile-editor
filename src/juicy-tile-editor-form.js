@@ -54,7 +54,7 @@
             direction: { type: String, value: null }
         },
         newGroupFromSelection: function (width, isEmpty) {
-            if (this.selectedItems.length < 2) {
+            if (!this.selectedItems.length) {
                 return;
             }
 
