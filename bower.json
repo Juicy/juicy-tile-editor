@@ -21,8 +21,7 @@
     "juicy-color-picker": "Juicy/juicy-color-picker#gh-pages"
   },
   "devDependencies": {
-    "core-localstorage": "Polymer/core-localstorage#0.4.1",
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
-    "juicy-tile-grid":  ">=0.3.0"
+    "juicy-tile-grid":  ">=1.0.0"
   }
 }
