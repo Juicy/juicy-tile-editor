@@ -76,7 +76,6 @@
 
             var model = this.editedTiles;
             var newContainer = model.createNewContainer(null, current.container, setup, true);
-            var dimensions = null;
 
             if (!isEmpty) {
                 // performant heavy // may cause lots of repaints
@@ -96,10 +95,12 @@
             }
 
             newContainer.height = 1;
-            newContainer.heightDynamic = true;
+            newContainer.heightDynamic = false;
 
             this.refresh(true);
             this.fire('juicy-tile-editor-form-tree-changed');
+
+            setTimeout(this.heightCalculate.bind(this));
         },
         newInlineGroupFromSelection: function () {
             this.newGroupFromSelection();
