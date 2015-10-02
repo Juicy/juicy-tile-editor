@@ -31,7 +31,7 @@
             heightFlexible: { type: Boolean, value: null },
             heightDynamic: { type: Boolean, value: null },
             gutter: { type: Number, value: 0, observer: "gutterChanged" },
-            tightGroup: { type: Boolean, value: null },
+            tightGroup: { type: Boolean, value: null, observer: "tightGroupChanged" },
             rightToLeft: { type: Boolean, value: null },
             bottomUp: { type: Boolean, value: null },
             oversize: { type: Number, value: 0 },
@@ -529,6 +529,11 @@
             }.bind(this));
 
             this.calculateActualSize();
+        },
+        tightGroupChanged: function () {
+            if (this.selectedItems && this.selectedItems.length) {
+                this.fire('juicy-tile-editor-form-tree-changed');
+            }
         },
         popoverExpand: function (ev, index, target) {
             var index = this.style.zIndex || 0;
