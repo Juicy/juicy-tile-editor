@@ -297,7 +297,7 @@
     </style>
     <template>
         <div class="editablesContainer" on-click="applyChange" on-keyup="applyChange">
-            <div class="editableGroup" disable$="{{!editedTiles.sync}}">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
                 <div class="toolbar-item" disabled$="{{!modified}}">
                     <button class="toolbar-button" on-click="saveChanges">
                         <i class="jte-icon-floppy"></i>
@@ -312,7 +312,7 @@
                 </div>
 
             </div>
-            <div class="editableGroup" disable$="{{!editedTiles.sync}}">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
                 <div class="toolbar-item">
                     <div class="drop-down">
                         <button class="toolbar-button" on-click="clearConfig">
@@ -351,7 +351,7 @@
                 </div>
             </div>
 
-            <div class="editableGroup">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
 
                 <div class="toolbar-item" disabled$="{{!isContainer}}">
                     <div class="directionGroup">
@@ -451,7 +451,7 @@
                 </div>
             </div>
 
-            <div class="editableGroup">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
                 <div class="toolbar-item" disabled$="{{getNotOrNot(isSelection, isGroupable)}}">
                     <div class="drop-down">
                         <button class="toolbar-button" title="Create a new line group from selected elements" on-click="newBlockGroupFromSelection">
@@ -510,7 +510,7 @@
                 </div>
 
             </div>
-            <div class="editableGroup">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
 
                 <div class="toolbar-item">
                     <div class="toolbar-item-wrapper" disabled$="{{!isSelection}}" data-applyvalue="oversize">
@@ -547,7 +547,7 @@
                     <label class="toolbar-label">Outline</label>
                 </div>
             </div>
-            <div class="editableGroup">
+            <div class="editableGroup" disabled$="{{!editedTiles.sync}}">
 
                 <div class="toolbar-item" disabled$="{{!isSelection}}" data-applyvalue="width">
                     <juicy-popover on-juicy-popover-expand="popoverExpand" on-juicy-popover-collapse="popoverCollapse">
