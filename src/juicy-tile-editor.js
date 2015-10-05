@@ -567,8 +567,11 @@
         treeChangedAction: function () {
             setTimeout((function () {
                 this.treeRefresh();
-                this.$.treeView.highlightBranch(this.selectedItems[0].uid);
-                this.treeHighlightAction({ uid: this.selectedItems[0].uid });
+
+                if (this.selectedItems.length) {
+                    this.$.treeView.highlightBranch(this.selectedItems[0].uid);
+                    this.treeHighlightAction({ uid: this.selectedItems[0].uid });
+                }
             }).bind(this));
         },
         refreshTileList: function (e) {

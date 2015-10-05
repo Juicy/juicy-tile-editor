@@ -420,6 +420,7 @@
             this.getSource();
         },
         clearConfig: function () {
+            this.splice("selectedItems", 0, this.selectedItems.length);
             this.editedTiles.sync.clear();
             this.refreshModified();
             this.getSource();
