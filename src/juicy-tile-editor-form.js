@@ -132,7 +132,7 @@
             var elements = [];
             for (var i = 0, ilen = container.items.length; i < ilen; i++) {
                 var id = container.items[i].id;
-                
+
                 if (typeof id !== "undefined" && id !== null) {
                     elements.push(model.tiles[container.items[i].id]);
                 }
@@ -286,7 +286,7 @@
             this.fire('juicy-tile-editor-form-tree-changed');
         },
         changeDirection: function (event, i) {
-            this.selectedItems[0].direction = element.value;
+            this.selectedItems[0].direction = event.currentTarget.value;
             this.direction = event.currentTarget.value;
             this.refresh();
         },
@@ -597,7 +597,7 @@
         getSelectedTile: function () {
             var id = this.getTileId(this.selectedItems[0]);
             var tile = this.editedTiles.tiles[id];
-            
+
             return tile;
         }
     });
