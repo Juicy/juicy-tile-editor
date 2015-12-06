@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
-    "juicy-tile-grid":  ">=1.0.0"
+    "juicy-tile-list":  ">=1.1.0",
+    "juicy-tile-grid":  ">=1.1.0"
   }
 }

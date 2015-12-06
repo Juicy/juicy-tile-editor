@@ -229,8 +229,8 @@
             tileLists: { type: Array, value: [] },
             modified: { type: Boolean, value: false, notify: true }
         },
-        /** 
-         * Search document (and shadowRoot if any) for juicy-tile-lists to manage 
+        /**
+         * Search document (and shadowRoot if any) for juicy-tile-lists to manage
          * @returns {NodeList | Array} found lists.
         */
         attachTileLists: function () {
@@ -443,7 +443,7 @@
             var list, shadowContainer;
             while (listNo--) {
                 list = this.tileLists[listNo];
-                shadowContainer = list.$.container; // list.shadowRoot.getElementById("container");
+                shadowContainer = list.shadowContainer; // list.shadowRoot.getElementById("container");
 
                 // TODO (tomalec) unify virtual groups and real items selection.
                 list.addEventListener('mouseover', this.mouseOverListener);
@@ -464,7 +464,7 @@
             var list, shadowContainer;
             while (listNo--) {
                 list = this.tileLists[listNo];
-                shadowContainer = list.$.container; // list.shadowRoot.getElementById("container");
+                shadowContainer = list.shadowContainer; // list.shadowRoot.getElementById("container");
 
                 list.removeEventListener('mouseover', this.mouseOverListener);
                 shadowContainer.removeEventListener('mouseover', this.mouseOverListener);

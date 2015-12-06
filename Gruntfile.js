@@ -27,10 +27,10 @@ module.exports = function(grunt) {
         },
         bump: {
           options: {
-            files: ['package.json', 'bower.json'],
+            files: ['package.json', 'bower.json', 'src/juicy-tile-editor.html'],
             commit: true,
             commitMessage: '%VERSION%',
-            commitFiles: ['package.json', 'bower.json'],
+            commitFiles: ['package.json', 'bower.json', 'src/juicy-tile-editor.html'],
             createTag: true,
             tagName: '%VERSION%',
             tagMessage: 'Version %VERSION%',
