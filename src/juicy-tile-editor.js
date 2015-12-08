@@ -227,7 +227,8 @@
             parentRoot: { type: Object, value: null },
             /** {NodeList | Array} of <juicy-tile-list> elements we will bind to */
             tileLists: { type: Array, value: [] },
-            modified: { type: Boolean, value: false, notify: true }
+            modified: { type: Boolean, value: false, notify: true },
+            tileListsSelector: {type: String, value: 'juicy-tile-list, juicy-tile-grid'}
         },
         /**
          * Search document (and shadowRoot if any) for juicy-tile-lists to manage
@@ -236,11 +237,11 @@
         attachTileLists: function () {
             // var lists = document.getElementsByTagName('juicy-tile-list').array();
             var lists = Array.prototype.slice.call(
-                document.querySelectorAll('juicy-tile-list, juicy-tile-grid')
+                document.querySelectorAll(this.tileListsSelector)
             );
             if (this.parentRoot != document) {
                 lists.concat(
-                  this.parentRoot.querySelectorAll('juicy-tile-list, juicy-tile-grid')
+                  this.parentRoot.querySelectorAll(this.tileListsSelector)
                   );
             }
             this.tileLists = lists;
@@ -674,7 +675,7 @@
                 this.unhideItems(item.items);
             }
 
-            var lists = list.querySelectorAll("juicy-tile-list, juicy-tile-grid");
+            var lists = list.querySelectorAll(this.tileListsSelector);
 
             for (var i = 0; i < lists.length; i++) {
                 this.unhideListItems(lists[i]);
