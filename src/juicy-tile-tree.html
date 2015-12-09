@@ -319,7 +319,7 @@
             }
 
             html.push('<juicy-toggle-icon-button class="visibility" icon-off="jte-icon-eye" icon-on="jte-icon-eye-off" value="', item.uid, '"></juicy-toggle-icon-button>');
-            html.push('<juicy-draggable position="static" dropselector="html /deep/ ul.branch li .drop-item"');
+            html.push('<juicy-draggable data-uid="', item.uid, '" position="static" dropselector="html /deep/ ul.branch li .drop-item"');
 
             if (this.activeUid == item.uid) {
                 html.push(' disabled="true"');
@@ -518,6 +518,7 @@
             var target = e.currentTarget;
             var uid = target.dataset["uid"];
             var label = this.querySelector(".element-label[data-uid='" + uid + "']");
+            var draggable = this.querySelector("juicy-draggable[data-uid='" + uid + "']");
 
             this.activeUid = uid;
             label.classList.toggle("active", true);
@@ -526,12 +527,14 @@
             target.focus();
             target.selectionStart = 0;
             target.selectionEnd = target.value.length;
+            draggable.setAttribute("disabled", "disabled");
         };
 
         proto.nameBlurAction = function (e) {
             var target = e.currentTarget;
             var uid = target.dataset["uid"];
             var label = this.querySelector(".element-label[data-uid='" + uid + "']");
+            var draggable = this.querySelector("juicy-draggable[data-uid='" + uid + "']");
 
             label.classList.toggle("active", false);
             target.classList.toggle("active", false);
@@ -547,6 +550,8 @@
                 this.activeUid = null;
                 this.dispatchEvent(event);
             }
+
+            draggable.removeAttribute("disabled");
         };
 
         proto.nameKeypressAction = function (e) {
