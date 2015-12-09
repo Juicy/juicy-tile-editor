@@ -473,8 +473,14 @@
                 target = target.parentNode;
             }
 
-            target.classList.toggle("expanded", !collapsed);
-            target.classList.toggle("collapsed", collapsed);
+            if (collapsed) {
+                target.classList.add("expanded");
+                target.classList.remove("collapsed", collapsed);
+            } else {
+                target.classList.remove("expanded");
+                target.classList.add("collapsed", collapsed);
+            }
+
             this.expanded[target.dataset["uid"]] = !collapsed;
         };
 
@@ -533,7 +539,10 @@
             target.focus();
             target.selectionStart = 0;
             target.selectionEnd = target.value.length;
-            draggable.setAttribute("disabled", "disabled");
+
+            if (draggable) {
+                draggable.setAttribute("disabled", "disabled");
+            }
         };
 
         proto.nameBlurAction = function (e) {
@@ -564,7 +573,10 @@
             }
 
             label.focus();
-            draggable.removeAttribute("disabled");
+
+            if (draggable) {
+                draggable.removeAttribute("disabled");
+            }
         };
 
         proto.nameKeypressAction = function (e) {

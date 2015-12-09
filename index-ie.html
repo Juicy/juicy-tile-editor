@@ -98,9 +98,41 @@
                 </div>
                 <div class="tile tile-3">
                     Nested tiles 1:
+                    <juicy-tile-list setup="{{model.setup2}}">
+                        <div class="tile tile-0">Subitem 0 </div>
+                        <div class="tile tile-1">
+                            <button>Subitem 1</button>
+                        </div>
+                        <div class="tile tile-2">
+                            <input value="Subitem2">
+                        </div>
+                        <section class="tile tile-3">Subitem 3</section>
+                    </juicy-tile-list>
+                    <section class="tile tile-1">
+                        Nested tiles 2:
+                        <juicy-tile-list setup="{{model.setup2}}">
+                            <div class="tile tile-0">Subitem 0 </div>
+                            <div class="tile tile-1">
+                                <button>Subitem 1</button>
+                            </div>
+                            <div class="tile tile-2">
+                                <input value="Subitem2">
+                            </div>
+                            <section class="tile tile-3">Subitem 3</section>
+                        </juicy-tile-list>
+                    </section>
                 </div>
                 <div class="tile tile-4">
-                    Nested tiles 2:
+                    <juicy-tile-list setup="{{model.setup2}}">
+                        <div class="tile tile-0">Subitem 0 </div>
+                        <div class="tile tile-1">
+                            <button>Subitem 1</button>
+                        </div>
+                        <div class="tile tile-2">
+                            <input value="Subitem2">
+                        </div>
+                        <section class="tile tile-3">Subitem 3</section>
+                    </juicy-tile-list>
                 </div>
             </juicy-tile-list>
         </template>
