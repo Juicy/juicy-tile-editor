@@ -133,14 +133,16 @@
             font-size: 11px;
             line-height: normal;
             vertical-align: middle;
+            cursor: default;
         }
 
         input[type=text].item-name:focus {
             outline: none;
         }
 
-        input[type=text].item-name.active {
+        input[type=text].item-name:not([readonly]).active {
             border-color: white;
+            cursor: text;
         }
 
         i.jte-icon ~ .item-name {
@@ -504,13 +506,17 @@
             for (var i = 0; i < txts.length; i++) {
                 var container = txts[i];
                 var uid = container.dataset["uid"];
-                var is = this.highlighted[uid];
+                var is = !!this.highlighted[uid];
 
                 while (!container.classList.contains("element-label")) {
                     container = container.parentNode;
                 }
 
-                container.classList.toggle("highlight", is);
+                if (is) {
+                    container.classList.add("highlight");
+                } else {
+                    container.classList.remove("highlight");
+                }
             }
         };
 
@@ -539,8 +545,14 @@
             label.classList.toggle("active", false);
             target.classList.toggle("active", false);
             target.setAttribute("readonly", "readonly");
-            target.selectionStart = 0;
-            target.selectionEnd = 0;
+
+            if (target.selectionStart) {
+                target.selectionStart = 0;
+            }
+
+            if (target.selectionEnd) {
+                target.selectionEnd = 0;
+            }
 
             if (this.activeUid) {
                 var event = new CustomEvent("juicy-tile-tree-item-name-changed");
@@ -551,6 +563,7 @@
                 this.dispatchEvent(event);
             }
 
+            label.focus();
             draggable.removeAttribute("disabled");
         };
 
