@@ -232,7 +232,9 @@
     <ul id="container" class="juicy-tile-tree branch"></ul>
 </template>
 <script>
-    (function (scriptDocument) {
+    (function () {
+        var script = document._currentScript || document.currentScript;
+        var scriptDocument = script.ownerDocument;
         var JuicyTileTreePrototype = Object.create(HTMLElement.prototype);
         var proto = JuicyTileTreePrototype;
 
@@ -626,5 +628,5 @@
         window.JuicyTileTree = document.registerElement("juicy-tile-tree", {
             prototype: JuicyTileTreePrototype
         });
-    })(document.currentScript.ownerDocument);
+    })();
 </script>
