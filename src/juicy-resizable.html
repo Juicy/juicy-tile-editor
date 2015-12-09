@@ -7,7 +7,10 @@
     <content id="content"></content>
 </template>
 <script>
-    (function (scriptDocument) {
+    (function () {
+        var script = document._currentScript || document.currentScript;
+        var scriptDocument = script.ownerDocument;
+
         function clearSelection() {
             if (window.getSelection) {
                 window.getSelection().removeAllRanges();
@@ -118,5 +121,5 @@
         window.JuicyResizableElement = document.registerElement("juicy-resizable", {
             prototype: JuicyResizablePrototype
         });
-    })(document.currentScript.ownerDocument);
+    })();
 </script>
