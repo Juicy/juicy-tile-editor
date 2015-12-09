@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-editor&gt;</title>
+    <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
+
+    <!-- Importing Web Component's Polyfill -->
+    <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../polymer/polymer.html">
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../juicy-tile-list/src/juicy-tile-list.html">
+    <link rel="import" href="../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
+    <link rel="import" href="src/juicy-tile-editor.html">
+
+    <style>
+        body {
+            padding: 50px 20px 20px 20px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        juicy-tile-list {
+            padding: 1em;
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+            display: block;
+            overflow: auto;
+        }
+
+        juicy-tile-list#st1 {
+            width: 100%;
+            height: 600px;
+            margin: 2em 0;
+        }
+
+        juicy-tile-list .tile {
+            box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);
+            overflow: auto;
+        }
+
+        juicy-tile-list .tile-0 {
+            background: lightgreen;
+        }
+
+        juicy-tile-list .tile-1 {
+            background: rgba(173, 216, 230, 0.8);
+        }
+
+        juicy-tile-list .tile-2 {
+            background: rgba(255, 255, 0, 0.8);
+        }
+
+        juicy-tile-list .tile-3 {
+            background: gray;
+        }
+
+        juicy-tile-list .tile-4 {
+            background: orange;
+        }
+
+        #aboveOverlay {
+            position: fixed;
+            z-index: 100;
+        }
+
+        iframe {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <article class="markdown-body">
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+        <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+                allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+
+        <template is="dom-bind" id="root">
+            <template is="dom-if" if="{{model.editingMode}}" restamp="true">
+                <div id="aboveOverlay">
+                    <juicy-tile-editor selection-mode="true" on-juicy-tile-editor-close="closeEditor"></juicy-tile-editor>
+                </div>
+            </template>
+            <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+            <label><input type="checkbox" checked="{{model.editingMode::change}}" /> Show editor (<span>{{model.editingMode}}</span>)</label>
+            <juicy-tiles-setup-sync name="juicy-tile-editor/index.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
+            <juicy-tile-list id="st1" setup="{{model.setup}}">
+                <div class="tile tile-0">Item 0 </div>
+                <div class="tile tile-1">
+                    <button onclick="blockme()">Item 1</button>
+                </div>
+                <div class="tile tile-2">
+                    <input value="Input2">
+                </div>
+                <div class="tile tile-3">
+                    Nested tiles 1:
+                </div>
+                <div class="tile tile-4">
+                    Nested tiles 2:
+                </div>
+            </juicy-tile-list>
+        </template>
+        <script type="text/javascript">
+            var model = {
+                editingMode: true,
+                setup: {
+                    gutter: 16,
+                    items: [
+                        /*{
+                            gutter: 0,
+                            height: 100,
+                            id: "root_0",
+                            itemName: "Group 2",
+                            items: [{ "width": 128, "height": 100, "priority": 0.5, "id": 0, hidden: false }],
+                            priority: 0.5,
+                            width: "100%"
+                        },*/
+                        { "width": 128, "height": 100, "priority": 0.5, "id": 0, hidden: false },
+                      {
+                          "width": 512, "height": 100, "priority": 0.48, "gutter": 8,
+                          "innerHTML": "<div style=\"background: rgba(191, 81, 236, 0.5); position: relative; top: -8px; left: -8px; height: calc(100% + 2 * 8px ); width: calc(100% + 2 * 8px ); font-size: 100px;\"></div>",
+                          "items": [
+                            { "width": 256, "height": 100, "priority": 0.7, "id": 1 },
+                            { "width": 128, "height": 100, "priority": 0.0, "id": 2 }
+                          ]
+                      },
+                      { "width": 256, "precalculateHeight": true, "priority": 0.47, "id": 3 }
+                    ]
+                },
+                setup2: {
+                    gutter: 4,
+                    items: [
+                      {
+                          id: 0,
+                          priority: 0.9,// 0.6,
+                          height: 20,
+                          width: 100
+                      },
+                      {
+                          id: 1,
+                          priority: 0.8,// 0.9,
+                          height: 20,
+                          width: 100
+                      },
+                      {
+                          id: 2,
+                          priority: 0.6,// 0.3,
+                          height: 40,
+                          width: 180
+                      },
+                      {
+                          id: 3,
+                          priority: 0.4,
+                          height: 20,
+                          width: 150
+                      }
+                    ]
+                }
+            };
+
+            var template = document.querySelector("template#root");
+
+            template.model = model;
+
+            template.closeEditor = function () {
+                template.set("model.editingMode", false);
+            };
+
+            function blockme() {
+                alert("I should get blocked when editor is opened");
+            }
+        </script>
+    </article>
+</body>
+</html>
