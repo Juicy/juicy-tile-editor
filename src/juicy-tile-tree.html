@@ -467,21 +467,24 @@
 
         proto.setIsExpanded = function (e) {
             var target = e.currentTarget;
-            var collapsed = target.checked;
 
-            while (target && target.tagName != "LI") {
-                target = target.parentNode;
-            }
+            setTimeout(function () {
+                var collapsed = target.checked;
 
-            if (collapsed) {
-                target.classList.add("expanded");
-                target.classList.remove("collapsed", collapsed);
-            } else {
-                target.classList.remove("expanded");
-                target.classList.add("collapsed", collapsed);
-            }
+                while (target && target.tagName != "LI") {
+                    target = target.parentNode;
+                }
 
-            this.expanded[target.dataset["uid"]] = !collapsed;
+                if (collapsed) {
+                    target.classList.add("expanded");
+                    target.classList.remove("collapsed", collapsed);
+                } else {
+                    target.classList.remove("expanded");
+                    target.classList.add("collapsed", collapsed);
+                }
+
+                this.expanded[target.dataset["uid"]] = !collapsed;
+            }.bind(this));
         };
 
         proto.tapAction = function (e, index) {
@@ -533,8 +536,8 @@
             var draggable = this.querySelector("juicy-draggable[data-uid='" + uid + "']");
 
             this.activeUid = uid;
-            label.classList.toggle("active", true);
-            target.classList.toggle("active", true);
+            label.classList.add("active");
+            target.classList.add("active");
             target.removeAttribute("readonly");
             target.focus();
             target.selectionStart = 0;
@@ -551,8 +554,8 @@
             var label = this.querySelector(".element-label[data-uid='" + uid + "']");
             var draggable = this.querySelector("juicy-draggable[data-uid='" + uid + "']");
 
-            label.classList.toggle("active", false);
-            target.classList.toggle("active", false);
+            label.classList.remove("active");
+            target.classList.remove("active");
             target.setAttribute("readonly", "readonly");
 
             if (target.selectionStart) {
@@ -616,8 +619,8 @@
                 var li = this.querySelector("li[data-uid='" + id + "']");
                 var expander = this.querySelector("li[data-uid='" + id + "'] juicy-toggle-icon-button.expand");
 
-                li.classList.toggle("collapsed", false);
-                li.classList.toggle("expanded", true);
+                li.classList.remove("collapsed");
+                li.classList.add("expanded");
 
                 if (expander) {
                     expander.setAttribute("checked", true)
@@ -631,7 +634,7 @@
                     var element = this.querySelector("div.element-label[data-uid='" + i + "']");
 
                     if (element) {
-                        element.classList.toggle("highlight", false);
+                        element.classList.remove("highlight");
                     }
                 }
 
@@ -642,7 +645,7 @@
 
             if (element) {
                 this.highlighted[uid] = true;
-                element.classList.toggle("highlight", true);
+                element.classList.add("highlight");
             }
         };
 
@@ -651,7 +654,7 @@
 
             if (element) {
                 this.highlighted[uid] = false;
-                element.classList.toggle("highlight", false);
+                element.classList.remove("highlight");
             }
         };
 
