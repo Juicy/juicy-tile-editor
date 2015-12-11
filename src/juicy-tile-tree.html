@@ -2,9 +2,7 @@
 <link href="css/jte-fontawesome.css" rel="stylesheet" />
 
 <template id="juicy-tile-tree">
-    <style type="text/css">
-        @import "css/jte-fontawesome.css";
-    </style>
+    <style type="text/css"></style>
     <style>
         :host {
             overflow: auto;
@@ -248,12 +246,13 @@
         };
 
         proto.attachedCallback = function () {
+            //debugger;
             var root = this;//.createShadowRoot();
             var template = scriptDocument.querySelector("#juicy-tile-tree");
             var clone = document.importNode(template.content, true);
-            var iconsUrl = new URL("css/jte-fontawesome.css", scriptDocument.querySelector("head").baseURI);
+            var iconsUrl = Polymer.ResolveUrl.resolveUrl("css/jte-fontawesome.css", script.baseURI || scriptDocument.baseURI);
 
-            clone.querySelector("style").innerHTML = '@import "' + iconsUrl.href + '"';
+            clone.querySelector("style").innerHTML = '@import "' + iconsUrl + '"';
             root.appendChild(clone);
             this.$ = {
                 container: root.querySelector("#container")
