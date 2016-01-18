@@ -207,7 +207,7 @@
                 attached: function () {
                     this.set("mediaScreen", this.mediaScreenRanges[this.mediaScreenRanges.length - 1]);
 
-                    var lists = document.querySelectorAll(this.tileListSelector);
+                    var lists = Array.prototype.slice.call(document.querySelectorAll(this.tileListSelector));
 
                     this.set("tileLists", lists);
                     this.attachEventListeners();
