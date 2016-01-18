@@ -1,0 +1,453 @@
+﻿﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../juicy-highlight/src/juicy-highlight.html">
+
+<dom-module id="juicy-tile-simple-editor">
+    <template>
+        <style>
+            :host {
+                position: fixed;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                box-sizing: border-box;
+                background-color: #252526;
+                color: white;
+                height: 60px;
+                padding: 10px;
+            }
+
+            .editor-form .editor-form-section {
+                float: left;
+                margin-right: 20px;
+            }
+
+            .editor-form .editor-form-section label,
+            .editor-form .editor-form-section span {
+                line-height: 35px;
+            }
+
+            .editor-form button.btn {
+                border: 0px;
+                cursor: pointer;
+                padding: 10px;
+                border-radius: 2px;
+                outline: none;
+                min-width: 30px;
+                text-align: center;
+                background-color: #CCCCCC;
+                line-height: normal;
+            }
+
+            .editor-form button.btn:hover {
+                background-color: #EEEEEE;
+            }
+
+            .editor-form button.btn-radio {
+                background-color: #F0F0F0;
+                color: #CCCCCC;
+            }
+
+            .editor-form button.btn-radio:hover {
+                color: black;
+            }
+
+            .editor-form button.btn-radio.active {
+                color: black;
+                background-color: #CCCCCC;
+            }
+
+            .editor-form button.btn[disabled],
+            .editor-form button.btn-radio[disabled],
+            .editor-form button.btn-radio:hover[disabled] {
+                cursor: not-allowed;
+                color: #CCCCCC;
+                background-color: #F0F0F0;
+            }
+
+            .editor-form .editor-form-section label.alert {
+                color: red;
+                background-color: white;
+                padding: 5px;
+                border-radius: 2px;
+            }
+        </style>
+
+        <div class="editor-form">
+            <div class="editor-form-section">
+                <template is="dom-repeat" items="{{mediaScreenRanges}}">
+                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" disabled$="{{!selectedTileList}}">{{item.name}}</button>
+                </template>
+            </div>
+            <div class="editor-form-section">
+                <label>Width:</label>
+                <template is="dom-repeat" items="{{widthRanges}}">
+                    <button type="button" class$="{{getRadioButtonCss(width, item)}}" item="{{item}}" on-click="selectWidth">{{item.name}}</button>
+                </template>
+            </div>
+            <div class="editor-form-section">
+                <label>Visible:</label>
+                <button type="button" class$="{{getRadioButtonCss(visible, 1)}}" on-click="selectVisible" data-value="1">Yes</button>
+                <button type="button" class$="{{getRadioButtonCss(visible, 0)}}" on-click="selectVisible" data-value="0">No</button>
+            </div>
+            <div class="editor-form-section">
+                <label>Position:</label>
+                <button type="button" class="btn" on-click="moveUp">Up</button>
+                <button type="button" class="btn" on-click="moveDown">Down</button>
+            </div>
+            <template is="dom-if" if="{{selectedTiles.length}}">
+                <div class="editor-form-section">
+                    <b>
+                        <span>{{selectedTiles.length}}</span>
+                        <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
+                    </b>
+                    <label>selected</label>
+                </div>
+            </template>
+            <template is="dom-if" if="{{message}}">
+                <div class="editor-form-section">
+                    <label class="alert">{{message}}</label>
+                </div>
+            </template>
+        </div>
+
+        <juicy-highlight id="highlightTileRollover" strokewidth="1" strokecolor="#1E90FF" strokeoffset="2" fill="rgba(0, 191, 255, 0.2)" on-click="highlightTileRolloverClick"></juicy-highlight>
+        <juicy-highlight id="highlightTileSelected" strokewidth="2" strokecolor="#fd7f02" strokeoffset="2"></juicy-highlight>
+    </template>
+    <script>
+        (function () {
+            function getJuicyList(e) {
+                var list = null;
+
+                for (var i = 1; i < e.path.length; i++) {
+                    if (e.path[i].tagName == "JUICY-TILE-LIST") {
+                        list = e.path[i];
+                        break;
+                    }
+                }
+
+                if (!list) {
+                    return null;
+                }
+
+                return list.host || list;
+            };
+
+            function getJuicyTile(e) {
+                var list = getJuicyList(e);
+
+                if (list == null) {
+                    return null;
+                }
+
+                var target = null;
+
+                for (var i = 0; i < e.path.length; i++) {
+                    target = e.path[i];
+
+                    if (target && target.classList && target.hasAttribute &&
+                        (target.classList.contains("juicy-tile") || target.classList.contains("containerBackground") || target.hasAttribute("juicytile"))) {
+                        break;
+                    }
+                }
+
+                if (!target.parentNode) {
+                    return null;
+                }
+
+                var id = target.id;
+
+                if (target.hasAttribute("juicytile")) {
+                    id = target.getAttribute("juicytile");
+                }
+
+                return list.tiles[id];
+            }
+
+            function getSetupItem(setup, id) {
+                if (!setup.items) {
+                    return null;
+                }
+
+                for (var i = 0; i < setup.items.length; i++) {
+                    var item = setup.items[i];
+
+                    if (item.id == id) {
+                        return item;
+                    }
+
+                    var s = getSetupItem(item, id);
+
+                    if (s != null) {
+                        return s;
+                    }
+                }
+
+                return null;
+            }
+
+            Polymer({
+                is: "juicy-tile-simple-editor",
+                properties: {
+                    mediaScreen: { type: Object, notify: true },
+                    mediaScreenRanges: { type: Array, value: [{ name: "Mobile", width: 300 }, { name: "Tablet", width: 700 }, { name: "Laptop", width: 900 }, { name: "Desktop", width: 1100 }] },
+                    width: { type: Object, value: null, notify: true },
+                    widthRanges: {
+                        type: Array,
+                        value: [{ name: "1", value: "10%" }, { name: "2", value: "20%" }, { name: "3", value: "30%" }, { name: "4", value: "40%" }, { name: "5", value: "50%" },
+                                { name: "6", value: "60%" }, { name: "7", value: "70%" }, { name: "8", value: "80%" }, { name: "9", value: "90%" }, { name: "10", value: "100%" }]
+                    },
+                    visible: { type: Boolean, value: null, notify: true },
+                    tileListSelector: { type: String, value: "juicy-tile-list, juicy-tile-grid" },
+                    tileLists: { type: Array, value: [] },
+                    selectedTiles: { type: Array, value: [] },
+                    selectedTileList: { type: Object, value: null, observer: "selectedTileListChanged" },
+                    message: { type: String, value: null }
+                },
+                observers: ["selectedTilesChanged(selectedTiles.length)"],
+                attached: function () {
+                    this.set("mediaScreen", this.mediaScreenRanges[this.mediaScreenRanges.length - 1]);
+
+                    var lists = document.querySelectorAll(this.tileListSelector);
+
+                    this.set("tileLists", lists);
+                    this.attachEventListeners();
+                },
+                detached: function () {
+                    this.detachEventListeners();
+                },
+                attachEventListeners: function () {
+                    this.onListMouseover = function (e) {
+                        var tile = getJuicyTile(e);
+
+                        if (tile) {
+                            this.$.highlightTileRollover.show(tile);
+                            e.stopImmediatePropagation();
+                        } else {
+                            this.$.highlightTileRollover.hide();
+                        }
+                    }.bind(this);
+
+                    this.onListClick = function (e) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+
+                        var list = getJuicyList(e);
+                        var tile = getJuicyTile(e);
+
+                        if (!tile) {
+                            this.set("selectedTileList", null);
+                            this.set("selectedTiles", []);
+                            return;
+                        }
+
+                        if (!e.ctrlKey) {
+                            this.set("selectedTileList", list);
+                            this.set("selectedTiles", [tile]);
+                            return;
+                        }
+
+                        if (this.selectedTiles.length && this.selectedTileList != list) {
+                            this.showMessage("You cannnot select tiles from different tile containers!");
+                            return;
+                        }
+
+                        var index = this.selectedTiles.indexOf(tile);
+
+                        this.set("selectedTileList", list);
+
+                        if (index >= 0) {
+                            this.splice("selectedTiles", index, 1);
+                        } else {
+                            this.push("selectedTiles", tile);
+                        }
+                    }.bind(this);
+
+                    this.tileLists.forEach(function (list) {
+                        var shadow = list.shadowContainer;
+
+                        list.addEventListener("mousemove", this.onListMouseover);
+                        shadow.addEventListener("mousemove", this.onListMouseover);
+
+                        list.addEventListener("click", this.onListClick, true);
+                        shadow.addEventListener("click", this.onListClick, true);
+                    }.bind(this));
+                },
+                detachEventListeners: function () {
+                    this.tileLists.forEach(function (list) {
+                        var shadow = list.shadowContainer;
+
+                        list.removeEventListener("mousemove", this.onListMouseover);
+                        shadow.removeEventListener("mousemove", this.onListMouseover);
+
+                        list.removeEventListener("click", this.onListClick, true);
+                        shadow.removeEventListener("click", this.onListClick, true);
+                    }.bind(this));
+
+                    this.onListMouseover = null;
+                    this.onListMouseover = null;
+                },
+                showMessage: function (text) {
+                    this.set("message", text);
+
+                    clearTimeout(this.messageTimeout);
+                    this.messageTimeout = setTimeout(function () {
+                        this.set("message", "");
+                    }.bind(this), 3000);
+                },
+                getSelectedTilesCaption: function (length) {
+                    return length > 1 ? "tiles" : "tile";
+                },
+                getRadioButtonCss: function (selected, item) {
+                    if (selected == item) {
+                        return "btn btn-radio active";
+                    }
+
+                    return "btn btn-radio";
+                },
+                getCommonSetupValue: function (name) {
+                    var value = null;
+
+                    for (var i = 0; i < this.selectedTiles.length; i++) {
+                        var tile = this.selectedTiles[i];
+                        var id = tile.id;
+                        var setup = getSetupItem(this.selectedTileList.setup, id);
+                        var v = setup[name];
+
+                        if (i > 0 && value !== v) {
+                            return null;
+                        }
+
+                        value = v;
+                    }
+
+                    if (value === undefined) {
+                        value = null;
+                    }
+
+                    return value;
+                },
+                readSelectedMediaScreen: function (newVal, oldVal) {
+                    if (!newVal) {
+                        this.set("mediaScreen", null);
+                        return;
+                    }
+
+                    var w = newVal.setup.width;
+                    var range = null;
+
+                    this.mediaScreenRanges.forEach(function (row) {
+                        if (w >= row.width) {
+                            range = row;
+                        }
+                    }.bind(this));
+
+                    this.set("mediaScreen", range);
+                },
+                readWidth: function () {
+                    var width = this.getCommonSetupValue("width");
+
+                    if (!width) {
+                        this.set("width", null);
+                    } else {
+                        var item = null;
+
+                        this.widthRanges.forEach(function (row) {
+                            if (width == row.value) {
+                                item = row;
+                            }
+                        });
+
+                        this.set("width", item);
+                    }
+                },
+                readVisible: function () {
+                    var hidden = this.getCommonSetupValue("hidden");
+
+                    if (hidden === null) {
+                        this.set("visible", null);
+                    } else {
+                        this.set("visible", !hidden);
+                    }
+                },
+                readSelectedSetup: function () {
+                    if (!this.selectedTiles.length) {
+                        return;
+                    }
+
+                    this.readWidth();
+                    this.readVisible();
+                },
+                selectMediaScreen: function (e) {
+                    if (!this.selectedTileList) {
+                        return;
+                    }
+
+                    this.set("mediaScreen", e.target.item);
+                    this.selectedTileList.setup.width = this.mediaScreen.width;
+                },
+                selectWidth: function (e) {
+                    this.set("width", e.target.item);
+
+                    this.selectedTiles.forEach(function (tile) {
+                        var id = tile.id;
+                        var setup = getSetupItem(this.selectedTileList.setup, id);
+
+                        setup.width = this.width.value;
+                        setup.widthFlexible = true;
+                    }.bind(this));
+
+                    this.selectedTileList.refresh();
+                },
+                selectVisible: function (e) {
+                    this.set("visible", e.target.dataset.value / 1);
+
+                    this.selectedTiles.forEach(function (tile) {
+                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+
+                        setup.hidden = !this.visible;
+                    }.bind(this));
+
+                    this.selectedTileList.refresh();
+                },
+                moveUp: function (e) {
+                    this.selectedTiles.forEach(function (tile) {
+                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+
+                        this.selectedTileList.reprioritizeItem(setup, true);
+                    }.bind(this));
+
+                    this.selectedTileList.refresh();
+                },
+                moveDown: function (e) {
+                    this.selectedTiles.forEach(function (tile) {
+                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+
+                        this.selectedTileList.reprioritizeItem(setup, false);
+                    }.bind(this));
+
+                    this.selectedTileList.refresh();
+                },
+                highlightTileRolloverClick: function (e) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    return false;
+                },
+                selectedTilesChanged: function () {
+                    this.$.highlightTileSelected.hide();
+                    this.readSelectedSetup();
+
+                    if (!this.selectedTiles.length) {
+                        this.set("width", null);
+                        this.set("selectedTileList", null);
+                        return;
+                    }
+
+                    this.$.highlightTileSelected.show(this.selectedTiles);
+                },
+                selectedTileListChanged: function (newVal, oldVal) {
+                    this.readSelectedMediaScreen(newVal, oldVal);
+                }
+            });
+        })();
+    </script>
+</dom-module>
