@@ -102,24 +102,24 @@
         <div class="editor-form">
             <div class="editor-form-section">
                 <template is="dom-repeat" items="{{mediaScreenRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" disabled$="{{!selectedTileList}}">{{item.name}}</button>
+                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" disabled$="{{!selectedList}}">{{item.name}}</button>
                 </template>
             </div>
             <div class="editor-form-section">
                 <label>Width:</label>
                 <template is="dom-repeat" items="{{widthRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(width, item)}}" item="{{item}}" on-click="selectWidth">{{item.name}}</button>
+                    <button type="button" class$="{{getRadioButtonCss(width, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">{{item.name}}</button>
                 </template>
             </div>
             <div class="editor-form-section">
                 <label>Visible:</label>
-                <button type="button" class$="{{getRadioButtonCss(visible, 1)}}" on-click="selectVisible" data-value="1">Yes</button>
-                <button type="button" class$="{{getRadioButtonCss(visible, 0)}}" on-click="selectVisible" data-value="0">No</button>
+                <button type="button" class$="{{getRadioButtonCss(visible, 1)}}" on-click="selectVisible" data-value="1" disabled$="{{!selectedTiles.length}}">Yes</button>
+                <button type="button" class$="{{getRadioButtonCss(visible, 0)}}" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}">No</button>
             </div>
             <div class="editor-form-section">
                 <label>Position:</label>
-                <button type="button" class="btn" on-click="moveUp">Up</button>
-                <button type="button" class="btn" on-click="moveDown">Down</button>
+                <button type="button" class="btn" on-click="moveUp" disabled$="{{!selectedTiles.length}}">Up</button>
+                <button type="button" class="btn" on-click="moveDown" disabled$="{{!selectedTiles.length}}">Down</button>
             </div>
             <template is="dom-if" if="{{selectedTiles.length}}">
                 <div class="editor-form-section">
