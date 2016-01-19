@@ -140,7 +140,7 @@
         <div class="editor-tree">
             <template is="dom-repeat" items="{{selectedListItems}}">
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
-                    <span>{{item.id}}</span>
+                    <span>{{item.name}}</span>
                 </div>
             </template>
         </div>
