@@ -464,7 +464,7 @@
                         setup.hidden = !this.visible;
                     }.bind(this));
 
-                    this.selectedList.refresh();
+                    this.selectedList.refresh(true);
                 },
                 moveUp: function (e) {
                     var setups = this.selectedTiles.map(function (tile) {
