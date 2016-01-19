@@ -200,7 +200,7 @@
                     tileListSelector: { type: String, value: "juicy-tile-list, juicy-tile-grid" },
                     tileLists: { type: Array, value: [] },
                     selectedTiles: { type: Array, value: [] },
-                    selectedTileList: { type: Object, value: null, observer: "selectedTileListChanged" },
+                    selectedList: { type: Object, value: null, observer: "selectedListChanged" },
                     message: { type: String, value: null }
                 },
                 observers: ["selectedTilesChanged(selectedTiles.length)"],
@@ -235,25 +235,25 @@
                         var tile = getJuicyTile(e);
 
                         if (!tile) {
-                            this.set("selectedTileList", null);
+                            this.set("selectedList", null);
                             this.set("selectedTiles", []);
                             return;
                         }
 
                         if (!e.ctrlKey) {
-                            this.set("selectedTileList", list);
+                            this.set("selectedList", list);
                             this.set("selectedTiles", [tile]);
                             return;
                         }
 
-                        if (this.selectedTiles.length && this.selectedTileList != list) {
+                        if (this.selectedTiles.length && this.selectedList != list) {
                             this.showMessage("You cannnot select tiles from different tile containers!");
                             return;
                         }
 
                         var index = this.selectedTiles.indexOf(tile);
 
-                        this.set("selectedTileList", list);
+                        this.set("selectedList", list);
 
                         if (index >= 0) {
                             this.splice("selectedTiles", index, 1);
@@ -310,7 +310,7 @@
                     for (var i = 0; i < this.selectedTiles.length; i++) {
                         var tile = this.selectedTiles[i];
                         var id = tile.id;
-                        var setup = getSetupItem(this.selectedTileList.setup, id);
+                        var setup = getSetupItem(this.selectedList.setup, id);
                         var v = setup[name];
 
                         if (i > 0 && value !== v) {
@@ -378,54 +378,54 @@
                     this.readVisible();
                 },
                 selectMediaScreen: function (e) {
-                    if (!this.selectedTileList) {
+                    if (!this.selectedList) {
                         return;
                     }
 
                     this.set("mediaScreen", e.target.item);
-                    this.selectedTileList.setup.width = this.mediaScreen.width;
+                    this.selectedList.setup.width = this.mediaScreen.width;
                 },
                 selectWidth: function (e) {
                     this.set("width", e.target.item);
 
                     this.selectedTiles.forEach(function (tile) {
                         var id = tile.id;
-                        var setup = getSetupItem(this.selectedTileList.setup, id);
+                        var setup = getSetupItem(this.selectedList.setup, id);
 
                         setup.width = this.width.value;
                         setup.widthFlexible = true;
                     }.bind(this));
 
-                    this.selectedTileList.refresh();
+                    this.selectedList.refresh();
                 },
                 selectVisible: function (e) {
                     this.set("visible", e.target.dataset.value / 1);
 
                     this.selectedTiles.forEach(function (tile) {
-                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+                        var setup = getSetupItem(this.selectedList.setup, tile.id);
 
                         setup.hidden = !this.visible;
                     }.bind(this));
 
-                    this.selectedTileList.refresh();
+                    this.selectedList.refresh();
                 },
                 moveUp: function (e) {
                     this.selectedTiles.forEach(function (tile) {
-                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+                        var setup = getSetupItem(this.selectedList.setup, tile.id);
 
-                        this.selectedTileList.reprioritizeItem(setup, true);
+                        this.selectedList.reprioritizeItem(setup, true);
                     }.bind(this));
 
-                    this.selectedTileList.refresh();
+                    this.selectedList.refresh();
                 },
                 moveDown: function (e) {
                     this.selectedTiles.forEach(function (tile) {
-                        var setup = getSetupItem(this.selectedTileList.setup, tile.id);
+                        var setup = getSetupItem(this.selectedList.setup, tile.id);
 
-                        this.selectedTileList.reprioritizeItem(setup, false);
+                        this.selectedList.reprioritizeItem(setup, false);
                     }.bind(this));
 
-                    this.selectedTileList.refresh();
+                    this.selectedList.refresh();
                 },
                 highlightTileRolloverClick: function (e) {
                     e.stopImmediatePropagation();
@@ -438,13 +438,13 @@
 
                     if (!this.selectedTiles.length) {
                         this.set("width", null);
-                        this.set("selectedTileList", null);
+                        this.set("selectedList", null);
                         return;
                     }
 
                     this.$.highlightTileSelected.show(this.selectedTiles);
                 },
-                selectedTileListChanged: function (newVal, oldVal) {
+                selectedListChanged: function (newVal, oldVal) {
                     this.readSelectedMediaScreen(newVal, oldVal);
                 }
             });
