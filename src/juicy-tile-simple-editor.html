@@ -145,7 +145,7 @@
             </template>
         </div>
 
-        <juicy-highlight id="highlightTileRollover" strokewidth="1" strokecolor="#1E90FF" strokeoffset="2" fill="rgba(0, 191, 255, 0.2)" on-click="highlightTileRolloverClick"></juicy-highlight>
+        <juicy-highlight id="highlightTileRollover" strokewidth="1" strokecolor="#1E90FF" strokeoffset="2" fill="rgba(0, 191, 255, 0.2)"></juicy-highlight>
         <juicy-highlight id="highlightTileSelected" strokewidth="2" strokecolor="#fd7f02" strokeoffset="2"></juicy-highlight>
     </template>
     <script>
@@ -459,11 +459,6 @@
                     var tile = this.selectedList.tiles[setup.id];
 
                     this.toggleSelectedTile(e, this.selectedList, tile);
-                },
-                highlightTileRolloverClick: function (e) {
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
-                    return false;
                 },
                 resetSelection: function () {
                     this.set("selectedList", this.tileLists[0]);
