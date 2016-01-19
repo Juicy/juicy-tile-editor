@@ -14,6 +14,7 @@
                 color: white;
                 height: 60px;
                 padding: 10px;
+                overflow: visible;
             }
 
             .editor-form .editor-form-section {
@@ -70,6 +71,32 @@
                 padding: 5px;
                 border-radius: 2px;
             }
+
+            .editor-tree {
+                position: fixed;
+                height: calc(100vh - 60px);
+                right: 0px;
+                width: 220px;
+                top: 60px;
+                background-color: #252526;
+                box-sizing: border-box;
+                padding: 0px;
+                border-top: 1px solid #C0C0C0;
+                font-size: 13px;
+            }
+
+            .editor-tree div.editor-tree-item {
+                padding: 2px 10px;
+                cursor: pointer;
+            }
+
+            .editor-tree div.editor-tree-item:hover {
+                background-color: #444444;
+            }
+
+            .editor-tree div.editor-tree-item.selected {
+                background-color: #01629E;
+            }
         </style>
 
         <div class="editor-form">
@@ -106,6 +133,14 @@
             <template is="dom-if" if="{{message}}">
                 <div class="editor-form-section">
                     <label class="alert">{{message}}</label>
+                </div>
+            </template>
+        </div>
+
+        <div class="editor-tree">
+            <template is="dom-repeat" items="{{selectedListItems}}">
+                <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
+                    <span>{{item.id}}</span>
                 </div>
             </template>
         </div>
@@ -201,6 +236,7 @@
                     tileLists: { type: Array, value: [] },
                     selectedTiles: { type: Array, value: [] },
                     selectedList: { type: Object, value: null, observer: "selectedListChanged" },
+                    selectedListItems:  { type: Array, value: [] },
                     message: { type: String, value: null }
                 },
                 observers: ["selectedTilesChanged(selectedTiles.length)"],
@@ -211,6 +247,7 @@
 
                     this.set("tileLists", lists);
                     this.attachEventListeners();
+                    this.resetSelection();
                 },
                 detached: function () {
                     this.detachEventListeners();
@@ -234,32 +271,7 @@
                         var list = getJuicyList(e);
                         var tile = getJuicyTile(e);
 
-                        if (!tile) {
-                            this.set("selectedList", null);
-                            this.set("selectedTiles", []);
-                            return;
-                        }
-
-                        if (!e.ctrlKey) {
-                            this.set("selectedList", list);
-                            this.set("selectedTiles", [tile]);
-                            return;
-                        }
-
-                        if (this.selectedTiles.length && this.selectedList != list) {
-                            this.showMessage("You cannnot select tiles from different tile containers!");
-                            return;
-                        }
-
-                        var index = this.selectedTiles.indexOf(tile);
-
-                        this.set("selectedList", list);
-
-                        if (index >= 0) {
-                            this.splice("selectedTiles", index, 1);
-                        } else {
-                            this.push("selectedTiles", tile);
-                        }
+                        this.toggleSelectedTile(e, list, tile);
                     }.bind(this);
 
                     this.tileLists.forEach(function (list) {
@@ -303,6 +315,21 @@
                     }
 
                     return "btn btn-radio";
+                },
+                getTreeItemCss: function (selected, item) {
+                    var css = ["editor-tree-item"];
+                    var tiles = this.selectedTiles;
+
+                    for (var i = 0; i < tiles.length; i++) {
+                        var tile = tiles[i];
+
+                        if (tile.id == item.id) {
+                            css.push("selected");
+                            break;
+                        }
+                    }
+
+                    return css.join(" ");
                 },
                 getCommonSetupValue: function (name) {
                     var value = null;
@@ -427,10 +454,50 @@
 
                     this.selectedList.refresh();
                 },
+                selectTreeItem: function (e) {
+                    var setup = e.currentTarget.item;
+                    var tile = this.selectedList.tiles[setup.id];
+
+                    this.toggleSelectedTile(e, this.selectedList, tile);
+                },
                 highlightTileRolloverClick: function (e) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
                     return false;
+                },
+                resetSelection: function () {
+                    this.set("selectedList", this.tileLists[0]);
+
+                    if (this.selectedTiles.length) {
+                        this.set("selectedTiles", []);
+                    }
+                },
+                toggleSelectedTile: function (e, list, tile) {
+                    if (!tile) {
+                        this.resetSelection();
+                        return;
+                    }
+
+                    if (!e.ctrlKey) {
+                        this.set("selectedList", list);
+                        this.set("selectedTiles", [tile]);
+                        return;
+                    }
+
+                    if (this.selectedTiles.length && this.selectedList != list) {
+                        this.showMessage("You cannnot select tiles from different tile containers!");
+                        return;
+                    }
+
+                    var index = this.selectedTiles.indexOf(tile);
+
+                    this.set("selectedList", list);
+
+                    if (index >= 0) {
+                        this.splice("selectedTiles", index, 1);
+                    } else {
+                        this.push("selectedTiles", tile);
+                    }
                 },
                 selectedTilesChanged: function () {
                     this.$.highlightTileSelected.hide();
@@ -438,7 +505,7 @@
 
                     if (!this.selectedTiles.length) {
                         this.set("width", null);
-                        this.set("selectedList", null);
+                        this.resetSelection();
                         return;
                     }
 
@@ -446,6 +513,13 @@
                 },
                 selectedListChanged: function (newVal, oldVal) {
                     this.readSelectedMediaScreen(newVal, oldVal);
+
+                    if (!newVal) {
+                        this.resetSelection();
+                    } else {
+                        var items = newVal.setup.items.slice();
+                        this.set("selectedListItems", items);
+                    }
                 }
             });
         })();
