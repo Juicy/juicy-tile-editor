@@ -98,6 +98,32 @@
         return null;
     }
 
+    function sortByPriority(a, b) {
+        a = a.priority;
+        b = b.priority;
+
+        if (a > b) {
+            return 1;
+        } else if (b > a) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    function sortByPriorityDesc(a, b) {
+        a = a.priority;
+        b = b.priority;
+
+        if (a > b) {
+            return -1;
+        } else if (b > a) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     Polymer({
         is: "juicy-tile-simple-editor",
         properties: {
@@ -328,24 +354,14 @@
                 return getSetupItem(this.selectedList.setup, tile.id);
             }.bind(this));
 
-            setups.sort(function (a, b) {
-                a = a.priority;
-                b = b.priority;
-
-                if (a > b) {
-                    return -1;
-                } else if (b > a) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            setups.sort(sortByPriorityDesc);
 
             setups.forEach(function (setup) {
                 this.selectedList.reprioritizeItem(setup, true);
             }.bind(this));
 
             this.selectedList.refresh();
+            this.refreshSelectedListItems();
         },
         moveDown: function (e) {
             this.touch();
@@ -354,24 +370,14 @@
                 return getSetupItem(this.selectedList.setup, tile.id);
             }.bind(this));
 
-            setups.sort(function (a, b) {
-                a = a.priority;
-                b = b.priority;
-
-                if (a > b) {
-                    return 1;
-                } else if (b > a) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
+            setups.sort(sortByPriority);
 
             setups.forEach(function (setup) {
                 this.selectedList.reprioritizeItem(setup, false);
             }.bind(this));
 
             this.selectedList.refresh();
+            this.refreshSelectedListItems();
         },
         selectTreeItem: function (e) {
             var setup = e.currentTarget.item;
@@ -413,6 +419,13 @@
                 this.push("selectedTiles", tile);
             }
         },
+        refreshSelectedListItems: function () {
+            var items = this.selectedList.setup.items.slice();;
+
+            items.sort(sortByPriorityDesc);
+
+            this.set("selectedListItems", items);
+        },
         saveSetup: function () {
             this.lists.forEach(function (list) {
                 if (list.sync) {
@@ -433,6 +446,7 @@
             });
 
             this.touch();
+            this.refreshSelectedListItems();
         },
         selectedTilesChanged: function () {
             this.$.highlightTileSelected.hide();
@@ -452,8 +466,7 @@
             if (!newVal) {
                 this.resetSelection();
             } else {
-                var items = newVal.setup.items.slice();
-                this.set("selectedListItems", items);
+                this.refreshSelectedListItems();
             }
 
             this.$.highlightListSelected.show(this.selectedList);
