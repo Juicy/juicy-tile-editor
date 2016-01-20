@@ -101,6 +101,10 @@
 
         <div class="editor-form">
             <div class="editor-form-section">
+                <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
+                <button type="button" class="btn" on-click="clearSetup">Clear</button>
+            </div>
+            <div class="editor-form-section">
                 <template is="dom-repeat" items="{{mediaScreenRanges}}">
                     <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" disabled$="{{!selectedList}}">{{item.name}}</button>
                 </template>
@@ -267,7 +271,8 @@
                     selectedTiles: { type: Array, value: [] },
                     selectedList: { type: Object, value: null, observer: "selectedListChanged" },
                     selectedListItems:  { type: Array, value: [] },
-                    message: { type: String, value: null }
+                    message: { type: String, value: null },
+                    hasChanges: { type: Boolean, value: false }
                 },
                 observers: ["selectedTilesChanged(selectedTiles.length)"],
                 attached: function () {
@@ -434,15 +439,20 @@
                     this.readWidth();
                     this.readVisible();
                 },
+                touch: function () {
+                    this.set("hasChanges", true);
+                },
                 selectMediaScreen: function (e) {
                     if (!this.selectedList) {
                         return;
                     }
 
+                    this.touch();
                     this.set("mediaScreen", e.target.item);
                     this.selectedList.setup.width = this.mediaScreen.width;
                 },
                 selectWidth: function (e) {
+                    this.touch();
                     this.set("width", e.target.item);
 
                     this.selectedTiles.forEach(function (tile) {
@@ -456,6 +466,7 @@
                     this.selectedList.refresh();
                 },
                 selectVisible: function (e) {
+                    this.touch();
                     this.set("visible", e.target.dataset.value / 1);
 
                     this.selectedTiles.forEach(function (tile) {
@@ -467,6 +478,8 @@
                     this.selectedList.refresh(true);
                 },
                 moveUp: function (e) {
+                    this.touch();
+
                     var setups = this.selectedTiles.map(function (tile) {
                         return getSetupItem(this.selectedList.setup, tile.id);
                     }.bind(this));
@@ -491,6 +504,8 @@
                     this.selectedList.refresh();
                 },
                 moveDown: function (e) {
+                    this.touch();
+
                     var setups = this.selectedTiles.map(function (tile) {
                         return getSetupItem(this.selectedList.setup, tile.id);
                     }.bind(this));
@@ -553,6 +568,27 @@
                     } else {
                         this.push("selectedTiles", tile);
                     }
+                },
+                saveSetup: function () {
+                    this.lists.forEach(function (list) {
+                        if (list.sync) {
+                            list.sync.save();
+                        }
+                    });
+
+                    this.set("hasChanges", false);
+                },
+                clearSetup: function () {
+                    this.lists.forEach(function (list) {
+                        list.setup = list.defaultsetup || null;
+                    });
+
+                    // Workaround to refresh parent list when child list changes it's dimensions.
+                    this.lists.forEach(function (list) {
+                        list.refresh(true);
+                    });
+
+                    this.touch();
                 },
                 selectedTilesChanged: function () {
                     this.$.highlightTileSelected.hide();
