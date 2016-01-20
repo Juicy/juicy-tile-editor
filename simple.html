@@ -83,8 +83,8 @@
             </template>
             <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
             <label><input type="checkbox" checked="{{model.editingMode::change}}"> Show editor (<span>{{model.editingMode}}</span>)</label>
-            <juicy-tiles-setup-sync name="juicy-tile-simple-editor/index.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
-            <juicy-tile-list id="st1" setup="{{model.setup}}">
+            <juicy-tiles-setup-sync name="juicy-tile-simple-editor/simple.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
+            <juicy-tile-list id="st1" setup="{{model.setup}}" defaultsetup="{{model.setupCopy}}">
                 <label>Product ID</label>
                 <input type="text" value="r9-380" />
                 <div>
@@ -101,7 +101,8 @@
                 </div>
                 <div>
                     <label>Suppliers</label>
-                    <juicy-tile-list setup="{{model.nestedSetup}}">
+                    <juicy-tiles-setup-sync name="juicy-tile-simple-editor/simple.html#nestedSetup" stored-value="{{model.nestedSetup}}" use-localstorage="true"></juicy-tiles-setup-sync>
+                    <juicy-tile-list setup="{{model.nestedSetup}}" defaultsetup="{{model.nestedSetupCopy}}">
                         <div>
                             <label>Name</label>
                             <input type="text" value="XFX" />
@@ -168,6 +169,8 @@
                 }
             };
 
+            model.setupCopy = JSON.parse(JSON.stringify(model.setup));
+            model.nestedSetupCopy = JSON.parse(JSON.stringify(model.nestedSetup));
             template.model = model;
 
             function blockme() {
