@@ -1,5 +1,5 @@
 ﻿(function () {
-    function isTileList(element, selectors) {
+    function isList(element, selectors) {
         if (!element || !element.tagName) {
             return false;
         }
@@ -15,15 +15,29 @@
         return false;
     }
 
+    function isTile(element) {
+        return element && element.classList && element.hasAttribute &&
+                (element.classList.contains("juicy-tile") || element.classList.contains("containerBackground") || element.hasAttribute("juicytile"));
+    }
+
+    function getTileId(element) {
+        var id = element.id;
+
+        if (element.hasAttribute("juicytile")) {
+            id = element.getAttribute("juicytile");
+        }
+
+        return id;
+    }
+
     function getJuicyList(event, selectors) {
         var list = null;
 
         for (var i = 1; i < event.path.length; i++) {
             var el = event.path[i];
 
-            if (isTileList(el, selectors)) {
+            if (isList(el, selectors)) {
                 list = el;
-                break;
             }
         }
 
@@ -44,26 +58,18 @@
         var target = null;
 
         for (var i = 0; i < event.path.length; i++) {
-            target = event.path[i];
+            var t = event.path[i];
 
-            if (target && target.classList && target.hasAttribute &&
-                (target.classList.contains("juicy-tile") || target.classList.contains("containerBackground") || target.hasAttribute("juicytile"))) {
-                break;
-            } else if (isTileList(target, listSelectors)) {
-                // Reached the top level of tile list. The selected tile is outside of current tile list.
-                return null;
+            if (isTile(t)) {
+                target = t;
             }
         }
 
-        if (!target.parentNode) {
+        if (!target || !target.parentNode) {
             return null;
         }
 
-        var id = target.id;
-
-        if (target.hasAttribute("juicytile")) {
-            id = target.getAttribute("juicytile");
-        }
+        var id = getTileId(target);
 
         // Selecting the top group if a tile packed inside.
         var setup = getSetupItem(list.setup, id);
