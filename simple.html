@@ -99,8 +99,8 @@
                     <button type="button">Save</button>
                     <button type="button">Cancel</button>
                 </div>
+                <label>Suppliers</label>
                 <div>
-                    <label>Suppliers</label>
                     <juicy-tiles-setup-sync name="juicy-tile-simple-editor/simple.html#nestedSetup" stored-value="{{model.nestedSetup}}" use-localstorage="true"></juicy-tiles-setup-sync>
                     <juicy-tile-list setup="{{model.nestedSetup}}" defaultsetup="{{model.nestedSetupCopy}}">
                         <div>
@@ -145,18 +145,32 @@
                             priority: 1,
                             gutter: 0,
                             items: [
-                                { width: "225px", widthFlexible: true, id: 0, hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.9 },
-                                { width: "875px", widthFlexible: true, id: 1, hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.8 }
+                                { width: "225px", widthFlexible: true, id: 0, name: "Label", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.9 },
+                                { width: "875px", widthFlexible: true, id: 1, name: "Input", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.8 }
                             ]
                         },
                         { width: "100%", widthFlexible: true, id: 2, name: "Name", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.7 },
                         { width: "100%", widthFlexible: true, id: 3, name: "Description", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.6 },
                         { width: "100%", widthFlexible: true, id: 4, name: "Buttons", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.5 },
-                        { width: "100%", widthFlexible: true, id: 5, name: "Suppliers", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.4 },
-                        { width: "100%", widthFlexible: true, id: 6, name: "Image label", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.3 },
-                        { width: "100%", widthFlexible: true, id: 7, name: "Image", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.2 },
-                        { width: "100%", widthFlexible: true, id: 8, name: "Barcode value", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.1 },
-                        { width: "100%", widthFlexible: true, id: 9, name: "Barcode image", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.09 }
+                        {
+                            width: "100%",
+                            widthFlexible: true,
+                            id: "group_2",
+                            name: "Suppliers",
+                            hidden: false,
+                            heightDynamic: true,
+                            precalculateHeight: true,
+                            priority: 0.41,
+                            gutter: 0,
+                            items: [
+                                { width: "100%", widthFlexible: true, id: 5, name: "Label", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.4 },
+                                { width: "100%", widthFlexible: true, id: 6, name: "List", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.31 }
+                            ]
+                        },
+                        { width: "100%", widthFlexible: true, id: 7, name: "Image label", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.3 },
+                        { width: "100%", widthFlexible: true, id: 8, name: "Image", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.2 },
+                        { width: "100%", widthFlexible: true, id: 9, name: "Barcode value", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.1 },
+                        { width: "100%", widthFlexible: true, id: 10, name: "Barcode image", hidden: false, heightDynamic: true, precalculateHeight: 1, priority: 0.09 }
                     ]
                 },
                 nestedSetup: {

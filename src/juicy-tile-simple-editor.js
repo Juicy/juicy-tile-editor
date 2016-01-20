@@ -48,7 +48,7 @@
         return list.host || list;
     };
 
-    function getJuicyTile(event, listSelectors) {
+    function getJuicyTile(event, listSelectors, scope) {
         var list = getJuicyList(event, listSelectors);
 
         if (list == null) {
@@ -73,13 +73,34 @@
 
         // Selecting the top group if a tile packed inside.
         var setup = getSetupItem(list.setup, id);
+        var scopeSetup = null;
 
-        while (setup.container.container) {
-            setup = setup.container;
+        if (scope) {
+            var scopeSetup = getSetupItem(list.setup, getTileId(scope));
+
+            while (setup && setup.container != scopeSetup) {
+                setup = setup.container;
+            }
+        } else {
+            while (setup.container.container) {
+                setup = setup.container;
+            }
+        }
+
+        if (!setup) {
+            return null;
         }
 
         // Get Shadow DOM element for this tile.id.
         return list.tiles[setup.id];
+    }
+
+    function getNestedList(tileId, selectors) {
+        var selector = selectors.map(function (s) {
+            return "[juicytile='" + tileId + "'] > " + s;
+        }).join(", ");
+
+        return document.querySelector(selector);
     }
 
     function getSetupItem(setup, id) {
@@ -146,7 +167,8 @@
             lists: { type: Array, value: [] },
             selectedTiles: { type: Array, value: [] },
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
-            selectedListItems: { type: Array, value: [] },
+            selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
+            selectedScopeItems: { type: Array, value: [] },
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false }
         },
@@ -165,7 +187,7 @@
         },
         attachEventListeners: function () {
             this.onListMouseover = function (e) {
-                var tile = getJuicyTile(e, this.listSelectors);
+                var tile = getJuicyTile(e, this.listSelectors, this.selectedScope);
 
                 if (tile) {
                     this.$.highlightTileRollover.show(tile);
@@ -180,7 +202,7 @@
                 e.preventDefault();
 
                 var list = getJuicyList(e, this.listSelectors);
-                var tile = getJuicyTile(e, this.listSelectors);
+                var tile = getJuicyTile(e, this.listSelectors, this.selectedScope);
 
                 this.toggleSelectedTile(e, list, tile);
             }.bind(this);
@@ -263,6 +285,13 @@
             }
 
             return value;
+        },
+        getIsScopable: function (item) {
+            if (item.items && item.items.length) {
+                return true;
+            }
+
+            return !!getNestedList(item.id, this.listSelectors);
         },
         readSelectedMediaScreen: function (newVal, oldVal) {
             if (!newVal) {
@@ -367,7 +396,7 @@
             }.bind(this));
 
             this.selectedList.refresh();
-            this.refreshSelectedListItems();
+            this.refreshSelectedScopeItems();
         },
         moveDown: function (e) {
             this.touch();
@@ -383,7 +412,7 @@
             }.bind(this));
 
             this.selectedList.refresh();
-            this.refreshSelectedListItems();
+            this.refreshSelectedScopeItems();
         },
         selectTreeItem: function (e) {
             var setup = e.currentTarget.item;
@@ -391,8 +420,28 @@
 
             this.toggleSelectedTile(e, this.selectedList, tile);
         },
+        selectScope: function (e) {
+            var setup = e.currentTarget.item;
+
+            if (setup.items && setup.items.length) {
+                var tile = this.selectedList.tiles[setup.id];
+
+                this.set("selectedScope", tile);
+            } else {
+                var list = getNestedList(setup.id, this.listSelectors);
+
+                if (!list) {
+                    throw "Cannot scope in to this tile!";
+                }
+
+                this.set("selectedScope", null);
+                this.set("selectedList", list);
+            }
+        },
         resetSelection: function () {
             this.set("selectedList", this.lists[0]);
+            this.set("selectedScope", null);
+            this.refreshSelectedScopeItems();
 
             if (this.selectedTiles.length) {
                 this.set("selectedTiles", []);
@@ -425,12 +474,23 @@
                 this.push("selectedTiles", tile);
             }
         },
-        refreshSelectedListItems: function () {
-            var items = this.selectedList.setup.items.slice();;
+        refreshSelectedScopeItems: function () {
+            var items;
+
+            if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                var setup = getSetupItem(this.selectedList.setup, id);
+
+                items = setup.items.slice();
+            } else if (this.selectedList) {
+                items = this.selectedList.setup.items.slice();
+            } else {
+                items = [];
+            }
 
             items.sort(sortByPriorityDesc);
 
-            this.set("selectedListItems", items);
+            this.set("selectedScopeItems", items);
         },
         saveSetup: function () {
             this.lists.forEach(function (list) {
@@ -452,7 +512,7 @@
             });
 
             this.touch();
-            this.refreshSelectedListItems();
+            this.refreshSelectedScopeItems();
         },
         selectedTilesChanged: function () {
             this.$.highlightTileSelected.hide();
@@ -472,10 +532,16 @@
             if (!newVal) {
                 this.resetSelection();
             } else {
-                this.refreshSelectedListItems();
+                this.refreshSelectedScopeItems();
             }
-
-            this.$.highlightListSelected.show(this.selectedList);
+        },
+        selectedScopeChanged: function (newVal, oldVal) {
+            if (newVal) {
+                this.$.highlightListSelected.show(newVal);
+                this.refreshSelectedScopeItems();
+            } else if (this.$.highlightListSelected.currentState == "shown") {
+                this.$.highlightListSelected.hide();
+            }
         }
     });
 })();

@@ -141,9 +141,12 @@
         </div>
 
         <div class="editor-tree">
-            <template is="dom-repeat" items="{{selectedListItems}}">
+            <template is="dom-repeat" items="{{selectedScopeItems}}">
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
                     <span>{{item.name}}</span>
+                    <template is="dom-if" if="{{getIsScopable(item)}}">
+                        <a href="javascript:" on-click="selectScope" item="{{item}}">...</a>
+                    </template>
                 </div>
             </template>
         </div>
