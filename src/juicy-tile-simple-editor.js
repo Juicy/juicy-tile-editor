@@ -155,6 +155,8 @@
         }
     }
 
+    var notAvailable = "N/A";
+
     Polymer({
         is: "juicy-tile-simple-editor",
         properties: {
@@ -301,9 +303,17 @@
             return css.join(" ");
         },
         getBackgroundStyle: function (background) {
+            if (background === notAvailable) {
+                return "";
+            }
+
             return background ? ["background-color: ", background, ";"].join("") : "";
         },
         getOutlineStyle: function (outline) {
+            if (outline === notAvailable) {
+                return "";
+            }
+
             return outline ? ["outline: ", outline, ";"].join("") : "";
         },
         getIsScopable: function (item) {
@@ -323,7 +333,7 @@
                 var v = setup[name];
 
                 if (i > 0 && value !== v) {
-                    return null;
+                    return notAvailable;
                 }
 
                 value = v;
@@ -336,7 +346,7 @@
             return value;
         },
         setCommonSetupValue: function (name, value) {
-            if (!this.selectedTiles.length) {
+            if (!this.selectedTiles.length || value === notAvailable) {
                 return;
             }
 
