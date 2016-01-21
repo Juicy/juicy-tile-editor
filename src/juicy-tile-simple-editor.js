@@ -202,7 +202,7 @@
 
                 var tile = getTile(e, this.selectedList, this.selectedScope);
 
-                this.toggleSelectedTile(e, this.selectedList, tile);
+                this.toggleSelectedTile(e.ctrlKey, tile);
             }.bind(this);
 
             this.lists.forEach(function (list) {
@@ -416,7 +416,7 @@
             var setup = e.currentTarget.item;
             var tile = this.selectedList.tiles[setup.id];
 
-            this.toggleSelectedTile(e, this.selectedList, tile);
+            this.toggleSelectedTile(e.ctrlKey, tile);
         },
         selectScope: function (e) {
             var setup = e.currentTarget.item;
@@ -445,26 +445,18 @@
                 this.set("selectedTiles", []);
             }
         },
-        toggleSelectedTile: function (e, list, tile) {
+        toggleSelectedTile: function (multiple, tile) {
             if (!tile) {
                 this.resetSelection();
                 return;
             }
 
-            if (!e.ctrlKey) {
-                this.set("selectedList", list);
+            if (!multiple) {
                 this.set("selectedTiles", [tile]);
                 return;
             }
 
-            if (this.selectedTiles.length && this.selectedList != list) {
-                this.showMessage("You cannnot select tiles from different tile containers!");
-                return;
-            }
-
             var index = this.selectedTiles.indexOf(tile);
-
-            this.set("selectedList", list);
 
             if (index >= 0) {
                 this.splice("selectedTiles", index, 1);
