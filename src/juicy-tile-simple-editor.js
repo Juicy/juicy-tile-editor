@@ -165,6 +165,7 @@
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
             selectedScopeItems: { type: Array, value: [] },
+            breadcrumb: { type: Array, value: [] },
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false }
         },
@@ -444,9 +445,13 @@
         selectScopeItem: function (e) {
             this.scopeIn(e.currentTarget.item);
         },
+        selectCrumbItem: function (e) {
+            this.scopeTo(e.currentTarget.item);
+        },
         resetSelection: function () {
             this.set("selectedList", this.lists[0]);
             this.set("selectedScope", null);
+            this.set("breadcrumb", []);
             this.refreshSelectedScopeItems();
 
             if (this.selectedTiles.length) {
@@ -454,6 +459,17 @@
             }
         },
         scopeIn: function (setup) {
+            var name = this.selectedList.setup.name;
+
+            if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                var s = getSetupItem(this.selectedList.setup, id);
+
+                name = s.name;
+            }
+
+            this.push("breadcrumb", { list: this.selectedList, scope: this.selectedScope, name: name });
+
             if (setup.items && setup.items.length) {
                 var tile = this.selectedList.tiles[setup.id];
 
@@ -468,6 +484,25 @@
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
             }
+        },
+        scopeOut: function () {
+            if (!this.breadcrumb.length) {
+                return;
+            }
+
+            var index = this.breadcrumb.length - 1;
+            var item = this.breadcrumb[index];
+
+            this.scopeTo(item);
+        },
+        scopeTo: function (crumb) {
+            var index = this.breadcrumb.indexOf(crumb);
+            var cut = this.breadcrumb.length - index;
+
+            this.set("selectedTiles", []);
+            this.set("selectedList", crumb.list);
+            this.set("selectedScope", crumb.scope);
+            this.splice("breadcrumb", index, cut);
         },
         toggleSelectedTile: function (multiple, tile) {
             if (!tile) {
@@ -541,13 +576,9 @@
             this.$.highlightTileSelected.hide();
             this.readSelectedSetup();
 
-            if (!this.selectedTiles.length) {
-                this.set("width", null);
-                this.resetSelection();
-                return;
+            if (this.selectedTiles.length) {
+                this.$.highlightTileSelected.show(this.selectedTiles);
             }
-
-            this.$.highlightTileSelected.show(this.selectedTiles);
         },
         selectedListChanged: function (newVal, oldVal) {
             this.attachEventListeners();
