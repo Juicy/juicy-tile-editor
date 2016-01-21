@@ -100,6 +100,13 @@
                 background-color: #01629E;
             }
 
+            .editor-tree .editor-tree-caption {
+                padding: 5px 10px;
+                border-bottom: 1px solid #C0C0C0;
+                height: 47px;
+                box-sizing: border-box;
+            }
+
             .editor-breadcrumb {
                 padding: 0px 10px;
                 border-bottom: 1px solid #C0C0C0;
@@ -145,15 +152,6 @@
                 <button type="button" class="btn" on-click="moveUp" disabled$="{{!selectedTiles.length}}">Up</button>
                 <button type="button" class="btn" on-click="moveDown" disabled$="{{!selectedTiles.length}}">Down</button>
             </div>
-            <template is="dom-if" if="{{selectedTiles.length}}">
-                <div class="editor-form-section">
-                    <b>
-                        <span>{{selectedTiles.length}}</span>
-                        <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
-                    </b>
-                    <label>selected</label>
-                </div>
-            </template>
             <template is="dom-if" if="{{message}}">
                 <div class="editor-form-section">
                     <label class="alert">{{message}}</label>
@@ -162,6 +160,16 @@
         </div>
 
         <div class="editor-tree">
+            <div class="editor-tree-caption">
+                <template is="dom-if" if="{{selectedTiles.length}}">
+
+                    <b>
+                        <span>{{selectedTiles.length}}</span>
+                        <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
+                    </b>
+                    <label>selected</label>
+                </template>
+            </div>
             <template is="dom-repeat" items="{{selectedScopeItems}}">
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
                     <span>{{item.name}}</span>
