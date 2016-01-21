@@ -174,14 +174,6 @@
 
             var lists = Array.prototype.slice.call(document.querySelectorAll(this.listSelectors.join(", ")));
 
-            this.set("lists", lists);
-            this.attachEventListeners();
-            this.resetSelection();
-        },
-        detached: function () {
-            this.detachEventListeners();
-        },
-        attachEventListeners: function () {
             this.onListMouseover = function (e) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
@@ -205,15 +197,46 @@
                 this.toggleSelectedTile(e.ctrlKey, tile);
             }.bind(this);
 
-            this.lists.forEach(function (list) {
-                var shadow = list.shadowContainer;
+            this.onListDoubleClick = function (e) {
+                var tile = getTile(e, this.selectedList, this.selectedScope);
+                var id = getTileId(tile);
+                var setup = getSetupItem(this.selectedList.setup, id);
+                var isScope = this.getIsScopable(setup);
 
-                list.addEventListener("mousemove", this.onListMouseover);
-                shadow.addEventListener("mousemove", this.onListMouseover);
+                if (isScope) {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    this.scopeIn(setup);
+                }
+            }.bind(this);
 
-                list.addEventListener("click", this.onListClick, true);
-                shadow.addEventListener("click", this.onListClick, true);
-            }.bind(this));
+            this.set("lists", lists);
+            this.resetSelection();
+        },
+        detached: function () {
+            this.detachEventListeners();
+            this.onListMouseover = null;
+            this.onListClick = null;
+            this.onListDoubleClick = null;
+        },
+        attachEventListeners: function () {
+            this.detachEventListeners();
+
+            if (!this.selectedList) {
+                return;
+            }
+
+            var list = this.selectedList;
+            var shadow = list.shadowContainer;
+
+            list.addEventListener("mousemove", this.onListMouseover);
+            shadow.addEventListener("mousemove", this.onListMouseover);
+
+            list.addEventListener("click", this.onListClick, true);
+            shadow.addEventListener("click", this.onListClick, true);
+
+            list.addEventListener("dblclick", this.onListDoubleClick, true);
+            shadow.addEventListener("dblclick", this.onListDoubleClick, true);
         },
         detachEventListeners: function () {
             this.lists.forEach(function (list) {
@@ -222,12 +245,12 @@
                 list.removeEventListener("mousemove", this.onListMouseover);
                 shadow.removeEventListener("mousemove", this.onListMouseover);
 
-                list.removeEventListener("click", this.onListClick, true);
-                shadow.removeEventListener("click", this.onListClick, true);
-            }.bind(this));
+                list.removeEventListener("click", this.onListClick);
+                shadow.removeEventListener("click", this.onListClick);
 
-            this.onListMouseover = null;
-            this.onListMouseover = null;
+                list.removeEventListener("dblclick", this.onListDoubleClick);
+                shadow.removeEventListener("dblclick", this.onListDoubleClick);
+            }.bind(this));
         },
         showMessage: function (text) {
             this.set("message", text);
@@ -418,9 +441,19 @@
 
             this.toggleSelectedTile(e.ctrlKey, tile);
         },
-        selectScope: function (e) {
-            var setup = e.currentTarget.item;
+        selectScopeItem: function (e) {
+            this.scopeIn(e.currentTarget.item);
+        },
+        resetSelection: function () {
+            this.set("selectedList", this.lists[0]);
+            this.set("selectedScope", null);
+            this.refreshSelectedScopeItems();
 
+            if (this.selectedTiles.length) {
+                this.set("selectedTiles", []);
+            }
+        },
+        scopeIn: function (setup) {
             if (setup.items && setup.items.length) {
                 var tile = this.selectedList.tiles[setup.id];
 
@@ -434,15 +467,6 @@
 
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
-            }
-        },
-        resetSelection: function () {
-            this.set("selectedList", this.lists[0]);
-            this.set("selectedScope", null);
-            this.refreshSelectedScopeItems();
-
-            if (this.selectedTiles.length) {
-                this.set("selectedTiles", []);
             }
         },
         toggleSelectedTile: function (multiple, tile) {
@@ -526,6 +550,7 @@
             this.$.highlightTileSelected.show(this.selectedTiles);
         },
         selectedListChanged: function (newVal, oldVal) {
+            this.attachEventListeners();
             this.readSelectedMediaScreen(newVal, oldVal);
 
             if (!newVal) {

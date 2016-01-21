@@ -145,7 +145,7 @@
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
                     <span>{{item.name}}</span>
                     <template is="dom-if" if="{{getIsScopable(item)}}">
-                        <a href="javascript:" on-click="selectScope" item="{{item}}">...</a>
+                        <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
                     </template>
                 </div>
             </template>
