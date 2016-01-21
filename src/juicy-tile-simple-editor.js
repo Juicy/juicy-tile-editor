@@ -542,8 +542,10 @@
                 var id = getTileId(tile);
                 var setup = getSetupItem(this.selectedList.setup, id);
 
-                this.selectedList.deleteContainer(setup);
-                this.splice("selectedTiles", index, 1);
+                if (setup.items) {
+                    this.selectedList.deleteContainer(setup);
+                    this.splice("selectedTiles", index, 1);
+                }
             }.bind(this));
 
             this.selectedList.refresh(true);
