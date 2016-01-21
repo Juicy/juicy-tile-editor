@@ -226,6 +226,7 @@
 
             this.set("lists", lists);
             this.resetSelection();
+            this.isAttached = true;
         },
         detached: function () {
             this.detachEventListeners();
@@ -275,7 +276,7 @@
             }.bind(this), 3000);
         },
         getSelectedTilesCaption: function (length) {
-            return length > 1 ? "tiles" : "tile";
+            return length > 1 ? "elements" : "element";
         },
         getRadioButtonCss: function (selected, item) {
             if (selected == item) {
@@ -335,6 +336,10 @@
             return value;
         },
         setCommonSetupValue: function (name, value) {
+            if (!this.selectedTiles.length) {
+                return;
+            }
+
             this.selectedTiles.forEach(function (tile) {
                 var id = tile.id;
                 var setup = getSetupItem(this.selectedList.setup, id);
@@ -407,7 +412,9 @@
             this.readPrimitiveSetupValues();
         },
         touch: function () {
-            this.set("hasChanges", true);
+            if (this.isAttached) {
+                this.set("hasChanges", true);
+            }
         },
         selectMediaScreen: function (e) {
             if (!this.selectedList) {
@@ -476,6 +483,62 @@
             this.selectedList.refresh();
             this.refreshSelectedScopeItems();
         },
+        packGroup: function (e) {
+            var first = this.selectedTiles[0];
+            var firstId = getTileId(first);
+            var firstSetup = getSetupItem(this.selectedList.setup, firstId);
+            var setup = {
+                priority: firstSetup.priority,
+                gutter: 0,
+                height: 1,
+                width: "100%",
+                widthFlexible: true,
+                hidden: false,
+                heightDynamic: true,
+                precalculateHeight: true,
+                tightGroup: true
+            };
+
+            var group = this.selectedList.createNewContainer(null, firstSetup.container, setup, true);
+
+            group.height = 1;
+            group.heightDynamic = true;
+            group.width = "100%";
+            group.widthFlexible = true;
+            group.precalculateHeight = true;
+            group.tightGroup = true;
+            group.itemName = "New Group";
+
+            this.selectedTiles.forEach(function (t) {
+                var id = getTileId(t);
+                var s = getSetupItem(this.selectedList.setup, id);
+
+                this.selectedList.moveToContainer(s, group, true);
+            }.bind(this));
+
+            this.set("selectedTiles", []);
+            this.selectedList.refresh(true);
+
+            var tile = this.selectedList.tiles[group.id];
+
+            this.set("selectedTiles", [tile]);
+            this.refreshSelectedScopeItems();
+        },
+        unpackGroup: function (e) {
+            var tiles = this.selectedTiles.slice();
+
+            tiles.forEach(function (tile) {
+                var index = this.selectedTiles.indexOf(tile);
+                var id = getTileId(tile);
+                var setup = getSetupItem(this.selectedList.setup, id);
+
+                this.selectedList.deleteContainer(setup);
+                this.splice("selectedTiles", index, 1);
+            }.bind(this));
+
+            this.selectedList.refresh(true);
+            this.refreshSelectedScopeItems();
+        },
         selectTreeItem: function (e) {
             var setup = e.currentTarget.item;
             var tile = this.selectedList.tiles[setup.id];
@@ -521,13 +584,13 @@
             }
         },
         scopeIn: function (setup) {
-            var name = this.selectedList.setup.name;
+            var name = this.selectedList.setup.itemName;
 
             if (this.selectedScope) {
                 var id = getTileId(this.selectedScope);
                 var s = getSetupItem(this.selectedList.setup, id);
 
-                name = s.name;
+                name = s.itemName;
             }
 
             this.push("breadcrumb", { list: this.selectedList, scope: this.selectedScope, name: name });

@@ -225,6 +225,14 @@
                         </div>
                     </juicy-popover>
                 </div>
+                <div class="editor-form-section">
+                    <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="packGroup">
+                        Group
+                    </button>
+                    <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="unpackGroup">
+                        Ungroup
+                    </button>
+                </div>
             </template>
             <div class="editor-form-section">
                 <button type="button" class="btn" on-click="toggleMore">
@@ -256,7 +264,7 @@
             </div>
             <template is="dom-repeat" items="{{selectedScopeItems}}">
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
-                    <span>{{item.name}}</span>
+                    <span>{{item.itemName}}</span>
                     <template is="dom-if" if="{{getIsScopable(item)}}">
                         <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
                     </template>
