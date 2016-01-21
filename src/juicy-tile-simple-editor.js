@@ -147,6 +147,14 @@
         }
     }
 
+    function clearSelection() {
+        if (window.getSelection) {
+            window.getSelection().removeAllRanges();
+        } else if (document.selection) {
+            document.selection.empty();
+        }
+    }
+
     Polymer({
         is: "juicy-tile-simple-editor",
         properties: {
@@ -205,6 +213,7 @@
                 var isScope = this.getIsScopable(setup);
 
                 if (isScope) {
+                    clearSelection();
                     e.stopImmediatePropagation();
                     e.preventDefault();
                     this.scopeIn(setup);
