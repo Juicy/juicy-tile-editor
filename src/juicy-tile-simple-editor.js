@@ -20,6 +20,26 @@
                 (element.classList.contains("juicy-tile") || element.classList.contains("containerBackground") || element.hasAttribute("juicytile"));
     }
 
+    function isListTile(list, element) {
+        if (!isTile(element)) {
+            return false;
+        }
+
+        if (element.parentNode == list) {
+            return true;
+        }
+
+        while (element.parentNode) {
+            element = element.parentNode;
+        }
+
+        if (element.host == list) {
+            return true;
+        }
+
+        return false;
+    }
+
     function getTileId(element) {
         var id = element.id;
 
@@ -30,37 +50,13 @@
         return id;
     }
 
-    function getJuicyList(event, selectors) {
-        var list = null;
-
-        for (var i = 1; i < event.path.length; i++) {
-            var el = event.path[i];
-
-            if (isList(el, selectors)) {
-                list = el;
-            }
-        }
-
-        if (!list) {
-            return null;
-        }
-
-        return list.host || list;
-    };
-
-    function getJuicyTile(event, listSelectors, scope) {
-        var list = getJuicyList(event, listSelectors);
-
-        if (list == null) {
-            return null;
-        }
-
+    function getTile(event, list, scope) {
         var target = null;
 
         for (var i = 0; i < event.path.length; i++) {
             var t = event.path[i];
 
-            if (isTile(t)) {
+            if (isListTile(list, t)) {
                 target = t;
             }
         }
@@ -187,7 +183,10 @@
         },
         attachEventListeners: function () {
             this.onListMouseover = function (e) {
-                var tile = getJuicyTile(e, this.listSelectors, this.selectedScope);
+                e.stopImmediatePropagation();
+                e.preventDefault();
+
+                var tile = getTile(e, this.selectedList, this.selectedScope);
 
                 if (tile) {
                     this.$.highlightTileRollover.show(tile);
@@ -201,10 +200,9 @@
                 e.stopImmediatePropagation();
                 e.preventDefault();
 
-                var list = getJuicyList(e, this.listSelectors);
-                var tile = getJuicyTile(e, this.listSelectors, this.selectedScope);
+                var tile = getTile(e, this.selectedList, this.selectedScope);
 
-                this.toggleSelectedTile(e, list, tile);
+                this.toggleSelectedTile(e, this.selectedList, tile);
             }.bind(this);
 
             this.lists.forEach(function (list) {
@@ -492,6 +490,15 @@
 
             this.set("selectedScopeItems", items);
         },
+        refreshHighlightSelectedScope: function () {
+            if (this.selectedScope) {
+                this.$.highlightScopeSelected.show(this.selectedScope);
+            } else if (this.selectedList) {
+                this.$.highlightScopeSelected.show(this.selectedList);
+            } else if (this.$.highlightScopeSelected.currentState == "shown") {
+                this.$.highlightScopeSelected.hide();
+            }
+        },
         saveSetup: function () {
             this.lists.forEach(function (list) {
                 if (list.sync) {
@@ -534,14 +541,12 @@
             } else {
                 this.refreshSelectedScopeItems();
             }
+
+            this.refreshHighlightSelectedScope();
         },
         selectedScopeChanged: function (newVal, oldVal) {
-            if (newVal) {
-                this.$.highlightListSelected.show(newVal);
-                this.refreshSelectedScopeItems();
-            } else if (this.$.highlightListSelected.currentState == "shown") {
-                this.$.highlightListSelected.hide();
-            }
+            this.refreshSelectedScopeItems();
+            this.refreshHighlightSelectedScope();
         }
     });
 })();
