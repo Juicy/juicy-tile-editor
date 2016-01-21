@@ -1,5 +1,8 @@
-﻿﻿<link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../juicy-highlight/src/juicy-highlight.html">
+﻿﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../juicy-highlight/src/juicy-highlight.html" />
+<link rel="import" href="../../juicy-popover/src/juicy-popover.html" />
+<link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
+<link rel="import" href="./juicy-border-picker.html" />
 
 <dom-module id="juicy-tile-simple-editor">
     <template>
@@ -24,11 +27,6 @@
             .editor-form .editor-form-section {
                 float: left;
                 margin-right: 20px;
-            }
-
-            .editor-form .editor-form-section label,
-            .editor-form .editor-form-section span {
-                line-height: 35px;
             }
 
             .editor-form button.btn {
@@ -72,6 +70,56 @@
                 background-color: white;
                 padding: 5px;
                 border-radius: 2px;
+            }
+
+            .editor-form .editor-form-section juicy-color-picker,
+            .editor-form .editor-form-section juicy-border-picker {
+                max-width: 120px;
+                display: block;
+            }
+
+            .editor-form .editor-form-section juicy-popover div.popup {
+                background-color: #C0C0C0;
+                color: white;
+                padding: 5px;
+                border: 1px solid #252526;
+            }
+
+            .editor-form .editor-form-section .btn .background,
+            .editor-form .editor-form-section .btn .outline {
+                display: block;
+                padding: 3px;
+                margin: -3px;
+                border-radius: 2px;
+            }
+
+            .editor-form .editor-form-section div.popup label.editor-form-value {
+                display: flex;
+                margin: 0px 0px 5px -2px;
+            }
+
+            .editor-form .editor-form-section div.popup label.editor-form-value input {
+                display: block;
+                width: 82px;
+                font-size: 12px;
+                padding: 2px;
+                box-sizing: border-box;
+            }
+
+            .editor-form .editor-form-section div.popup label.editor-form-value .btn-range {
+                background-color: white;
+                width: 20px;
+                height: 20px;
+                border-radius: 0px;
+                padding: 0px;
+                min-width: 0px;
+                display: block;
+                margin-top: 1px;
+                border: 1px solid #C0C0C0;
+            }
+
+            .editor-form .editor-form-section div.popup label.editor-form-value .btn-range:hover {
+                background-color: #F0F0F0;
             }
 
             .editor-tree {
@@ -151,6 +199,42 @@
                 <label>Position:</label>
                 <button type="button" class="btn" on-click="moveUp" disabled$="{{!selectedTiles.length}}">Up</button>
                 <button type="button" class="btn" on-click="moveDown" disabled$="{{!selectedTiles.length}}">Down</button>
+            </div>
+            <template is="dom-if" if="{{showMore}}">
+                <div class="editor-form-section">
+                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
+                            <span class="background" style$="{{getBackgroundStyle(background)}}">Fill</span>
+                        </button>
+                        <div class="popup">
+                            <label class="editor-form-value">
+                                <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
+                                <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
+                                <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
+                            </label>
+                            <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
+                        </div>
+                    </juicy-popover>
+                    
+                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
+                            <span class="outline" style$="{{getOutlineStyle(outline)}}">Outline</span>
+                        </button>
+                        <div class="popup">
+                            <juicy-border-picker border-value="{{outline}}"></juicy-border-picker>
+                        </div>
+                    </juicy-popover>
+                </div>
+            </template>
+            <div class="editor-form-section">
+                <button type="button" class="btn" on-click="toggleMore">
+                    <template is="dom-if" if="{{showMore}}">
+                        <span>Less</span>
+                    </template>
+                    <template is="dom-if" if="{{!showMore}}">
+                        <span>More</span>
+                    </template>
+                </button>
             </div>
             <template is="dom-if" if="{{message}}">
                 <div class="editor-form-section">

@@ -175,7 +175,11 @@
             selectedScopeItems: { type: Array, value: [] },
             breadcrumb: { type: Array, value: [] },
             message: { type: String, value: null },
-            hasChanges: { type: Boolean, value: false }
+            hasChanges: { type: Boolean, value: false },
+            showMore: { type: Boolean, value: true },
+            background: { type: String, observer: "backgroundChanged" },
+            oversize: { type: Number, observer: "oversizeChanged" },
+            outline: { type: String, observer: "outlineChanged" }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -295,6 +299,19 @@
 
             return css.join(" ");
         },
+        getBackgroundStyle: function (background) {
+            return background ? ["background-color: ", background, ";"].join("") : "";
+        },
+        getOutlineStyle: function (outline) {
+            return outline ? ["outline: ", outline, ";"].join("") : "";
+        },
+        getIsScopable: function (item) {
+            if (item.items && item.items.length) {
+                return true;
+            }
+
+            return !!getNestedList(item.id, this.listSelectors);
+        },
         getCommonSetupValue: function (name) {
             var value = null;
 
@@ -317,12 +334,16 @@
 
             return value;
         },
-        getIsScopable: function (item) {
-            if (item.items && item.items.length) {
-                return true;
-            }
+        setCommonSetupValue: function (name, value) {
+            this.selectedTiles.forEach(function (tile) {
+                var id = tile.id;
+                var setup = getSetupItem(this.selectedList.setup, id);
 
-            return !!getNestedList(item.id, this.listSelectors);
+                setup[name] = value;
+            }.bind(this));
+
+            this.touch();
+            this.selectedList.refresh();
         },
         readSelectedMediaScreen: function (newVal, oldVal) {
             if (!newVal) {
@@ -367,13 +388,23 @@
                 this.set("visible", !hidden);
             }
         },
+        readPrimitiveSetupValues: function () {
+            var names = ["background", "oversize", "outline"];
+
+            names.forEach(function (name) {
+                var value = this.getCommonSetupValue(name);
+
+                this.set(name, value);
+            }.bind(this));
+        },
         readSelectedSetup: function () {
-            if (!this.selectedTiles.length) {
+            if (!this.selectedList) {
                 return;
             }
 
             this.readWidth();
             this.readVisible();
+            this.readPrimitiveSetupValues();
         },
         touch: function () {
             this.set("hasChanges", true);
@@ -457,11 +488,33 @@
         selectCrumbItem: function (e) {
             this.scopeTo(e.currentTarget.item);
         },
+        toggleMore: function (e) {
+            this.set("showMore", !this.showMore);
+        },
+        oversizePlus: function (e) {
+            var value = 1;
+
+            if (this.oversize) {
+                value = this.oversize + 1;
+            }
+
+            this.set("oversize", value);
+        },
+        oversizeMinus: function (e) {
+            var value = this.oversize - 1;
+
+            if (!value || value < 0) {
+                value = 0;
+            }
+
+            this.set("oversize", value);
+        },
         resetSelection: function () {
             this.set("selectedList", this.lists[0]);
             this.set("selectedScope", null);
             this.set("breadcrumb", []);
             this.refreshSelectedScopeItems();
+            this.readSelectedSetup();
 
             if (this.selectedTiles.length) {
                 this.set("selectedTiles", []);
@@ -604,6 +657,15 @@
         selectedScopeChanged: function (newVal, oldVal) {
             this.refreshSelectedScopeItems();
             this.refreshHighlightSelectedScope();
+        },
+        backgroundChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("background", newVal);
+        },
+        oversizeChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("oversize", newVal);
+        },
+        outlineChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("outline", newVal);
         }
     });
 })();
