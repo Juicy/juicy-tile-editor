@@ -625,15 +625,17 @@
             this.set("gutter", value);
         },
         resetSelection: function () {
+            this.set("selectedList", null);
             this.set("selectedList", this.lists[0]);
             this.set("selectedScope", null);
             this.set("breadcrumb", []);
             this.refreshSelectedScopeItems();
-            this.readSelectedSetup();
 
             if (this.selectedTiles.length) {
                 this.set("selectedTiles", []);
             }
+
+            this.readSelectedSetup();
         },
         scopeIn: function (setup) {
             var name = this.selectedList.setup.itemName;
@@ -747,7 +749,7 @@
             });
 
             this.touch();
-            this.refreshSelectedScopeItems();
+            this.resetSelection();
         },
         selectedTilesChanged: function () {
             this.$.highlightTileSelected.hide();
@@ -758,15 +760,13 @@
             }
         },
         selectedListChanged: function (newVal, oldVal) {
-            this.attachEventListeners();
-            this.readSelectedMediaScreen(newVal, oldVal);
-
             if (!newVal) {
-                this.resetSelection();
-            } else {
-                this.refreshSelectedScopeItems();
+                return;
             }
 
+            this.attachEventListeners();
+            this.readSelectedMediaScreen(newVal, oldVal);
+            this.refreshSelectedScopeItems();
             this.refreshHighlightSelectedScope();
         },
         selectedScopeChanged: function (newVal, oldVal) {
