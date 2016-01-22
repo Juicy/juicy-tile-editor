@@ -231,6 +231,7 @@
             this.set("lists", lists);
             this.resetSelection();
             this.isAttached = true;
+            this.isReadingSetup = false;
         },
         detached: function () {
             this.detachEventListeners();
@@ -360,7 +361,7 @@
             return value;
         },
         setCommonSetupValue: function (name, value) {
-            if (!this.selectedTiles.length || value === notAvailable) {
+            if (!this.selectedTiles.length || value === notAvailable || this.isReadingSetup) {
                 return;
             }
 
@@ -420,11 +421,15 @@
         readPrimitiveSetupValues: function () {
             var names = ["background", "oversize", "outline", "gutter"];
 
+            this.isReadingSetup = true;
+
             names.forEach(function (name) {
                 var value = this.getCommonSetupValue(name);
 
                 this.set(name, value);
             }.bind(this));
+
+            this.isReadingSetup = false;
         },
         readSelectedSetup: function () {
             if (!this.selectedList) {
@@ -436,7 +441,7 @@
             this.readPrimitiveSetupValues();
         },
         touch: function () {
-            if (this.isAttached) {
+            if (this.isAttached && !this.isReadingSetup) {
                 this.set("hasChanges", true);
             }
         },
