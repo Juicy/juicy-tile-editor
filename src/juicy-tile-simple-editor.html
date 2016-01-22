@@ -20,13 +20,14 @@
 
             .editor-form {
                 overflow: auto;
-                padding: 5px 10px;
+                padding: 5px 10px 0px 10px;
                 border-bottom: 1px solid #C0C0C0;
             }
 
             .editor-form .editor-form-section {
                 float: left;
                 margin-right: 20px;
+                margin-bottom: 5px;
             }
 
             .editor-form .btn {
@@ -44,6 +45,7 @@
                 display: inline-block;
                 box-sizing: border-box;
                 height: 35px;
+                vertical-align: middle;
             }
 
             .editor-form .btn:hover {
@@ -137,7 +139,7 @@
 
             .editor-form .editor-form-section juicy-popover div.popup {
                 background-color: #C0C0C0;
-                color: white;
+                color: black;
                 padding: 5px;
                 border: 1px solid #252526;
             }
@@ -161,6 +163,19 @@
                 font-size: 12px;
                 padding: 2px;
                 box-sizing: border-box;
+            }
+
+            .editor-form .editor-form-section .radio-group {
+                margin-bottom: 10px;
+            }
+
+            .editor-form .editor-form-section .radio-group .radio-group-caption {
+                font-weight: bold;
+            }
+
+            .editor-form .editor-form-section .radio-group label.radio {
+                cursor: pointer;
+                display: block;
             }
 
             .editor-tree {
@@ -282,8 +297,86 @@
                         <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
                     </label>
                 </div>
+                <template is="dom-if" if="{{showAdvanced}}">
+                    <div class="editor-form-section">
+                        <label class="btn">
+                            <span>Own scope</span>
+                            <input type="checkbox" checked="{{tightGroup::change}}" />
+                        </label>
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
+                                Direction
+                            </button>
+                            <div class="popup">
+                                <div class="radio-group">
+                                    <div class="radio-group-caption">Elements flow</div>
+                                    <label class="radio">
+                                        <input type="radio" name="direction" checked />
+                                        <span>Horizontal</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="direction" />
+                                        <span>Vertical</span>
+                                    </label>
+                                </div>
+                                <div class="radio-group">
+                                    <div class="radio-group-caption">From</div>
+                                    <label class="radio">
+                                        <input type="radio" name="left-right" checked />
+                                        <span>Left to right</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="left-right" />
+                                        <span>Right to left</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="top-bottom" checked />
+                                        <span>Top to bottom</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="top-bottom" />
+                                        <span>Bottom to top</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </juicy-popover>
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
+                            <div class="popup">
+                                <textarea></textarea>
+                            </div>
+                        </juicy-popover>
+                    </div>
+                    <div class="editor-form-section">
+                        <label class="btn">
+                            <span>Width</span>
+                            <input type="text" value="{{gutter::change}}" disabled$="{{!selectedTiles.length}}" />
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">+</button>
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">-</button>
+                        </label>
+                        <label class="btn">
+                            <span>Height</span>
+                            <input type="text" value="{{gutter::change}}" disabled$="{{!selectedTiles.length}}" />
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">+</button>
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">-</button>
+                        </label>
+                    </div>
+                    <div class="editor-form-section">
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn">Source</button>
+                            <div class="popup">
+                                <textarea></textarea>
+                            </div>
+                        </juicy-popover>
+                    </div>
+                </template>
             </template>
             <div class="editor-form-section">
+                <template is="dom-if" if="{{showMore}}">
+                    <button type="button" class="btn" on-click="toggleAdvanced">
+                        Advanced
+                    </button>
+                </template>
                 <button type="button" class="btn" on-click="toggleMore">
                     <template is="dom-if" if="{{showMore}}">
                         <span>Less</span>

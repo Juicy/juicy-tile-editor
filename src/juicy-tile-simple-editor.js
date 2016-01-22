@@ -178,7 +178,8 @@
             breadcrumb: { type: Array, value: [] },
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false },
-            showMore: { type: Boolean, value: true },
+            showMore: { type: Boolean, value: false },
+            showAdvanced: { type: Boolean, value: false },
             background: { type: String, observer: "backgroundChanged" },
             oversize: { type: Number, observer: "oversizeChanged" },
             outline: { type: String, observer: "outlineChanged" },
@@ -578,6 +579,9 @@
         },
         toggleMore: function (e) {
             this.set("showMore", !this.showMore);
+        },
+        toggleAdvanced: function (e) {
+            this.set("showAdvanced", !this.showAdvanced);
         },
         oversizePlus: function (e) {
             var value = 1;
