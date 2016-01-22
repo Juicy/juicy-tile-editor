@@ -29,7 +29,7 @@
                 margin-right: 20px;
             }
 
-            .editor-form button.btn {
+            .editor-form .btn {
                 border: 0px;
                 cursor: pointer;
                 padding: 10px;
@@ -39,30 +39,87 @@
                 text-align: center;
                 background-color: #CCCCCC;
                 line-height: normal;
+                font-size: 13.3px;
+                font-family: Arial;
+                display: inline-block;
+                box-sizing: border-box;
+                height: 35px;
             }
 
-            .editor-form button.btn:hover {
+            .editor-form .btn:hover {
                 background-color: #EEEEEE;
             }
 
-            .editor-form button.btn-radio {
+            .editor-form .btn-radio {
                 background-color: #F0F0F0;
             }
 
-            .editor-form button.btn-radio:hover {
+            .editor-form .btn-radio:hover {
                 background-color: #E0E0E0;
             }
 
-            .editor-form button.btn-radio.active {
+            .editor-form .btn-radio.active {
                 background-color: #BBBBBB;
             }
 
-            .editor-form button.btn[disabled],
-            .editor-form button.btn-radio[disabled],
-            .editor-form button.btn-radio:hover[disabled] {
+            .editor-form .btn[disabled],
+            .editor-form .btn-radio[disabled],
+            .editor-form .btn-radio:hover[disabled] {
                 cursor: not-allowed;
                 color: #CCCCCC;
                 background-color: #F0F0F0;
+            }
+
+            .editor-form label.btn,
+            .editor-form label.btn:hover {
+                cursor: default;
+                background-color: #cccccc;
+                color: black;
+                padding-top: 2px;
+                padding-bottom: 2px;
+                font-size: 10px;
+                white-space: nowrap;
+            }
+
+            .editor-form label.btn span {
+                display: block;
+                margin-bottom: 1px;
+            }
+
+            .editor-form label.btn input {
+                width: 50px;
+            }
+
+            .editor-form label.btn .btn-range {
+                display: inline-block;
+                margin: 0px;
+                height: 19px;
+                width: 19px;
+                margin-left: -2px;
+            }
+
+            .editor-form .editor-form-section .btn-range {
+                background-color: white;
+                width: 20px;
+                height: 20px;
+                border-radius: 0px;
+                padding: 0px;
+                min-width: 0px;
+                display: block;
+                margin-top: 1px;
+                border: 1px solid #C0C0C0;
+                cursor: pointer;
+            }
+
+            .editor-form .editor-form-section .btn-range:hover {
+                background-color: #F0F0F0;
+            }
+
+            .editor-form .editor-form-section .btn-range[disabled],
+            .editor-form .editor-form-section .btn-range[disabled]:hover {
+                background-color: white;
+                color: #C0C0C0;
+                cursor: not-allowed;
             }
 
             .editor-form .editor-form-section label.alert {
@@ -104,22 +161,6 @@
                 font-size: 12px;
                 padding: 2px;
                 box-sizing: border-box;
-            }
-
-            .editor-form .editor-form-section div.popup label.editor-form-value .btn-range {
-                background-color: white;
-                width: 20px;
-                height: 20px;
-                border-radius: 0px;
-                padding: 0px;
-                min-width: 0px;
-                display: block;
-                margin-top: 1px;
-                border: 1px solid #C0C0C0;
-            }
-
-            .editor-form .editor-form-section div.popup label.editor-form-value .btn-range:hover {
-                background-color: #F0F0F0;
             }
 
             .editor-tree {
@@ -232,6 +273,14 @@
                     <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="unpackGroup">
                         Ungroup
                     </button>
+                </div>
+                <div class="editor-form-section">
+                    <label class="btn">
+                        <span>Gutter</span>
+                        <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
+                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
+                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
+                    </label>
                 </div>
             </template>
             <div class="editor-form-section">

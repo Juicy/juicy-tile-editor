@@ -181,7 +181,8 @@
             showMore: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
             oversize: { type: Number, observer: "oversizeChanged" },
-            outline: { type: String, observer: "outlineChanged" }
+            outline: { type: String, observer: "outlineChanged" },
+            gutter: { type: Number, observer: "gutterChanged" }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -323,6 +324,18 @@
 
             return !!getNestedList(item.id, this.listSelectors);
         },
+        getIsGroupSelection: function (tiles) {
+            for (var i = 0; i < tiles.length; i++) {
+                var id = getTileId(tiles[i]);
+                var setup = getSetupItem(this.selectedList.setup, id);
+
+                if (!setup.items) {
+                    return false;
+                }
+            }
+
+            return tiles.length > 0;
+        },
         getCommonSetupValue: function (name) {
             var value = null;
 
@@ -404,7 +417,7 @@
             }
         },
         readPrimitiveSetupValues: function () {
-            var names = ["background", "oversize", "outline"];
+            var names = ["background", "oversize", "outline", "gutter"];
 
             names.forEach(function (name) {
                 var value = this.getCommonSetupValue(name);
@@ -584,6 +597,24 @@
 
             this.set("oversize", value);
         },
+        gutterPlus: function (e) {
+            var value = 1;
+
+            if (this.gutter) {
+                value = this.gutter + 1;
+            }
+
+            this.set("gutter", value);
+        },
+        gutterMinus: function (e) {
+            var value = this.gutter - 1;
+
+            if (!value || value < 0) {
+                value = 0;
+            }
+
+            this.set("gutter", value);
+        },
         resetSelection: function () {
             this.set("selectedList", this.lists[0]);
             this.set("selectedScope", null);
@@ -741,6 +772,9 @@
         },
         outlineChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("outline", newVal);
+        },
+        gutterChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("gutter", newVal);
         }
     });
 })();
