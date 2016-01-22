@@ -181,6 +181,7 @@
             .editor-tree {
                 position: fixed;
                 height: 100vh;
+                max-height: 100vh;
                 right: 0px;
                 width: 220px;
                 top: 0px;
@@ -189,6 +190,7 @@
                 padding: 0px;
                 font-size: 13px;
                 border-left: 1px solid #C0C0C0;
+                overflow: auto;
             }
 
             .editor-tree div.editor-tree-item {
@@ -406,7 +408,7 @@
             </div>
             <template is="dom-repeat" items="{{selectedScopeItems}}">
                 <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
-                    <span>{{item.itemName}}</span>
+                    <span>{{getSetupName(item)}}</span>
                     <template is="dom-if" if="{{getIsScopable(item)}}">
                         <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
                     </template>

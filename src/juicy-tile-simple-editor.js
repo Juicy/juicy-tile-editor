@@ -155,6 +155,133 @@
         }
     }
 
+    function getLabelSetupName(element) {
+        if (!element) {
+            return null;
+        }
+
+        var tagName = element.tagName.toLowerCase();
+
+        if ((tagName == "label" || tagName == "legend") && element.innerText) {
+            return element.innerText;
+        }
+
+        element = element.querySelector("label, legend");
+
+        return getLabelSetupName(element);
+    }
+
+    function getControlSetupName(element) {
+        if (!element) {
+            return null;
+        }
+
+        var tagName = element.tagName.toLowerCase();
+
+        if (["input", "select", "textarea"].indexOf(tagName) < 0) {
+            return getControlSetupName(element.querySelector("input, select, textarea"));
+        }
+
+        var value = element.getAttribute("placeholder");
+
+        if (value) {
+            return value;
+        }
+
+        var value = element.getAttribute("title");
+
+        if (value) {
+            return value;
+        }
+
+        var value = element.querySelector("option");
+
+        if (value && value.innerText) {
+            return value.innerText;
+        }
+
+        if (element.value) {
+            return element.value;
+        }
+
+        return null;
+    }
+
+    function getImageSetupName(element) {
+        if (!element) {
+            return null;
+        }
+
+        if (element.tagName.toLowerCase() != "img") {
+            return getImageSetupName(element.querySelector("img"));
+        }
+
+        var value = element.getAttribute("alt");
+
+        if (value) {
+            return value + " image";
+        }
+
+        value = element.getAttribute("title");
+
+        if (value) {
+            return value + " image";
+        }
+
+        value = element.getAttribute("src");
+
+        if (value && value.indexOf("data:image") < 0) {
+            return value;
+        }
+
+        return "Empty image";
+    }
+
+    function getSetupName(list, setup) {
+        if (setup.itemName) {
+            return setup.itemName;
+        }
+
+        if (setup.items) {
+            if (!setup.items.length) {
+                return "Empty group";
+            }
+
+            var names = [];
+
+            for (var i = 0; i < setup.items.length; i++) {
+                names.push(getSetupName(list, setup.items[i]));
+            }
+
+            return names.join(" & ");
+        }
+
+        var tile = list.querySelector("[juicytile='" + setup.id + "']");
+        var value = getLabelSetupName(tile);
+
+        if (value) {
+            return value;
+        }
+
+        value = getControlSetupName(tile);
+
+        if (value) {
+            return value;
+        }
+
+        value = getImageSetupName(tile);
+
+        if (value) {
+            return value;
+        }
+
+        if (tile.innerText) {
+            return tile.innerText;
+        }
+
+        return "Empty element";
+    }
+
     var notAvailable = "N/A";
 
     Polymer({
@@ -337,6 +464,9 @@
             }
 
             return tiles.length > 0;
+        },
+        getSetupName: function (setup) {
+            return getSetupName(this.selectedList, setup);
         },
         getCommonSetupValue: function (name) {
             var value = null;
