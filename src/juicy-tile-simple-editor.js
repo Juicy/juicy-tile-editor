@@ -378,6 +378,10 @@
             this.onListMouseover = null;
             this.onListClick = null;
             this.onListDoubleClick = null;
+
+            this.$.highlightScopeSelected.hide();
+            this.$.highlightTileRollover.hide();
+            this.$.highlightTileSelected.hide();
         },
         attachEventListeners: function () {
             this.detachEventListeners();
@@ -389,8 +393,8 @@
             var list = this.selectedList;
             var shadow = list.shadowContainer;
 
-            list.addEventListener("mousemove", this.onListMouseover);
-            shadow.addEventListener("mousemove", this.onListMouseover);
+            list.addEventListener("mousemove", this.onListMouseover, true);
+            shadow.addEventListener("mousemove", this.onListMouseover, true);
 
             list.addEventListener("click", this.onListClick, true);
             shadow.addEventListener("click", this.onListClick, true);
@@ -402,14 +406,14 @@
             this.lists.forEach(function (list) {
                 var shadow = list.shadowContainer;
 
-                list.removeEventListener("mousemove", this.onListMouseover);
-                shadow.removeEventListener("mousemove", this.onListMouseover);
+                list.removeEventListener("mousemove", this.onListMouseover, true);
+                shadow.removeEventListener("mousemove", this.onListMouseover, true);
 
-                list.removeEventListener("click", this.onListClick);
-                shadow.removeEventListener("click", this.onListClick);
+                list.removeEventListener("click", this.onListClick, true);
+                shadow.removeEventListener("click", this.onListClick, true);
 
-                list.removeEventListener("dblclick", this.onListDoubleClick);
-                shadow.removeEventListener("dblclick", this.onListDoubleClick);
+                list.removeEventListener("dblclick", this.onListDoubleClick, true);
+                shadow.removeEventListener("dblclick", this.onListDoubleClick, true);
             }.bind(this));
         },
         showMessage: function (text) {
@@ -670,7 +674,6 @@
                 widthFlexible: true,
                 hidden: false,
                 heightDynamic: true,
-                precalculateHeight: true,
                 tightGroup: true
             };
 
@@ -680,7 +683,6 @@
             group.heightDynamic = true;
             group.width = "100%";
             group.widthFlexible = true;
-            group.precalculateHeight = true;
             group.tightGroup = true;
             group.itemName = "New Group";
             group.direction = "horizontal";
@@ -758,13 +760,13 @@
             var value = 1;
 
             if (this.gutter) {
-                value = this.gutter + 1;
+                value = this.gutter / 1 + 1;
             }
 
             this.set("gutter", value);
         },
         gutterMinus: function (e) {
-            var value = this.gutter - 1;
+            var value = this.gutter / 1 - 1;
 
             if (!value || value < 0) {
                 value = 0;
@@ -798,21 +800,27 @@
         },
         heightPlus: function (e) {
             var value = 1;
+            var unit = "";
 
             if (this.height) {
-                value = this.height + 1;
+                value = this.height.replace(/[\D]/gi, "");
+                unit = this.height.replace(/[\d]/gi, "");
+                value++;
             }
 
-            this.set("height", value);
+            this.set("height", value + unit);
         },
         heightMinus: function (e) {
-            var value = this.height - 1;
+            var value = this.height.replace(/[\D]/gi, "");
+            var unit = this.height.replace(/[\d]/gi, "");
 
             if (!value || value < 0) {
                 value = 0;
+            } else {
+                value--;
             }
 
-            this.set("height", value);
+            this.set("height", value + unit);
         },
         selectDirection: function (e) {
             var target = e.currentTarget;
