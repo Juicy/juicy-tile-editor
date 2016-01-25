@@ -245,7 +245,7 @@
             <div class="editor-form-section">
                 <label>Width:</label>
                 <template is="dom-repeat" items="{{widthRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(width, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">{{item.name}}</button>
+                    <button type="button" class$="{{getRadioButtonCss(widthItem, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">{{item.name}}</button>
                 </template>
             </div>
             <div class="editor-form-section">
@@ -313,11 +313,11 @@
                                 <div class="radio-group">
                                     <div class="radio-group-caption">Elements flow</div>
                                     <label class="radio">
-                                        <input type="radio" name="direction" checked />
+                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
                                         <span>Horizontal</span>
                                     </label>
                                     <label class="radio">
-                                        <input type="radio" name="direction" />
+                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
                                         <span>Vertical</span>
                                     </label>
                                 </div>
@@ -345,23 +345,47 @@
                         <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
                             <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
                             <div class="popup">
-                                <textarea></textarea>
+                                <textarea value="{{content::change}}"></textarea>
                             </div>
                         </juicy-popover>
                     </div>
                     <div class="editor-form-section">
-                        <label class="btn">
-                            <span>Width</span>
-                            <input type="text" value="{{gutter::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">-</button>
-                        </label>
-                        <label class="btn">
-                            <span>Height</span>
-                            <input type="text" value="{{gutter::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="">-</button>
-                        </label>
+                        <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
+                            <label class="btn">
+                                <span>Width</span>
+                                <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
+                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
+                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
+                            </label>
+                            <div class="popup">
+                                <label class="checkbox">
+                                    <input type="checkbox" checked="{{widthFlexible::change}}" />
+                                    <span>flexible</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" checked="{{widthDynamic::change}}" />
+                                    <span>resize with content</span>
+                                </label>
+                            </div>
+                        </juicy-popover>
+                        <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
+                            <label class="btn">
+                                <span>Height</span>
+                                <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
+                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
+                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
+                            </label>
+                            <div class="popup">
+                                <label class="checkbox">
+                                    <input type="checkbox" checked="{{heightFlexible::change}}" />
+                                    <span>flexible</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" checked="{{heightDynamic::change}}" />
+                                    <span>resize with content</span>
+                                </label>
+                            </div>
+                        </juicy-popover>
                     </div>
                     <div class="editor-form-section">
                         <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">

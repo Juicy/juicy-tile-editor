@@ -56,6 +56,10 @@
         for (var i = 0; i < event.path.length; i++) {
             var t = event.path[i];
 
+            if (t == scope) {
+                break;
+            }
+
             if (isListTile(list, t)) {
                 target = t;
             }
@@ -289,7 +293,7 @@
         properties: {
             mediaScreen: { type: Object, notify: true },
             mediaScreenRanges: { type: Array, value: [{ name: "Mobile", width: 300 }, { name: "Tablet", width: 700 }, { name: "Laptop", width: 900 }, { name: "Desktop", width: 1100 }] },
-            width: { type: Object, value: null, notify: true },
+            widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
                 type: Array,
                 value: [{ name: "1", value: "10%" }, { name: "2", value: "20%" }, { name: "3", value: "30%" }, { name: "4", value: "40%" }, { name: "5", value: "50%" },
@@ -305,12 +309,20 @@
             breadcrumb: { type: Array, value: [] },
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false },
-            showMore: { type: Boolean, value: false },
-            showAdvanced: { type: Boolean, value: false },
+            showMore: { type: Boolean, value: true },
+            showAdvanced: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
             oversize: { type: Number, observer: "oversizeChanged" },
             outline: { type: String, observer: "outlineChanged" },
-            gutter: { type: Number, observer: "gutterChanged" }
+            gutter: { type: Number, observer: "gutterChanged" },
+            direction: { type: String },
+            content: { type: String, observer: "contentChanged" },
+            width: { type: String, observer: "widthChanged" },
+            height: { type: String, observer: "heightChanged" },
+            widthFlexible: { type: Boolean, observer: "widthFlexibleChanged" },
+            widthDynamic: { type: Boolean, observer: "widthDynamicChanged" },
+            heightFlexible: { type: Boolean, observer: "heightFlexibleChanged" },
+            heightDynamic: { type: Boolean, observer: "heightDynamicChanged" }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -446,6 +458,9 @@
 
             return outline ? ["outline: ", outline, ";"].join("") : "";
         },
+        getIsChecked: function (a, b) {
+            return a == b;
+        },
         getIsScopable: function (item) {
             if (item.items && item.items.length) {
                 return true;
@@ -526,7 +541,7 @@
             var width = this.getCommonSetupValue("width");
 
             if (!width) {
-                this.set("width", null);
+                this.set("widthItem", null);
             } else {
                 var item = null;
 
@@ -536,7 +551,7 @@
                     }
                 });
 
-                this.set("width", item);
+                this.set("widthItem", item);
             }
         },
         readVisible: function () {
@@ -549,7 +564,7 @@
             }
         },
         readPrimitiveSetupValues: function () {
-            var names = ["background", "oversize", "outline", "gutter"];
+            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic", "heightFlexible", "heightDynamic"];
 
             this.isReadingSetup = true;
 
@@ -586,13 +601,13 @@
         },
         selectWidth: function (e) {
             this.touch();
-            this.set("width", e.target.item);
+            this.set("widthItem", e.target.item);
 
             this.selectedTiles.forEach(function (tile) {
                 var id = tile.id;
                 var setup = getSetupItem(this.selectedList.setup, id);
 
-                setup.width = this.width.value;
+                setup.width = this.widthItem.value;
                 setup.widthFlexible = true;
             }.bind(this));
 
@@ -667,6 +682,8 @@
             group.precalculateHeight = true;
             group.tightGroup = true;
             group.itemName = "New Group";
+            group.direction = "horizontal";
+            group.content = "";
 
             this.selectedTiles.forEach(function (t) {
                 var id = getTileId(t);
@@ -753,6 +770,55 @@
             }
 
             this.set("gutter", value);
+        },
+        widthPlus: function (e) {
+            var value = 1;
+            var unit = "";
+
+            if (this.width) {
+                value = this.width.replace(/[\D]/gi, "");
+                unit = this.width.replace(/[\d]/gi, "");
+                value++;
+            }
+
+            this.set("width", value + unit);
+        },
+        widthMinus: function (e) {
+            var value = this.width.replace(/[\D]/gi, "");
+            var unit = this.width.replace(/[\d]/gi, "");
+
+            if (!value || value < 0) {
+                value = 0;
+            } else {
+                value--;
+            }
+
+            this.set("width", value + unit);
+        },
+        heightPlus: function (e) {
+            var value = 1;
+
+            if (this.height) {
+                value = this.height + 1;
+            }
+
+            this.set("height", value);
+        },
+        heightMinus: function (e) {
+            var value = this.height - 1;
+
+            if (!value || value < 0) {
+                value = 0;
+            }
+
+            this.set("height", value);
+        },
+        selectDirection: function (e) {
+            var target = e.currentTarget;
+            var value = target.value;
+
+            this.set("direction", value);
+            this.setCommonSetupValue("direction", value);
         },
         resetSelection: function () {
             this.set("selectedList", null);
@@ -914,6 +980,27 @@
         },
         gutterChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("gutter", newVal);
+        },
+        contentChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("content", newVal);
+        },
+        widthChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("width", newVal);
+        },
+        heightChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("height", newVal);
+        },
+        widthFlexibleChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("widthFlexible", newVal);
+        },
+        widthDynamicChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("widthDynamic", newVal);
+        },
+        heightFlexibleChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("heightFlexible", newVal);
+        },
+        heightDynamicChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("heightDynamic", newVal);
         }
     });
 })();
