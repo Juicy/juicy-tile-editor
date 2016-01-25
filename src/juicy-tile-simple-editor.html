@@ -303,7 +303,7 @@
                     <div class="editor-form-section">
                         <label class="btn">
                             <span>Own scope</span>
-                            <input type="checkbox" checked="{{tightGroup::change}}" />
+                            <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
                         </label>
                         <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
                             <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">

@@ -322,7 +322,8 @@
             widthFlexible: { type: Boolean, observer: "widthFlexibleChanged" },
             widthDynamic: { type: Boolean, observer: "widthDynamicChanged" },
             heightFlexible: { type: Boolean, observer: "heightFlexibleChanged" },
-            heightDynamic: { type: Boolean, observer: "heightDynamicChanged" }
+            heightDynamic: { type: Boolean, observer: "heightDynamicChanged" },
+            tightGroup: { type: Boolean, observer: "tightGroupChanged" }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -564,7 +565,7 @@
             }
         },
         readPrimitiveSetupValues: function () {
-            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic", "heightFlexible", "heightDynamic"];
+            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic", "heightFlexible", "heightDynamic", "tightGroup"];
 
             this.isReadingSetup = true;
 
@@ -1014,6 +1015,9 @@
         },
         heightDynamicChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("heightDynamic", newVal);
+        },
+        tightGroupChanged: function (newVal, oldVal) {
+            this.setCommonSetupValue("tightGroup", newVal);
         }
     });
 })();
