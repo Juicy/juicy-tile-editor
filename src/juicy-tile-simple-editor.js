@@ -242,6 +242,21 @@
     }
 
     function getSetupName(list, setup) {
+        var value = getFullSetupName(list, setup);
+        var maxLen = 15;
+
+        if (value && value.length > maxLen) {
+            var index = value.indexOf(" ", maxLen);
+
+            if (index > 0) {
+                value = value.substring(0, index);
+            }
+        }
+
+        return value;
+    }
+
+    function getFullSetupName(list, setup) {
         if (setup.itemName) {
             return setup.itemName;
         }
@@ -254,7 +269,7 @@
             var names = [];
 
             for (var i = 0; i < setup.items.length; i++) {
-                names.push(getSetupName(list, setup.items[i]));
+                names.push(getFullSetupName(list, setup.items[i]));
             }
 
             return names.join(" & ");
