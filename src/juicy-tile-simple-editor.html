@@ -389,9 +389,9 @@
                     </div>
                     <div class="editor-form-section">
                         <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                            <button type="button" class="btn">Source</button>
+                            <button type="button" class="btn" on-click="readSource">Source</button>
                             <div class="popup">
-                                <textarea></textarea>
+                                <textarea value="{{source::change}}" on-change="writeSource"></textarea>
                             </div>
                         </juicy-popover>
                     </div>

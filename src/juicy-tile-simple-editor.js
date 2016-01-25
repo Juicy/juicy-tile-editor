@@ -820,6 +820,19 @@
             this.set("direction", value);
             this.setCommonSetupValue("direction", value);
         },
+        readSource: function (e) {
+            var setup = JSON.stringify(this.selectedList.setup);
+
+            this.set("source", setup);
+        },
+        writeSource: function (e) {
+            var setup = JSON.parse(this.source);
+
+            this.selectedList.setup = setup;
+            this.selectedList.refresh(true);
+            this.set("selectedScope", null);
+            this.refreshSelectedScopeItems();
+        },
         resetSelection: function () {
             this.set("selectedList", null);
             this.set("selectedList", this.lists[0]);
