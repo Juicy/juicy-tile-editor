@@ -324,19 +324,19 @@
                                 <div class="radio-group">
                                     <div class="radio-group-caption">From</div>
                                     <label class="radio">
-                                        <input type="radio" name="left-right" checked />
+                                        <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
                                         <span>Left to right</span>
                                     </label>
                                     <label class="radio">
-                                        <input type="radio" name="left-right" />
+                                        <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
                                         <span>Right to left</span>
                                     </label>
                                     <label class="radio">
-                                        <input type="radio" name="top-bottom" checked />
+                                        <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
                                         <span>Top to bottom</span>
                                     </label>
                                     <label class="radio">
-                                        <input type="radio" name="top-bottom" />
+                                        <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
                                         <span>Bottom to top</span>
                                     </label>
                                 </div>

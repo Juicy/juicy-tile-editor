@@ -338,7 +338,9 @@
             widthDynamic: { type: Boolean, observer: "widthDynamicChanged" },
             heightFlexible: { type: Boolean, observer: "heightFlexibleChanged" },
             heightDynamic: { type: Boolean, observer: "heightDynamicChanged" },
-            tightGroup: { type: Boolean, observer: "tightGroupChanged" }
+            tightGroup: { type: Boolean, observer: "tightGroupChanged" },
+            rightToLeft: { type: Boolean },
+            bottomUp: { type: Boolean }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -594,7 +596,8 @@
             }
         },
         readPrimitiveSetupValues: function () {
-            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic", "heightFlexible", "heightDynamic", "tightGroup"];
+            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic",
+                "heightFlexible", "heightDynamic", "tightGroup", "rightToLeft", "bottomUp"];
 
             this.isReadingSetup = true;
 
@@ -854,6 +857,24 @@
 
             this.set("direction", value);
             this.setCommonSetupValue("direction", value);
+        },
+        selectRightToLeft: function (e) {
+            var target = e.currentTarget;
+            var value = target.value / 1;
+
+            value = value === 1;
+
+            this.set("rightToLeft", value);
+            this.setCommonSetupValue("rightToLeft", value);
+        },
+        selectBottomUp: function (e) {
+            var target = e.currentTarget;
+            var value = target.value / 1;
+
+            value = value === 1;
+
+            this.set("bottomUp", value);
+            this.setCommonSetupValue("bottomUp", value);
         },
         readSource: function (e) {
             var setup = JSON.stringify(this.selectedList.setup);
