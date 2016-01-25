@@ -445,7 +445,7 @@
                 <template is="dom-repeat" items="{{breadcrumb}}">
                     <a href="javascript:" on-click="selectCrumbItem" item="{{item}}">
                         <span>&gt;</span>
-                        <span>{{item.name}}</span>
+                        <span>{{getCrumbName(item)}}</span>
                     </a>
                 </template>
             </div>

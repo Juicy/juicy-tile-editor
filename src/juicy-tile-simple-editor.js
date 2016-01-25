@@ -488,6 +488,16 @@
         getSetupName: function (setup) {
             return getSetupName(this.selectedList, setup);
         },
+        getCrumbName: function (item) {
+            if (item.scope) {
+                var id = getTileId(item.scope);
+                var setup = getSetupItem(item.list.setup, id);
+
+                return getSetupName(item.list, setup);
+            } else {
+                return this.getSetupName(item.list.setup);
+            }
+        },
         getCommonSetupValue: function (name) {
             var value = null;
 
@@ -666,6 +676,7 @@
             var first = this.selectedTiles[0];
             var firstId = getTileId(first);
             var firstSetup = getSetupItem(this.selectedList.setup, firstId);
+
             var setup = {
                 priority: firstSetup.priority,
                 gutter: 0,
