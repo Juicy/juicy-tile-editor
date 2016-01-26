@@ -623,6 +623,58 @@
                 this.set("hasChanges", true);
             }
         },
+        dimensionPlus: function (name) {
+            var value = 1;
+            var unit = "";
+            var v = this[name] ? this[name].toString() : "";
+
+            if (v) {
+                value = v.replace(/[\D]/gi, "");
+                unit = v.replace(/[\d]/gi, "");
+                value++;
+            }
+
+            if (unit) {
+                this.set(name, value + unit);
+            } else {
+                this.set(name, value / 1);
+            }
+        },
+        dimensionMinus: function (name) {
+            var v = this[name] ? this[name].toString() : "";
+            var value = v.replace(/[\D]/gi, "");
+            var unit = v.replace(/[\d]/gi, "");
+
+            if (!value || value < 0) {
+                value = 0;
+            } else {
+                value--;
+            }
+
+            if (unit) {
+                this.set(name, value + unit);
+            } else {
+                this.set(name, value / 1);
+            }
+        },
+        valuePlus: function (name) {
+            var value = 1;
+
+            if (this[name]) {
+                value = this[name] / 1 + 1;
+            }
+
+            this.set(name, value);
+        },
+        valueMinus: function (name) {
+            var value = this[name] / 1 - 1;
+
+            if (!value || value < 0) {
+                value = 0;
+            }
+
+            this.set(name, value);
+        },
         selectMediaScreen: function (e) {
             if (!this.selectedList) {
                 return;
@@ -768,88 +820,28 @@
             this.set("showAdvanced", !this.showAdvanced);
         },
         oversizePlus: function (e) {
-            var value = 1;
-
-            if (this.oversize) {
-                value = this.oversize + 1;
-            }
-
-            this.set("oversize", value);
+            this.valuePlus("oversize");
         },
         oversizeMinus: function (e) {
-            var value = this.oversize - 1;
-
-            if (!value || value < 0) {
-                value = 0;
-            }
-
-            this.set("oversize", value);
+            this.valueMinus("oversize");
         },
         gutterPlus: function (e) {
-            var value = 1;
-
-            if (this.gutter) {
-                value = this.gutter / 1 + 1;
-            }
-
-            this.set("gutter", value);
+            this.valuePlus("gutter");
         },
         gutterMinus: function (e) {
-            var value = this.gutter / 1 - 1;
-
-            if (!value || value < 0) {
-                value = 0;
-            }
-
-            this.set("gutter", value);
+            this.valueMinus("gutter");
         },
         widthPlus: function (e) {
-            var value = 1;
-            var unit = "";
-
-            if (this.width) {
-                value = this.width.replace(/[\D]/gi, "");
-                unit = this.width.replace(/[\d]/gi, "");
-                value++;
-            }
-
-            this.set("width", value + unit);
+            this.dimensionPlus("width");
         },
         widthMinus: function (e) {
-            var value = this.width.replace(/[\D]/gi, "");
-            var unit = this.width.replace(/[\d]/gi, "");
-
-            if (!value || value < 0) {
-                value = 0;
-            } else {
-                value--;
-            }
-
-            this.set("width", value + unit);
+            this.dimensionMinus("width");
         },
         heightPlus: function (e) {
-            var value = 1;
-            var unit = "";
-
-            if (this.height) {
-                value = this.height.replace(/[\D]/gi, "");
-                unit = this.height.replace(/[\d]/gi, "");
-                value++;
-            }
-
-            this.set("height", value + unit);
+            this.dimensionPlus("height");
         },
         heightMinus: function (e) {
-            var value = this.height.replace(/[\D]/gi, "");
-            var unit = this.height.replace(/[\d]/gi, "");
-
-            if (!value || value < 0) {
-                value = 0;
-            } else {
-                value--;
-            }
-
-            this.set("height", value + unit);
+            this.dimensionMinus("height");
         },
         selectDirection: function (e) {
             var target = e.currentTarget;
