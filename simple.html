@@ -20,6 +20,10 @@
             margin: 0px;
         }
 
+        div.editor-container {
+            height: 50px;
+        }
+
         article.markdown-body {
             padding: 20px;
         }
@@ -71,7 +75,9 @@
 <body>
     <template is="dom-bind" id="root">
         <template is="dom-if" if="{{model.editingMode}}" restamp="true">
-            <juicy-tile-simple-editor></juicy-tile-simple-editor>
+            <div class="editor-container">
+                <juicy-tile-simple-editor></juicy-tile-simple-editor>
+            </div>
         </template>
         <article class="markdown-body">
             <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
