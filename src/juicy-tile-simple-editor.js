@@ -850,23 +850,20 @@
             this.set("direction", value);
             this.setCommonSetupValue("direction", value);
         },
-        selectRightToLeft: function (e) {
+        selectBooleanValue: function (name, e) {
             var target = e.currentTarget;
             var value = target.value / 1;
 
             value = value === 1;
 
-            this.set("rightToLeft", value);
-            this.setCommonSetupValue("rightToLeft", value);
+            this.set(name, value);
+            this.setCommonSetupValue(name, value);
+        },
+        selectRightToLeft: function (e) {
+            this.selectBooleanValue("rightToLeft", e);
         },
         selectBottomUp: function (e) {
-            var target = e.currentTarget;
-            var value = target.value / 1;
-
-            value = value === 1;
-
-            this.set("bottomUp", value);
-            this.setCommonSetupValue("bottomUp", value);
+            this.selectBooleanValue("bottomUp", e);
         },
         readSource: function (e) {
             var setup = JSON.stringify(this.selectedList.setup);
