@@ -13,6 +13,82 @@
                 left: 0px;
                 width: 100%;
                 box-sizing: border-box;
+                background-color: #596567;
+                color: #b0b6b6;
+                display: block;
+                font: 15px Helvetica, arial, freesans, clean, sans-serif;
+                line-height: 22.1px;
+                position: fixed;
+                z-index: 1;
+                height: 126px;
+            }
+
+            .btn {
+                background-color: #3e494c;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 8px;
+                font-size: 17px;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                background-color: #3a3a3c;
+            }
+
+            .btn[disabled],
+            .btn[disabled]:hover {
+                color: #b0b6b6;
+                background-color: #3e494c;
+                cursor: not-allowed;
+            }
+
+            .editor-simple-form {
+                padding: 5px 40px;
+                overflow: auto;
+            }
+
+            .editor-simple-form .editor-form-section {
+                float: left;
+                margin-right: 50px;
+            }
+
+            .editor-simple-form .save-section {
+                display: flex;
+                flex-direction: column;
+                width: 100px;
+                padding: 16px 0px;
+            }
+
+            .editor-simple-form .save-section button {
+                margin-bottom: 10px;
+            }
+
+            .editor-simple-form .media-section {
+            }
+
+            .editor-simple-form .media-section button.btn {
+                background-color: transparent;
+                background-position: center center;
+                background-repeat: no-repeat;
+                line-height: 100px;
+                font-size: 12px;
+            }
+
+            .editor-simple-form .media-section button.btn.ipad {
+                background-image: url(images/ipad.svg);
+                background-position: bottom center;
+                background-size: auto 80px;
+                width: 90px;
+            }
+        </style>
+        <style-old style="display: none;">
+            :host {
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                box-sizing: border-box;
                 background-color: #252526;
                 color: white;
                 overflow: visible;
@@ -244,17 +320,17 @@
             .editor-breadcrumb a:hover {
                 color: white;
             }
-        </style>
+        </style-old>
 
-        <div class="editor-form">
-            <div class="editor-form-section">
+        <div class="editor-simple-form">
+            <div class="editor-form-section save-section">
                 <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
                 <button type="button" class="btn" on-click="resetSetup">Reset</button>
             </div>
             <!-- Hiding the media screen buttons till we support multiple break points on the juicy-tile-list/grid/table level -->
-            <div class="editor-form-section" style="display: none;">
+            <div class="editor-form-section media-section">
                 <template is="dom-repeat" items="{{mediaScreenRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" disabled$="{{!selectedList}}">{{item.name}}</button>
+                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}">{{item.width}}</button>
                 </template>
             </div>
             <div class="editor-form-section">

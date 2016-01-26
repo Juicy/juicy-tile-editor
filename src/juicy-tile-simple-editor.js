@@ -307,7 +307,11 @@
         is: "juicy-tile-simple-editor",
         properties: {
             mediaScreen: { type: Object, notify: true },
-            mediaScreenRanges: { type: Array, value: [{ name: "Mobile", width: 300 }, { name: "Tablet", width: 700 }, { name: "Laptop", width: 900 }, { name: "Desktop", width: 1100 }] },
+            mediaScreenRanges: {
+                type: Array,
+                value: [{ name: "Mobile", width: 300, css: "iphone" }, { name: "Tablet", width: 700, css: "ipad" },
+                    { name: "Laptop", width: 900, css: "laptop" }, { name: "Desktop", width: 1100, css: "screen" }]
+            },
             widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
                 type: Array,
@@ -451,11 +455,17 @@
             return length > 1 ? "elements" : "element";
         },
         getRadioButtonCss: function (selected, item) {
+            var css = ["btn btn-radio"];
+
             if (selected == item) {
-                return "btn btn-radio active";
+                css.push("active");
             }
 
-            return "btn btn-radio";
+            if (item.css) {
+                css.push(item.css);
+            }
+
+            return css.join(" ");
         },
         getTreeItemCss: function (selected, item) {
             var css = ["editor-tree-item"];
