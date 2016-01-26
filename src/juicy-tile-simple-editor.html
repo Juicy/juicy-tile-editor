@@ -8,7 +8,6 @@
     <template>
         <style>
             :host {
-                position: fixed;
                 top: 0px;
                 left: 0px;
                 width: calc(100% - 220px);
@@ -16,6 +15,11 @@
                 background-color: #252526;
                 color: white;
                 overflow: visible;
+                display: block;
+                position: relative;
+                z-index: 1;
+                font: 15px Helvetica, arial, freesans, clean, sans-serif;
+                line-height: 22.1px;
             }
 
             .editor-form {
@@ -211,6 +215,15 @@
                 border-bottom: 1px solid #C0C0C0;
                 height: 46px;
                 box-sizing: border-box;
+            }
+
+            .editor-tree a {
+                color: #4183c4;
+                text-decoration: none;
+            }
+
+            .editor-tree a:hover {
+                text-decoration: underline;
             }
 
             .editor-breadcrumb {
