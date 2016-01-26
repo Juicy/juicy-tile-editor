@@ -1,4 +1,5 @@
 ﻿﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../iron-localstorage/iron-localstorage.html" />
 <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html" />
 <link rel="import" href="../../juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
@@ -10,7 +11,7 @@
             :host {
                 top: 0px;
                 left: 0px;
-                width: calc(100% - 220px);
+                width: 100%;
                 box-sizing: border-box;
                 background-color: #252526;
                 color: white;
@@ -24,7 +25,7 @@
 
             .editor-form {
                 overflow: auto;
-                padding: 5px 10px 0px 10px;
+                padding: 5px 230px 0px 10px;
                 border-bottom: 1px solid #C0C0C0;
             }
 
@@ -424,6 +425,9 @@
                         <span>More</span>
                     </template>
                 </button>
+                <button type="button" class="btn" on-click="toggleTree">
+                    Tree
+                </button>
             </div>
             <template is="dom-if" if="{{message}}">
                 <div class="editor-form-section">
@@ -432,26 +436,27 @@
             </template>
         </div>
 
-        <div class="editor-tree">
-            <div class="editor-tree-caption">
-                <template is="dom-if" if="{{selectedTiles.length}}">
-
-                    <b>
-                        <span>{{selectedTiles.length}}</span>
-                        <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
-                    </b>
-                    <label>selected</label>
-                </template>
-            </div>
-            <template is="dom-repeat" items="{{selectedScopeItems}}">
-                <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
-                    <span>{{getSetupName(item)}}</span>
-                    <template is="dom-if" if="{{getIsScopable(item)}}">
-                        <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
+        <template is="dom-if" if="{{showTree}}">
+            <div class="editor-tree">
+                <div class="editor-tree-caption">
+                    <template is="dom-if" if="{{selectedTiles.length}}">
+                        <b>
+                            <span>{{selectedTiles.length}}</span>
+                            <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
+                        </b>
+                        <label>selected</label>
                     </template>
                 </div>
-            </template>
-        </div>
+                <template is="dom-repeat" items="{{selectedScopeItems}}">
+                    <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
+                        <span>{{getSetupName(item)}}</span>
+                        <template is="dom-if" if="{{getIsScopable(item)}}">
+                            <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
 
         <template is="dom-if" if="{{breadcrumb.length}}">
             <div class="editor-breadcrumb">
@@ -470,6 +475,7 @@
 
         <iron-localstorage name="juicy-tile-editor#showMore" value="{{showMore}}"></iron-localstorage>
         <iron-localstorage name="juicy-tile-editor#showAdvanced" value="{{showAdvanced}}"></iron-localstorage>
+        <iron-localstorage name="juicy-tile-editor#showTree" value="{{showTree}}" on-iron-localstorage-load-empty="initShowTree"></iron-localstorage>
     </template>
     <script src="juicy-tile-simple-editor.js"></script>
 </dom-module>

@@ -324,8 +324,9 @@
             breadcrumb: { type: Array, value: [] },
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false },
-            showMore: { type: Boolean, value: true },
-            showAdvanced: { type: Boolean, value: true },
+            showMore: { type: Boolean, value: false },
+            showAdvanced: { type: Boolean, value: false },
+            showTree: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
             oversize: { type: Number, observer: "oversizeChanged" },
             outline: { type: String, observer: "outlineChanged" },
@@ -373,6 +374,11 @@
 
             this.onListDoubleClick = function (e) {
                 var tile = getTile(e, this.selectedList, this.selectedScope);
+
+                if (!tile) {
+                    return;
+                }
+
                 var id = getTileId(tile);
                 var setup = getSetupItem(this.selectedList.setup, id);
                 var isScope = this.getIsScopable(setup);
@@ -819,6 +825,9 @@
         toggleAdvanced: function (e) {
             this.set("showAdvanced", !this.showAdvanced);
         },
+        toggleTree: function (e) {
+            this.set("showTree", !this.showTree);
+        },
         oversizePlus: function (e) {
             this.valuePlus("oversize");
         },
@@ -877,6 +886,9 @@
             this.selectedList.refresh(true);
             this.set("selectedScope", null);
             this.refreshSelectedScopeItems();
+        },
+        initShowTree: function (e) {
+            this.set("showTree", true);
         },
         resetSelection: function () {
             this.set("selectedList", null);
