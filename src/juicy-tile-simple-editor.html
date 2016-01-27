@@ -336,9 +336,11 @@
         </style>
         <style>
             .editor-expert-form {
-                padding: 5px 0px 5px 20px;
-                margin-right: 150px;
+                padding: 5px 0px 5px 10px;
+                margin-right: 100px;
                 overflow: auto;
+                max-width: 1100px;
+                background-color: #F0F0F0;
             }
 
             .editor-expert-form .btn-range,
@@ -346,8 +348,8 @@
                 border: none;
                 background-color: #3e494c;
                 color: #b0b6b6;
-                height: 23px;
-                width: 23px;
+                height: 18px;
+                width: 18px;
                 outline: none;
                 cursor: pointer;
             }
@@ -363,41 +365,42 @@
 
             .editor-expert-form .editor-form-section {
                 float: left;
-                margin-right: 20px;
+                margin-right: 10px;
                 min-height: 125px;
             }
 
             .editor-expert-form .save-section {
                 display: flex;
                 flex-direction: column;
-                width: 100px;
+                width: 70px;
                 padding: 5px 0px;
             }
 
             .editor-expert-form .save-section button {
                 margin-bottom: 5px;
-                padding: 6px 15px;
+                padding: 6px 5px;
+                font-size: 12px;
             }
 
             .editor-expert-form .media-section {
-                width: 190px;
+                width: 135px;
+                margin-top: 3px;
             }
 
             .editor-expert-form .media-section button.btn {
                 background-color: transparent;
                 background-position: center center;
                 background-repeat: no-repeat;
-                font-size: 12px;
-                height: 110px;
+                font-size: 9px;
                 box-sizing: border-box;
                 background-color: #3e494c;
                 color: white;
                 border-radius: 0px;
-                width: 85px;
-                height: 52px;
+                width: 60px;
+                height: 43px;
                 display: block;
                 float: left;
-                margin: 3px;
+                margin: 2px;
                 background-size: auto 40px;
             }
 
@@ -407,7 +410,8 @@
 
             .editor-expert-form .media-section button.btn.iphone {
                 background-image: url(images/iphone.svg);
-                background-position: 20px center;
+                background-position: 8px center;
+                background-size: 15px auto;
                 text-align: right;
                 padding-right: 5px;
             }
@@ -418,9 +422,10 @@
 
             .editor-expert-form .media-section button.btn.ipad {
                 background-image: url(images/ipad.svg);
-                background-position: 10px center;
+                background-position: 3px center;
+                background-size: 25px auto;
                 text-align: right;
-                padding-right: 5px;
+                padding-right: 2px;
             }
 
             .editor-expert-form .media-section button.btn.ipad.active {
@@ -430,7 +435,7 @@
             .editor-expert-form .media-section button.btn.laptop {
                 background-image: url(images/laptop.svg);
                 background-position: center center;
-                background-size: auto 44px;
+                background-size: auto 30px;
             }
 
             .editor-expert-form .media-section button.btn.laptop.active {
@@ -440,7 +445,7 @@
             .editor-expert-form .media-section button.btn.screen {
                 background-image: url(images/screen.svg);
                 background-position: center center;
-                background-size: auto 44px;
+                background-size: auto 32px;
             }
 
             .editor-expert-form .media-section button.btn.screen.active {
@@ -448,77 +453,79 @@
             }
 
             .editor-expert-form .gutter-section {
-                margin: 0px 50px 0px 20px;
+                margin-right: 20px;
+                margin-top: 5px;
             }
 
             .editor-expert-form .gutter-section label {
                 display: block;
                 text-align: center;
-                margin: 15px 0px 5px 0px;
+                margin: 10px 0px 0px 0px;
+                font-size: 11px;
             }
 
             .editor-expert-form .gutter-section .btn-group {
-                border: 6px dotted #b0b6b6;
+                border: 4px dotted #b0b6b6;
                 border-left: none;
                 border-right: none;
-                padding: 5px 0px;
+                padding: 3px 0px;
             }
 
             .editor-expert-form .gutter-section input {
                 border: 1px solid #b0b6b6;
-                padding: 3px 5px;
-                width: 60px;
-                height: 23px;
+                padding: 2px 4px;
+                width: 35px;
+                height: 18px;
                 box-sizing: border-box;
             }
 
             .editor-expert-form .width-section {
-                margin-bottom : 10px;
             }
 
             .editor-expert-form .width-section label {
                 text-align: center;
                 display: block;
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .editor-expert-form .width-section .btn-group {
                 overflow: visible;
-                border-top: 3px dotted #787b80;
-                border-bottom: 3px dotted #787b80;
-                height: 33px;
+                border-top: 1px dotted #787b80;
+                border-bottom: 1px dotted #787b80;
+                height: 25px;
+                display: inline-block;
             }
 
             .editor-expert-form .width-section .btn-group button.btn {
-                border-right: 3px dotted #787b80;
+                border-right: 1px dotted #787b80;
                 float: left;
                 color: #afb5b5;
                 background-color: transparent;
                 border-radius: 0px;
                 padding: 0px 6.5px;
-                height: 35px;
-                width: 32px;
+                height: 25px;
+                width: 25px;
                 box-sizing: border-box;
                 overflow: hidden;
-                font-size: 11px;
+                font-size: 10px;
             }
 
             .editor-expert-form .width-section .btn-group button.btn.active,
             .editor-expert-form .width-section .btn-group button.btn.active:first-child {
                 background-color: #21b3cf;
-                border: 3px solid #21b3cf;
+                border: 1px solid #21b3cf;
                 border-left: none;
                 color: white;
-                margin: -3px 0px;
-                height: 39px;
+                margin: -1px 0px;
+                height: 27px;
             }
 
             .editor-expert-form .width-section .btn-group button.btn:first-child {
-                border-left: 3px dotted #787b80;
+                border-left: 1px dotted #787b80;
             }
 
             .editor-expert-form .width-section .btn-group button.btn.active:first-child {
-                border-left: 3px solid #21b3cf;
+                border-left: 1px solid #21b3cf;
             }
 
             .editor-expert-form .width-section .btn-group button.btn span {
@@ -527,28 +534,28 @@
             }
 
             .editor-expert-form .width-section .btn-group button.btn span:first-child {
-                border-bottom: 2px solid #afb5b5;
+                border-bottom: 1px solid #afb5b5;
                 margin-top: -1px;
             }
 
             .editor-expert-form .width-section .btn-group button.btn.active span:first-child {
-                border-bottom: 2px solid white;
+                border-bottom: 1px solid white;
             }
 
             .editor-expert-form .position-section {
                 float: left;
-                margin-right: 40px;
-                margin-left: 7px;
+                margin-right: 30px;
+                margin-left: 2px;
             }
 
             .editor-expert-form .position-section .btn {
                 border-radius: 0px;
                 background-color: #3e494c;
-                width: 37px;
-                height: 37px;
+                width: 30px;
+                height: 30px;
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-size: 18px 18px;
+                background-size: 15px 15px;
             }
 
             .editor-expert-form .position-section .btn.btn-up,
@@ -571,7 +578,13 @@
 
             .editor-expert-form .group-section {
                 float: left;
-                margin-right: 35px;
+                margin-right: 20px;
+                margin-top: 3px;
+            }
+
+            .editor-expert-form .group-section .btn {
+                padding: 6px 15px;
+                font-size: 12px;
             }
 
             .editor-expert-form .visible-section {
@@ -582,10 +595,10 @@
                 border-radius: 0px;
                 background-color: transparent;
                 width: 40px;
-                height: 37px;
+                height: 34px;
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-size: 40px 40px;
+                background-size: 30px 30px;
             }
 
             .editor-expert-form .visible-section .btn.btn-visible {
@@ -599,15 +612,19 @@
             .editor-expert-form .dimension-section {
                 display: flex;
                 flex-direction: row;
-                margin: 10px 0px 10px 30px;
+                margin: 5px 0px 5px 5px;
+            }
+
+            .editor-expert-form .dimension-section:first-child {
+                margin-top: 20px;
             }
 
             .editor-expert-form .dimension-section label.section-title {
                 text-transform: uppercase;
-                font-size: 16px;
-                margin-right: 15px;
-                margin-top: 10px;
-                width: 65px;
+                font-size: 12px;
+                margin-right: 5px;
+                margin-top: 2px;
+                width: 45px;
                 display: block;
                 text-align: right;
             }
@@ -615,21 +632,23 @@
             .editor-expert-form .dimension-section .control-group {
                 display: flex;
                 flex-direction: row;
-                padding:5px 10px 5px 15px;
-                border-radius: 8px;
+                padding: 2px 5px 2px 7px;
+                border-radius: 4px;
                 background-color: #3e494c;
+                height: 22px;
             }
 
             .editor-expert-form .dimension-section input {
-                width: 50px;
-                margin-right: 5px;
+                width: 40px;
+                margin-right: 3px;
                 border: none;
                 background-color: #3e494c;
                 color: white;
+                font-size: 12px;
             }
 
             .editor-expert-form .dimension-section .btn-range {
-                margin-top: 5px;
+                margin-top: 1px;
             }
 
             .editor-expert-form .dimension-section label.checkbox {
@@ -643,12 +662,12 @@
                 display: block;
                 background-color: #384041;
                 color: white;
-                font-size: 11px;
+                font-size: 10px;
                 text-align: center;
-                line-height: 12px;
-                padding: 5px 8px;
-                border-radius: 5px;
-                margin: 0px 5px;
+                line-height: 10px;
+                padding: 1px 3px;
+                border-radius: 2px;
+                margin: 0px 3px;
                 cursor: pointer;
             }
 
@@ -663,6 +682,98 @@
             .editor-expert-form .dimension-section label.checkbox input[disabled] + span {
                 cursor: not-allowed;
                 color: #b0b6b6;
+            }
+
+            .editor-expert-form .outline-section {
+                background-color: black;
+                width: 60px;
+                height: 60px;
+                text-align: center;
+                margin-top: 18px;
+            }
+
+            .editor-expert-form .outline-section button.btn {
+                padding: 0px;
+                background-color: transparent;
+                margin: 0px;
+                border: none;
+                color: inherit;
+                font-size: 12px;
+            }
+
+            .editor-expert-form .fill-section {
+                background-color: white;
+                color: black;
+                width: 20px;
+                height: 20px;
+                margin: auto;
+            }
+
+            .editor-expert-form .fill-section button.btn {
+            }
+
+            .editor-expert-form .tight-direction-html-source-section {
+                overflow: auto;
+                width: 110px;
+                height: 70px;
+                background-color: #3e494c;
+                padding: 5px;
+                min-height: 0px;
+                margin-top: 5px;
+            }
+
+            .editor-expert-form .tight-section,
+            .editor-expert-form .direction-section,
+            .editor-expert-form .html-section,
+            .editor-expert-form .source-section {
+                width: 50px;
+                height: 30px;
+                float: left;
+                margin: 2px;
+                overflow: hidden;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox {
+                
+                text-align: center;
+                display: block;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn,
+            .editor-expert-form .tight-direction-html-source-section label.checkbox span {
+                display: block;
+                background-color: #414042;
+                padding: 4px 5px 6px 5px;
+                border-radius: 4px;
+                font-size: 10px;
+                color: white;
+                line-height: 11px;
+                box-sizing: border-box;
+                height: 30px;
+                width: 50px;
+                margin: 0px;
+                cursor: pointer;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn[disabled],
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input[disabled] + span {
+                cursor: not-allowed;
+                color: #C0C0C0;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input {
+                display: none;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input:checked + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input[checked] + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn {
             }
         </style>
         <style-old style="display: none;">
@@ -993,88 +1104,93 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="editor-form-section">
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
-                            <span class="background" style$="{{getBackgroundStyle(background)}}">Fill</span>
-                        </button>
-                        <div class="popup">
-                            <label class="editor-form-value">
-                                <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
-                                <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
-                                <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
-                            </label>
-                            <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
-                        </div>
-                    </juicy-popover>
-
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
-                            <span class="outline" style$="{{getOutlineStyle(outline)}}">Outline</span>
-                        </button>
-                        <div class="popup">
-                            <juicy-border-picker border-value="{{outline}}"></juicy-border-picker>
-                        </div>
-                    </juicy-popover>
-                </div>
-                
-                <div class="editor-form-section">
-                    <label class="btn">
-                        <span>Own scope</span>
-                        <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
-                    </label>
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
-                            Direction
-                        </button>
-                        <div class="popup">
-                            <div class="radio-group">
-                                <div class="radio-group-caption">Elements flow</div>
-                                <label class="radio">
-                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
-                                    <span>Horizontal</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
-                                    <span>Vertical</span>
-                                </label>
+                    <div class="outline-section" style$="{{getOutlineStyle(outline)}}">
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">Outline</button>
+                            <div class="popup">
+                                <juicy-border-picker border-value="{{outline}}"></juicy-border-picker>
                             </div>
-                            <div class="radio-group">
-                                <div class="radio-group-caption">From</div>
-                                <label class="radio">
-                                    <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
-                                    <span>Left to right</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
-                                    <span>Right to left</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
-                                    <span>Top to bottom</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
-                                    <span>Bottom to top</span>
-                                </label>
-                            </div>
+                        </juicy-popover>
+                        <div class="fill-section" style$="{{getBackgroundStyle(background)}}">
+                            <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                                <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">Fill</button>
+                                <div class="popup">
+                                    <label class="editor-form-value">
+                                        <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
+                                        <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
+                                        <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
+                                    </label>
+                                    <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
+                                </div>
+                            </juicy-popover>
                         </div>
-                    </juicy-popover>
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
-                        <div class="popup">
-                            <textarea value="{{content::change}}"></textarea>
-                        </div>
-                    </juicy-popover>
+                    </div>
                 </div>
-                <div class="editor-form-section">
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" on-click="readSource">Source</button>
-                        <div class="popup">
-                            <textarea value="{{source::change}}" on-change="writeSource"></textarea>
+                <div class="editor-form-section tight-direction-html-source-section">
+                    <div class="tight-section">
+                        <label class="checkbox">
+                            <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
+                            <span>Own<br />scope</span>
+                        </label>
+                    </div>
+                    <div class="direction-section">
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
+                                Direction
+                            </button>
+                            <div class="popup">
+                                <div class="radio-group">
+                                    <div class="radio-group-caption">Elements flow</div>
+                                    <label class="radio">
+                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
+                                        <span>Horizontal</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
+                                        <span>Vertical</span>
+                                    </label>
+                                </div>
+                                <div class="radio-group">
+                                    <div class="radio-group-caption">From</div>
+                                    <label class="radio">
+                                        <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
+                                        <span>Left to right</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
+                                        <span>Right to left</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
+                                        <span>Top to bottom</span>
+                                    </label>
+                                    <label class="radio">
+                                        <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
+                                        <span>Bottom to top</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </juicy-popover>
+                    </div>
+                    <div class="html-section">
+                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
+                            <div class="popup">
+                                <textarea value="{{content::change}}"></textarea>
+                            </div>
+                        </juicy-popover>
+                    </div>
+                    <div class="source-section">
+                        <div class="editor-form-section">
+                            <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                                <button type="button" class="btn" on-click="readSource">Source</button>
+                                <div class="popup">
+                                    <textarea value="{{source::change}}" on-change="writeSource"></textarea>
+                                </div>
+                            </juicy-popover>
                         </div>
-                    </juicy-popover>
+                    </div>
                 </div>
             </div>
         </template>
