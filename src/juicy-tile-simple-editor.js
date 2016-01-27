@@ -327,7 +327,6 @@
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
             selectedScopeItems: { type: Array, value: [] },
             breadcrumb: { type: Array, value: [] },
-            message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false },
             showMore: { type: Boolean, value: false },
             showTree: { type: Boolean, value: true },
@@ -442,17 +441,6 @@
                 list.removeEventListener("dblclick", this.onListDoubleClick, true);
                 shadow.removeEventListener("dblclick", this.onListDoubleClick, true);
             }.bind(this));
-        },
-        showMessage: function (text) {
-            this.set("message", text);
-
-            clearTimeout(this.messageTimeout);
-            this.messageTimeout = setTimeout(function () {
-                this.set("message", "");
-            }.bind(this), 3000);
-        },
-        getSelectedTilesCaption: function (length) {
-            return length > 1 ? "elements" : "element";
         },
         getMediaButtonCss: function (selected, item) {
             var css = ["btn"];
