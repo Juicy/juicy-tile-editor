@@ -853,9 +853,6 @@
         toggleMore: function (e) {
             this.set("showMore", !this.showMore);
         },
-        toggleAdvanced: function (e) {
-            this.set("showAdvanced", !this.showAdvanced);
-        },
         toggleTree: function (e) {
             this.set("showTree", !this.showTree);
         },

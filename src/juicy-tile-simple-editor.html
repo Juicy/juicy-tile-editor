@@ -588,95 +588,94 @@
                     <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
                 </label>
             </div>
-            <template is="dom-if" if="{{showAdvanced}}">
-                <div class="editor-form-section">
+            <div class="editor-form-section">
+                <label class="btn">
+                    <span>Own scope</span>
+                    <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
+                </label>
+                <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                    <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
+                        Direction
+                    </button>
+                    <div class="popup">
+                        <div class="radio-group">
+                            <div class="radio-group-caption">Elements flow</div>
+                            <label class="radio">
+                                <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
+                                <span>Horizontal</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
+                                <span>Vertical</span>
+                            </label>
+                        </div>
+                        <div class="radio-group">
+                            <div class="radio-group-caption">From</div>
+                            <label class="radio">
+                                <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
+                                <span>Left to right</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
+                                <span>Right to left</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
+                                <span>Top to bottom</span>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
+                                <span>Bottom to top</span>
+                            </label>
+                        </div>
+                    </div>
+                </juicy-popover>
+                <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                    <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
+                    <div class="popup">
+                        <textarea value="{{content::change}}"></textarea>
+                    </div>
+                </juicy-popover>
+            </div>
+            <div class="editor-form-section">
+                <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
                     <label class="btn">
-                        <span>Own scope</span>
-                        <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
+                        <span>Width</span>
+                        <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
+                        <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
+                        <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
                     </label>
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
-                            Direction
-                        </button>
-                        <div class="popup">
-                            <div class="radio-group">
-                                <div class="radio-group-caption">Elements flow</div>
-                                <label class="radio">
-                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
-                                    <span>Horizontal</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
-                                    <span>Vertical</span>
-                                </label>
-                            </div>
-                            <div class="radio-group">
-                                <div class="radio-group-caption">From</div>
-                                <label class="radio">
-                                    <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
-                                    <span>Left to right</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
-                                    <span>Right to left</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
-                                    <span>Top to bottom</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
-                                    <span>Bottom to top</span>
-                                </label>
-                            </div>
-                        </div>
-                    </juicy-popover>
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
-                        <div class="popup">
-                            <textarea value="{{content::change}}"></textarea>
-                        </div>
-                    </juicy-popover>
-                </div>
-                <div class="editor-form-section">
-                    <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
-                        <label class="btn">
-                            <span>Width</span>
-                            <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
+                    <div class="popup">
+                        <label class="checkbox">
+                            <input type="checkbox" checked="{{widthFlexible::change}}" />
+                            <span>flexible</span>
                         </label>
-                        <div class="popup">
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{widthFlexible::change}}" />
-                                <span>flexible</span>
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{widthDynamic::change}}" />
-                                <span>resize with content</span>
-                            </label>
-                        </div>
-                    </juicy-popover>
-                    <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
-                        <label class="btn">
-                            <span>Height</span>
-                            <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
+                        <label class="checkbox">
+                            <input type="checkbox" checked="{{widthDynamic::change}}" />
+                            <span>resize with content</span>
                         </label>
-                        <div class="popup">
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{heightFlexible::change}}" />
-                                <span>flexible</span>
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{heightDynamic::change}}" />
-                                <span>resize with content</span>
-                            </label>
-                        </div>
-                    </juicy-popover>
-                </div>
-                <div class="editor-form-section">
+                    </div>
+                </juicy-popover>
+                <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
+                    <label class="btn">
+                        <span>Height</span>
+                        <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
+                        <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
+                        <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
+                    </label>
+                    <div class="popup">
+                        <label class="checkbox">
+                            <input type="checkbox" checked="{{heightFlexible::change}}" />
+                            <span>flexible</span>
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" checked="{{heightDynamic::change}}" />
+                            <span>resize with content</span>
+                        </label>
+                    </div>
+                </juicy-popover>
+            </div>
+            <div class="editor-form-section">
                     <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
                         <button type="button" class="btn" on-click="readSource">Source</button>
                         <div class="popup">
@@ -684,7 +683,6 @@
                         </div>
                     </juicy-popover>
                 </div>
-            </template>
         </template>
 
         <template is="dom-if" if="{{showTree}}">
