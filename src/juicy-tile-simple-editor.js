@@ -309,8 +309,8 @@
             mediaScreen: { type: Object, notify: true },
             mediaScreenRanges: {
                 type: Array,
-                value: [{ name: "Mobile", width: 300, css: "iphone" }, { name: "Tablet", width: 700, css: "ipad" },
-                    { name: "Laptop", width: 900, css: "laptop" }, { name: "Desktop", width: 1100, css: "screen" }]
+                value: [{ name: "Mobile", width: 320, css: "iphone" }, { name: "Tablet", width: 480, css: "ipad" },
+                    { name: "Laptop", width: 960, css: "laptop" }, { name: "Desktop", width: 1200, css: "screen" }]
             },
             widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
@@ -706,7 +706,7 @@
             }
 
             this.touch();
-            this.set("mediaScreen", e.target.item);
+            this.set("mediaScreen", e.currentTarget.item);
             this.selectedList.setup.width = this.mediaScreen.width;
         },
         selectWidth: function (e) {
