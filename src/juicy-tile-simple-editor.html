@@ -20,14 +20,14 @@
                 line-height: 22.1px;
                 position: fixed;
                 z-index: 1;
-                height: 126px;
+                min-height: 126px;
             }
 
             .btn {
                 background-color: #3e494c;
                 color: white;
                 border: none;
-                padding: 8px 15px;
+                padding: 8px 10px;
                 border-radius: 8px;
                 font-size: 17px;
                 cursor: pointer;
@@ -76,6 +76,21 @@
                 border-color: #596567;
             }
 
+            .editor-breadcrumb {
+                background-color: #3e494c;
+                padding: 2px 10px;
+            }
+
+            .editor-breadcrumb a {
+                text-decoration: none;
+                color: #b0b6b6;
+                font-size: 13px;
+            }
+
+            .editor-breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
             .editor-tree {
                 position: fixed;
                 height: calc(100vh - 126px);
@@ -115,21 +130,21 @@
         </style>
         <style>
             .editor-simple-form {
-                padding: 5px 0px 5px 40px;
+                padding: 5px 0px 5px 20px;
                 margin-right: 150px;
                 overflow: auto;
             }
 
             .editor-simple-form .editor-form-section {
                 float: left;
-                margin-right: 50px;
+                margin-right: 25px;
             }
 
             .editor-simple-form .save-section {
                 display: flex;
                 flex-direction: column;
-                width: 100px;
-                padding: 16px 0px;
+                width: 90px;
+                padding: 12px 0px;
             }
 
             .editor-simple-form .save-section button {
@@ -143,12 +158,12 @@
                 background-color: transparent;
                 background-position: center center;
                 background-repeat: no-repeat;
-                line-height: 70px;
-                font-size: 12px;
+                font-size: 11px;
                 color: #b0b6b6;
-                height: 110px;
+                height: 90px;
                 box-sizing: border-box;
-                padding-bottom: 30px;
+                padding-bottom: 5px;
+                vertical-align: middle;
             }
 
             .editor-simple-form .media-section button.btn.active {
@@ -158,8 +173,10 @@
             .editor-simple-form .media-section button.btn.iphone {
                 background-image: url(images/iphone.svg);
                 background-position: bottom center;
-                background-size: 30px auto;
-                width: 60px;
+                background-size: 25px auto;
+                width: 50px;
+                padding-bottom: 30px;
+                margin-left: -10px;
             }
 
             .editor-simple-form .media-section button.btn.iphone.active {
@@ -169,8 +186,8 @@
             .editor-simple-form .media-section button.btn.ipad {
                 background-image: url(images/ipad.svg);
                 background-position: bottom center;
-                background-size: 65px auto;
-                width: 75px;
+                background-size: 50px auto;
+                width: 50px;
             }
 
             .editor-simple-form .media-section button.btn.ipad.active {
@@ -180,8 +197,8 @@
             .editor-simple-form .media-section button.btn.laptop {
                 background-image: url(images/laptop.svg);
                 background-position: bottom center;
-                background-size: 135px auto;
-                width: 145px;
+                background-size: 110px auto;
+                width: 115px;
             }
 
             .editor-simple-form .media-section button.btn.laptop.active {
@@ -191,8 +208,8 @@
             .editor-simple-form .media-section button.btn.screen {
                 background-image: url(images/screen.svg);
                 background-position: bottom center;
-                background-size: 190px auto;
-                width: 200px;
+                background-size: 130px auto;
+                width: 135px;
             }
 
             .editor-simple-form .media-section button.btn.screen.active {
@@ -206,7 +223,7 @@
             .editor-simple-form .width-section label {
                 text-align: center;
                 display: block;
-                font-size: 16px;
+                font-size: 15px;
                 margin: 15px 0px 5px 0px;
             }
 
@@ -214,7 +231,7 @@
                 overflow: visible;
                 border-top: 5px dotted #787b80;
                 border-bottom: 5px dotted #787b80;
-                height: 47px;
+                height: 40px;
             }
 
             .editor-simple-form .width-section .btn-group button.btn {
@@ -225,6 +242,8 @@
                 border-radius: 0px;
                 padding-top: 3px;
                 padding-bottom: 3px;
+                font-size: 14px;
+                height: 40px;
             }
 
             .editor-simple-form .width-section .btn-group button.btn.active,
@@ -234,6 +253,7 @@
                 border-left: none;
                 color: white;
                 margin: -5px 0px;
+                height: 50px;
             }
 
             .editor-simple-form .width-section .btn-group button.btn:first-child {
@@ -263,8 +283,8 @@
             .editor-simple-form .position-section .btn {
                 border-radius: 0px;
                 background-color: #3e494c;
-                width: 57px;
-                height: 57px;
+                width: 50px;
+                height: 50px;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: 28px 28px;
@@ -289,14 +309,15 @@
             }
 
             .editor-simple-form .visible-section {
-                padding-top: 42px;
+                padding-top: 40px;
+                margin-right: 0px;
             }
 
             .editor-simple-form .visible-section .btn {
                 border-radius: 0px;
                 background-color: transparent;
-                width: 57px;
-                height: 57px;
+                width: 50px;
+                height: 50px;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: 45px 45px;

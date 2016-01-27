@@ -395,9 +395,12 @@
             }.bind(this);
 
             this.set("lists", lists);
-            this.resetSelection();
             this.isAttached = true;
             this.isReadingSetup = false;
+
+            setTimeout(function () {
+                this.resetSelection();
+            }.bind(this), 100);
         },
         detached: function () {
             this.detachEventListeners();
