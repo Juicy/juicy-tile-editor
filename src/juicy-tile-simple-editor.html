@@ -31,6 +31,7 @@
                 border-radius: 8px;
                 font-size: 17px;
                 cursor: pointer;
+                outline: none;
             }
 
             .btn:hover {
@@ -44,8 +45,40 @@
                 cursor: not-allowed;
             }
 
+            .editor-tabs {
+                float: right;
+                background-color: #3e494c;
+                width: 150px;
+                height: 124px;
+            }
+
+            .editor-tabs button {
+                display: block;
+                width: 100%;
+                color: #b1b5b6;
+                border: 3px solid #3e494c;
+                border-right: none;
+                cursor: pointer;
+                outline: none;
+                background-color: transparent;
+            }
+
+            .editor-tabs button:hover {
+                color: white;
+            }
+
+            .editor-tabs button.btn-tab {
+                background-color: #596567;
+                height: 50px;
+            }
+
+            .editor-tabs button.active {
+                border-color: #596567;
+            }
+
             .editor-simple-form {
-                padding: 5px 40px;
+                padding: 5px 0px 5px 40px;
+                margin-right: 150px;
                 overflow: auto;
             }
 
@@ -72,15 +105,208 @@
                 background-color: transparent;
                 background-position: center center;
                 background-repeat: no-repeat;
-                line-height: 100px;
+                line-height: 70px;
                 font-size: 12px;
+                color: #b0b6b6;
+                height: 110px;
+                box-sizing: border-box;
+                padding-bottom: 30px;
+            }
+
+            .editor-simple-form .media-section button.btn.active {
+                color: white;
+            }
+
+            .editor-simple-form .media-section button.btn.iphone {
+                background-image: url(images/iphone.svg);
+                background-position: bottom center;
+                background-size: 30px auto;
+                width: 60px;
+            }
+
+            .editor-simple-form .media-section button.btn.iphone.active {
+                background-image: url(images/iphone-selected.svg);
             }
 
             .editor-simple-form .media-section button.btn.ipad {
                 background-image: url(images/ipad.svg);
                 background-position: bottom center;
-                background-size: auto 80px;
-                width: 90px;
+                background-size: 65px auto;
+                width: 75px;
+            }
+
+            .editor-simple-form .media-section button.btn.ipad.active {
+                background-image: url(images/ipad-selected.svg);
+            }
+
+            .editor-simple-form .media-section button.btn.laptop {
+                background-image: url(images/laptop.svg);
+                background-position: bottom center;
+                background-size: 135px auto;
+                width: 145px;
+            }
+
+            .editor-simple-form .media-section button.btn.laptop.active {
+                background-image: url(images/laptop-selected.svg);
+            }
+
+            .editor-simple-form .media-section button.btn.screen {
+                background-image: url(images/screen.svg);
+                background-position: bottom center;
+                background-size: 190px auto;
+                width: 200px;
+            }
+
+            .editor-simple-form .media-section button.btn.screen.active {
+                background-image: url(images/screen-selected.svg);
+            }
+
+            .editor-simple-form .width-section {
+            
+            }
+
+            .editor-simple-form .width-section label {
+                text-align: center;
+                display: block;
+                font-size: 16px;
+                margin: 15px 0px 5px 0px;
+            }
+
+            .editor-simple-form .width-section .btn-group {
+                overflow: visible;
+                border-top: 5px dotted #787b80;
+                border-bottom: 5px dotted #787b80;
+                height: 47px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn {
+                border-right: 5px dotted #787b80;
+                float: left;
+                color: #afb5b5;
+                background-color: transparent;
+                border-radius: 0px;
+                padding-top: 3px;
+                padding-bottom: 3px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active,
+            .editor-simple-form .width-section .btn-group button.btn.active:first-child {
+                background-color: #21b3cf;
+                border: 5px solid #21b3cf;
+                border-left: none;
+                color: white;
+                margin: -5px 0px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn:first-child {
+                border-left: 5px dotted #787b80;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active:first-child {
+                border-left: 5px solid #21b3cf;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn span {
+                display: block;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn span:first-child {
+                border-bottom: 2px solid #afb5b5;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active span:first-child {
+                border-bottom: 2px solid white;
+            }
+
+            .editor-simple-form .position-section {
+                padding-top: 42px;
+            }
+
+            .editor-simple-form .position-section .btn {
+                border-radius: 0px;
+                background-color: #3e494c;
+                width: 57px;
+                height: 57px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 28px 28px;
+            }
+
+            .editor-simple-form .position-section .btn.btn-up,
+            .editor-simple-form .position-section .btn.btn-up[disabled]:hover {
+                background-image: url(images/arrow-up.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-down,
+            .editor-simple-form .position-section .btn.btn-down[disabled]:hover {
+                background-image: url(images/arrow-down.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-up:hover {
+                background-image: url(images/arrow-up-selected.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-down:hover {
+                background-image: url(images/arrow-down-selected.svg);
+            }
+
+            .editor-simple-form .visible-section {
+                padding-top: 42px;
+            }
+
+            .editor-simple-form .visible-section .btn {
+                border-radius: 0px;
+                background-color: transparent;
+                width: 57px;
+                height: 57px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 45px 45px;
+            }
+
+            .editor-simple-form .visible-section .btn.btn-visible {
+                background-image: url(images/eye-selected.svg);
+            }
+
+            .editor-simple-form .visible-section .btn.btn-hidden {
+                background-image: url(images/eye.svg);
+            }
+
+            .editor-tree {
+                position: fixed;
+                height: calc(100vh - 126px);
+                max-height: calc(100vh - 126px);
+                right: 0px;
+                width: 220px;
+                top: 126px;
+                background-color: #252526;
+                box-sizing: border-box;
+                padding: 0px;
+                font-size: 13px;
+                border-left: 1px solid #C0C0C0;
+                overflow: auto;
+            }
+
+            .editor-tree div.editor-tree-item {
+                padding: 2px 10px;
+                cursor: pointer;
+            }
+
+            .editor-tree div.editor-tree-item:hover {
+                background-color: #444444;
+            }
+
+            .editor-tree div.editor-tree-item.selected {
+                background-color: #01629E;
+            }
+
+            .editor-tree a {
+                color: #4183c4;
+                text-decoration: none;
+            }
+
+            .editor-tree a:hover {
+                text-decoration: underline;
             }
         </style>
         <style-old style="display: none;">
@@ -260,50 +486,6 @@
                 display: block;
             }
 
-            .editor-tree {
-                position: fixed;
-                height: 100vh;
-                max-height: 100vh;
-                right: 0px;
-                width: 220px;
-                top: 0px;
-                background-color: #252526;
-                box-sizing: border-box;
-                padding: 0px;
-                font-size: 13px;
-                border-left: 1px solid #C0C0C0;
-                overflow: auto;
-            }
-
-            .editor-tree div.editor-tree-item {
-                padding: 2px 10px;
-                cursor: pointer;
-            }
-
-            .editor-tree div.editor-tree-item:hover {
-                background-color: #444444;
-            }
-
-            .editor-tree div.editor-tree-item.selected {
-                background-color: #01629E;
-            }
-
-            .editor-tree .editor-tree-caption {
-                padding: 5px 10px;
-                border-bottom: 1px solid #C0C0C0;
-                height: 46px;
-                box-sizing: border-box;
-            }
-
-            .editor-tree a {
-                color: #4183c4;
-                text-decoration: none;
-            }
-
-            .editor-tree a:hover {
-                text-decoration: underline;
-            }
-
             .editor-breadcrumb {
                 padding: 0px 10px;
                 border-bottom: 1px solid #C0C0C0;
@@ -322,208 +504,191 @@
             }
         </style-old>
 
-        <div class="editor-simple-form">
-            <div class="editor-form-section save-section">
-                <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
-                <button type="button" class="btn" on-click="resetSetup">Reset</button>
-            </div>
-            <!-- Hiding the media screen buttons till we support multiple break points on the juicy-tile-list/grid/table level -->
-            <div class="editor-form-section media-section">
-                <template is="dom-repeat" items="{{mediaScreenRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}">{{item.width}}</button>
-                </template>
-            </div>
-            <div class="editor-form-section">
-                <label>Width:</label>
-                <template is="dom-repeat" items="{{widthRanges}}">
-                    <button type="button" class$="{{getRadioButtonCss(widthItem, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">{{item.name}}</button>
-                </template>
-            </div>
-            <div class="editor-form-section">
-                <label>Visible:</label>
-                <button type="button" class$="{{getRadioButtonCss(visible, 1)}}" on-click="selectVisible" data-value="1" disabled$="{{!selectedTiles.length}}">Yes</button>
-                <button type="button" class$="{{getRadioButtonCss(visible, 0)}}" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}">No</button>
-            </div>
-            <div class="editor-form-section">
-                <label>Position:</label>
-                <button type="button" class="btn" on-click="moveUp" disabled$="{{!selectedTiles.length}}">Up</button>
-                <button type="button" class="btn" on-click="moveDown" disabled$="{{!selectedTiles.length}}">Down</button>
-            </div>
-            <template is="dom-if" if="{{showMore}}">
-                <div class="editor-form-section">
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
-                            <span class="background" style$="{{getBackgroundStyle(background)}}">Fill</span>
-                        </button>
-                        <div class="popup">
-                            <label class="editor-form-value">
-                                <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
-                                <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
-                                <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
-                            </label>
-                            <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
-                        </div>
-                    </juicy-popover>
-                    
-                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
-                            <span class="outline" style$="{{getOutlineStyle(outline)}}">Outline</span>
-                        </button>
-                        <div class="popup">
-                            <juicy-border-picker border-value="{{outline}}"></juicy-border-picker>
-                        </div>
-                    </juicy-popover>
+        <div class="editor-tabs">
+            <button class$="{{getTabButtonCss('normal', showMore)}}" on-click="toggleMore">Normal</button>
+            <button class$="{{getTabButtonCss('expert', showMore)}}" on-click="toggleMore">Expert</button>
+            <button on-click="toggleTree">Toggle sidebar</button>
+        </div>
+        <template is="dom-if" if="{{!showMore}}">
+            <div class="editor-simple-form">
+                <div class="editor-form-section save-section">
+                    <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
+                    <button type="button" class="btn" on-click="resetSetup">Reset</button>
                 </div>
-                <div class="editor-form-section">
-                    <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="packGroup">
-                        Group
-                    </button>
-                    <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="unpackGroup">
-                        Ungroup
-                    </button>
+                <div class="editor-form-section media-section">
+                    <template is="dom-repeat" items="{{mediaScreenRanges}}">
+                        <button type="button" class$="{{getMediaButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}">
+                            <span>{{item.width}}</span><span>px</span>
+                        </button>
+                    </template>
                 </div>
+                <div class="editor-form-section width-section">
+                    <label>Width:</label>
+                    <div class="btn-group">
+                        <template is="dom-repeat" items="{{widthRanges}}">
+                            <button type="button" class$="{{getWidthButtonCss(widthItem, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">
+                                <span>{{item.name}}</span>
+                                <span>12</span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                <div class="editor-form-section position-section">
+                    <button type="button" class="btn btn-up" on-click="moveUp" disabled$="{{!selectedTiles.length}}" title="Move selected tiles up"></button>
+                    <button type="button" class="btn btn-down" on-click="moveDown" disabled$="{{!selectedTiles.length}}" title="Move selected tiles down"></button>
+                </div>
+                <div class="editor-form-section visible-section">
+                    <template is="dom-if" if="{{!visible}}">
+                        <button type="button" class="btn btn-hidden" on-click="selectVisible" data-value="1" disabled$="{{!selectedTiles.length}}" title="Show selected tiles"></button>
+                    </template>
+                    <template is="dom-if" if="{{visible}}">
+                        <button type="button" class="btn btn-visible" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <template is="dom-if" if="{{showMore}}">
+            <div class="editor-form-section">
+                <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                    <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
+                        <span class="background" style$="{{getBackgroundStyle(background)}}">Fill</span>
+                    </button>
+                    <div class="popup">
+                        <label class="editor-form-value">
+                            <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
+                            <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
+                            <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
+                        </label>
+                        <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
+                    </div>
+                </juicy-popover>
+
+                <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                    <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">
+                        <span class="outline" style$="{{getOutlineStyle(outline)}}">Outline</span>
+                    </button>
+                    <div class="popup">
+                        <juicy-border-picker border-value="{{outline}}"></juicy-border-picker>
+                    </div>
+                </juicy-popover>
+            </div>
+            <div class="editor-form-section">
+                <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="packGroup">
+                    Group
+                </button>
+                <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="unpackGroup">
+                    Ungroup
+                </button>
+            </div>
+            <div class="editor-form-section">
+                <label class="btn">
+                    <span>Gutter</span>
+                    <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
+                    <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
+                    <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
+                </label>
+            </div>
+            <template is="dom-if" if="{{showAdvanced}}">
                 <div class="editor-form-section">
                     <label class="btn">
-                        <span>Gutter</span>
-                        <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
-                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
-                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
+                        <span>Own scope</span>
+                        <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
                     </label>
+                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
+                            Direction
+                        </button>
+                        <div class="popup">
+                            <div class="radio-group">
+                                <div class="radio-group-caption">Elements flow</div>
+                                <label class="radio">
+                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
+                                    <span>Horizontal</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
+                                    <span>Vertical</span>
+                                </label>
+                            </div>
+                            <div class="radio-group">
+                                <div class="radio-group-caption">From</div>
+                                <label class="radio">
+                                    <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
+                                    <span>Left to right</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
+                                    <span>Right to left</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
+                                    <span>Top to bottom</span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
+                                    <span>Bottom to top</span>
+                                </label>
+                            </div>
+                        </div>
+                    </juicy-popover>
+                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                        <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
+                        <div class="popup">
+                            <textarea value="{{content::change}}"></textarea>
+                        </div>
+                    </juicy-popover>
                 </div>
-                <template is="dom-if" if="{{showAdvanced}}">
-                    <div class="editor-form-section">
-                        <label class="btn">
-                            <span>Own scope</span>
-                            <input type="checkbox" checked="{{tightGroup::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
-                        </label>
-                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">
-                                Direction
-                            </button>
-                            <div class="popup">
-                                <div class="radio-group">
-                                    <div class="radio-group-caption">Elements flow</div>
-                                    <label class="radio">
-                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'horizontal')}}" value="horizontal" on-change="selectDirection" />
-                                        <span>Horizontal</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="direction" checked$="{{getIsChecked(direction, 'vertical')}}" value="vertical" on-change="selectDirection" />
-                                        <span>Vertical</span>
-                                    </label>
-                                </div>
-                                <div class="radio-group">
-                                    <div class="radio-group-caption">From</div>
-                                    <label class="radio">
-                                        <input type="radio" name="left-right" checked$="{{!rightToLeft}}" value="0" on-change="selectRightToLeft" />
-                                        <span>Left to right</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="left-right" checked$="{{rightToLeft}}" value="1" on-change="selectRightToLeft" />
-                                        <span>Right to left</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="top-bottom" checked$="{{!bottomUp}}" value="0" on-change="selectBottomUp" />
-                                        <span>Top to bottom</span>
-                                    </label>
-                                    <label class="radio">
-                                        <input type="radio" name="top-bottom" checked$="{{bottomUp}}" value="1" on-change="selectBottomUp" />
-                                        <span>Bottom to top</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </juicy-popover>
-                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                            <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}">Html</button>
-                            <div class="popup">
-                                <textarea value="{{content::change}}"></textarea>
-                            </div>
-                        </juicy-popover>
-                    </div>
-                    <div class="editor-form-section">
-                        <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
-                            <label class="btn">
-                                <span>Width</span>
-                                <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
-                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
-                            </label>
-                            <div class="popup">
-                                <label class="checkbox">
-                                    <input type="checkbox" checked="{{widthFlexible::change}}" />
-                                    <span>flexible</span>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" checked="{{widthDynamic::change}}" />
-                                    <span>resize with content</span>
-                                </label>
-                            </div>
-                        </juicy-popover>
-                        <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
-                            <label class="btn">
-                                <span>Height</span>
-                                <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
-                                <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
-                            </label>
-                            <div class="popup">
-                                <label class="checkbox">
-                                    <input type="checkbox" checked="{{heightFlexible::change}}" />
-                                    <span>flexible</span>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" checked="{{heightDynamic::change}}" />
-                                    <span>resize with content</span>
-                                </label>
-                            </div>
-                        </juicy-popover>
-                    </div>
-                    <div class="editor-form-section">
-                        <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
-                            <button type="button" class="btn" on-click="readSource">Source</button>
-                            <div class="popup">
-                                <textarea value="{{source::change}}" on-change="writeSource"></textarea>
-                            </div>
-                        </juicy-popover>
-                    </div>
-                </template>
-            </template>
-            <div class="editor-form-section">
-                <template is="dom-if" if="{{showMore}}">
-                    <button type="button" class="btn" on-click="toggleAdvanced">
-                        Advanced
-                    </button>
-                </template>
-                <button type="button" class="btn" on-click="toggleMore">
-                    <template is="dom-if" if="{{showMore}}">
-                        <span>Less</span>
-                    </template>
-                    <template is="dom-if" if="{{!showMore}}">
-                        <span>More</span>
-                    </template>
-                </button>
-                <button type="button" class="btn" on-click="toggleTree">
-                    Tree
-                </button>
-            </div>
-            <template is="dom-if" if="{{message}}">
                 <div class="editor-form-section">
-                    <label class="alert">{{message}}</label>
+                    <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
+                        <label class="btn">
+                            <span>Width</span>
+                            <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
+                        </label>
+                        <div class="popup">
+                            <label class="checkbox">
+                                <input type="checkbox" checked="{{widthFlexible::change}}" />
+                                <span>flexible</span>
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" checked="{{widthDynamic::change}}" />
+                                <span>resize with content</span>
+                            </label>
+                        </div>
+                    </juicy-popover>
+                    <juicy-popover handleSelector="label.btn" expandableSelector="div.popup">
+                        <label class="btn">
+                            <span>Height</span>
+                            <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
+                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
+                        </label>
+                        <div class="popup">
+                            <label class="checkbox">
+                                <input type="checkbox" checked="{{heightFlexible::change}}" />
+                                <span>flexible</span>
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" checked="{{heightDynamic::change}}" />
+                                <span>resize with content</span>
+                            </label>
+                        </div>
+                    </juicy-popover>
+                </div>
+                <div class="editor-form-section">
+                    <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                        <button type="button" class="btn" on-click="readSource">Source</button>
+                        <div class="popup">
+                            <textarea value="{{source::change}}" on-change="writeSource"></textarea>
+                        </div>
+                    </juicy-popover>
                 </div>
             </template>
-        </div>
+        </template>
 
         <template is="dom-if" if="{{showTree}}">
             <div class="editor-tree">
-                <div class="editor-tree-caption">
-                    <template is="dom-if" if="{{selectedTiles.length}}">
-                        <b>
-                            <span>{{selectedTiles.length}}</span>
-                            <span>{{getSelectedTilesCaption(selectedTiles.length)}}</span>
-                        </b>
-                        <label>selected</label>
-                    </template>
-                </div>
                 <template is="dom-repeat" items="{{selectedScopeItems}}">
                     <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
                         <span>{{getSetupName(item)}}</span>

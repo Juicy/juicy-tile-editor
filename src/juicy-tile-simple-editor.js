@@ -315,8 +315,9 @@
             widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
                 type: Array,
-                value: [{ name: "1", value: "10%" }, { name: "2", value: "20%" }, { name: "3", value: "30%" }, { name: "4", value: "40%" }, { name: "5", value: "50%" },
-                        { name: "6", value: "60%" }, { name: "7", value: "70%" }, { name: "8", value: "80%" }, { name: "9", value: "90%" }, { name: "10", value: "100%" }]
+                value: [{ name: "1", value: "8.33%" }, { name: "2", value: "16.66%" }, { name: "3", value: "25%" }, { name: "4", value: "33.33%" }, { name: "5", value: "41.66%" },
+                        { name: "6", value: "50%" }, { name: "7", value: "58.33%" }, { name: "8", value: "66.66%" }, { name: "9", value: "75%" }, { name: "10", value: "83.33%" },
+                        { name: "11", value: "91.66%" }, { name: "12", value: "100%" }]
             },
             visible: { type: Boolean, value: null, notify: true },
             listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid"] },
@@ -329,7 +330,6 @@
             message: { type: String, value: null },
             hasChanges: { type: Boolean, value: false },
             showMore: { type: Boolean, value: false },
-            showAdvanced: { type: Boolean, value: false },
             showTree: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
             oversize: { type: Number, observer: "oversizeChanged" },
@@ -454,8 +454,8 @@
         getSelectedTilesCaption: function (length) {
             return length > 1 ? "elements" : "element";
         },
-        getRadioButtonCss: function (selected, item) {
-            var css = ["btn btn-radio"];
+        getMediaButtonCss: function (selected, item) {
+            var css = ["btn"];
 
             if (selected == item) {
                 css.push("active");
@@ -463,6 +463,20 @@
 
             if (item.css) {
                 css.push(item.css);
+            }
+
+            return css.join(" ");
+        },
+        getWidthButtonCss: function (selected, item) {
+            var css = ["btn"];
+
+            if (selected) {
+                var v = parseFloat(selected.value);
+                var i = parseFloat(item.value);
+
+                if (i <= v) {
+                    css.push("active");
+                }
             }
 
             return css.join(" ");
@@ -481,6 +495,13 @@
             }
 
             return css.join(" ");
+        },
+        getTabButtonCss: function (name) {
+            var v = (name == "expert");
+
+            v = (!!this.showMore === v) ? "btn-tab active" : "btn-tab";
+
+            return v;
         },
         getBackgroundStyle: function (background) {
             if (background === notAvailable) {
@@ -702,7 +723,7 @@
         },
         selectWidth: function (e) {
             this.touch();
-            this.set("widthItem", e.target.item);
+            this.set("widthItem", e.currentTarget.item);
 
             this.selectedTiles.forEach(function (tile) {
                 var id = tile.id;
