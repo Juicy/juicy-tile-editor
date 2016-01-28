@@ -1025,7 +1025,7 @@
         },
         resetSetup: function () {
             this.lists.forEach(function (list) {
-                list.setup = list.defaultsetup || null;
+                list.setup = list.defaultsetup ? JSON.parse(JSON.stringify(list.defaultsetup)) : null;
             });
 
             // Workaround to refresh parent list when child list changes it's dimensions.
@@ -1035,6 +1035,24 @@
 
             this.touch();
             this.resetSelection();
+        },
+        revertSetup: function () {
+            this.lists.forEach(function (list) {
+                if (list.sync) {
+                    if (list.sync.storedValue) {
+                        list.sync.revert();
+                    } else {
+                        list.setup = list.defaultsetup ? JSON.parse(JSON.stringify(list.defaultsetup)) : null;
+                    }
+                }
+            });
+
+            // Workaround to refresh parent list when child list changes it's dimensions.
+            this.lists.forEach(function (list) {
+                list.refresh(true);
+            });
+
+            this.set("hasChanges", false);
         },
         selectedTilesChanged: function () {
             this.$.highlightTileSelected.hide();
