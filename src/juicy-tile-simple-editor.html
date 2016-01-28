@@ -127,6 +127,13 @@
             .editor-tree a:hover {
                 text-decoration: underline;
             }
+
+            juicy-popover div.popup {
+                background-color: #596567;
+                width: 120px;
+                padding: 5px;
+                border: 1px solid #414042;
+            }
         </style>
         <style>
             .editor-simple-form {
@@ -315,7 +322,6 @@
 
             .editor-simple-form .visible-section {
                 padding-top: 37px;
-                margin-right: 0px;
             }
 
             .editor-simple-form .visible-section .btn {
@@ -715,10 +721,11 @@
 
             .editor-expert-form .tight-direction-html-source-section {
                 overflow: auto;
-                width: 110px;
-                height: 70px;
+                width: 120px;
+                height: 81px;
+                box-sizing: border-box;
                 background-color: #3e494c;
-                padding: 5px;
+                padding: 7px 5px 6px 5px;
                 min-height: 0px;
                 margin-top: 10px;
             }
@@ -775,6 +782,36 @@
 
             .editor-expert-form .tight-direction-html-source-section button.btn {
             }
+
+            .editor-expert-form .oversize-section {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 5px;
+            }
+
+            .editor-expert-form .oversize-section input {
+                width: 80px;
+            }
+
+            .align-section {
+                width: 81px;
+                height: 81px;
+                border: 1px solid #414042;
+                margin-top: 10px;
+                margin-right: 0px;
+            }
+
+            .align-section .btn {
+                width: 25px;
+                height: 25px;
+                float: left;
+                margin: 1px;
+                border-radius: 0px;
+            }
+
+            .align-section .btn.active {
+                background-color: #21b3cf;
+            }
         </style>
 
         <div class="editor-tabs">
@@ -817,6 +854,17 @@
                     <template is="dom-if" if="{{visible}}">
                         <button type="button" class="btn btn-visible" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
                     </template>
+                </div>
+                <div class="editor-form-section align-section">
+                    <button class="btn active"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
                 </div>
             </div>
         </template>
@@ -922,11 +970,11 @@
                             <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
                                 <button type="button" class="btn" disabled$="{{!selectedTiles.length}}">Fill</button>
                                 <div class="popup">
-                                    <label class="editor-form-value">
+                                    <div class="oversize-section">
                                         <input type="text" value="{{oversize::input}}" placeholder="Oversize" />
                                         <button type="button" class="btn btn-range" on-click="oversizePlus">+</button>
                                         <button type="button" class="btn btn-range" on-click="oversizeMinus">-</button>
-                                    </label>
+                                    </div>
                                     <juicy-color-picker pallete="flat" value="{{background::change}}"></juicy-color-picker>
                                 </div>
                             </juicy-popover>
@@ -997,6 +1045,17 @@
                             </juicy-popover>
                         </div>
                     </div>
+                </div>
+                <div class="editor-form-section align-section">
+                    <button class="btn active"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
+                    <button class="btn"></button>
                 </div>
             </div>
         </template>
