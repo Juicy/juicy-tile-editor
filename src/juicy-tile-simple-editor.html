@@ -619,6 +619,53 @@
                 font-size: 12px;
             }
 
+            .editor-expert-form .group-section .btn-group {
+                display: flex;
+                float: left;
+                margin-right: 10px;
+            }
+
+            .editor-expert-form .group-section .btn-group .btn.btn-left {
+                border-radius: 8px 0px 0px 8px;
+                padding-right: 8px;
+            }
+
+            .editor-expert-form .group-section .btn-group .btn.btn-right {
+                border-radius: 0px 8px 8px 0px;
+                padding-left: 8px;
+                background-image: url(images/arrow-down.svg);
+                background-size: 10px 10px;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+
+            .editor-expert-form .group-section .popup {
+                white-space: nowrap;
+            }
+
+            .editor-expert-form .group-section .popup button {
+                text-decoration: none;
+                color: #b0b6b6;
+                font-size: 13px;
+                display: block;
+                background-color: transparent;
+                border: none;
+                padding: 0px;
+                line-height: 24px;
+                cursor: pointer;
+                outline: none;
+            }
+
+            .editor-expert-form .group-section .popup button:hover {
+                color: white;
+            }
+
+            .editor-expert-form .group-section .popup button[disabled],
+            .editor-expert-form .group-section .popup button[disabled]:hover {
+                cursor: not-allowed;
+                color: #3e494c;
+            }
+
             .editor-expert-form .visible-section {
                 float: left;
             }
@@ -943,11 +990,21 @@
                         <button type="button" class="btn btn-down" on-click="moveDown" disabled$="{{!selectedTiles.length}}" title="Move selected tiles down"></button>
                     </div>
                     <div class="group-section">
-                        <button type="button" class="btn" disabled$="{{!selectedTiles.length}}" on-click="packGroup">
-                            Group
-                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-left" disabled$="{{!selectedTiles.length}}" on-click="packGroup" title="Box from selection">
+                                Box
+                            </button>
+                            <juicy-popover handleSelector="button.btn" expandableSelector="div.popup">
+                                <button type="button" class="btn btn-right">&nbsp;</button>
+                                <div class="popup">
+                                    <button on-click="packGroup" disabled$="{{!selectedTiles.length}}">Box from selection</button>
+                                    <button on-click="packEmptyGroup">New empty box</button>
+                                    <button on-click="packSeparatorGroup">New black line</button>
+                                </div>
+                            </juicy-popover>
+                        </div>
                         <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="unpackGroup">
-                            Ungroup
+                            Unbox
                         </button>
                     </div>
                     <div class="visible-section">

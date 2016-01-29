@@ -301,6 +301,34 @@
         return "Empty element";
     }
 
+    function createSetupGroup(list, selectedSetup) {
+        var container = selectedSetup ? selectedSetup.container : list.setup;
+        var priority = selectedSetup ? selectedSetup.priority : 1;
+        var setup = {
+            priority: priority,
+            gutter: 0,
+            height: 1,
+            width: "100%",
+            widthFlexible: true,
+            hidden: false,
+            heightDynamic: true,
+            tightGroup: true
+        };
+
+        var group = list.createNewContainer(null, container, setup, true);
+
+        group.height = 1;
+        group.heightDynamic = true;
+        group.width = "100%";
+        group.widthFlexible = true;
+        group.tightGroup = true;
+        group.itemName = "New Group";
+        group.direction = "horizontal";
+        group.content = "";
+
+        return group;
+    }
+
     var notAvailable = "N/A";
 
     Polymer({
@@ -703,6 +731,26 @@
 
             this.set(name, value);
         },
+        refreshAndSelectTile: function (steupId) {
+            this.set("selectedTiles", []);
+            this.selectedList.refresh(true);
+
+            var tile = this.selectedList.tiles[steupId];
+
+            this.set("selectedTiles", [tile]);
+            this.refreshSelectedScopeItems();
+        },
+        getFirstSelectedSetup: function () {
+            if (!this.selectedTiles.length) {
+                return null;
+            }
+
+            var tile = this.selectedTiles[0];
+            var id = getTileId(tile);
+            var setup = getSetupItem(this.selectedList.setup, id);
+
+            return setup;
+        },
         selectMediaScreen: function (e) {
             if (!this.selectedList) {
                 return;
@@ -771,31 +819,8 @@
             this.refreshSelectedScopeItems();
         },
         packGroup: function (e) {
-            var first = this.selectedTiles[0];
-            var firstId = getTileId(first);
-            var firstSetup = getSetupItem(this.selectedList.setup, firstId);
-
-            var setup = {
-                priority: firstSetup.priority,
-                gutter: 0,
-                height: 1,
-                width: "100%",
-                widthFlexible: true,
-                hidden: false,
-                heightDynamic: true,
-                tightGroup: true
-            };
-
-            var group = this.selectedList.createNewContainer(null, firstSetup.container, setup, true);
-
-            group.height = 1;
-            group.heightDynamic = true;
-            group.width = "100%";
-            group.widthFlexible = true;
-            group.tightGroup = true;
-            group.itemName = "New Group";
-            group.direction = "horizontal";
-            group.content = "";
+            var setup = this.getFirstSelectedSetup();
+            var group = createSetupGroup(this.selectedList, setup);
 
             this.selectedTiles.forEach(function (t) {
                 var id = getTileId(t);
@@ -804,13 +829,23 @@
                 this.selectedList.moveToContainer(s, group, true);
             }.bind(this));
 
-            this.set("selectedTiles", []);
-            this.selectedList.refresh(true);
+            this.refreshAndSelectTile(group.id);
+        },
+        packEmptyGroup: function (e) {
+            var setup = this.getFirstSelectedSetup();
+            var group = createSetupGroup(this.selectedList, setup);
 
-            var tile = this.selectedList.tiles[group.id];
+            this.refreshAndSelectTile(group.id);
+        },
+        packSeparatorGroup: function (e) {
+            var setup = this.getFirstSelectedSetup();
+            var group = createSetupGroup(this.selectedList, setup);
 
-            this.set("selectedTiles", [tile]);
-            this.refreshSelectedScopeItems();
+            group.heightDynamic = false;
+            group.background = "#000000";
+            group.itemName = "Separator";
+
+            this.refreshAndSelectTile(group.id);
         },
         unpackGroup: function (e) {
             var tiles = this.selectedTiles.slice();
