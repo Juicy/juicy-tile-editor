@@ -13,6 +13,7 @@
                 left: 0px;
                 width: 100%;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #596567;
                 color: #b0b6b6;
                 display: block;
@@ -32,6 +33,8 @@
                 font-size: 15px;
                 cursor: pointer;
                 outline: none;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .btn:hover {
@@ -100,6 +103,7 @@
                 top: 115px;
                 background-color: #3e494c;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding: 0px;
                 font-size: 13px;
                 overflow: auto;
@@ -151,6 +155,7 @@
                 margin-right: 100px;
                 height: 115px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 overflow: hidden;
             }
 
@@ -181,6 +186,7 @@
                 color: #b0b6b6;
                 height: 85px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding-bottom: 5px;
                 vertical-align: middle;
                 padding-left: 0px;
@@ -379,6 +385,7 @@
                 overflow: auto;
                 height: 115px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .btn-range,
@@ -411,12 +418,22 @@
                 flex-direction: column;
                 width: 70px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .save-section button {
                 margin-bottom: 6px;
                 padding: 6px 5px;
                 font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .save-section button {
+                    font-size: 11px;
+                    padding: 4px 5px 8px 5px;
+                }
             }
 
             .editor-expert-form .save-section button:last-child {
@@ -435,6 +452,7 @@
                 background-repeat: no-repeat;
                 font-size: 9px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #3e494c;
                 color: white;
                 border-radius: 0px;
@@ -527,6 +545,7 @@
                 width: 35px;
                 height: 18px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .width-section {
@@ -558,6 +577,7 @@
                 height: 25px;
                 width: 23px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 overflow: hidden;
                 font-size: 10px;
                 line-height: 11px;
@@ -638,6 +658,14 @@
             .editor-expert-form .group-section .btn {
                 padding: 6px 15px;
                 font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .group-section .btn {
+                    padding: 4px 10px 8px 10px;
+                }
             }
 
             .editor-expert-form .group-section .btn-group {
@@ -801,6 +829,7 @@
                 height: 88px;
                 text-align: center;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding: 8px;
             }
 
@@ -830,6 +859,7 @@
                 width: 130px;
                 height: 88px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #3e494c;
                 padding: 8px;
                 min-height: 0px;
@@ -861,6 +891,7 @@
                 color: white;
                 line-height: 11px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 height: 30px;
                 width: 50px;
                 margin: 0px;
