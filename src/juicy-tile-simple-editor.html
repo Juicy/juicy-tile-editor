@@ -13,6 +13,7 @@
                 left: 0px;
                 width: 100%;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #596567;
                 color: #b0b6b6;
                 display: block;
@@ -32,6 +33,8 @@
                 font-size: 15px;
                 cursor: pointer;
                 outline: none;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .btn:hover {
@@ -98,11 +101,11 @@
                 right: 0px;
                 width: 220px;
                 top: 115px;
-                background-color: #252526;
+                background-color: #3e494c;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding: 0px;
                 font-size: 13px;
-                border-left: 1px solid #C0C0C0;
                 overflow: auto;
             }
 
@@ -128,6 +131,17 @@
                 text-decoration: underline;
             }
 
+            .editor-tree a.hidden-icon {
+                width: 18px;
+                height: 18px;
+                float: right;
+                background-image: url(images/eye.svg);
+                background-size: 14px 14px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                margin-top: 1px;
+            }
+
             juicy-popover div.popup {
                 background-color: #596567;
                 width: 120px;
@@ -139,9 +153,10 @@
             .editor-simple-form {
                 padding: 8px 0px 0px 15px;
                 margin-right: 100px;
-                overflow: auto;
                 height: 115px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                overflow: hidden;
             }
 
             .editor-simple-form .editor-form-section {
@@ -171,6 +186,7 @@
                 color: #b0b6b6;
                 height: 85px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding-bottom: 5px;
                 vertical-align: middle;
                 padding-left: 0px;
@@ -369,6 +385,7 @@
                 overflow: auto;
                 height: 115px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .btn-range,
@@ -401,12 +418,22 @@
                 flex-direction: column;
                 width: 70px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .save-section button {
                 margin-bottom: 6px;
                 padding: 6px 5px;
                 font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .save-section button {
+                    font-size: 11px;
+                    padding: 4px 5px 8px 5px;
+                }
             }
 
             .editor-expert-form .save-section button:last-child {
@@ -425,6 +452,7 @@
                 background-repeat: no-repeat;
                 font-size: 9px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #3e494c;
                 color: white;
                 border-radius: 0px;
@@ -495,10 +523,20 @@
             }
 
             .editor-expert-form .gutter-section .btn-group {
-                border: 4px dotted #b0b6b6;
-                border-left: none;
-                border-right: none;
                 padding: 3px 0px;
+            }
+
+            .editor-expert-form .gutter-section .gutter-border {
+                border-top: 4px dotted #b0b6b6;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            /* Need this hack because FF starts dotted border before the container starts, and ends before the container ends. */
+            @-moz-document url-prefix() {
+                .editor-expert-form .gutter-section .gutter-border {
+                    margin-right: -2px;
+                }
             }
 
             .editor-expert-form .gutter-section input {
@@ -507,6 +545,7 @@
                 width: 35px;
                 height: 18px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
             }
 
             .editor-expert-form .width-section {
@@ -538,8 +577,10 @@
                 height: 25px;
                 width: 23px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 overflow: hidden;
                 font-size: 10px;
+                line-height: 11px;
             }
 
             .editor-expert-form .width-section .btn-group button.btn.active,
@@ -617,6 +658,14 @@
             .editor-expert-form .group-section .btn {
                 padding: 6px 15px;
                 font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .group-section .btn {
+                    padding: 4px 10px 8px 10px;
+                }
             }
 
             .editor-expert-form .group-section .btn-group {
@@ -725,6 +774,7 @@
                 color: white;
                 font-size: 12px;
                 padding-left: 5px;
+                flex: auto;
             }
 
             .editor-expert-form .dimension-section .btn-range {
@@ -779,6 +829,7 @@
                 height: 88px;
                 text-align: center;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 padding: 8px;
             }
 
@@ -808,6 +859,7 @@
                 width: 130px;
                 height: 88px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 background-color: #3e494c;
                 padding: 8px;
                 min-height: 0px;
@@ -839,6 +891,7 @@
                 color: white;
                 line-height: 11px;
                 box-sizing: border-box;
+                -moz-box-sizing: border-box;
                 height: 30px;
                 width: 50px;
                 margin: 0px;
@@ -967,11 +1020,13 @@
                 </div>
                 <div class="editor-form-section gutter-section">
                     <label>Gutter</label>
+                    <div class="gutter-border"></div>
                     <div class="btn-group">
                         <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
                         <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
                         <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
                     </div>
+                    <div class="gutter-border"></div>
                 </div>
                 <div class="editor-form-section">
                     <div class="width-section">
@@ -1156,6 +1211,9 @@
             <div class="editor-tree">
                 <template is="dom-repeat" items="{{selectedScopeItems}}">
                     <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
+                        <template is="dom-if" if="{{item.hidden}}">
+                            <a href="javascript:" class="hidden-icon" title="Show element" on-click="showTreeItem" item="{{item}}"></a>
+                        </template>
                         <span>{{getSetupName(item)}}</span>
                         <template is="dom-if" if="{{getIsScopable(item)}}">
                             <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
