@@ -70,6 +70,17 @@
             width: calc(100% - 10px);
             box-sizing: border-box;
         }
+        /* Override github-markdown styles affecting bled ShadowDOM in shimmed browsers */
+        table.juicy-tile-table > .juicy-shadow-row>td{
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        table.juicy-tile-table > .juicy-shadow-row:nth-child(2n),
+        table.juicy-tile-table > .juicy-shadow-row{
+            border: 0;
+            background-color: transparent;
+        }
     </style>
 </head>
 <body>
