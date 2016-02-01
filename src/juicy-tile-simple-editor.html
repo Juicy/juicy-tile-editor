@@ -98,11 +98,10 @@
                 right: 0px;
                 width: 220px;
                 top: 115px;
-                background-color: #252526;
+                background-color: #3e494c;
                 box-sizing: border-box;
                 padding: 0px;
                 font-size: 13px;
-                border-left: 1px solid #C0C0C0;
                 overflow: auto;
             }
 
@@ -126,6 +125,17 @@
 
             .editor-tree a:hover {
                 text-decoration: underline;
+            }
+
+            .editor-tree a.hidden-icon {
+                width: 18px;
+                height: 18px;
+                float: right;
+                background-image: url(images/eye.svg);
+                background-size: 14px 14px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                margin-top: 1px;
             }
 
             juicy-popover div.popup {
@@ -1156,6 +1166,9 @@
             <div class="editor-tree">
                 <template is="dom-repeat" items="{{selectedScopeItems}}">
                     <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
+                        <template is="dom-if" if="{{item.hidden}}">
+                            <a href="javascript:" class="hidden-icon" title="Show element" on-click="showTreeItem" item="{{item}}"></a>
+                        </template>
                         <span>{{getSetupName(item)}}</span>
                         <template is="dom-if" if="{{getIsScopable(item)}}">
                             <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>

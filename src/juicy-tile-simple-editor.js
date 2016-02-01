@@ -782,8 +782,10 @@
 
             this.selectedTiles.forEach(function (tile) {
                 var setup = getSetupItem(this.selectedList.setup, tile.id);
+                var index = this.selectedScopeItems.indexOf(setup);
 
                 setup.hidden = !this.visible;
+                this.notifyPath("selectedScopeItems." + index + ".hidden", setup.hidden);
             }.bind(this));
 
             this.selectedList.refresh(true);
@@ -871,6 +873,15 @@
             var tile = this.selectedList.tiles[setup.id];
 
             this.toggleSelectedTile(e.ctrlKey, tile);
+        },
+        showTreeItem: function (e) {
+            var setup = e.currentTarget.item;
+            var index = this.selectedScopeItems.indexOf(setup);
+
+            setup.hidden = false;
+
+            this.selectedList.refresh(true);
+            this.notifyPath("selectedScopeItems." + index + ".hidden", false);
         },
         selectScopeItem: function (e) {
             this.scopeIn(e.currentTarget.item);
