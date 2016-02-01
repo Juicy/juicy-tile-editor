@@ -45,6 +45,8 @@
 
         if (element.hasAttribute("juicytile")) {
             id = element.getAttribute("juicytile");
+        } else if (element.classList.contains("juicy-tile") && element.parentNode && element.parentNode.tagName == "TD") {
+            id = element.parentNode.id;
         }
 
         return id;
