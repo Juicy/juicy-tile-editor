@@ -968,7 +968,7 @@
                     </template>
                 </div>
                 <div class="editor-form-section width-section">
-                    <label>Width:</label>
+                    <label>{{getWidthString(selectedList, width, widthFlexible, widthDynamic)}}</label>
                     <div class="btn-group">
                         <template is="dom-repeat" items="{{widthRanges}}">
                             <button type="button" class$="{{getWidthButtonCss(widthItem, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">
@@ -1030,7 +1030,7 @@
                 </div>
                 <div class="editor-form-section">
                     <div class="width-section">
-                        <label>Width:</label>
+                        <label>{{getWidthString(selectedList, width, widthFlexible, widthDynamic)}}</label>
                         <div class="btn-group">
                             <template is="dom-repeat" items="{{widthRanges}}">
                                 <button type="button" class$="{{getWidthButtonCss(widthItem, item)}}" item="{{item}}" on-click="selectWidth" disabled$="{{!selectedTiles.length}}">

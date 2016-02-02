@@ -595,6 +595,27 @@
 
             return value;
         },
+        getWidthString: function (list, width, widthFlexible, widthDynamic) {
+            if (!width) {
+                return "Width:"
+            }
+
+            var s = [width];
+
+            if (width.indexOf("%") > 0) {
+                if (widthFlexible) {
+                    s.push(" of parent");
+                } else {
+                    s.push(" of ", list.setup.width, "px");
+                }
+            }
+
+            if (widthDynamic) {
+                s.push(" or more");
+            }
+
+            return s.join("");
+        },
         setCommonSetupValue: function (name, value) {
             if (!this.selectedTiles.length || value === notAvailable || this.isReadingSetup) {
                 return;
