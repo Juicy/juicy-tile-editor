@@ -917,6 +917,9 @@
         toggleTree: function (e) {
             this.set("showTree", !this.showTree);
         },
+        closeEditor: function (e) {
+            this.fire("close-click");
+        },
         oversizePlus: function (e) {
             this.valuePlus("oversize");
         },

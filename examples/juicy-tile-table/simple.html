@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -90,7 +90,7 @@
     <template is="dom-bind" id="root">
         <template is="dom-if" if="{{model.editingMode}}" restamp="true">
             <div class="editor-container">
-                <juicy-tile-simple-editor></juicy-tile-simple-editor>
+                <juicy-tile-simple-editor on-close-click="closeEditor"></juicy-tile-simple-editor>
             </div>
         </template>
         <article class="markdown-body">
@@ -210,6 +210,10 @@
         model.setupCopy = JSON.parse(JSON.stringify(model.setup));
         model.nestedSetupCopy = JSON.parse(JSON.stringify(model.nestedSetup));
         template.model = model;
+
+        template.closeEditor = function () {
+            template.set("model.editingMode", false);
+        };
 
         function blockme() {
             alert("I should get blocked when editor is opened");
