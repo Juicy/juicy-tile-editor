@@ -608,7 +608,7 @@
             }.bind(this));
 
             this.touch();
-            this.selectedList.refresh();
+            this.refreshSelectedList();
         },
         readSelectedMediaScreen: function (newVal, oldVal) {
             if (!newVal) {
@@ -735,7 +735,7 @@
         },
         refreshAndSelectTile: function (steupId) {
             this.set("selectedTiles", []);
-            this.selectedList.refresh(true);
+            this.refreshSelectedList();
 
             var tile = this.selectedList.tiles[steupId];
 
@@ -775,7 +775,7 @@
                 setup.widthFlexible = true;
             }.bind(this));
 
-            this.selectedList.refresh();
+            this.refreshSelectedList();
         },
         selectVisible: function (e) {
             this.touch();
@@ -789,7 +789,7 @@
                 this.notifyPath("selectedScopeItems." + index + ".hidden", setup.hidden);
             }.bind(this));
 
-            this.selectedList.refresh(true);
+            this.refreshSelectedList();
         },
         moveUp: function (e) {
             this.touch();
@@ -804,7 +804,7 @@
                 this.selectedList.reprioritizeItem(setup, true);
             }.bind(this));
 
-            this.selectedList.refresh();
+            this.refreshSelectedList();
             this.refreshSelectedScopeItems();
         },
         moveDown: function (e) {
@@ -820,7 +820,7 @@
                 this.selectedList.reprioritizeItem(setup, false);
             }.bind(this));
 
-            this.selectedList.refresh();
+            this.refreshSelectedList();
             this.refreshSelectedScopeItems();
         },
         packGroup: function (e) {
@@ -866,7 +866,7 @@
                 }
             }.bind(this));
 
-            this.selectedList.refresh(true);
+            this.refreshSelectedList();
             this.refreshSelectedScopeItems();
         },
         selectTreeItem: function (e) {
@@ -881,7 +881,7 @@
 
             setup.hidden = false;
 
-            this.selectedList.refresh(true);
+            this.refreshSelectedList();
             this.notifyPath("selectedScopeItems." + index + ".hidden", false);
         },
         selectScopeItem: function (e) {
@@ -951,7 +951,7 @@
             var setup = JSON.parse(this.source);
 
             this.selectedList.setup = setup;
-            this.selectedList.refresh(true);
+            this.refreshSelectedList();
             this.set("selectedScope", null);
             this.refreshSelectedScopeItems();
         },
@@ -1036,6 +1036,10 @@
                 this.push("selectedTiles", tile);
             }
         },
+        refreshSelectedList: function () {
+            this.selectedList.refresh(true);
+            this.refreshSelectedTiles();
+        },
         refreshSelectedScopeItems: function () {
             var items;
 
@@ -1053,6 +1057,18 @@
             items.sort(sortByPriorityDesc);
 
             this.set("selectedScopeItems", items);
+        },
+        refreshSelectedTiles: function () {
+            var tiles = [];
+
+            this.selectedTiles.forEach(function (t) {
+                var id = getTileId(t);
+                var tile = this.selectedList.tiles[id];
+
+                tiles.push(tile);
+            }.bind(this));
+
+            this.set("selectedTiles", tiles);
         },
         refreshHighlightSelectedScope: function () {
             if (this.selectedScope) {
