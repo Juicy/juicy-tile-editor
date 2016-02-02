@@ -765,6 +765,7 @@
         selectWidth: function (e) {
             this.touch();
             this.set("widthItem", e.currentTarget.item);
+            this.set("width", e.currentTarget.item.value);
 
             this.selectedTiles.forEach(function (tile) {
                 var id = tile.id;
