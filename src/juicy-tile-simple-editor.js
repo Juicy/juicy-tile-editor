@@ -350,7 +350,7 @@
                         { name: "11", value: "91.66%" }, { name: "12", value: "100%" }]
             },
             visible: { type: Boolean, value: null, notify: true },
-            listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid"] },
+            listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
             lists: { type: Array, value: [] },
             selectedTiles: { type: Array, value: [] },
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
