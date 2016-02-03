@@ -64,6 +64,8 @@
                 cursor: pointer;
                 outline: none;
                 background-color: transparent;
+                height: 21px;
+                line-height: 12px;
             }
 
             .editor-tabs button:hover {
@@ -193,6 +195,12 @@
                 padding-right: 0px;
             }
 
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn {
+                    height: 95px;
+                }
+            }
+
             .editor-simple-form .media-section button.btn.active {
                 color: white;
             }
@@ -204,6 +212,13 @@
                 width: 40px;
                 padding-bottom: 20px;
                 margin-left: -10px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.iphone {
+                    padding-bottom: 16px;
+                    background-position: center 49px;
+                }
             }
 
             .editor-simple-form .media-section button.btn.iphone.active {
@@ -218,6 +233,13 @@
                 padding-bottom: 50px;
             }
 
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.ipad {
+                    padding-bottom: 45px;
+                    background-position: center 18px;
+                }
+            }
+
             .editor-simple-form .media-section button.btn.ipad.active {
                 background-image: url(images/ipad-selected.svg);
             }
@@ -229,6 +251,12 @@
                 width: 90px;
             }
 
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.laptop {
+                    background-position: center 16px;
+                }
+            }
+
             .editor-simple-form .media-section button.btn.laptop.active {
                 background-image: url(images/laptop-selected.svg);
             }
@@ -238,6 +266,12 @@
                 background-position: bottom center;
                 background-size: 105px auto;
                 width: 105px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.screen {
+                    background-position: center 16px;
+                }
             }
 
             .editor-simple-form .media-section button.btn.screen.active {
@@ -271,6 +305,7 @@
                 padding-top: 2px;
                 padding-bottom: 4px;
                 font-size: 11px;
+                line-height: 12px;
                 height: 35px;
             }
 
@@ -298,6 +333,12 @@
 
             .editor-simple-form .width-section .btn-group button.btn span:first-child {
                 border-bottom: 2px solid #afb5b5;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .width-section .btn-group button.btn span:first-child {
+                    margin-bottom: 0.5px;
+                }
             }
 
             .editor-simple-form .width-section .btn-group button.btn.active span:first-child {
