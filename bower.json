@@ -19,7 +19,7 @@
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
     "juicy-color-picker": "Juicy/juicy-color-picker#gh-pages",
-    "juicy-draggable": "Juicy/juicy-draggable#master"
+    "juicy-draggable": "Juicy/juicy-draggable#gh-pages"
   },
   "devDependencies": {
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
