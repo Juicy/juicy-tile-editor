@@ -351,6 +351,7 @@
             },
             visible: { type: Boolean, value: null, notify: true },
             listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
+            defaultSelectedListSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
             lists: { type: Array, value: [] },
             selectedTiles: { type: Array, value: [] },
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
@@ -983,8 +984,15 @@
             this.set("showTree", true);
         },
         resetSelection: function () {
+            var list = document.querySelector(this.defaultSelectedListSelectors.join(", "));
+
+            if (this.lists.indexOf(list) < 0) {
+                console.error("Invalid defaultSelectedListSelectors value. The list does not match the listSelectors.",
+                    this.defaultSelectedListSelectors, this.listSelectors, list);
+            }
+
             this.set("selectedList", null);
-            this.set("selectedList", this.lists[0]);
+            this.set("selectedList", list);
             this.set("selectedScope", null);
             this.set("breadcrumb", []);
             this.refreshSelectedScopeItems();
@@ -1093,6 +1101,13 @@
             }.bind(this));
 
             this.set("selectedTiles", tiles);
+
+            if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                var tile = this.selectedList.tiles[id];
+
+                this.set("selectedScope", tile);
+            }
         },
         refreshHighlightSelectedScope: function () {
             if (this.selectedScope) {
@@ -1142,6 +1157,7 @@
             });
 
             this.set("hasChanges", false);
+            this.resetSelection();
         },
         selectedTilesChanged: function () {
             this.$.highlightTileSelected.hide();
