@@ -1054,7 +1054,9 @@
             this.splice("breadcrumb", index, cut);
         },
         toggleSelectedTile: function (multiple, tile) {
-            if (!tile) {
+            if (!tile && this.breadcrumb.length) {
+                this.scopeOut();
+            } else if (!tile) {
                 this.resetSelection();
                 return;
             }
