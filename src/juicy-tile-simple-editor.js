@@ -353,9 +353,9 @@
             widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
                 type: Array,
-                value: [{ name: "1", value: "8.33%" }, { name: "2", value: "16.66%" }, { name: "3", value: "25%" }, { name: "4", value: "33.33%" }, { name: "5", value: "41.66%" },
-                        { name: "6", value: "50%" }, { name: "7", value: "58.33%" }, { name: "8", value: "66.66%" }, { name: "9", value: "75%" }, { name: "10", value: "83.33%" },
-                        { name: "11", value: "91.66%" }, { name: "12", value: "100%" }]
+                value: [{ name: "1", value: 100 / 12 + "%" }, { name: "2", value: 200 / 12 + "%" }, { name: "3", value: 300 / 12 + "%" }, { name: "4", value: 400 / 12 + "%" },
+                        { name: "5", value: 500 / 12 + "%" }, { name: "6", value: 600 / 12 + "%" }, { name: "7", value: 700 / 12 + "%" }, { name: "8", value: 800 / 12 + "%" },
+                        { name: "9", value: 900 / 12 + "%" }, { name: "10", value: 1000 / 12 + "%" }, { name: "11", value: 1100 / 12 + "%" }, { name: "12", value: 1200 / 12 + "%" }]
             },
             visible: { type: Boolean, value: null, notify: true },
             listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
