@@ -996,9 +996,9 @@
             }
 
             this.set("selectedList", null);
-            this.set("selectedList", list);
             this.set("selectedScope", null);
             this.set("breadcrumb", []);
+            this.set("selectedList", list);
             this.refreshSelectedScopeItems();
 
             if (this.selectedTiles.length) {
