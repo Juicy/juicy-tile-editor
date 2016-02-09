@@ -304,8 +304,16 @@
     }
 
     function createSetupGroup(list, selectedSetup) {
-        var container = selectedSetup ? selectedSetup.container : list.setup;
-        var priority = selectedSetup ? selectedSetup.priority : 1;
+        var container = list.setup;
+        var priority = 1;
+
+        if (selectedSetup) {
+            container = selectedSetup.container;
+            priority = selectedSetup.priority - Number.EPSILON;
+        } else if (list.setup.items.length) {
+            list.setup.items[0].priority = 1 - Number.EPSILON;
+        }
+
         var setup = {
             priority: priority,
             gutter: 0,
