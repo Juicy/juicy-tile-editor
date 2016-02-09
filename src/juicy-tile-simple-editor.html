@@ -86,7 +86,8 @@
                 padding: 2px 10px;
             }
 
-            .editor-breadcrumb a {
+            .editor-breadcrumb a,
+            .editor-breadcrumb span {
                 text-decoration: none;
                 color: #b0b6b6;
                 font-size: 13px;
@@ -94,6 +95,10 @@
 
             .editor-breadcrumb a:hover {
                 text-decoration: underline;
+            }
+
+            .editor-breadcrumb span.separator {
+                margin: auto 5px;
             }
 
             .editor-tree {
@@ -1268,12 +1273,15 @@
 
         <template is="dom-if" if="{{breadcrumb.length}}">
             <div class="editor-breadcrumb">
+                <a href="javascript:" on-click="scopeOut" title="One level up">←</a>
                 <template is="dom-repeat" items="{{breadcrumb}}">
+                    <span class="separator">/</span>
                     <a href="javascript:" on-click="selectCrumbItem" item="{{item}}">
-                        <span>&gt;</span>
                         <span>{{getCrumbName(item)}}</span>
                     </a>
                 </template>
+                <span class="separator">/</span>
+                <span>{{getSelectedScopeName(selectedList, selectedScope)}}</span>
             </div>
         </template>
 

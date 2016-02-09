@@ -582,6 +582,13 @@
                 return this.getSetupName(item.list.setup);
             }
         },
+        getSelectedScopeName: function (list, scope) {
+            if (scope) {
+                return getFullSetupName(list, getSetupItem(list.setup, getTileId(scope)));
+            } else {
+                return getFullSetupName(list, list.setup);
+            }
+        },
         getCommonSetupValue: function (name) {
             var value = null;
 
