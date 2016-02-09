@@ -857,12 +857,14 @@
             }.bind(this));
 
             this.refreshAndSelectTile(group.id);
+            this.touch();
         },
         packEmptyGroup: function (e) {
             var setup = this.getFirstSelectedSetup();
             var group = createSetupGroup(this.selectedList, setup);
 
             this.refreshAndSelectTile(group.id);
+            this.touch();
         },
         packSeparatorGroup: function (e) {
             var setup = this.getFirstSelectedSetup();
@@ -873,6 +875,7 @@
             group.itemName = "Separator";
 
             this.refreshAndSelectTile(group.id);
+            this.touch();
         },
         unpackGroup: function (e) {
             var tiles = this.selectedTiles.slice();
@@ -890,6 +893,7 @@
 
             this.refreshSelectedList();
             this.refreshSelectedScopeItems();
+            this.touch();
         },
         selectTreeItem: function (e) {
             var setup = e.currentTarget.item;
