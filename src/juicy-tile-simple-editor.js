@@ -358,7 +358,7 @@
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
             selectedScopeItems: { type: Array, value: [] },
             breadcrumb: { type: Array, value: [] },
-            hasChanges: { type: Boolean, value: false },
+            hasChanges: { type: Boolean, value: false, notify: true },
             showMore: { type: Boolean, value: false },
             showTree: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
