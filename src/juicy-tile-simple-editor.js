@@ -97,12 +97,12 @@
         return list.tiles[setup.id];
     }
 
-    function getNestedList(tileId, selectors) {
+    function getNestedList(list, tileId, selectors) {
         var selector = selectors.map(function (s) {
-            return "[juicytile='" + tileId + "'] > " + s;
+            return "[juicytile='" + tileId + "'] " + s;
         }).join(", ");
 
-        return document.querySelector(selector);
+        return list.querySelector(selector);
     }
 
     function getSetupItem(setup, id) {
@@ -547,7 +547,7 @@
                 return true;
             }
 
-            return !!getNestedList(item.id, this.listSelectors);
+            return !!getNestedList(this.selectedList, item.id, this.listSelectors);
         },
         getIsGroupSelection: function (tiles) {
             for (var i = 0; i < tiles.length; i++) {
@@ -1020,7 +1020,7 @@
 
                 this.set("selectedScope", tile);
             } else {
-                var list = getNestedList(setup.id, this.listSelectors);
+                var list = getNestedList(this.selectedList, setup.id, this.listSelectors);
 
                 if (!list) {
                     throw "Cannot scope in to this tile!";
