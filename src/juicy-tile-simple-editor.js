@@ -1078,6 +1078,8 @@
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
             }
+
+            this.readSelectedSetup();
         },
         scopeOut: function () {
             if (!this.breadcrumb.length) {
@@ -1097,6 +1099,7 @@
             this.set("selectedList", crumb.list);
             this.set("selectedScope", crumb.scope);
             this.splice("breadcrumb", index, cut);
+            this.readSelectedSetup();
         },
         toggleSelectedTile: function (multiple, tile) {
             clearSelection();
