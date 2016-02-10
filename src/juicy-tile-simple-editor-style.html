@@ -1,0 +1,1281 @@
+﻿<dom-module is="juicy-tile-simple-editor-style">
+    <template>
+        <style>
+            :host {
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                background-color: #596567;
+                color: #b0b6b6;
+                display: block;
+                font: 15px Helvetica, arial, freesans, clean, sans-serif;
+                line-height: 22.1px;
+                position: fixed;
+                z-index: 1;
+                min-height: 100px;
+            }
+
+            .btn {
+                background-color: #3e494c;
+                color: white;
+                border: none;
+                padding: 8px 10px;
+                border-radius: 8px;
+                font-size: 15px;
+                cursor: pointer;
+                outline: none;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .btn:hover {
+                background-color: #3a3a3c;
+            }
+
+            .btn[disabled],
+            .btn[disabled]:hover {
+                color: #b0b6b6;
+                background-color: #3e494c;
+                cursor: not-allowed;
+            }
+
+            .editor-tabs {
+                float: right;
+                background-color: #3e494c;
+                width: 100px;
+                height: 115px;
+            }
+
+            .editor-tabs button {
+                display: block;
+                width: 100%;
+                color: #b1b5b6;
+                border: 3px solid #3e494c;
+                border-right: none;
+                cursor: pointer;
+                outline: none;
+                background-color: transparent;
+                height: 21px;
+                line-height: 12px;
+            }
+
+            .editor-tabs button:hover {
+                color: white;
+            }
+
+            .editor-tabs button.btn-tab {
+                background-color: #596567;
+                height: 36px;
+            }
+
+            .editor-tabs button.active {
+                border-color: #596567;
+            }
+
+            .editor-breadcrumb {
+                background-color: #3e494c;
+                padding: 2px 10px;
+            }
+
+            .editor-breadcrumb a,
+            .editor-breadcrumb span {
+                text-decoration: none;
+                color: #b0b6b6;
+                font-size: 13px;
+            }
+
+            .editor-breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
+            .editor-breadcrumb span.separator {
+                margin: auto 5px;
+            }
+
+            .editor-tree {
+                position: fixed;
+                height: calc(100vh - 115px);
+                max-height: calc(100vh - 115px);
+                right: 0px;
+                width: 220px;
+                top: 115px;
+                background-color: #3e494c;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                padding: 0px;
+                font-size: 13px;
+                overflow: auto;
+            }
+
+            .editor-tree div.editor-tree-item {
+                padding: 2px 10px;
+                cursor: pointer;
+            }
+
+            .editor-tree div.editor-tree-item:hover {
+                background-color: #444444;
+            }
+
+            .editor-tree div.editor-tree-item.selected {
+                background-color: #01629E;
+            }
+
+            .editor-tree a {
+                color: #4183c4;
+                text-decoration: none;
+            }
+
+            .editor-tree a:hover {
+                text-decoration: underline;
+            }
+
+            .editor-tree a.hidden-icon {
+                width: 18px;
+                height: 18px;
+                float: right;
+                background-image: url(images/eye.svg);
+                background-size: 14px 14px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                margin-top: 1px;
+            }
+
+            juicy-popover div.popup {
+                background-color: #596567;
+                width: 120px;
+                padding: 5px;
+                border: 1px solid #414042;
+            }
+        </style>
+        <style>
+            .editor-simple-form {
+                padding: 8px 0px 0px 15px;
+                margin-right: 100px;
+                height: 115px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .editor-simple-form .editor-form-section {
+                float: left;
+                margin-right: 20px;
+            }
+
+            .editor-simple-form .save-section {
+                display: flex;
+                flex-direction: column;
+                width: 80px;
+                padding: 10px 0px;
+            }
+
+            .editor-simple-form .save-section button {
+                margin-bottom: 10px;
+            }
+
+            .editor-simple-form .media-section {
+            }
+
+            .editor-simple-form .media-section button.btn {
+                background-color: transparent;
+                background-position: center center;
+                background-repeat: no-repeat;
+                font-size: 10px;
+                color: #b0b6b6;
+                height: 85px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                padding-bottom: 5px;
+                vertical-align: middle;
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn {
+                    height: 95px;
+                }
+            }
+
+            .editor-simple-form .media-section button.btn.active {
+                color: white;
+            }
+
+            .editor-simple-form .media-section button.btn.iphone {
+                background-image: url(images/iphone.svg);
+                background-position: bottom center;
+                background-size: 20px auto;
+                width: 40px;
+                padding-bottom: 20px;
+                margin-left: -10px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.iphone {
+                    padding-bottom: 16px;
+                    background-position: center 49px;
+                }
+            }
+
+            .editor-simple-form .media-section button.btn.iphone.active {
+                background-image: url(images/iphone-selected.svg);
+            }
+
+            .editor-simple-form .media-section button.btn.ipad {
+                background-image: url(images/ipad.svg);
+                background-position: bottom center;
+                background-size: 40px auto;
+                width: 40px;
+                padding-bottom: 50px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.ipad {
+                    padding-bottom: 45px;
+                    background-position: center 18px;
+                }
+            }
+
+            .editor-simple-form .media-section button.btn.ipad.active {
+                background-image: url(images/ipad-selected.svg);
+            }
+
+            .editor-simple-form .media-section button.btn.laptop {
+                background-image: url(images/laptop.svg);
+                background-position: bottom center;
+                background-size: 90px auto;
+                width: 90px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.laptop {
+                    background-position: center 16px;
+                }
+            }
+
+            .editor-simple-form .media-section button.btn.laptop.active {
+                background-image: url(images/laptop-selected.svg);
+            }
+
+            .editor-simple-form .media-section button.btn.screen {
+                background-image: url(images/screen.svg);
+                background-position: bottom center;
+                background-size: 105px auto;
+                width: 105px;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .media-section button.btn.screen {
+                    background-position: center 16px;
+                }
+            }
+
+            .editor-simple-form .media-section button.btn.screen.active {
+                background-image: url(images/screen-selected.svg);
+            }
+
+            .editor-simple-form .width-section {
+            }
+
+            .editor-simple-form .width-section label {
+                text-align: center;
+                display: block;
+                font-size: 15px;
+                margin: 10px 0px 5px 0px;
+            }
+
+            .editor-simple-form .width-section .btn-group {
+                overflow: visible;
+                border-top: 4px dotted #787b80;
+                border-bottom: 4px dotted #787b80;
+                height: 35px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn {
+                border-right: 4px dotted #787b80;
+                float: left;
+                color: #afb5b5;
+                background-color: transparent;
+                border-radius: 0px;
+                padding-top: 2px;
+                padding-bottom: 4px;
+                font-size: 11px;
+                line-height: 12px;
+                height: 35px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active,
+            .editor-simple-form .width-section .btn-group button.btn.active:first-child {
+                background-color: #21b3cf;
+                border: 4px solid #21b3cf;
+                border-left: none;
+                color: white;
+                margin: -4px 0px;
+                height: 43px;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn:first-child {
+                border-left: 5px dotted #787b80;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active:first-child {
+                border-left: 5px solid #21b3cf;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn span {
+                display: block;
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn span:first-child {
+                border-bottom: 2px solid #afb5b5;
+            }
+
+            @media all and (-ms-high-contrast:none) {
+                .editor-simple-form .width-section .btn-group button.btn span:first-child {
+                    margin-bottom: 0.5px;
+                }
+            }
+
+            .editor-simple-form .width-section .btn-group button.btn.active span:first-child {
+                border-bottom: 2px solid white;
+            }
+
+            .editor-simple-form .position-section {
+                padding-top: 38px;
+            }
+
+            .editor-simple-form .position-section .btn {
+                border-radius: 0px;
+                background-color: #3e494c;
+                width: 40px;
+                height: 40px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 20px 20px;
+            }
+
+            .editor-simple-form .position-section .btn.btn-up,
+            .editor-simple-form .position-section .btn.btn-up[disabled]:hover {
+                background-image: url(images/arrow-up.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-down,
+            .editor-simple-form .position-section .btn.btn-down[disabled]:hover {
+                background-image: url(images/arrow-down.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-up:hover {
+                background-image: url(images/arrow-up-selected.svg);
+            }
+
+            .editor-simple-form .position-section .btn.btn-down:hover {
+                background-image: url(images/arrow-down-selected.svg);
+            }
+
+            .editor-simple-form .visible-section {
+                padding-top: 37px;
+            }
+
+            .editor-simple-form .visible-section .btn {
+                border-radius: 0px;
+                background-color: transparent;
+                width: 40px;
+                height: 40px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 35px 35px;
+            }
+
+            .editor-simple-form .visible-section .btn.btn-visible {
+                background-image: url(images/eye-selected.svg);
+            }
+
+            .editor-simple-form .visible-section .btn.btn-hidden {
+                background-image: url(images/eye.svg);
+            }
+
+            .editor-simple-form .align-section {
+                width: 85px;
+                height: 85px;
+                margin-top: 10px;
+                margin-right: 0px;
+            }
+
+            .editor-simple-form .align-section .btn {
+                width: 26px;
+                height: 26px;
+                float: left;
+                margin: 1px;
+                border-radius: 0px;
+            }
+
+            .editor-simple-form .align-section .btn.active {
+                background-color: #21b3cf;
+            }
+        </style>
+        <style>
+            .editor-expert-form {
+                margin-top: 12px;
+                padding: 1px 0px 0px 10px;
+                margin-right: 100px;
+                overflow: auto;
+                height: 93px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                min-width: 1200px;
+                overflow: hidden;
+            }
+
+            .editor-expert-form .btn-range,
+            .editor-expert-form .btn-range[disabled]:hover {
+                border: none;
+                background-color: #3e494c;
+                color: #b0b6b6;
+                height: 18px;
+                width: 18px;
+                outline: none;
+                cursor: pointer;
+            }
+
+            .editor-expert-form .btn-range:hover {
+                background-color: #21b3cf;
+                color: white;
+            }
+
+            .editor-expert-form .btn-range[disabled]:hover {
+                cursor: not-allowed;
+            }
+
+            .editor-expert-form .editor-form-section {
+                float: left;
+                margin-right: 15px;
+            }
+
+            .editor-expert-form .save-section {
+                display: flex;
+                flex-direction: column;
+                width: 70px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .editor-expert-form .save-section button {
+                margin-bottom: 6px;
+                padding: 6px 5px;
+                font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .save-section button {
+                    font-size: 11px;
+                    padding: 4px 5px 8px 5px;
+                }
+            }
+
+            .editor-expert-form .save-section button:last-child {
+                margin-bottom: 0px;
+            }
+
+            .editor-expert-form .media-section {
+                width: 128px;
+                margin-top: -2px;
+                margin-right: 13px;
+            }
+
+            .editor-expert-form .media-section button.btn {
+                background-color: transparent;
+                background-position: center center;
+                background-repeat: no-repeat;
+                font-size: 9px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                background-color: #3e494c;
+                color: white;
+                border-radius: 0px;
+                width: 60px;
+                height: 43px;
+                display: block;
+                float: left;
+                margin: 2px;
+                background-size: auto 40px;
+            }
+
+            .editor-expert-form .media-section button.btn.active {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .media-section button.btn.iphone {
+                background-image: url(images/iphone.svg);
+                background-position: 8px center;
+                background-size: 15px auto;
+                text-align: right;
+                padding-right: 5px;
+            }
+
+            .editor-expert-form .media-section button.btn.iphone.active {
+                background-image: url(images/iphone-selected.svg);
+            }
+
+            .editor-expert-form .media-section button.btn.ipad {
+                background-image: url(images/ipad.svg);
+                background-position: 3px center;
+                background-size: 25px auto;
+                text-align: right;
+                padding-right: 2px;
+            }
+
+            .editor-expert-form .media-section button.btn.ipad.active {
+                background-image: url(images/ipad-selected.svg);
+            }
+
+            .editor-expert-form .media-section button.btn.laptop {
+                background-image: url(images/laptop.svg);
+                background-position: center center;
+                background-size: auto 30px;
+            }
+
+            .editor-expert-form .media-section button.btn.laptop.active {
+                background-image: url(images/laptop-selected.svg);
+            }
+
+            .editor-expert-form .media-section button.btn.screen {
+                background-image: url(images/screen.svg);
+                background-position: center center;
+                background-size: auto 32px;
+            }
+
+            .editor-expert-form .media-section button.btn.screen.active {
+                background-image: url(images/screen-selected.svg);
+            }
+
+            .editor-expert-form .gutter-section {
+                margin-top: 2px;
+            }
+
+            .editor-expert-form .gutter-section label {
+                display: block;
+                text-align: center;
+                font-size: 11px;
+            }
+
+            .editor-expert-form .gutter-section .btn-group {
+                padding: 3px 0px;
+            }
+
+            .editor-expert-form .gutter-section .gutter-border {
+                border-top: 4px dotted #b0b6b6;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            /* Need this hack because FF starts dotted border before the container starts, and ends before the container ends. */
+            @-moz-document url-prefix() {
+                .editor-expert-form .gutter-section .gutter-border {
+                    margin-right: -2px;
+                }
+            }
+
+            .editor-expert-form .gutter-section input {
+                border: 1px solid #b0b6b6;
+                padding: 2px 4px;
+                width: 35px;
+                height: 18px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .editor-expert-form .width-section {
+                margin-top: 2px;
+                margin-bottom: 4px;
+            }
+
+            .editor-expert-form .width-section label {
+                text-align: center;
+                display: block;
+                font-size: 11px;
+            }
+
+            .editor-expert-form .width-section .btn-group {
+                overflow: visible;
+                border-top: 1px dotted #787b80;
+                border-bottom: 1px dotted #787b80;
+                height: 25px;
+                display: inline-block;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn {
+                border-right: 1px dotted #787b80;
+                float: left;
+                color: #afb5b5;
+                background-color: transparent;
+                border-radius: 0px;
+                padding: 0px 1.5px;
+                height: 25px;
+                width: 23px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                overflow: hidden;
+                font-size: 10px;
+                line-height: 11px;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn.active,
+            .editor-expert-form .width-section .btn-group button.btn.active:first-child {
+                background-color: #21b3cf;
+                border: 1px solid #21b3cf;
+                border-left: none;
+                color: white;
+                margin: -1px 0px;
+                height: 27px;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn:first-child {
+                border-left: 1px dotted #787b80;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn.active:first-child {
+                border-left: 1px solid #21b3cf;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn span {
+                display: block;
+                text-align: center;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn span:first-child {
+                border-bottom: 1px solid #afb5b5;
+                margin-top: -1px;
+            }
+
+            .editor-expert-form .width-section .btn-group button.btn.active span:first-child {
+                border-bottom: 1px solid white;
+            }
+
+            .editor-expert-form .position-section {
+                float: left;
+                margin-right: 15px;
+                margin-left: 2px;
+            }
+
+            .editor-expert-form .position-section .btn {
+                border-radius: 0px;
+                background-color: #3e494c;
+                width: 30px;
+                height: 30px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 15px 15px;
+            }
+
+            .editor-expert-form .position-section .btn.btn-up,
+            .editor-expert-form .position-section .btn.btn-up[disabled]:hover {
+                background-image: url(images/arrow-up.svg);
+            }
+
+            .editor-expert-form .position-section .btn.btn-down,
+            .editor-expert-form .position-section .btn.btn-down[disabled]:hover {
+                background-image: url(images/arrow-down.svg);
+            }
+
+            .editor-expert-form .position-section .btn.btn-up:hover {
+                background-image: url(images/arrow-up-selected.svg);
+            }
+
+            .editor-expert-form .position-section .btn.btn-down:hover {
+                background-image: url(images/arrow-down-selected.svg);
+            }
+
+            .editor-expert-form .group-section {
+                float: left;
+                margin-right: 10px;
+                margin-top: 3px;
+            }
+
+            .editor-expert-form .group-section .btn {
+                padding: 6px 15px;
+                font-size: 12px;
+                height: 26px;
+                line-height: 14px;
+            }
+
+            @-moz-document url-prefix() {
+                .editor-expert-form .group-section .btn {
+                    padding: 4px 10px 8px 10px;
+                }
+            }
+
+            .editor-expert-form .group-section .btn-group {
+                display: flex;
+                float: left;
+                margin-right: 10px;
+            }
+
+            .editor-expert-form .group-section .btn-group .btn.btn-left {
+                border-radius: 8px 0px 0px 8px;
+                padding-right: 8px;
+            }
+
+            .editor-expert-form .group-section .btn-group .btn.btn-right {
+                border-radius: 0px 8px 8px 0px;
+                padding-left: 8px;
+                background-image: url(images/arrow-down.svg);
+                background-size: 10px 10px;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+
+            .editor-expert-form .group-section .popup {
+                white-space: nowrap;
+            }
+
+            .editor-expert-form .group-section .popup button {
+                text-decoration: none;
+                color: #b0b6b6;
+                font-size: 13px;
+                display: block;
+                background-color: transparent;
+                border: none;
+                padding: 0px;
+                line-height: 24px;
+                cursor: pointer;
+                outline: none;
+            }
+
+            .editor-expert-form .group-section .popup button:hover {
+                color: white;
+            }
+
+            .editor-expert-form .group-section .popup button[disabled],
+            .editor-expert-form .group-section .popup button[disabled]:hover {
+                cursor: not-allowed;
+                color: #3e494c;
+            }
+
+            .editor-expert-form .visible-section {
+                float: left;
+            }
+
+            .editor-expert-form .visible-section .btn {
+                border-radius: 0px;
+                background-color: transparent;
+                width: 40px;
+                height: 30px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: 28px auto;
+            }
+
+            .editor-expert-form .visible-section .btn.btn-visible {
+                background-image: url(images/eye-selected.svg);
+            }
+
+            .editor-expert-form .visible-section .btn.btn-hidden {
+                background-image: url(images/eye.svg);
+            }
+
+            .editor-expert-form .dimension-section {
+                display: flex;
+                flex-direction: row;
+                margin-top: 5px;
+            }
+
+            .editor-expert-form .dimension-section:first-child {
+                margin-top: 22px;
+            }
+
+            .editor-expert-form .dimension-section label.section-title {
+                text-transform: uppercase;
+                font-size: 12px;
+                margin-right: 5px;
+                margin-top: 6px;
+                width: 45px;
+                display: block;
+                text-align: right;
+            }
+
+            .editor-expert-form .dimension-section .control-group {
+                display: flex;
+                flex-direction: row;
+                padding: 4px 3px;
+                border-radius: 4px;
+                background-color: #3e494c;
+                height: 24px;
+            }
+
+            .editor-expert-form .dimension-section input {
+                width: 40px;
+                margin-right: 3px;
+                border: none;
+                background-color: #3e494c;
+                color: white;
+                font-size: 12px;
+                padding-left: 5px;
+                flex: auto;
+            }
+
+            .editor-expert-form .dimension-section .btn-range {
+                height: 25px;
+                width: 25px;
+                background-color: #384041;
+                padding: 1px 3px;
+                border-radius: 2px;
+                margin: 0px 2px;
+                line-height: 21px;
+            }
+
+            .editor-expert-form .dimension-section .btn-range:hover {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .dimension-section label.checkbox {
+            }
+
+            .editor-expert-form .dimension-section label.checkbox input {
+                display: none;
+            }
+
+            .editor-expert-form .dimension-section label.checkbox span {
+                display: block;
+                background-color: #384041;
+                color: white;
+                font-size: 10px;
+                text-align: center;
+                line-height: 11px;
+                padding: 1px 3px 2px 3px;
+                border-radius: 2px;
+                margin: 0px 3px;
+                cursor: pointer;
+            }
+
+            .editor-expert-form .dimension-section label.checkbox input[checked] + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .dimension-section label.checkbox input:checked + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .dimension-section label.checkbox input[disabled] + span {
+                cursor: not-allowed;
+                color: #b0b6b6;
+            }
+
+            .editor-expert-form .outline-section {
+                background-color: black;
+                width: 91px;
+                height: 91px;
+                text-align: center;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                padding: 8px;
+            }
+
+            .editor-expert-form .outline-section button.btn {
+                padding: 0px;
+                background-color: transparent;
+                margin: 0px;
+                border: none;
+                color: inherit;
+                font-size: 12px;
+            }
+
+            .editor-expert-form .fill-section {
+                background-color: white;
+                color: black;
+                width: 35px;
+                height: 25px;
+                margin: auto;
+                margin-top: 5px;
+            }
+
+            .editor-expert-form .fill-section button.btn {
+            }
+
+            .editor-expert-form .tight-direction-html-source-section {
+                overflow: auto;
+                width: 130px;
+                height: 91px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                background-color: #3e494c;
+                padding: 9px;
+                min-height: 0px;
+            }
+
+            .editor-expert-form .tight-section,
+            .editor-expert-form .direction-section,
+            .editor-expert-form .html-section,
+            .editor-expert-form .source-section {
+                width: 50px;
+                height: 30px;
+                float: left;
+                margin: 3px;
+                overflow: hidden;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox {
+                text-align: center;
+                display: block;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn,
+            .editor-expert-form .tight-direction-html-source-section label.checkbox span {
+                display: block;
+                background-color: #414042;
+                padding: 4px 5px 6px 5px;
+                border-radius: 4px;
+                font-size: 10px;
+                color: white;
+                line-height: 11px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                height: 30px;
+                width: 50px;
+                margin: 0px;
+                cursor: pointer;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn[disabled],
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input[disabled] + span {
+                cursor: not-allowed;
+                color: #C0C0C0;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input {
+                display: none;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input:checked + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section label.checkbox input[checked] + span {
+                background-color: #21b3cf;
+            }
+
+            .editor-expert-form .tight-direction-html-source-section button.btn {
+            }
+
+            .editor-expert-form .oversize-section {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 5px;
+            }
+
+            .editor-expert-form .oversize-section input {
+                width: 80px;
+            }
+
+            .editor-expert-form .align-section {
+                width: 95px;
+                height: 91px;
+                margin: -1px;
+            }
+
+            .editor-expert-form .align-section .btn {
+                width: 29px;
+                height: 29px;
+                float: left;
+                margin: 1px;
+                border-radius: 0px;
+            }
+
+            .editor-expert-form .align-section .btn.active {
+                background-color: #21b3cf;
+            }
+        </style>
+        <style>
+            @media (max-width: 1399px) {
+                .editor-expert-form {
+                    min-width: 1000px;
+                }
+
+                .editor-expert-form .btn-range,
+                .editor-expert-form .btn-range[disabled]:hover {
+                    height: 17px;
+                    width: 17px;
+                }
+
+                .editor-expert-form .editor-form-section {
+                    margin-right: 14px;
+                }
+
+                .editor-expert-form .save-section {
+                    width: 66px;
+                }
+
+                .editor-expert-form .save-section button {
+                    margin-bottom: 5.7px;
+                    padding: 5.7px 4.7px;
+                    font-size: 11.4px;
+                    height: 24.7px;
+                    line-height: 13px;
+                }
+
+                @-moz-document url-prefix() {
+                    .editor-expert-form .save-section button {
+                        font-size: 10.45px;
+                        padding: 3.8px 4.75px 7.6px 4.75px;
+                    }
+                }
+
+                .editor-expert-form .media-section {
+                    width: 121.6px;
+                    margin-top: -1.8px;
+                    margin-right: 11.35px;
+                }
+
+                .editor-expert-form .media-section button.btn {
+                    font-size: 8.55px;
+                    width: 57px;
+                    height: 40.85px;
+                    margin: 1.9px;
+                    background-size: auto 38px;
+                }
+
+                .editor-expert-form .media-section button.btn.iphone {
+                    background-position: 7.6px center;
+                    background-size: 14.25px auto;
+                    padding-right: 4.75px;
+                }
+
+                .editor-expert-form .media-section button.btn.ipad {
+                    background-position: 2.85px center;
+                    background-size: 23.75px auto;
+                    padding-right: 1.9px;
+                }
+
+                .editor-expert-form .media-section button.btn.laptop {
+                    background-size: auto 28.5px;
+                }
+
+                .editor-expert-form .media-section button.btn.screen {
+                    background-size: auto 30.4px;
+                }
+
+                .editor-expert-form .gutter-section {
+                    margin-top: 1.9px;
+                }
+
+                .editor-expert-form .gutter-section label {
+                    font-size: 10.45px;
+                }
+
+                .editor-expert-form .gutter-section .btn-group {
+                    padding: 2.85px 0px;
+                }
+
+                .editor-expert-form .gutter-section .gutter-border {
+                    border-top: 3.8px dotted #b0b6b6;
+                }
+
+                /* Need this hack because FF starts dotted border before the container starts, and ends before the container ends. */
+                @-moz-document url-prefix() {
+                    .editor-expert-form .gutter-section .gutter-border {
+                        margin-right: -1.9px;
+                    }
+                }
+
+                .editor-expert-form .gutter-section input {
+                    padding: 1.9px 3.8px;
+                    width: 33.25px;
+                    height: 17.18px;
+                }
+
+                .editor-expert-form .width-section {
+                    margin-top: 1.9px;
+                    margin-bottom: 3.8px;
+                }
+
+                .editor-expert-form .width-section label {
+                    font-size: 10.45px;
+                }
+
+                .editor-expert-form .width-section .btn-group {
+                    height: 23.75px;
+                }
+
+                .editor-expert-form .width-section .btn-group button.btn {
+                    padding: 0px 1.425px;
+                    height: 23.75px;
+                    width: 21px;
+                    font-size: 9px;
+                    line-height: 10.45px;
+                }
+
+                .editor-expert-form .width-section .btn-group button.btn.active,
+                .editor-expert-form .width-section .btn-group button.btn.active:first-child {
+                    height: 25.65px;
+                }
+
+                .editor-expert-form .position-section {
+                    margin-right: 14.25px;
+                    margin-left: 1.9px;
+                }
+
+                .editor-expert-form .position-section .btn {
+                    width: 28.5px;
+                    height: 28.5px;
+                    background-size: 14.25px 14.25px;
+                }
+
+                .editor-expert-form .group-section {
+                    margin-right: 9.5px;
+                    margin-top: 2.85px;
+                }
+
+                .editor-expert-form .group-section .btn {
+                    padding: 5px 14px;
+                    font-size: 11.4px;
+                    height: 24.7px;
+                    line-height: 13.3px;
+                    vertical-align: middle;
+                }
+
+                @-moz-document url-prefix() {
+                    .editor-expert-form .group-section .btn {
+                        padding: 3.8px 9.5px 7.6px 9.5px;
+                    }
+                }
+
+                .editor-expert-form .group-section .btn-group {
+                    margin-right: 9.5px;
+                }
+
+                .editor-expert-form .group-section .btn-group .btn.btn-left {
+                    border-radius: 7.6px 0px 0px 7.6px;
+                    padding-right: 7.6px;
+                }
+
+                .editor-expert-form .group-section .btn-group .btn.btn-right {
+                    border-radius: 0px 7.6px 7.6px 0px;
+                    padding-left: 7.6px;
+                    background-size: 9.5px 9.5px;
+                }
+
+                .editor-expert-form .group-section .popup button {
+                    font-size: 12.35px;
+                    line-height: 22.8px;
+                }
+
+                .editor-expert-form .visible-section .btn {
+                    width: 30px;
+                    height: 30px;
+                    background-size: 20px 20px;
+                }
+
+                .editor-expert-form .dimension-section {
+                    margin-top: 4.75px;
+                }
+
+                .editor-expert-form .dimension-section:first-child {
+                    margin-top: 20.9px;
+                }
+
+                .editor-expert-form .dimension-section label.section-title {
+                    font-size: 11.4px;
+                    margin-right: 4.75px;
+                    margin-top: 5.7px;
+                    width: 42.75px;
+                }
+
+                .editor-expert-form .dimension-section .control-group {
+                    display: flex;
+                    flex-direction: row;
+                    padding: 3.8px 2.85px;
+                    border-radius: 3.8px;
+                    background-color: #3e494c;
+                    height: 22.8px;
+                }
+
+                .editor-expert-form .dimension-section input {
+                    width: 38px;
+                    margin-right: 2.85px;
+                    font-size: 11.4px;
+                    padding-left: 4.75px;
+                }
+
+                .editor-expert-form .dimension-section .btn-range {
+                    height: 23px;
+                    width: 23px;
+                    background-color: #384041;
+                    padding: 1px 2.85px;
+                    border-radius: 1.9px;
+                    margin: 0px 1.9px;
+                    line-height: 19.95px;
+                }
+
+                .editor-expert-form .dimension-section label.checkbox span {
+                    font-size: 9px;
+                    line-height: 10.45px;
+                    padding: 1px 3px 1.9px 3px;
+                    border-radius: 6px;
+                    margin: 0px 2.85px;
+                }
+
+                .editor-expert-form .outline-section {
+                    width: 86.45px;
+                    height: 86.45px;
+                    padding: 7.6px;
+                }
+
+                .editor-expert-form .outline-section button.btn {
+                    font-size: 11.4px;
+                }
+
+                .editor-expert-form .fill-section {
+                    width: 33.25px;
+                    height: 23.75px;
+                    margin-top: 4.75px;
+                }
+
+                .editor-expert-form .tight-direction-html-source-section {
+                    width: 123px;
+                    height: 86.45px;
+                    padding: 8.55px;
+                }
+
+                .editor-expert-form .tight-section,
+                .editor-expert-form .direction-section,
+                .editor-expert-form .html-section,
+                .editor-expert-form .source-section {
+                    width: 47px;
+                    height: 28.5px;
+                    margin: 2.85px;
+                }
+
+                .editor-expert-form .tight-direction-html-source-section button.btn,
+                .editor-expert-form .tight-direction-html-source-section label.checkbox span {
+                    padding: 3.8px 4px 5.7px 4px;
+                    border-radius: 3.8px;
+                    font-size: 9px;
+                    line-height: 10.45px;
+                    height: 28.5px;
+                    width: 43px;
+                }
+
+                .editor-expert-form .oversize-section {
+                    margin-bottom: 4.75px;
+                }
+
+                .editor-expert-form .oversize-section input {
+                    width: 76px;
+                }
+
+                .editor-expert-form .align-section {
+                    width: 90.25px;
+                    height: 86.45px;
+                }
+
+                .editor-expert-form .align-section .btn {
+                    width: 27.55px;
+                    height: 27.55px;
+                }
+            }
+        </style>
+    </template>
+</dom-module>
