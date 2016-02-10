@@ -243,9 +243,20 @@
         return "Empty image";
     }
 
-    function getSetupName(list, setup) {
-        var value = getFullSetupName(list, setup);
-        var maxLen = 15;
+    function getListSetupName(element, listSelectors) {
+        var selector = listSelectors.join(", ");
+        var list = element.querySelector(selector);
+
+        if (list) {
+            return getFullSetupName(list, list.setup, listSelectors);
+        }
+
+        return null;
+    }
+
+    function getSetupName(list, setup, listSelectors) {
+        var value = getFullSetupName(list, setup, listSelectors);
+        var maxLen = 18;
 
         if (value && value.length > maxLen) {
             var index = value.indexOf(" ", maxLen);
@@ -255,10 +266,12 @@
             }
         }
 
+        value = value.replace(/[&]$/gi, "").trim();
+
         return value;
     }
 
-    function getFullSetupName(list, setup) {
+    function getFullSetupName(list, setup, listSelectors) {
         if (setup.itemName) {
             return setup.itemName;
         }
@@ -271,14 +284,26 @@
             var names = [];
 
             for (var i = 0; i < setup.items.length; i++) {
-                names.push(getFullSetupName(list, setup.items[i]));
+                names.push(getFullSetupName(list, setup.items[i], listSelectors));
             }
 
-            return names.join(" & ");
+            names = names.join(" & ");
+
+            if (setup.container) {
+                return "Group: " + names;
+            } else {
+                return "Partial: " + names;
+            }
         }
 
         var tile = list.querySelector("[juicytile='" + setup.id + "']");
-        var value = getLabelSetupName(tile);
+        var value = getListSetupName(tile, listSelectors);
+
+        if (value) {
+            return value;
+        }
+
+        value = getLabelSetupName(tile);
 
         if (value) {
             return value;
@@ -577,23 +602,23 @@
             return this.getIsGroupSelection(tiles);
         },
         getSetupName: function (setup) {
-            return getSetupName(this.selectedList, setup);
+            return getSetupName(this.selectedList, setup, this.listSelectors);
         },
         getCrumbName: function (item) {
             if (item.scope) {
                 var id = getTileId(item.scope);
                 var setup = getSetupItem(item.list.setup, id);
 
-                return getSetupName(item.list, setup);
+                return getSetupName(item.list, setup, this.listSelectors);
             } else {
-                return this.getSetupName(item.list.setup);
+                return this.getSetupName(item.list.setup, this.listSelectors);
             }
         },
         getSelectedScopeName: function (list, scope) {
             if (scope) {
-                return getFullSetupName(list, getSetupItem(list.setup, getTileId(scope)));
+                return getSetupName(list, getSetupItem(list.setup, getTileId(scope)), this.listSelectors);
             } else {
-                return getFullSetupName(list, list.setup);
+                return getSetupName(list, list.setup, this.listSelectors);
             }
         },
         getCommonSetupValue: function (name) {
@@ -1065,7 +1090,7 @@
             this.readSelectedSetup();
         },
         scopeIn: function (setup) {
-            var name = this.selectedList.setup.itemName;
+            var name = getSetupItem(this.selectedList, this.selectedList);
 
             if (this.selectedScope) {
                 var id = getTileId(this.selectedScope);
