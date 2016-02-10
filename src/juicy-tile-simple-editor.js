@@ -411,7 +411,7 @@
 
                 var tile = getTile(e, this.selectedList, this.selectedScope);
 
-                this.toggleSelectedTile(e.ctrlKey, tile);
+                this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
             }.bind(this);
 
             this.onListDoubleClick = function (e) {
@@ -943,7 +943,7 @@
             var setup = e.currentTarget.item;
             var tile = this.selectedList.tiles[setup.id];
 
-            this.toggleSelectedTile(e.ctrlKey, tile);
+            this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
         },
         showTreeItem: function (e) {
             var setup = e.currentTarget.item;
@@ -1099,6 +1099,8 @@
             this.splice("breadcrumb", index, cut);
         },
         toggleSelectedTile: function (multiple, tile) {
+            clearSelection();
+
             if (!tile && this.breadcrumb.length) {
                 this.scopeOut();
             } else if (!tile) {
