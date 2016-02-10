@@ -642,6 +642,12 @@
                 } else {
                     s.push(" of ", list.setup.width, "px");
                 }
+            } else {
+                if (widthFlexible) {
+                    s.push(" / ", list.setup.width, " of parent");
+                } else {
+                    s.push(" pixels");
+                }
             }
 
             if (widthDynamic) {
