@@ -569,6 +569,13 @@
 
             return tiles.length > 0;
         },
+        getIsGutterSelection: function (tiles) {
+            if (!tiles.length) {
+                return true;
+            }
+
+            return this.getIsGroupSelection(tiles);
+        },
         getSetupName: function (setup) {
             return getSetupName(this.selectedList, setup);
         },
@@ -592,17 +599,26 @@
         getCommonSetupValue: function (name) {
             var value = null;
 
-            for (var i = 0; i < this.selectedTiles.length; i++) {
-                var tile = this.selectedTiles[i];
-                var id = tile.id;
-                var setup = getSetupItem(this.selectedList.setup, id);
-                var v = setup[name];
+            if (this.selectedTiles.length) {
+                for (var i = 0; i < this.selectedTiles.length; i++) {
+                    var tile = this.selectedTiles[i];
+                    var id = tile.id;
+                    var setup = getSetupItem(this.selectedList.setup, id);
+                    var v = setup[name];
 
-                if (i > 0 && value !== v) {
-                    return notAvailable;
+                    if (i > 0 && value !== v) {
+                        return notAvailable;
+                    }
+
+                    value = v;
                 }
+            } else if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                var setup = getSetupItem(this.selectedList.setup, id);
 
-                value = v;
+                value = setup[name];
+            } else {
+                value = this.selectedList.setup[name];
             }
 
             if (value === undefined) {
@@ -615,6 +631,8 @@
             if (!width) {
                 return "Width:"
             }
+
+            width = width.toString();
 
             var s = [width];
 
@@ -633,16 +651,27 @@
             return s.join("");
         },
         setCommonSetupValue: function (name, value) {
-            if (!this.selectedTiles.length || value === notAvailable || this.isReadingSetup) {
+            if (value === notAvailable || this.isReadingSetup) {
                 return;
             }
 
-            this.selectedTiles.forEach(function (tile) {
-                var id = tile.id;
+
+
+            if (this.selectedTiles.length) {
+                this.selectedTiles.forEach(function (tile) {
+                    var id = tile.id;
+                    var setup = getSetupItem(this.selectedList.setup, id);
+
+                    setup[name] = value;
+                }.bind(this));
+            } else if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
                 var setup = getSetupItem(this.selectedList.setup, id);
 
                 setup[name] = value;
-            }.bind(this));
+            } else if (this.selectedList) {
+                this.selectedList.setup[name] = value;
+            }
 
             this.touch();
             this.refreshSelectedList();
@@ -1032,6 +1061,7 @@
                 name = s.itemName;
             }
 
+            this.set("selectedTiles", []);
             this.push("breadcrumb", { list: this.selectedList, scope: this.selectedScope, name: name });
 
             if (setup.items && setup.items.length) {
@@ -1090,6 +1120,10 @@
             }
         },
         refreshSelectedList: function () {
+            if (!this.selectedList) {
+                return;
+            }
+
             this.selectedList.refresh(true);
             this.refreshSelectedTiles();
         },
@@ -1196,6 +1230,7 @@
             this.attachEventListeners();
             this.readSelectedMediaScreen(newVal, oldVal);
             this.refreshSelectedScopeItems();
+            this.readPrimitiveSetupValues();
             this.refreshHighlightSelectedScope();
         },
         selectedScopeChanged: function (newVal, oldVal) {

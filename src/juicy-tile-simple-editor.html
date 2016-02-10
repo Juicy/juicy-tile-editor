@@ -1070,9 +1070,9 @@
                     <label>Gutter</label>
                     <div class="gutter-border"></div>
                     <div class="btn-group">
-                        <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" />
-                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
-                        <button class="btn-range" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
+                        <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGutterSelection(selectedTiles, selectedTiles.length)}}" />
+                        <button class="btn-range" disabled$="{{!getIsGutterSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterPlus">+</button>
+                        <button class="btn-range" disabled$="{{!getIsGutterSelection(selectedTiles, selectedTiles.length)}}" on-click="gutterMinus">-</button>
                     </div>
                     <div class="gutter-border"></div>
                 </div>
