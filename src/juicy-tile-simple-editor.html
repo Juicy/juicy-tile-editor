@@ -1258,7 +1258,7 @@
         <template is="dom-if" if="{{showTree}}">
             <div class="editor-tree">
                 <template is="dom-repeat" items="{{selectedScopeItems}}">
-                    <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}">
+                    <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}" on-dblclick="scopeInTreeItem">
                         <template is="dom-if" if="{{item.hidden}}">
                             <a href="javascript:" class="hidden-icon" title="Show element" on-click="showTreeItem" item="{{item}}"></a>
                         </template>

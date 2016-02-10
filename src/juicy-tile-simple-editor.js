@@ -951,6 +951,13 @@
 
             this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
         },
+        scopeInTreeItem: function (e) {
+            var setup = e.currentTarget.item;
+
+            if (this.getIsScopable(setup)) {
+                this.scopeIn(setup);
+            }
+        },
         showTreeItem: function (e) {
             var setup = e.currentTarget.item;
             var index = this.selectedScopeItems.indexOf(setup);
