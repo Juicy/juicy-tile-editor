@@ -617,9 +617,11 @@
         getSelectedScopeName: function (list, scope) {
             if (scope) {
                 return getSetupName(list, getSetupItem(list.setup, getTileId(scope)), this.listSelectors);
-            } else {
+            } else if(list) {
                 return getSetupName(list, list.setup, this.listSelectors);
             }
+
+            return "";
         },
         getCommonSetupValue: function (name) {
             var value = null;
@@ -1077,17 +1079,18 @@
                     this.defaultSelectedListSelectors, this.listSelectors, list);
             }
 
-            this.set("selectedList", null);
-            this.set("selectedScope", null);
-            this.set("breadcrumb", []);
-            this.set("selectedList", list);
-            this.refreshSelectedScopeItems();
-
             if (this.selectedTiles.length) {
                 this.set("selectedTiles", []);
             }
 
+            this.set("selectedScope", null);
+            this.set("breadcrumb", []);
+            this.set("selectedList", null);
+            this.set("selectedList", list);
+
+            this.refreshSelectedScopeItems();
             this.readSelectedSetup();
+            this.refreshHighlightSelectedScope();
         },
         scopeIn: function (setup) {
             var name = getSetupItem(this.selectedList, this.selectedList);
@@ -1138,12 +1141,14 @@
             this.set("selectedScope", crumb.scope);
             this.splice("breadcrumb", index, cut);
             this.readSelectedSetup();
+            this.refreshSelectedTiles();
         },
         toggleSelectedTile: function (multiple, tile) {
             clearSelection();
 
             if (!tile && this.breadcrumb.length) {
                 this.scopeOut();
+                return;
             } else if (!tile) {
                 this.resetSelection();
                 return;
