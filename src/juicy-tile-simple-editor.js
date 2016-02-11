@@ -859,6 +859,7 @@
 
             this.touch();
             this.set("mediaScreen", e.currentTarget.item);
+            this.set("width", this.mediaScreen.width);
             this.selectedList.setup.width = this.mediaScreen.width;
         },
         selectWidth: function (e) {
