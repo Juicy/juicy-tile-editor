@@ -268,6 +268,10 @@
 
         value = value.replace(/[&]$/gi, "").trim();
 
+        if (!value) {
+            value = "Empty tile";
+        }
+
         return value;
     }
 
