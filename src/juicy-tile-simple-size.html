@@ -58,110 +58,155 @@
             label.checkbox input + span {
                 line-height: 11px;
             }
+
+            .btn-calculate {
+                width: 22px;
+                height: 25px;
+                background-image: url('images/calculator.svg');
+                background-position: center -4px;
+                background-repeat: no-repeat;
+                background-size: 35px 35px;
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                cursor: pointer;
+                margin-left: 3px;
+            }
         </style>
         <div class="row">
             <input type="text" value="{{stringValue::input}}" disabled$="{{disabled}}" />
             <label class="radio">
-                <input type="radio" name="unit" value="px" checked="{{isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
+                <input type="radio" name="{{_radioName}}" value="px" checked="{{isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
                 <span>px</span>
             </label>
             <label class="radio">
-                <input type="radio" name="unit" value="%" checked="{{!isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
+                <input type="radio" name="{{_radioName}}" value="%" checked="{{!isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
                 <span>%</span>
             </label>
             <template is="dom-if" if="{{showDynamic}}">
                 <label class="checkbox">
                     <input type="checkbox" checked="{{dynamic::change}}" disabled$="{{disabled}}" />
-                    <span>Grow with<br/>content</span>
+                    <span>Grow with<br />content</span>
                 </label>
             </template>
+            <button type="button" class="btn btn-calculate" title="Calculate real dimensions" on-click="calculate"></button>
         </div>
     </template>
     <script>
-        Polymer({
-            is: "juicy-tile-simple-size",
-            properties: {
-                value: { type: Object, value: null, observer: "valueChanged", notify: true },
-                flexible: { type: Boolean, value: false, notify: true },
-                dynamic: { type: Boolean, value: false, notify: true },
-                stringValue: { type: String, value: "", observer: "stringValueChanged" },
-                showDynamic: { type: Boolean, value: false },
-                disabled: { type: Boolean, value: false }
-            },
-            isPx: function (v) {
+        (function () {
+            var counter = 0;
+
+            function parseDecimal(v, d) {
                 if (!v) {
+                    return 0;
+                }
+
+                v = v.toString().replace(new RegExp("[^\\d.,-]", "gi"), "");
+                v = v.replace(new RegExp("[,]", "gi"), ".");
+
+                if (!v) {
+                    return 0;
+                }
+
+                if (typeof d !== "undefined") {
+                    v = parseFloat(v).toFixed(d);
+                }
+
+                return parseFloat(v);
+            };
+
+            Polymer({
+                is: "juicy-tile-simple-size",
+                properties: {
+                    value: { type: Object, value: null, observer: "valueChanged", notify: true },
+                    flexible: { type: Boolean, value: false, notify: true },
+                    dynamic: { type: Boolean, value: false, notify: true },
+                    stringValue: { type: String, value: "", observer: "stringValueChanged" },
+                    showDynamic: { type: Boolean, value: false },
+                    disabled: { type: Boolean, value: false },
+                    _radioName: { type: String, value: "unit" }
+                },
+                attached: function () {
+                    this.set("_radioName", "unit-" + counter);
+                    counter++;
+                },
+                isPx: function (v) {
+                    if (!v) {
+                        return true;
+                    }
+
+                    v = v.toString();
+
+                    if (/[%]$/gi.test(v)) {
+                        return false;
+                    }
+
                     return true;
+                },
+                setUnit: function (e) {
+                    var unit = e.currentTarget.value;
+                    var v = this.value;
+                    var isPx = this.isPx(this.value);
+
+                    if (!v) {
+                        v = "0";
+                    } else {
+                        v = v.toString();
+                    }
+
+                    if (unit == "px" && !isPx) {
+                        v = parseDecimal(v);
+
+                        this.set("flexible", false);
+                        this.set("value", v);
+                    } else if (unit == "%" && isPx) {
+                        v += "%";
+
+                        this.set("flexible", true);
+                        this.set("value", v);
+                    }
+                },
+                calculate: function () {
+                    this.fire("calculate");
+                },
+                valueChanged: function (newVal, oldVal) {
+                    var v = newVal;
+
+                    if (v) {
+                        v = v.toString();
+                    } else {
+                        v = "";
+                    }
+
+                    v = parseDecimal(v).toString();
+
+                    if (this.stringValue !== v) {
+                        this.set("stringValue", v);
+                    }
+                },
+                stringValueChanged: function (newVal, oldVal) {
+                    var v = newVal;
+
+                    v = parseDecimal(v).toString();
+
+                    if (v !== newVal) {
+                        this.set("stringValue", v);
+                        return;
+                    }
+
+                    if (this.isPx(this.value)) {
+                        v = v / 1;
+                    } else if (v === "") {
+                        v = null;
+                    } else {
+                        v = v + "%";
+                    }
+
+                    if (this.value !== v) {
+                        this.set("value", v);
+                    }
                 }
-
-                v = v.toString();
-
-                if (/[%]$/gi.test(v)) {
-                    return false;
-                }
-
-                return true;
-            },
-            setUnit: function (e) {
-                var unit = e.currentTarget.value;
-                var v = this.value;
-                var isPx = this.isPx(this.value);
-
-                if (!v) {
-                    v = "0";
-                } else {
-                    v = v.toString();
-                }
-
-                if (unit == "px" && !isPx) {
-                    v = v.replace(/\D/gi, "");
-                    v = v / 1;
-
-                    this.set("flexible", false);
-                    this.set("value", v);
-                } else if (unit == "%" && isPx) {
-                    v += "%";
-
-                    this.set("flexible", true);
-                    this.set("value", v);
-                }
-            },
-            valueChanged: function (newVal, oldVal) {
-                var v = newVal;
-
-                if (v) {
-                    v = v.toString();
-                } else {
-                    v = "";
-                }
-
-                v = v.replace(/\D/gi, "");
-
-                if (this.stringValue !== v) {
-                    this.set("stringValue", v);
-                }
-            },
-            stringValueChanged: function (newVal, oldVal) {
-                var v = newVal;
-                
-                v = v.replace(/\D/gi, "");
-
-                if (v !== newVal) {
-                    this.set("stringValue", v);
-                    return;
-                }
-
-                if (this.isPx(this.value)) {
-                    v = v / 1;
-                } else if (v === "") {
-                    v = null;
-                } else {
-                    v = v + "%";
-                }
-
-                if (this.value !== v) {
-                    this.set("value", v);
-                }
-            }
-        });
+            });
+        })();
     </script>
 </dom-module>

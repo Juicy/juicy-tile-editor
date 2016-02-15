@@ -1038,6 +1038,34 @@
         heightMinus: function (e) {
             this.dimensionMinus("height");
         },
+        calculateWidth: function (e) {
+            this.selectedTiles.forEach(function (tile) {
+                var id = getTileId(tile);
+                var setup = getSetupItem(this.selectedList.setup, id);
+                var element = this.selectedList.querySelector("[juicytile='" + id + "']");
+                var rec = element.getBoundingClientRect();
+                var w = rec.width;
+
+                setup.width = w;
+                setup.widthFlexible = false;
+            }.bind(this));
+
+            this.refreshSelectedList();
+        },
+        calculateHeight: function (e) {
+            this.selectedTiles.forEach(function (tile) {
+                var id = getTileId(tile);
+                var setup = getSetupItem(this.selectedList.setup, id);
+                var element = this.selectedList.querySelector("[juicytile='" + id + "']");
+                var rec = element.getBoundingClientRect();
+                var h = rec.height;
+
+                setup.height = h;
+                setup.heightDynamic = false;
+            }.bind(this));
+
+            this.refreshSelectedList();
+        },
         selectDirection: function (e) {
             var target = e.currentTarget;
             var value = target.value;
