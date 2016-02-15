@@ -5,6 +5,7 @@
 <link rel="import" href="../../juicy-color-picker/src/juicy-color-picker.html" />
 <link rel="import" href="./juicy-border-picker.html" />
 <link rel="import" href="./juicy-tile-simple-editor-style.html" />
+<link rel="import" href="./juicy-tile-simple-size.html" />
 
 <dom-module id="juicy-tile-simple-editor">
     <template>
@@ -136,33 +137,18 @@
                     <div class="dimension-section">
                         <label class="section-title">Width</label>
                         <div class="control-group">
-                            <input type="text" value="{{width::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthPlus">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="widthMinus">-</button>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{widthFlexible::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <span>grow<br />with parent</span>
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{widthDynamic::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <span>grow<br />with content</span>
-                            </label>
+                            <juicy-tile-simple-size value="{{width}}" flexible="{{widthFlexible}}" disabled$="{{!selectedTiles.length}}"></juicy-tile-simple-size>
                         </div>
                     </div>
                     <div class="dimension-section">
-                        <label class="section-title">Height</label>
+                        <template is="dom-if" if="{{!heightDynamic}}">
+                            <label class="section-title">Height</label>
+                        </template>
+                        <template is="dom-if" if="{{heightDynamic}}">
+                            <label class="section-title section-title-two">Min<br />Height</label>
+                        </template>
                         <div class="control-group">
-                            <input type="text" value="{{height::change}}" disabled$="{{!selectedTiles.length}}" />
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightPlus">+</button>
-                            <button class="btn-range" disabled$="{{!selectedTiles.length}}" on-click="heightMinus">-</button>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{heightFlexible::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <span>grow<br />with parent</span>
-                            </label>
-                            <label class="checkbox">
-                                <input type="checkbox" checked="{{heightDynamic::change}}" disabled$="{{!selectedTiles.length}}" />
-                                <span>grow<br />with content</span>
-                            </label>
+                            <juicy-tile-simple-size value="{{height}}" dynamic="{{heightDynamic}}" show-dynamic="true" disabled$="{{!selectedTiles.length}}"></juicy-tile-simple-size>
                         </div>
                     </div>
                 </div>

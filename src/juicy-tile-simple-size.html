@@ -1,0 +1,167 @@
+﻿<dom-module id="juicy-tile-simple-size">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            :host[disabled],
+            :host[disabled] * {
+                cursor: not-allowed;
+                opacity: 0.9;
+            }
+
+            div.row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            input[type=text] {
+                width: 60px;
+                border: none;
+                background-color: transparent;
+                box-shadow: none;
+                outline: none;
+                color: white;
+                margin-left: 3px;
+            }
+
+            label {
+                cursor: pointer;
+                display: block;
+                min-width: 28px;
+            }
+
+            label input {
+                display: none;
+            }
+
+            label input + span {
+                display: block;
+                color: white;
+                font-size: 10px;
+                text-align: center;
+                line-height: 22px;
+                padding: 1px 3px 2px 3px;
+                border-radius: 2px;
+                margin: 0px 3px;
+                height: 22px;
+                background-color: #384041;
+            }
+
+            label input:checked + span,
+            label input[checked] + span {
+                background-color: #21b3cf;
+                color: white;
+            }
+
+            label.checkbox input + span {
+                line-height: 11px;
+            }
+        </style>
+        <div class="row">
+            <input type="text" value="{{stringValue::input}}" disabled$="{{disabled}}" />
+            <label class="radio">
+                <input type="radio" name="unit" value="px" checked="{{isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
+                <span>px</span>
+            </label>
+            <label class="radio">
+                <input type="radio" name="unit" value="%" checked="{{!isPx(value)}}" on-change="setUnit" disabled$="{{disabled}}" />
+                <span>%</span>
+            </label>
+            <template is="dom-if" if="{{showDynamic}}">
+                <label class="checkbox">
+                    <input type="checkbox" checked="{{dynamic::change}}" disabled$="{{disabled}}" />
+                    <span>Grow with<br/>content</span>
+                </label>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "juicy-tile-simple-size",
+            properties: {
+                value: { type: Object, value: null, observer: "valueChanged", notify: true },
+                flexible: { type: Boolean, value: false, notify: true },
+                dynamic: { type: Boolean, value: false, notify: true },
+                stringValue: { type: String, value: "", observer: "stringValueChanged" },
+                showDynamic: { type: Boolean, value: false },
+                disabled: { type: Boolean, value: false }
+            },
+            isPx: function (v) {
+                if (!v) {
+                    return true;
+                }
+
+                v = v.toString();
+
+                if (/[%]$/gi.test(v)) {
+                    return false;
+                }
+
+                return true;
+            },
+            setUnit: function (e) {
+                var unit = e.currentTarget.value;
+                var v = this.value;
+                var isPx = this.isPx(this.value);
+
+                if (!v) {
+                    v = "0";
+                } else {
+                    v = v.toString();
+                }
+
+                if (unit == "px" && !isPx) {
+                    v = v.replace(/\D/gi, "");
+                    v = v / 1;
+
+                    this.set("flexible", false);
+                    this.set("value", v);
+                } else if (unit == "%" && isPx) {
+                    v += "%";
+
+                    this.set("flexible", true);
+                    this.set("value", v);
+                }
+            },
+            valueChanged: function (newVal, oldVal) {
+                var v = newVal;
+
+                if (v) {
+                    v = v.toString();
+                } else {
+                    v = "";
+                }
+
+                v = v.replace(/\D/gi, "");
+
+                if (this.stringValue !== v) {
+                    this.set("stringValue", v);
+                }
+            },
+            stringValueChanged: function (newVal, oldVal) {
+                var v = newVal;
+                
+                v = v.replace(/\D/gi, "");
+
+                if (v !== newVal) {
+                    this.set("stringValue", v);
+                    return;
+                }
+
+                if (this.isPx(this.value)) {
+                    v = v / 1;
+                } else if (v === "") {
+                    v = null;
+                } else {
+                    v = v + "%";
+                }
+
+                if (this.value !== v) {
+                    this.set("value", v);
+                }
+            }
+        });
+    </script>
+</dom-module>
