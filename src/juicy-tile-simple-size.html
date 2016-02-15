@@ -80,6 +80,25 @@
             span.gutter {
                 width: 57px;
             }
+
+            @media (max-width: 1399px) {
+                label input + span {
+                    height: 19px;
+                    line-height: 19px;
+                }
+
+                label.checkbox input + span {
+                    font-size: 9px;
+                    line-height: 10px;
+                }
+
+                .btn-calculate {
+                    background-position: center -3px;
+                    height: 22px;
+                    width: 20px;
+                    background-size: 30px 30px;
+                }
+            }
         </style>
         <div class="row">
             <input type="text" value="{{stringValue::input}}" disabled$="{{disabled}}" />
