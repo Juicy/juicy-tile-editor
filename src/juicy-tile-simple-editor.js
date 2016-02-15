@@ -1038,30 +1038,27 @@
         heightMinus: function (e) {
             this.dimensionMinus("height");
         },
-        calculateWidth: function (e) {
+        calculateDimension: function (e) {
+            var dimension = e.currentTarget.dataset["dimension"];
+
             this.selectedTiles.forEach(function (tile) {
                 var id = getTileId(tile);
                 var setup = getSetupItem(this.selectedList.setup, id);
                 var element = this.selectedList.querySelector("[juicytile='" + id + "']");
+
+                if (!element) {
+                    element = this.selectedList.tiles[id];
+                }
+
                 var rec = element.getBoundingClientRect();
-                var w = rec.width;
 
-                setup.width = w;
-                setup.widthFlexible = false;
-            }.bind(this));
-
-            this.refreshSelectedList();
-        },
-        calculateHeight: function (e) {
-            this.selectedTiles.forEach(function (tile) {
-                var id = getTileId(tile);
-                var setup = getSetupItem(this.selectedList.setup, id);
-                var element = this.selectedList.querySelector("[juicytile='" + id + "']");
-                var rec = element.getBoundingClientRect();
-                var h = rec.height;
-
-                setup.height = h;
-                setup.heightDynamic = false;
+                if (dimension == "width") {
+                    setup.width = rec.width;
+                    setup.widthFlexible = false;
+                } else if (dimension == "height") {
+                    setup.height = rec.height;
+                    setup.heightDynamic = false;
+                }
             }.bind(this));
 
             this.refreshSelectedList();
