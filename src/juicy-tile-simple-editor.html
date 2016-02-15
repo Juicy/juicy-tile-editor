@@ -11,10 +11,10 @@
     <template>
         <style include="juicy-tile-simple-editor-style"></style>
         <div class="editor-tabs">
-            <button on-click="closeEditor">Close</button>
+            <button on-click="closeEditor" class="btn-close" title="Close editor"></button>
             <button class$="{{getTabButtonCss('normal', showMore)}}" on-click="toggleMore">Normal</button>
             <button class$="{{getTabButtonCss('expert', showMore)}}" on-click="toggleMore">Expert</button>
-            <button on-click="toggleTree">Sidebar</button>
+            <button on-click="toggleTree" class="btn-tree">List</button>
         </div>
         <template is="dom-if" if="{{!showMore}}">
             <div class="editor-simple-form">
@@ -265,6 +265,10 @@
                         </template>
                     </div>
                 </template>
+            </div>
+        </template>
+        <template is="dom-if" if="{{!showTree}}">
+            <div class="editor-tree-chevron" on-click="toggleTree">
             </div>
         </template>
 
