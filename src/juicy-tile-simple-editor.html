@@ -45,11 +45,16 @@
                     <button type="button" class="btn btn-down" on-click="moveDown" disabled$="{{!selectedTiles.length}}" title="Move selected tiles down"></button>
                 </div>
                 <div class="editor-form-section visible-section">
-                    <template is="dom-if" if="{{!visible}}">
+                    <template is="dom-if" if="{{getIsHidden(visible)}}">
                         <button type="button" class="btn btn-hidden" on-click="selectVisible" data-value="1" disabled$="{{!selectedTiles.length}}" title="Show selected tiles"></button>
                     </template>
-                    <template is="dom-if" if="{{visible}}">
+                    <template is="dom-if" if="{{getIsVisible(visible)}}">
                         <button type="button" class="btn btn-visible" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
+                    </template>
+                    <template is="dom-if" if="{{!getIsVisible(visible)}}">
+                        <template is="dom-if" if="{{!getIsHidden(visible)}}">
+                            <button type="button" class="btn btn-undefined" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
+                        </template>
                     </template>
                 </div>
                 <div class="editor-form-section align-section">
@@ -125,11 +130,16 @@
                         </button>
                     </div>
                     <div class="visible-section">
-                        <template is="dom-if" if="{{!visible}}">
+                        <template is="dom-if" if="{{getIsHidden(visible)}}">
                             <button type="button" class="btn btn-hidden" on-click="selectVisible" data-value="1" disabled$="{{!selectedTiles.length}}" title="Show selected tiles"></button>
                         </template>
-                        <template is="dom-if" if="{{visible}}">
+                        <template is="dom-if" if="{{getIsVisible(visible)}}">
                             <button type="button" class="btn btn-visible" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
+                        </template>
+                        <template is="dom-if" if="{{!getIsVisible(visible)}}">
+                            <template is="dom-if" if="{{!getIsHidden(visible)}}">
+                                <button type="button" class="btn btn-undefined" on-click="selectVisible" data-value="0" disabled$="{{!selectedTiles.length}}" title="Hide selected tiles"></button>
+                            </template>
                         </template>
                     </div>
                 </div>

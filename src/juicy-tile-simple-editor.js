@@ -605,6 +605,12 @@
 
             return this.getIsGroupSelection(tiles);
         },
+        getIsVisible: function (visible) {
+            return visible === true;
+        },
+        getIsHidden: function (visible) {
+            return visible === false;
+        },
         getSetupName: function (setup) {
             return getSetupName(this.selectedList, setup, this.listSelectors);
         },
@@ -750,8 +756,8 @@
         readVisible: function () {
             var hidden = this.getCommonSetupValue("hidden");
 
-            if (hidden === null) {
-                this.set("visible", true);
+            if (hidden === null || hidden === notAvailable) {
+                this.set("visible", null);
             } else {
                 this.set("visible", !hidden);
             }
