@@ -1072,6 +1072,7 @@
                 }
             }.bind(this));
 
+            this.touch();
             this.refreshSelectedList();
         },
         selectDirection: function (e) {
