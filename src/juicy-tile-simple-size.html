@@ -3,6 +3,8 @@
         <style>
             :host {
                 display: block;
+                padding: 0px;
+                margin: 0px;
             }
 
             :host[disabled],
@@ -14,6 +16,10 @@
             div.row {
                 display: flex;
                 flex-direction: row;
+                margin: 0px;
+                margin-left: 0px;
+                margin-right: 0px;
+                box-sizing: content-box;
             }
 
             input[type=text] {
@@ -24,12 +30,18 @@
                 outline: none;
                 color: white;
                 margin-left: 3px;
+                font-size: 13px;
+                border: none;
+                border-bottom: none!important;
             }
 
-            label {
+            label,
+            label + label {
                 cursor: pointer;
                 display: block;
                 min-width: 28px;
+                margin: 0px;
+                margin-top: 0px;
             }
 
             label input {
@@ -47,6 +59,7 @@
                 margin: 0px 3px;
                 height: 22px;
                 background-color: #384041;
+                box-sizing: content-box;
             }
 
             label input:checked + span,
@@ -60,7 +73,7 @@
             }
 
             label.checkbox input + span {
-                line-height: 11px;
+                line-height: 10px;
             }
 
             .btn-calculate {
@@ -83,12 +96,12 @@
 
             @media (max-width: 1399px) {
                 label input + span {
-                    height: 19px;
                     line-height: 19px;
+                    height: 19px;
                 }
 
                 label.checkbox input + span {
-                    font-size: 9px;
+                    font-size: 8.5px;
                     line-height: 10px;
                 }
 
@@ -97,6 +110,10 @@
                     height: 22px;
                     width: 20px;
                     background-size: 30px 30px;
+                }
+
+                span.gutter {
+                    height: 22px;
                 }
             }
         </style>

@@ -28,6 +28,8 @@
                 outline: none;
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
+                text-decoration: none;
+                box-shadow: none;
             }
 
             .btn:hover {
@@ -220,8 +222,12 @@
                 padding: 10px 0px;
             }
 
-            .editor-simple-form .save-section button {
+            .editor-simple-form .save-section button.btn {
                 margin-bottom: 10px;
+                height: 33px;
+                text-decoration: none;
+                text-transform: none;
+                line-height: normal;
             }
 
             .editor-simple-form .media-section {
@@ -240,6 +246,7 @@
                 vertical-align: middle;
                 padding-left: 0px;
                 padding-right: 0px;
+                box-shadow: none;
             }
 
             @media all and (-ms-high-contrast:none) {
@@ -340,6 +347,7 @@
                 border-top: 4px dotted #787b80;
                 border-bottom: 4px dotted #787b80;
                 height: 35px;
+                box-sizing: content-box;
             }
 
             .editor-simple-form .width-section .btn-group button.btn {
@@ -363,6 +371,7 @@
                 color: white;
                 margin: -4px 0px;
                 height: 43px;
+                box-shadow: none;
             }
 
             .editor-simple-form .width-section .btn-group button.btn:first-child {
@@ -617,6 +626,12 @@
 
             .editor-expert-form .gutter-section .btn-group {
                 padding: 3px 0px;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .editor-expert-form .gutter-section .btn-group button {
+                margin-left: 4px;
             }
 
             .editor-expert-form .gutter-section .gutter-border {
@@ -632,13 +647,15 @@
                 }
             }
 
-            .editor-expert-form .gutter-section input {
+            .editor-expert-form .gutter-section input[type=text] {
                 border: 1px solid #b0b6b6;
                 padding: 2px 4px;
                 width: 35px;
                 height: 18px;
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
+                font-size: 13px;
+                box-shadow: none;
             }
 
             .editor-expert-form .width-section {
@@ -838,6 +855,7 @@
                 display: flex;
                 flex-direction: row;
                 margin-top: 5px;
+                height: 28px;
             }
 
             .editor-expert-form .dimension-section:first-child {
@@ -867,6 +885,7 @@
                 border-radius: 4px;
                 background-color: #3e494c;
                 height: 24px;
+                box-sizing: content-box;
             }
 
             .editor-expert-form .outline-section {
@@ -926,6 +945,9 @@
             .editor-expert-form .tight-direction-html-source-section label.checkbox {
                 text-align: center;
                 display: block;
+                margin: 0px;
+                margin-top: 0px;
+                margin-bottom: 0px;
             }
 
             .editor-expert-form .tight-direction-html-source-section button.btn,
@@ -943,6 +965,7 @@
                 width: 50px;
                 margin: 0px;
                 cursor: pointer;
+                text-transform: none;
             }
 
             .editor-expert-form .tight-direction-html-source-section button.btn[disabled],
@@ -1179,7 +1202,7 @@
                 }
 
                 .editor-expert-form .dimension-section:first-child {
-                    margin-top: 20.9px;
+                    margin-top: 25px;
                 }
 
                 .editor-expert-form .dimension-section label.section-title {
@@ -1199,10 +1222,10 @@
                 .editor-expert-form .dimension-section .control-group {
                     display: flex;
                     flex-direction: row;
-                    padding: 3.8px 2.85px;
+                    padding: 3px 2.85px;
                     border-radius: 3.8px;
                     background-color: #3e494c;
-                    height: 22.8px;
+                    height: 22px;
                 }
 
                 .editor-expert-form .outline-section {
