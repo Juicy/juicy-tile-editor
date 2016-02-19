@@ -84,7 +84,7 @@
     <template>
         <div class="container">
             <div class="width">
-                <input type="text" value="{{borderWidth::change}}" class="width" />
+                <input type="text" value="{{borderWidth::input}}" class="width" />
                 <select class="width" value="{{borderWidthUnit::change}}">
                     <option value="px">px</option>
                     <option value="em">em</option>
@@ -157,6 +157,9 @@
             },
             ready: function () {
             },
+            attached: function () {
+                this.attachedCalled = true;
+            },
             resetInParse: function (fire) {
                 if (fire) {
                     this.fire("change");
@@ -222,6 +225,18 @@
                 this.parseBorderValue();
             },
             borderStyleChanged: function () {
+                if (this.inParse || !this.attachedCalled) {
+                    return;
+                }
+
+                if (!this.borderColor) {
+                    this.set("borderColor", "#000000");
+                }
+
+                if (!this.borderWidth) {
+                    this.set("borderWidth", 1);
+                }
+
                 this.refreshBorderValueAsync();
             },
             borderWidthChanged: function () {
@@ -231,6 +246,18 @@
                 this.refreshBorderValueAsync();
             },
             borderColorChanged: function () {
+                if (this.inParse || !this.attachedCalled) {
+                    return;
+                }
+
+                if (!this.borderWidth) {
+                    this.set("borderWidth", 1);
+                }
+
+                if (!this.borderStyle) {
+                    this.set("borderStyle", "solid");
+                }
+
                 this.refreshBorderValueAsync();
             },
             applyStyle: function (e) {
