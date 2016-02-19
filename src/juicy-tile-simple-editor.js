@@ -1001,14 +1001,14 @@
                 this.scopeIn(setup);
             }
         },
-        showTreeItem: function (e) {
+        toggleTreeItem: function (e) {
             var setup = e.currentTarget.item;
             var index = this.selectedScopeItems.indexOf(setup);
 
-            setup.hidden = false;
+            setup.hidden = !setup.hidden;
 
             this.refreshSelectedList();
-            this.notifyPath("selectedScopeItems." + index + ".hidden", false);
+            this.notifyPath("selectedScopeItems." + index + ".hidden", setup.hidden);
         },
         selectScopeItem: function (e) {
             this.scopeIn(e.currentTarget.item);

@@ -267,7 +267,10 @@
                 <template is="dom-repeat" items="{{selectedScopeItems}}">
                     <div class$="{{getTreeItemCss(selectedTiles.length, item)}}" on-click="selectTreeItem" item="{{item}}" on-dblclick="scopeInTreeItem">
                         <template is="dom-if" if="{{item.hidden}}">
-                            <a href="javascript:" class="hidden-icon" title="Show element" on-click="showTreeItem" item="{{item}}"></a>
+                            <a href="javascript:" class="hidden-icon" title="Show element" on-click="toggleTreeItem" item="{{item}}"></a>
+                        </template>
+                        <template is="dom-if" if="{{!item.hidden}}">
+                            <a href="javascript:" class="show-icon" title="Hide element" on-click="toggleTreeItem" item="{{item}}"></a>
                         </template>
                         <span>{{getSetupName(item)}}</span>
                         <template is="dom-if" if="{{getIsScopable(item)}}">
