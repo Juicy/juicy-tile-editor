@@ -588,10 +588,9 @@
         },
         getIsGroupSelection: function (tiles) {
             for (var i = 0; i < tiles.length; i++) {
-                var id = getTileId(tiles[i]);
-                var setup = getSetupItem(this.selectedList.setup, id);
+                var setup = this.getSetupItem(tiles[i]);
 
-                if (!setup.items) {
+                if (!setup || !setup.items) {
                     return false;
                 }
             }
@@ -686,12 +685,16 @@
 
             return s.join("");
         },
+        getSetupItem: function (tile) {
+            var id = getTileId(tile);
+            var setup = getSetupItem(this.selectedList.setup, id);
+
+            return setup;
+        },
         setCommonSetupValue: function (name, value) {
             if (value === notAvailable || this.isReadingSetup) {
                 return;
             }
-
-
 
             if (this.selectedTiles.length) {
                 this.selectedTiles.forEach(function (tile) {
@@ -701,9 +704,7 @@
                     setup[name] = value;
                 }.bind(this));
             } else if (this.selectedScope) {
-                var id = getTileId(this.selectedScope);
-                var setup = getSetupItem(this.selectedList.setup, id);
-
+                var setup = this.getSetupItem(this.selectedScope);
                 setup[name] = value;
             } else if (this.selectedList) {
                 this.selectedList.setup[name] = value;
@@ -759,8 +760,7 @@
             var setup;
 
             if (this.selectedScope) {
-                var id = getTileId(this.selectedScope);
-                setup = getSetupItem(this.selectedList.setup, id);
+                setup = this.getSetupItem(this.selectedScope);
             } else {
                 setup = this.selectedList.setup;
             }
@@ -865,8 +865,7 @@
             }
 
             var tile = this.selectedTiles[0];
-            var id = getTileId(tile);
-            var setup = getSetupItem(this.selectedList.setup, id);
+            var setup = this.getSetupItem(tile);
 
             return setup;
         },
@@ -946,8 +945,7 @@
             var group = createSetupGroup(this.selectedList, setup);
 
             this.selectedTiles.forEach(function (t) {
-                var id = getTileId(t);
-                var s = getSetupItem(this.selectedList.setup, id);
+                var s = this.getSetupItem(t);
 
                 this.selectedList.moveToContainer(s, group, true);
             }.bind(this));
@@ -978,8 +976,7 @@
 
             tiles.forEach(function (tile) {
                 var index = this.selectedTiles.indexOf(tile);
-                var id = getTileId(tile);
-                var setup = getSetupItem(this.selectedList.setup, id);
+                var setup = this.getSetupItem(tile);
 
                 if (setup.items) {
                     this.selectedList.deleteContainer(setup);
@@ -1140,8 +1137,7 @@
             var name = getSetupItem(this.selectedList, this.selectedList);
 
             if (this.selectedScope) {
-                var id = getTileId(this.selectedScope);
-                var s = getSetupItem(this.selectedList.setup, id);
+                var s = this.getSetupItem(this.selectedScope);
 
                 name = s.itemName;
             }
@@ -1223,8 +1219,7 @@
             var items;
 
             if (this.selectedScope) {
-                var id = getTileId(this.selectedScope);
-                var setup = getSetupItem(this.selectedList.setup, id);
+                var setup = this.getSetupItem(this.selectedScope);
 
                 items = setup.items.slice();
             } else if (this.selectedList) {
@@ -1342,8 +1337,7 @@
             var setup;
 
             if (this.selectedScope) {
-                var id = getTileId(this.selectedScope);
-                setup = getSetupItem(this.selectedList.setup, id);
+                setup = this.getSetupItem(this.selectedScope);
             } else {
                 setup = this.selectedList.setup;
             }
