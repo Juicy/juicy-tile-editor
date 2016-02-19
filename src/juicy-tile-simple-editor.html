@@ -16,10 +16,10 @@
             <button class$="{{getTabButtonCss('expert', showMore)}}" on-click="toggleMore">Expert</button>
             <button on-click="toggleTree" class="btn-tree">List</button>
         </div>
-        <template is="dom-if" if="{{!showMore}}">
+        <template is="dom-if" if="{{!showMore}}" restamp>
             <div class="editor-simple-form">
                 <div class="editor-form-section save-section">
-                    <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
+                    <button type="button" class="btn" on-click="saveSetup" disabled="{{!isModified}}">Save</button>
                     <button type="button" class="btn" on-click="resetSetup">Reset</button>
                 </div>
                 <div class="editor-form-section media-section">
@@ -71,11 +71,11 @@
             </div>
         </template>
 
-        <template is="dom-if" if="{{showMore}}">
+        <template is="dom-if" if="{{showMore}}" restamp>
             <div class="editor-expert-form">
                 <div class="editor-form-section save-section">
-                    <button type="button" class="btn" on-click="saveSetup" disabled$="{{!hasChanges}}">Save</button>
-                    <button type="button" class="btn" on-click="revertSetup" disabled$="{{!hasChanges}}">Discard</button>
+                    <button type="button" class="btn" on-click="saveSetup" disabled$="{{!isModified}}">Save</button>
+                    <button type="button" class="btn" on-click="revertSetup" disabled$="{{!isModified}}">Discard</button>
                     <button type="button" class="btn" on-click="resetSetup">Reset</button>
                 </div>
                 <div class="editor-form-section media-section">

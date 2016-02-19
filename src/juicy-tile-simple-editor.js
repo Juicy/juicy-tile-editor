@@ -395,7 +395,7 @@
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
             selectedScopeItems: { type: Array, value: [] },
             breadcrumb: { type: Array, value: [] },
-            hasChanges: { type: Boolean, value: false, notify: true },
+            isModified: { type: Boolean, value: false, notify: true },
             showMore: { type: Boolean, value: false },
             showTree: { type: Boolean, value: true },
             background: { type: String, observer: "backgroundChanged" },
@@ -463,11 +463,11 @@
             }.bind(this);
 
             this.set("lists", lists);
-            this.isAttached = true;
-            this.isReadingSetup = false;
 
             setTimeout(function () {
                 this.resetSelection();
+                this.attachedCalled = true;
+                this.isReadingSetup = false;
             }.bind(this), 100);
         },
         detached: function () {
@@ -786,9 +786,11 @@
             this.readPrimitiveSetupValues();
         },
         touch: function () {
-            if (this.isAttached && !this.isReadingSetup) {
-                this.set("hasChanges", true);
+            if (!this.attachedCalled || this.isReadingSetup) {
+                return;
             }
+
+            this.set("isModified", true);
         },
         dimensionPlus: function (name) {
             var value = 1;
@@ -1264,7 +1266,7 @@
                 }
             });
 
-            this.set("hasChanges", false);
+            this.set("isModified", false);
         },
         resetSetup: function () {
             this.lists.forEach(function (list) {
@@ -1295,7 +1297,7 @@
                 list.refresh(true);
             });
 
-            this.set("hasChanges", false);
+            this.set("isModified", false);
             this.resetSelection();
         },
         selectedTilesChanged: function () {
