@@ -598,13 +598,6 @@
 
             return tiles.length > 0;
         },
-        getIsGutterSelection: function (tiles) {
-            if (!tiles.length) {
-                return true;
-            }
-
-            return this.getIsGroupSelection(tiles);
-        },
         getIsVisible: function (visible) {
             return visible === true;
         },
@@ -762,28 +755,41 @@
                 this.set("visible", !hidden);
             }
         },
-        readPrimitiveSetupValues: function () {
-            var names = ["background", "oversize", "outline", "gutter", "direction", "content", "width", "height", "widthFlexible", "widthDynamic",
-                "heightFlexible", "heightDynamic", "tightGroup", "rightToLeft", "bottomUp"];
+        readGutter: function () {
+            var setup;
 
-            this.isReadingSetup = true;
+            if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                setup = getSetupItem(this.selectedList.setup, id);
+            } else {
+                setup = this.selectedList.setup;
+            }
+
+            this.set("gutter", setup.gutter);
+        },
+        readPrimitiveSetupValues: function () {
+            var names = ["background", "oversize", "outline", "direction", "content", "width", "height", "widthFlexible", "widthDynamic",
+                "heightFlexible", "heightDynamic", "tightGroup", "rightToLeft", "bottomUp"];
 
             names.forEach(function (name) {
                 var value = this.getCommonSetupValue(name);
 
                 this.set(name, value);
             }.bind(this));
-
-            this.isReadingSetup = false;
         },
         readSelectedSetup: function () {
             if (!this.selectedList) {
                 return;
             }
 
+            this.isReadingSetup = true;
+
             this.readWidth();
             this.readVisible();
+            this.readGutter();
             this.readPrimitiveSetupValues();
+
+            this.isReadingSetup = false;
         },
         touch: function () {
             if (!this.attachedCalled || this.isReadingSetup) {
@@ -1333,7 +1339,17 @@
             this.setCommonSetupValue("outline", newVal);
         },
         gutterChanged: function (newVal, oldVal) {
-            this.setCommonSetupValue("gutter", newVal);
+            var setup;
+
+            if (this.selectedScope) {
+                var id = getTileId(this.selectedScope);
+                setup = getSetupItem(this.selectedList.setup, id);
+            } else {
+                setup = this.selectedList.setup;
+            }
+
+            setup.gutter = newVal / 1;
+            this.refreshSelectedList();
         },
         contentChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("content", newVal);
