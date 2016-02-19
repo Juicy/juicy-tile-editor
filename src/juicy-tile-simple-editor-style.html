@@ -145,7 +145,7 @@
             }
 
             .editor-tree div.editor-tree-item {
-                padding: 2px 10px;
+                padding: 2px 5px 2px 10px;
                 cursor: pointer;
             }
 
@@ -166,6 +166,7 @@
                 text-decoration: underline;
             }
 
+            .editor-tree a.scope-in,
             .editor-tree a.show-icon,
             .editor-tree a.hidden-icon {
                 width: 18px;
@@ -178,10 +179,16 @@
                 margin-top: 1px;
                 background-color: #ebebe4;
                 border-radius: 2px;
+                text-align: center;
+                margin-left: 5px;
             }
 
             .editor-tree a.show-icon {
                 background-image: url(images/eye.svg);
+            }
+
+            .editor-tree a.scope-in {
+                background-image: none;
             }
 
             juicy-popover div.popup {

@@ -272,10 +272,10 @@
                         <template is="dom-if" if="{{!item.hidden}}">
                             <a href="javascript:" class="show-icon" title="Hide element" on-click="toggleTreeItem" item="{{item}}"></a>
                         </template>
-                        <span>{{getSetupName(item)}}</span>
                         <template is="dom-if" if="{{getIsScopable(item)}}">
-                            <a href="javascript:" on-click="selectScopeItem" item="{{item}}">...</a>
+                            <a href="javascript:" class="scope-in" on-click="selectScopeItem" item="{{item}}" title="Scope in">...</a>
                         </template>
+                        <span>{{getSetupName(item)}}</span>
                     </div>
                 </template>
             </div>
