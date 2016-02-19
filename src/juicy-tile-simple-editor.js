@@ -1254,12 +1254,14 @@
             }
         },
         refreshHighlightSelectedScope: function () {
+            if (this.$.highlightScopeSelected.currentState == "shown") {
+                this.$.highlightScopeSelected.hide();
+            }
+
             if (this.selectedScope) {
                 this.$.highlightScopeSelected.show(this.selectedScope);
             } else if (this.selectedList) {
                 this.$.highlightScopeSelected.show(this.selectedList);
-            } else if (this.$.highlightScopeSelected.currentState == "shown") {
-                this.$.highlightScopeSelected.hide();
             }
         },
         saveSetup: function () {
