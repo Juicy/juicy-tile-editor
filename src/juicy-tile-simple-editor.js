@@ -1271,8 +1271,11 @@
             this.set("isModified", false);
         },
         resetSetup: function () {
+            var media = this.mediaScreenRanges[this.mediaScreenRanges.length - 1];
+
             this.lists.forEach(function (list) {
                 list.setup = list.defaultsetup ? JSON.parse(JSON.stringify(list.defaultsetup)) : null;
+                list.setup.width = media.width;
             });
 
             // Workaround to refresh parent list when child list changes it's dimensions.
