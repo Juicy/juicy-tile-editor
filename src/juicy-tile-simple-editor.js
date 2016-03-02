@@ -43,7 +43,9 @@
     function getTileId(element) {
         var id = element.id;
 
-        if (element.hasAttribute("juicytile")) {
+        if (element.isLoseGroup) {
+            id = element.id;
+        } else if (element.hasAttribute("juicytile")) {
             id = element.getAttribute("juicytile");
         } else if (element.classList.contains("juicy-tile") && element.parentNode && element.parentNode.tagName == "TD") {
             id = element.parentNode.id;
@@ -94,7 +96,36 @@
         }
 
         // Get Shadow DOM element for this tile.id.
-        return list.tiles[setup.id];
+        var element = list.tiles[setup.id];
+
+        if (!element && setup.items && setup.items.length) {
+            element = getGroupTiles(list, setup);
+        }
+
+        return element;
+    }
+
+    function getGroupTiles(list, setup) {
+        var tiles = [];
+
+        tiles.isLoseGroup = true;
+        tiles.id = setup.id;
+
+        setup.items.forEach(function (s) {
+            var el = list.tiles[s.id];
+
+            if (el) {
+                tiles.push(el);
+            } else if (s.items) {
+                var children = getGroupTiles(list, s);
+
+                children.forEach(function (child) {
+                    tiles.push(child);
+                });
+            }
+        });
+
+        return tiles;
     }
 
     function getNestedList(list, tileId, selectors) {
@@ -685,6 +716,19 @@
 
             return s.join("");
         },
+        getTile: function (id) {
+            var tile = this.selectedList.tiles[id];
+
+            if (tile) {
+                return tile;
+            }
+
+            var setup = getSetupItem(this.selectedList.setup, id);
+            
+            tile = getGroupTiles(this.selectedList, setup);
+
+            return tile;
+        },
         getSetupItem: function (tile) {
             var id = getTileId(tile);
             var setup = getSetupItem(this.selectedList.setup, id);
@@ -1148,7 +1192,7 @@
             this.push("breadcrumb", { list: this.selectedList, scope: this.selectedScope, name: name });
 
             if (setup.items && setup.items.length) {
-                var tile = this.selectedList.tiles[setup.id];
+                var tile = this.getTile(setup.id);
 
                 this.set("selectedScope", tile);
             } else {
@@ -1248,7 +1292,7 @@
 
             if (this.selectedScope) {
                 var id = getTileId(this.selectedScope);
-                var tile = this.selectedList.tiles[id];
+                var tile = this.getTile(id);
 
                 this.set("selectedScope", tile);
             }
@@ -1313,7 +1357,17 @@
             this.readSelectedSetup();
 
             if (this.selectedTiles.length) {
-                this.$.highlightTileSelected.show(this.selectedTiles);
+                var tiles = [];
+
+                this.selectedTiles.forEach(function (tile) {
+                    if (tile.isLoseGroup) {
+                        tiles = tiles.concat(tile);
+                    } else {
+                        tiles.push(tile);
+                    }
+                });
+
+                this.$.highlightTileSelected.show(tiles);
             }
         },
         selectedListChanged: function (newVal, oldVal) {
