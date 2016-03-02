@@ -1283,7 +1283,7 @@
 
             this.selectedTiles.forEach(function (t) {
                 var id = getTileId(t);
-                var tile = this.selectedList.tiles[id];
+                var tile = this.getTile(id);
 
                 tiles.push(tile);
             }.bind(this));
