@@ -1035,7 +1035,7 @@
         },
         selectTreeItem: function (e) {
             var setup = e.currentTarget.item;
-            var tile = this.selectedList.tiles[setup.id];
+            var tile = this.getTile(setup.id);
 
             this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
         },
