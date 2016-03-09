@@ -105,6 +105,18 @@
         return element;
     }
 
+    function getList(event, selectors) {
+        var list = null;
+
+        for (var i = 0; i < event.path.length; i++) {
+            if (isList(event.path[i], selectors)) {
+                list = event.path[i];
+            }
+        }
+
+        return list;
+    }
+
     function getGroupTiles(list, setup) {
         var tiles = [];
 
@@ -419,7 +431,7 @@
             },
             visible: { type: Boolean, value: null, notify: true },
             listSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
-            defaultSelectedListSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
+            //defaultSelectedListSelectors: { type: Array, value: ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"] },
             lists: { type: Array, value: [] },
             selectedTiles: { type: Array, value: [] },
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
@@ -449,13 +461,49 @@
         attached: function () {
             this.set("mediaScreen", this.mediaScreenRanges[this.mediaScreenRanges.length - 1]);
 
-            var lists = Array.prototype.slice.call(document.querySelectorAll(this.listSelectors.join(", ")));
+            var listsTree = [];
+            var lists = [];
+            var node = document.querySelector("body");
+            var getNodeLists = function (node, allLists) {
+                var lists = [];
+                var children = node.childNodes;
+
+                for (var i = 0; i < children.length; i++) {
+                    var child = children[i];
+
+                    if (isList(child, this.listSelectors)) {
+                        var item = {
+                            list: child,
+                            children: getNodeLists(child, allLists)
+                        };
+
+                        allLists.push(child);
+                        lists.push(item);
+                    } else {
+                        var items = getNodeLists(child, allLists);
+
+                        lists = lists.concat(items);
+                    }
+                }
+
+                return lists;
+            }.bind(this);
+
+            //var lists = Array.prototype.slice.call(document.querySelectorAll(this.listSelectors.join(", ")));
+
+            listsTree = getNodeLists(node, lists);
 
             this.onListMouseover = function (e) {
                 e.stopImmediatePropagation();
                 e.preventDefault();
 
-                var tile = getTile(e, this.selectedList, this.selectedScope);
+                var tile = null;
+
+                if (this.selectedList) {
+                    tile = getTile(e, this.selectedList, this.selectedScope);
+                } else {
+                    tile = getList(e, this.listSelectors);
+                }
 
                 if (tile) {
                     this.$.highlightTileRollover.show(tile);
@@ -469,21 +517,46 @@
                 e.stopImmediatePropagation();
                 e.preventDefault();
 
-                var tile = getTile(e, this.selectedList, this.selectedScope);
+                var tile = null;
+
+                if (this.selectedList) {
+                    tile = getTile(e, this.selectedList, this.selectedScope);
+                } else {
+                    tile = getList(e, this.listSelectors);
+                }
 
                 this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
             }.bind(this);
 
             this.onListDoubleClick = function (e) {
-                var tile = getTile(e, this.selectedList, this.selectedScope);
+                e.stopImmediatePropagation();
+                e.preventDefault();
+
+                var tile = null;
+
+                if (this.selectedList) {
+                    tile = getTile(e, this.selectedList, this.selectedScope);
+                } else {
+                    tile = getList(e, this.listSelectors);
+                }
 
                 if (!tile) {
                     return;
                 }
 
-                var id = getTileId(tile);
-                var setup = getSetupItem(this.selectedList.setup, id);
-                var isScope = this.getIsScopable(setup);
+                var id = null;
+                var setup = null;
+                var isScope = false;
+
+                if (this.selectedList) {
+                    id = getTileId(tile);
+                    setup = getSetupItem(this.selectedList.setup, id);
+                    isScope = this.getIsScopable(setup);
+                } else {
+                    id = tile.setup.id;
+                    setup = tile.setup;
+                    isScope = true;
+                }
 
                 if (isScope) {
                     clearSelection();
@@ -493,10 +566,16 @@
                 }
             }.bind(this);
 
+            this.onDocumentClick = function (e) {
+                this.scopeOut();
+            }.bind(this);
+
             this.set("lists", lists);
+            this.set("listsTree", listsTree);
 
             setTimeout(function () {
                 this.resetSelection();
+                this.attachEventListeners();
                 this.attachedCalled = true;
                 this.isReadingSetup = false;
             }.bind(this), 100);
@@ -514,21 +593,31 @@
         attachEventListeners: function () {
             this.detachEventListeners();
 
-            if (!this.selectedList) {
-                return;
+            var lists = null;
+
+            if (this.selectedList) {
+                lists = [this.selectedList];
+            } else {
+                lists = this.listsTree.map(function (item) {
+                    return item.list;
+                });
             }
 
-            var list = this.selectedList;
-            var shadow = list.shadowContainer;
+            for (var i = 0; i < lists.length; i++) {
+                var list = lists[i];
+                var shadow = list.shadowContainer;
 
-            list.addEventListener("mousemove", this.onListMouseover, true);
-            shadow.addEventListener("mousemove", this.onListMouseover, true);
+                list.addEventListener("mousemove", this.onListMouseover, true);
+                shadow.addEventListener("mousemove", this.onListMouseover, true);
 
-            list.addEventListener("click", this.onListClick, true);
-            shadow.addEventListener("click", this.onListClick, true);
+                list.addEventListener("click", this.onListClick, true);
+                shadow.addEventListener("click", this.onListClick, true);
 
-            list.addEventListener("dblclick", this.onListDoubleClick, true);
-            shadow.addEventListener("dblclick", this.onListDoubleClick, true);
+                list.addEventListener("dblclick", this.onListDoubleClick, true);
+                shadow.addEventListener("dblclick", this.onListDoubleClick, true);
+            }
+
+            document.addEventListener("click", this.onDocumentClick);
         },
         detachEventListeners: function () {
             this.lists.forEach(function (list) {
@@ -543,11 +632,13 @@
                 list.removeEventListener("dblclick", this.onListDoubleClick, true);
                 shadow.removeEventListener("dblclick", this.onListDoubleClick, true);
             }.bind(this));
+
+            document.removeEventListener("click", this.onDocumentClick);
         },
         getMediaButtonCss: function (selected, item) {
             var css = ["btn"];
 
-            if (selected == item) {
+            if (selected == item && this.selectedList) {
                 css.push("active");
             }
 
@@ -578,7 +669,7 @@
             for (var i = 0; i < tiles.length; i++) {
                 var tile = tiles[i];
 
-                if (tile.id == item.id) {
+                if (tile.id == item.id || tile.setup == item) {
                     css.push("selected");
                     break;
                 }
@@ -635,7 +726,13 @@
             return visible === false;
         },
         getSetupName: function (setup) {
-            return getSetupName(this.selectedList, setup, this.listSelectors);
+            if (this.selectedList) {
+                return getSetupName(this.selectedList, setup, this.listSelectors);
+            }
+
+            var list = this.getListPerSetup(setup);
+
+            return getSetupName(list, setup, this.listSelectors);
         },
         getCrumbName: function (item) {
             if (item.scope) {
@@ -659,7 +756,7 @@
         getCommonSetupValue: function (name) {
             var value = null;
 
-            if (this.selectedTiles.length) {
+            if (this.selectedList && this.selectedTiles.length) {
                 for (var i = 0; i < this.selectedTiles.length; i++) {
                     var tile = this.selectedTiles[i];
                     var id = tile.id;
@@ -677,8 +774,20 @@
                 var setup = getSetupItem(this.selectedList.setup, id);
 
                 value = setup[name];
-            } else {
+            } else if (this.selectedList) {
                 value = this.selectedList.setup[name];
+            } else if (this.selectedTiles.length) {
+                for (var i = 0; i < this.selectedTiles.length; i++) {
+                    var tile = this.selectedTiles[i];
+                    var setup = tile.setup;
+                    var v = setup[name];
+
+                    if (i > 0 && value !== v) {
+                        return notAvailable;
+                    }
+
+                    value = v;
+                }
             }
 
             if (value === undefined) {
@@ -716,24 +825,48 @@
 
             return s.join("");
         },
-        getTile: function (id) {
-            var tile = this.selectedList.tiles[id];
+        // function getTile(id) or getTile(list, id)
+        getTile: function () {
+            var id;
+            var list;
+            
+            if (arguments.length == 1) {
+                id = arguments[0];
+                list = this.selectedList;
+            } else {
+                id = arguments[1];
+                list = arguments[0];
+            }
+
+            var tile = list.tiles[id];
 
             if (tile) {
                 return tile;
             }
 
-            var setup = getSetupItem(this.selectedList.setup, id);
+            var setup = getSetupItem(list.setup, id);
             
-            tile = getGroupTiles(this.selectedList, setup);
+            tile = getGroupTiles(list, setup);
 
             return tile;
         },
         getSetupItem: function (tile) {
+            // juicy-tile-list/grid/table
+            if (tile.setup) {
+                return tile.setup;
+            }
+
             var id = getTileId(tile);
             var setup = getSetupItem(this.selectedList.setup, id);
 
             return setup;
+        },
+        getListPerSetup: function (setup) {
+            for (var i = 0; i < this.lists.length; i++) {
+                if (this.lists[i].setup == setup) {
+                    return this.lists[i];
+                }
+            }
         },
         setCommonSetupValue: function (name, value) {
             if (value === notAvailable || this.isReadingSetup) {
@@ -1034,12 +1167,19 @@
             this.touch();
         },
         selectTreeItem: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
             var setup = e.currentTarget.item;
-            var tile = this.getTile(setup.id);
+            var list = this.selectedList || this.getListPerSetup(setup);
+            var tile = this.getTile(list, setup.id);
 
             this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
         },
         scopeInTreeItem: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
             var setup = e.currentTarget.item;
 
             if (this.getIsScopable(setup)) {
@@ -1047,6 +1187,9 @@
             }
         },
         toggleTreeItem: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
             var setup = e.currentTarget.item;
             var index = this.selectedScopeItems.indexOf(setup);
 
@@ -1159,12 +1302,16 @@
             this.set("showTree", true);
         },
         resetSelection: function () {
-            var list = document.querySelector(this.defaultSelectedListSelectors.join(", "));
+            /*var list = document.querySelector(this.defaultSelectedListSelectors.join(", "));
 
             if (this.lists.indexOf(list) < 0) {
                 console.error("Invalid defaultSelectedListSelectors value. The list does not match the listSelectors.",
                     this.defaultSelectedListSelectors, this.listSelectors, list);
-            }
+            }*/
+
+            var lists = this.listsTree.map(function (item) {
+                return item.list;
+            });
 
             if (this.selectedTiles.length) {
                 this.set("selectedTiles", []);
@@ -1173,13 +1320,25 @@
             this.set("selectedScope", null);
             this.set("breadcrumb", []);
             this.set("selectedList", null);
-            this.set("selectedList", list);
+
+            if (lists.length == 1) {
+                this.set("selectedList", lists[0]);
+            }
 
             this.refreshSelectedScopeItems();
             this.readSelectedSetup();
             this.refreshHighlightSelectedScope();
         },
         scopeIn: function (setup) {
+            if (!this.selectedList) {
+                var list = this.getListPerSetup(setup);
+
+                this.set("selectedTiles", []);
+                this.set("selectedScope", null);
+                this.set("selectedList", list);
+                return;
+            }
+
             var name = getSetupItem(this.selectedList, this.selectedList);
 
             if (this.selectedScope) {
@@ -1210,6 +1369,9 @@
         },
         scopeOut: function () {
             if (!this.breadcrumb.length) {
+                this.set("selectedTiles", []);
+                this.set("selectedScope", null);
+                this.set("selectedList", null);
                 return;
             }
 
@@ -1268,13 +1430,17 @@
                 var setup = this.getSetupItem(this.selectedScope);
 
                 items = setup.items.slice();
+                items.sort(sortByPriorityDesc);
             } else if (this.selectedList) {
                 items = this.selectedList.setup.items.slice();
+                items.sort(sortByPriorityDesc);
+            } else if (this.listsTree) {
+                items = this.listsTree.map(function (item) {
+                    return item.list.setup;
+                });
             } else {
                 items = [];
             }
-
-            items.sort(sortByPriorityDesc);
 
             this.set("selectedScopeItems", items);
         },
@@ -1306,6 +1472,12 @@
                 this.$.highlightScopeSelected.show(this.selectedScope);
             } else if (this.selectedList) {
                 this.$.highlightScopeSelected.show(this.selectedList);
+            } else if(this.listsTree) {
+                var lists = this.listsTree.map(function (item) {
+                    return item.list;
+                });
+
+                this.$.highlightScopeSelected.show(lists);
             }
         },
         saveSetup: function () {
@@ -1371,7 +1543,7 @@
             }
         },
         selectedListChanged: function (newVal, oldVal) {
-            if (!newVal) {
+            if (!newVal && !this.listsTree) {
                 return;
             }
 
