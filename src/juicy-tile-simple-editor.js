@@ -516,11 +516,11 @@
                 var tile = null;
 
                 if (this.selectedList) {
-                    tile = getTile(e, this.selectedList, this.selectedScope);
+                    tile = this.getEventTile(e);
                 }
 
                 if (!tile) {
-                    tile = this.getList(e);
+                    tile = this.getEventList(e);
                 }
 
                 if (tile) {
@@ -538,11 +538,11 @@
                 var tile = null;
 
                 if (this.selectedList) {
-                    tile = getTile(e, this.selectedList, this.selectedScope);
+                    tile = this.getEventTile(e);
                 }
 
                 if (!tile) {
-                    tile = this.getList(e);
+                    tile = this.getEventList(e);
                 }
 
                 this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
@@ -555,11 +555,11 @@
                 var tile = null;
 
                 if (this.selectedList) {
-                    tile = getTile(e, this.selectedList, this.selectedScope);
+                    tile = this.getEventTile(e);
                 }
 
                 if (!tile) {
-                    tile = this.getList(e);
+                    tile = this.getEventList(e);
                 }
 
                 if (!tile) {
@@ -890,7 +890,10 @@
 
             return tile;
         },
-        getList: function (e) {
+        getEventTile: function (e) {
+            return getTile(e, this.selectedList, this.selectedScope);
+        },
+        getEventList: function (e) {
             return getList(e, this.selectedScope || this.selectedList, this.listSelectors);
         },
         getSetupItem: function (tile) {
