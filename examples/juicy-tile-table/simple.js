@@ -3,7 +3,7 @@ var model = {
     editingMode: true,
     setup: {
         gutter: 10,
-        width: 1200,
+        width: 480,
         direction: "horizontal",
         items: [
             {
@@ -66,7 +66,7 @@ var model = {
     },
     nestedSetup: {
         gutter: 10,
-        width: 1200,
+        width: 480,
         direction: "horizontal",
         items: [
             { width: "100%", widthFlexible: true, id: 0, hidden: false, heightDynamic: true, height: 1, priority: 1 },
@@ -75,8 +75,20 @@ var model = {
     }
 };
 
-model.setupCopy = JSON.parse(JSON.stringify(model.setup));
-model.nestedSetupCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.setupLeft = JSON.parse(JSON.stringify(model.setup));
+model.setupLeftCopy = JSON.parse(JSON.stringify(model.setup));
+model.nestedSetup0Left = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0LeftCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1Left = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1LeftCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+
+model.setupRight = JSON.parse(JSON.stringify(model.setup));
+model.setupRightCopy = JSON.parse(JSON.stringify(model.setup));
+model.nestedSetup0Right = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0RightCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1Right = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1RightCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+
 template.model = model;
 
 template.closeEditor = function () {

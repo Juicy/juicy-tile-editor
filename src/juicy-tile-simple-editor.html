@@ -24,7 +24,7 @@
                 </div>
                 <div class="editor-form-section media-section">
                     <template is="dom-repeat" items="{{mediaScreenRanges}}">
-                        <button type="button" class$="{{getMediaButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}">
+                        <button type="button" class$="{{getMediaButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}" disabled="{{!selectedList}}">
                             <span>{{item.width}}</span><span>px</span>
                         </button>
                     </template>
@@ -80,7 +80,7 @@
                 </div>
                 <div class="editor-form-section media-section">
                     <template is="dom-repeat" items="{{mediaScreenRanges}}">
-                        <button type="button" class$="{{getMediaButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}">
+                        <button type="button" class$="{{getMediaButtonCss(mediaScreen, item)}}" item="{{item}}" on-click="selectMediaScreen" title="{{item.name}}" disabled="{{!selectedList}}">
                             <span>{{item.width}}</span><span>px</span>
                         </button>
                     </template>
@@ -89,9 +89,9 @@
                     <label>Gutter</label>
                     <div class="gutter-border"></div>
                     <div class="btn-group">
-                        <input type="text" value="{{gutter::change}}" disabled$="{{!selectedList}}" />
-                        <button class="btn-range" disabled$="{{!selectedList}}" on-click="gutterPlus">+</button>
-                        <button class="btn-range" disabled$="{{!selectedList}}" on-click="gutterMinus">-</button>
+                        <input type="text" value="{{gutter::change}}" disabled$="{{!getIsGutterable(selectedList, selectedScope)}}" />
+                        <button class="btn-range" disabled$="{{!getIsGutterable(selectedList, selectedScope)}}" on-click="gutterPlus">+</button>
+                        <button class="btn-range" disabled$="{{!getIsGutterable(selectedList, selectedScope)}}" on-click="gutterMinus">-</button>
                     </div>
                     <div class="gutter-border"></div>
                 </div>
