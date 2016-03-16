@@ -520,7 +520,7 @@
                 }
 
                 if (!tile) {
-                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
+                    tile = this.getList(e);
                 }
 
                 if (tile) {
@@ -542,7 +542,7 @@
                 }
 
                 if (!tile) {
-                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
+                    tile = this.getList(e);
                 }
 
                 this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
@@ -559,7 +559,7 @@
                 }
 
                 if (!tile) {
-                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
+                    tile = this.getList(e);
                 }
 
                 if (!tile) {
@@ -889,6 +889,9 @@
             tile = getGroupTiles(list, setup);
 
             return tile;
+        },
+        getList: function (e) {
+            return getList(e, this.selectedScope || this.selectedList, this.listSelectors);
         },
         getSetupItem: function (tile) {
             // juicy-tile-list/grid/table
