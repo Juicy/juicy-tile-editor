@@ -77,13 +77,17 @@ var model = {
 
 model.setupLeft = JSON.parse(JSON.stringify(model.setup));
 model.setupLeftCopy = JSON.parse(JSON.stringify(model.setup));
-model.nestedSetupLeft = JSON.parse(JSON.stringify(model.nestedSetup));
-model.nestedSetupLeftCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0Left = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0LeftCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1Left = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1LeftCopy = JSON.parse(JSON.stringify(model.nestedSetup));
 
 model.setupRight = JSON.parse(JSON.stringify(model.setup));
 model.setupRightCopy = JSON.parse(JSON.stringify(model.setup));
-model.nestedSetupRight = JSON.parse(JSON.stringify(model.nestedSetup));
-model.nestedSetupRightCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0Right = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup0RightCopy = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1Right = JSON.parse(JSON.stringify(model.nestedSetup));
+model.nestedSetup1RightCopy = JSON.parse(JSON.stringify(model.nestedSetup));
 
 template.model = model;
 

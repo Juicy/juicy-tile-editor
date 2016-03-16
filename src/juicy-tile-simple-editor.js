@@ -105,13 +105,25 @@
         return element;
     }
 
-    function getList(event, selectors) {
+    function getList(event, scope, selectors) {
         var list = null;
+        var inScope = !scope;
 
         for (var i = 0; i < event.path.length; i++) {
-            if (isList(event.path[i], selectors)) {
-                list = event.path[i];
+            var el = event.path[i];
+
+            if (el == scope) {
+                inScope = true;
+                break;
             }
+
+            if (isList(el, selectors)) {
+                list = el;
+            }
+        }
+
+        if (!inScope) {
+            return null;
         }
 
         return list;
@@ -140,12 +152,16 @@
         return tiles;
     }
 
-    function getNestedList(list, tileId, selectors) {
+    function getNestedLists(list, tileId, selectors) {
         var selector = selectors.map(function (s) {
             return "[juicytile='" + tileId + "'] " + s;
         }).join(", ");
 
-        return list.querySelector(selector);
+        var lists = list.querySelectorAll(selector);
+
+        lists = Array.prototype.slice.call(lists);
+
+        return lists;
     }
 
     function getSetupItem(setup, id) {
@@ -501,8 +517,10 @@
 
                 if (this.selectedList) {
                     tile = getTile(e, this.selectedList, this.selectedScope);
-                } else {
-                    tile = getList(e, this.listSelectors);
+                }
+
+                if (!tile) {
+                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
                 }
 
                 if (tile) {
@@ -521,8 +539,10 @@
 
                 if (this.selectedList) {
                     tile = getTile(e, this.selectedList, this.selectedScope);
-                } else {
-                    tile = getList(e, this.listSelectors);
+                }
+
+                if (!tile) {
+                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
                 }
 
                 this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
@@ -536,8 +556,10 @@
 
                 if (this.selectedList) {
                     tile = getTile(e, this.selectedList, this.selectedScope);
-                } else {
-                    tile = getList(e, this.listSelectors);
+                }
+
+                if (!tile) {
+                    tile = getList(e, this.selectedScope || this.selectedList, this.listSelectors);
                 }
 
                 if (!tile) {
@@ -548,7 +570,11 @@
                 var setup = null;
                 var isScope = false;
 
-                if (this.selectedList) {
+                if (tile.setup) {
+                    id = tile.setup.id;
+                    setup = tile.setup;
+                    isScope = true;
+                } else if (this.selectedList) {
                     id = getTileId(tile);
                     setup = getSetupItem(this.selectedList.setup, id);
                     isScope = this.getIsScopable(setup);
@@ -568,6 +594,11 @@
 
             this.onDocumentClick = function (e) {
                 this.scopeOut();
+            }.bind(this);
+
+            this.onClick = function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
             }.bind(this);
 
             this.set("lists", lists);
@@ -618,6 +649,7 @@
             }
 
             document.addEventListener("click", this.onDocumentClick);
+            this.addEventListener("click", this.onClick);
         },
         detachEventListeners: function () {
             this.lists.forEach(function (list) {
@@ -634,6 +666,7 @@
             }.bind(this));
 
             document.removeEventListener("click", this.onDocumentClick);
+            this.removeEventListener("click", this.onClick);
         },
         getMediaButtonCss: function (selected, item) {
             var css = ["btn"];
@@ -706,7 +739,14 @@
                 return true;
             }
 
-            return !!getNestedList(this.selectedList, item.id, this.listSelectors);
+            return getNestedLists(this.selectedList, item.id, this.listSelectors).length;
+        },
+        getIsGutterable: function (list, scope) {
+            if (!scope) {
+                return !!list;
+            }
+
+            return !!scope.items;
         },
         getIsGroupSelection: function (tiles) {
             for (var i = 0; i < tiles.length; i++) {
@@ -760,7 +800,7 @@
                 for (var i = 0; i < this.selectedTiles.length; i++) {
                     var tile = this.selectedTiles[i];
                     var id = tile.id;
-                    var setup = getSetupItem(this.selectedList.setup, id);
+                    var setup = tile.setup || getSetupItem(this.selectedList.setup, id);
                     var v = setup[name];
 
                     if (i > 0 && value !== v) {
@@ -938,11 +978,13 @@
 
             if (this.selectedScope) {
                 setup = this.getSetupItem(this.selectedScope);
-            } else {
+            }
+
+            if (!setup || !setup.items) {
                 setup = this.selectedList.setup;
             }
 
-            this.set("gutter", setup.gutter);
+            this.set("gutter", setup.gutter || 0);
         },
         readPrimitiveSetupValues: function () {
             var names = ["background", "oversize", "outline", "direction", "content", "width", "height", "widthFlexible", "widthDynamic",
@@ -1171,7 +1213,7 @@
             e.stopImmediatePropagation();
 
             var setup = e.currentTarget.item;
-            var list = this.selectedList || this.getListPerSetup(setup);
+            var list = this.getListPerSetup(setup) || this.selectedList;
             var tile = this.getTile(list, setup.id);
 
             this.toggleSelectedTile(e.ctrlKey || e.metaKey, tile);
@@ -1330,16 +1372,18 @@
             this.refreshHighlightSelectedScope();
         },
         scopeIn: function (setup) {
+            this.set("selectedTiles", []);
+
             if (!this.selectedList) {
                 var list = this.getListPerSetup(setup);
-
-                this.set("selectedTiles", []);
+                
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
                 return;
             }
 
-            var name = getSetupItem(this.selectedList, this.selectedList);
+            var name = getFullSetupName(this.selectedList, this.selectedList.setup, this.listSelectors);
+            var tile = this.getTile(setup.id);
 
             if (this.selectedScope) {
                 var s = this.getSetupItem(this.selectedScope);
@@ -1350,19 +1394,21 @@
             this.set("selectedTiles", []);
             this.push("breadcrumb", { list: this.selectedList, scope: this.selectedScope, name: name });
 
-            if (setup.items && setup.items.length) {
-                var tile = this.getTile(setup.id);
+            var list = this.getListPerSetup(setup);
 
+            if (list) {
+                this.set("selectedScope", null);
+                this.set("selectedList", list);
+            } else if (setup.items && setup.items.length) {
                 this.set("selectedScope", tile);
             } else {
-                var list = getNestedList(this.selectedList, setup.id, this.listSelectors);
+                var lists = getNestedLists(this.selectedList, setup.id, this.listSelectors);
 
-                if (!list) {
+                if (!lists.length) {
                     throw "Cannot scope in to this tile!";
                 }
 
-                this.set("selectedScope", null);
-                this.set("selectedList", list);
+                this.set("selectedScope", tile);
             }
 
             this.readSelectedSetup();
@@ -1429,8 +1475,14 @@
             if (this.selectedScope) {
                 var setup = this.getSetupItem(this.selectedScope);
 
-                items = setup.items.slice();
-                items.sort(sortByPriorityDesc);
+                if (setup.items) {
+                    items = setup.items.slice();
+                    items.sort(sortByPriorityDesc);
+                } else {
+                    items = getNestedLists(this.selectedList, setup.id, this.listSelectors).map(function (it) {
+                        return it.setup;
+                    });
+                }
             } else if (this.selectedList) {
                 items = this.selectedList.setup.items.slice();
                 items.sort(sortByPriorityDesc);
