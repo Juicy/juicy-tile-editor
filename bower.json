@@ -25,6 +25,7 @@
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
     "juicy-tile-list":  ">=1.1.0",
     "juicy-tile-grid":  ">=1.1.0",
-    "juicy-tile-table":  "tomalec/juicy-tile-table#gh-pages"
+    "juicy-tile-table":  "tomalec/juicy-tile-table#gh-pages",
+    "web-component-tester": "^4.0.0"
   }
 }

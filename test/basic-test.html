@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html" />
+    <link rel="import" href="../src/juicy-tile-simple-editor.html" />
+</head>
+<body>
+
+    <test-fixture id="editor-form-fixture">
+        <template>
+            <div style="padding: 0px; margin: 0px;">
+                <template is="dom-bind">
+                    <juicy-tile-simple-editor></juicy-tile-simple-editor>
+                    <juicy-tile-table id="table-0" setup="{{model.setup0}}" defaultsetup="{{model.setupCopy}}">
+                        <div class="tile-0">tile-00</div>
+                        <div class="tile-1">tile-01</div>
+                    </juicy-tile-table>
+                    <juicy-tile-table id="table-1" setup="{{model.setup1}}" defaultsetup="{{model.setupCopy}}">
+                        <div class="tile-0">tile-10</div>
+                        <div class="tile-1">tile-11</div>
+                    </juicy-tile-table>
+                </template>
+                <script>
+                    (function () {
+                        var script = document._currentScript || document.currentScript;
+                        var tempalte = script.previousElementSibling;
+                        var setup = {
+                            gutter: 0,
+                            width: 480,
+                            direction: "horizontal",
+                            items: [
+                                { width: "100%", widthFlexible: true, id: 0, hidden: false, heightDynamic: true, height: 1, priority: 1 },
+                                { width: "100%", widthFlexible: true, id: 1, hidden: false, heightDynamic: true, height: 1, priority: 0.9 }
+                            ]
+                        };
+
+                        tempalte.model = {
+                            setup0: JSON.parse(JSON.stringify(setup)),
+                            setup1: JSON.parse(JSON.stringify(setup)),
+                            setupCopy: JSON.parse(JSON.stringify(setup))
+                        };
+                    })();
+                </script>
+            </div>
+        </template>
+    </test-fixture>
+
+    <script>
+        var page = {
+            width: 1000
+        };
+
+        function fireEvent(obj, evt, ctrl) {
+            var fireOnThis = obj;
+
+            if (document.createEvent) {
+                //var evObj = document.createEvent(evt.indexOf("mouse") > -1 ? "MouseEvents" : "KeyboardEvent");
+                var evObj = document.createEvent("MouseEvents", { ctrlKey: true });
+                evObj.ctrlKey = !!ctrl;
+                evObj.initEvent(evt, true, false);
+                fireOnThis.dispatchEvent(evObj);
+
+            } else if (document.createEventObject) {
+                var evObj = document.createEventObject();
+                evObj.ctrlKey = !!ctrl;
+                fireOnThis.fireEvent("on" + evt, evObj);
+            }
+        }
+
+        //Required to trigger fast-json-patch dirty checking
+        function fireClickEvent() {
+            var body = document.querySelector("body");
+            fireEvent(document.documentElement, "mouseup");
+        }
+
+        function click(element, timeout) {
+            if (!timeout) {
+                element.click();
+                return;
+            }
+
+            setTimeout(function () {
+                click(element);
+            }, timeout);
+        }
+
+        function dblclick(element, timeout) {
+            if (!timeout) {
+                fireEvent(element, "dblclick");
+                return;
+            }
+
+            setTimeout(function () {
+                dblclick(element);
+            }, timeout);
+        }
+
+        function ctrlClick(element, timeout) {
+            if (!timeout) {
+                console.error("ctrlClick is not implemented");
+                return;
+            }
+
+            setTimeout(function () {
+                ctrlClick(element);
+            }, timeout);
+        }
+
+        suite("<juicy-tile-simple-editor>", function () {
+            var fix;
+            var editor;
+            var table0;
+            var table1;
+            var div00, div01, div10, div11;
+            var td00, td01, td10, td11;
+
+            setup(function () {
+                fix = fixture("editor-form-fixture");
+                editor = fix.querySelector("juicy-tile-simple-editor");
+
+                table0 = fix.querySelector("juicy-tile-table#table-0");
+                table1 = fix.querySelector("juicy-tile-table#table-1");
+
+                div00 = table0.querySelector("div.tile-0");
+                div01 = table0.querySelector("div.tile-1");
+                div10 = table1.querySelector("div.tile-0");
+                div11 = table1.querySelector("div.tile-1");
+
+                td00 = function () { return Polymer.dom(table0.shadowRoot).querySelector("td[id='0']"); }
+                td01 = function () { return Polymer.dom(table0.shadowRoot).querySelector("td[id='1']"); }
+                td10 = function () { return Polymer.dom(table1.shadowRoot).querySelector("td[id='0']"); }
+                td11 = function () { return Polymer.dom(table1.shadowRoot).querySelector("td[id='1']"); }
+
+                fix.style.width = page.width + "px";
+
+                setTimeout(function () {
+                    editor.set("showTree", true);
+                }, 10);
+            });
+
+            test("finds all <juicy-tile-table> on the page", function () {
+                assert.equal(editor.lists[0], table0);
+                assert.equal(editor.lists[1], table1);
+            });
+
+            test("hides and shows sidebar", function (done) {
+                setTimeout(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
+                    click(btn);
+                }, 100);
+
+                setTimeout(function () {
+                    var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
+
+                    assert.equal(tree.style.display, "none");
+                    click(btn, 25);
+                }, 150);
+
+                setTimeout(function () {
+                    var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
+
+                    assert.equal(tree.style.display, "");
+                    done();
+                }, 200);
+            });
+
+            test("selects <juicy-tile-table> on click", function (done) {
+                click(table0, 100);
+
+                setTimeout(function () {
+                    assert.equal(editor.selectedTiles[0], table0);
+                    done();
+                }, 200);
+            });
+
+            test("scopes into <juicy-tile-table> on double click", function (done) {
+                dblclick(table0, 100);
+
+                setTimeout(function () {
+                    assert.equal(editor.selectedTiles.length, 0);
+                    assert.equal(editor.selectedList, table0);
+                    done();
+                }, 200);
+            });
+
+            test("selects a tile on click", function (done) {
+                dblclick(table0, 100);
+                click(div00, 150);
+
+                setTimeout(function () {
+                    assert.equal(editor.selectedTiles.length, 1);
+                    assert.equal(editor.selectedTiles[0], td00());
+                    done();
+                }, 200);
+            });
+
+            test("selects another tile on click", function (done) {
+                dblclick(table0, 100);
+                click(div00, 125);
+                click(div01, 150);
+
+                setTimeout(function () {
+                    assert.equal(editor.selectedTiles.length, 1);
+                    assert.equal(editor.selectedTiles[0], td01());
+                    done();
+                }, 200);
+            });
+
+            //test("selects multiple tiles on ctrl + click", function (done) {
+            //    dblclick(table0, 100);
+            //    click(div00, 125);
+            //    ctrlClick(div01, 150);
+
+            //    setTimeout(function () {
+            //        assert.equal(editor.selectedTiles.length, 2);
+            //        assert.equal(editor.selectedTiles[0], td00());
+            //        assert.equal(editor.selectedTiles[1], td01());
+            //        done();
+            //    }, 200);
+            //});
+
+            test("changes width of a tile", function (done) {
+                dblclick(table0, 100);
+                click(div00, 125);
+
+                setTimeout(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
+                    click(btn);
+                }, 150);
+                
+                setTimeout(function () {
+                    var rec = div00.getBoundingClientRect();
+                    assert.equal(page.width / 2, rec.width);
+                    done();
+                }, 200);
+            });
+
+            test("changes priority of a tile", function (done) {
+                dblclick(table0, 100);
+                click(div00, 125);
+
+                setTimeout(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
+                    click(btn);
+                }, 150);
+
+                setTimeout(function () {
+                    var td = Polymer.dom(table0.shadowRoot).querySelector("td");
+                    var id = td.id;
+                    assert.equal(id, 1);
+                    done();
+                }, 200);
+            });
+
+            test("hides a tile", function (done) {
+                dblclick(table0, 100);
+                click(div00, 125);
+
+                setTimeout(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
+                    click(btn);
+                }, 150);
+
+                setTimeout(function () {
+                    var tds = Polymer.dom(table0.shadowRoot).querySelectorAll("td");
+                    assert.equal(tds.length, 1);
+                    assert.equal(tds[0].id, 1);
+                    done();
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
