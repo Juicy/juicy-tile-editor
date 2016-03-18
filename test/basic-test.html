@@ -81,7 +81,7 @@
 
             test("finds all <juicy-tile-table> on the page", function () {
                 tables.forEach(function (t, i) {
-                    expect(editor.lists[i]).to.equal(t);
+                    expect(editor.lists).to.contain(t);
                 });
             });
 
