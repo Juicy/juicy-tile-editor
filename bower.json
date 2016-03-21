@@ -19,14 +19,13 @@
     "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
     "juicy-popover": "Juicy/juicy-popover#gh-pages",
     "juicy-color-picker": "Juicy/juicy-color-picker#gh-pages",
-    "juicy-draggable": "Juicy/juicy-draggable#gh-pages",
-    "juicy-tile-table": "Juicy/juicy-tile-table#gh-pages"
+    "juicy-draggable": "Juicy/juicy-draggable#gh-pages"
   },
   "devDependencies": {
     "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
-    "juicy-tile-list":  ">=1.1.0",
-    "juicy-tile-grid":  ">=1.1.0",
-    "juicy-tile-table":  "tomalec/juicy-tile-table#gh-pages",
+    "juicy-tile-list": ">=1.1.0",
+    "juicy-tile-grid": ">=1.1.0",
+    "juicy-tile-table": ">=0.0.5",
     "web-component-tester": "^4.0.0"
   }
 }
