@@ -91,3 +91,17 @@ JuicyTileTableWrapper.prototype.tile = function (id) {
 JuicyTileTableWrapper.prototype.nthTile = function (n) {
     return getNthTile(this.table, IDBCursor);
 };
+
+JuicyTileTableWrapper.prototype.setup = function (id) {
+    var items = this.table.setup.items;
+
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+
+        if (item.id == id) {
+            return item;
+        }
+    }
+
+    return null;
+};

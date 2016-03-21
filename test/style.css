@@ -1,0 +1,12 @@
+﻿html,
+body,
+#body,
+juicy-tile-table {
+    padding: 0px;
+    margin: 0px;
+    width: 1000px;
+}
+
+div.tile {
+    height: 500px;
+}

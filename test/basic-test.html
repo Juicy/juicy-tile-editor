@@ -9,45 +9,34 @@
 
     <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html" />
     <link rel="import" href="../src/juicy-tile-simple-editor.html" />
+
+    <link rel="stylesheet" href="style.css" />
+    <script src="juicy-tile-setup.js"></script>
 </head>
 <body>
-
     <test-fixture id="editor-form-fixture">
         <template>
-            <div style="padding: 0px; margin: 0px;">
+            <div id="body" style="padding: 0px; margin: 0px;">
                 <template is="dom-bind">
                     <juicy-tile-simple-editor></juicy-tile-simple-editor>
                     <juicy-tile-table id="table-0" setup="{{model.setup0}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile-0">tile-00</div>
-                        <div class="tile-1">tile-01</div>
+                        <div class="tile">tile-00</div>
+                        <div class="tile">tile-01</div>
                     </juicy-tile-table>
                     <juicy-tile-table id="table-1" setup="{{model.setup1}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile-0">tile-10</div>
-                        <div class="tile-1">tile-11</div>
+                        <div class="tile">tile-10</div>
+                        <div class="tile">tile-11</div>
                     </juicy-tile-table>
                 </template>
                 <script>
-                    (function () {
-                        var script = document._currentScript || document.currentScript;
-                        var tempalte = script.previousElementSibling;
-                        var setup = function () {
-                            return JSON.parse(JSON.stringify({
-                                gutter: 0,
-                                width: 480,
-                                direction: "horizontal",
-                                items: [
-                                    { width: "100%", widthFlexible: true, id: 0, hidden: false, heightDynamic: true, height: 1, priority: 1 },
-                                    { width: "100%", widthFlexible: true, id: 1, hidden: false, heightDynamic: true, height: 1, priority: 0.9 }
-                                ]
-                            }));
-                        };
+                    var script = document._currentScript || document.currentScript;
+                    var tempalte = script.previousElementSibling;
 
-                        tempalte.model = {
-                            setup0: setup(),
-                            setup1: setup(),
-                            setupCopy: setup()
-                        };
-                    })();
+                    tempalte.model = {
+                        setup0: getJuicyTileSetup(),
+                        setup1: getJuicyTileSetup(),
+                        setupCopy: getJuicyTileSetup()
+                    };
                 </script>
             </div>
         </template>
@@ -55,11 +44,7 @@
 
     <script src="helpers.js"></script>
     <script>
-        var page = {
-            width: 1000
-        };
-
-        suite("<juicy-tile-simple-editor>", function () {
+        suite("basic editor features test", function () {
             var fix;
             var editor;
             var tables;
@@ -71,8 +56,6 @@
 
                 tables = Array.prototype.slice.call(fix.querySelectorAll("juicy-tile-table"));
                 tw = new JuicyTileTableWrapper(tables[0]);
-
-                fix.style.width = page.width + "px";
 
                 setTimeout(function () {
                     editor.set("showTree", true);
@@ -168,55 +151,6 @@
                     done();
                 }, 200);
             });*/
-
-            test("changes width of a tile on width button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
-                    click(btn);
-                }, 150);
-                
-                setTimeout(function () {
-                    var rec = tw.tile(0).getBoundingClientRect();
-                    expect(rec.width).to.be.equal(page.width / 2);
-                    done();
-                }, 200);
-            });
-
-            test("changes priority of a tile on priority arrow button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var td = tw.nthCell(1);
-                    expect(td).to.have.property("id", "1");
-                    done();
-                }, 200);
-            });
-
-            test("hides a tile on eye button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var tds = tw.cells();
-                    expect(tds).to.have.length(1);
-                    expect(tds[0]).to.have.property("id", "1");
-                    done();
-                }, 200);
-            });
         });
     </script>
 </body>
