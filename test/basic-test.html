@@ -63,7 +63,7 @@
             });
 
             test("finds all <juicy-tile-table> on the page", function () {
-                expect(editor.lists).to.deep.equal(tables);
+                expect(editor.lists).to.contain.members(tables);
             });
 
             test("hides and shows sidebar", function (done) {
