@@ -44,19 +44,19 @@
 
     <script src="helpers.js"></script>
     <script>
-        suite("light dom test", function () {
+        describe("light dom test", function () {
             var fix;
             var editor;
             var tw;
 
-            setup(function () {
+            beforeEach(function () {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
 
                 tw = new JuicyTileTableWrapper(fix.querySelector("juicy-tile-table"));
             });
 
-            test("changes width of a tile on width button click", function (done) {
+            it("changes width of a tile on width button click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 125);
 
@@ -72,7 +72,7 @@
                 }, 200);
             });
 
-            test("changes priority of a tile on priority arrow button click", function (done) {
+            it("changes priority of a tile on priority arrow button click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 125);
 
@@ -94,7 +94,7 @@
                 }, 200);
             });
 
-            test("hides a tile on eye button click", function (done) {
+            it("hides a tile on eye button click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 125);
 

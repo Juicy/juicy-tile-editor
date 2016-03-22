@@ -46,14 +46,14 @@
 
     <script src="helpers.js"></script>
     <script>
-        suite("basic editor features test", function () {
+        describe("basic editor features test", function () {
             var fix;
             var editor;
             var tables;
             var tw;
             var highlight;
 
-            setup(function () {
+            beforeEach(function () {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
                 highlight = fix.querySelector("juicy-highlight#test-highlight");
@@ -66,15 +66,15 @@
                 }, 10);
             });
 
-            test("finds all <juicy-tile-table> on the page", function () {
+            it("finds all <juicy-tile-table> on the page", function () {
                 expect(editor.lists).to.contain.members(tables);
             });
 
-            test("hides and shows sidebar", function (done) {
+            it("hides and shows sidebar", function (done) {
                 setTimeout(function () {
                     var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
                     click(btn);
-                }, 100);
+                }, 500);
 
                 setTimeout(function () {
                     var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
@@ -82,17 +82,17 @@
 
                     expect(tree).to.have.deep.property("style.display", "none");
                     click(btn, 25);
-                }, 150);
+                }, 1000);
 
                 setTimeout(function () {
                     var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
 
                     expect(tree).to.have.deep.property("style.display", "");
                     done();
-                }, 200);
+                }, 1500);
             });
 
-            test("selects <juicy-tile-table> on click", function (done) {
+            it("selects <juicy-tile-table> on click", function (done) {
                 click(tw.table, 100);
 
                 setTimeout(function () {
@@ -101,7 +101,7 @@
                 }, 200);
             });
 
-            test("highlights selected <juicy-tile-table>", function (done) {
+            it("highlights selected <juicy-tile-table>", function (done) {
                 click(tw.table, 100);
 
                 setTimeout(function () {
@@ -109,13 +109,13 @@
 
                     var a = editor.$.highlightTileSelected.getSvg().querySelector("path").getAttribute("d");
                     var b = highlight.getSvg().querySelector("path").getAttribute("d");
-                    
+
                     expect(a).to.equal(b);
                     done();
                 }, 150);
             });
 
-            test("removes all highlights when detached", function (done) {
+            it("removes all highlights when detached", function (done) {
                 click(tw.table, 100);
                 dblclick(tw.table, 125);
                 click(tw.tile(0), 150);
@@ -131,7 +131,7 @@
                 }, 400);
             });
 
-            test("scopes into <juicy-tile-table> on double click", function (done) {
+            it("scopes into <juicy-tile-table> on double click", function (done) {
                 dblclick(tw.table, 100);
 
                 setTimeout(function () {
@@ -141,7 +141,7 @@
                 }, 200);
             });
 
-            test("selects a tile on click", function (done) {
+            it("selects a tile on click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 150);
 
@@ -154,7 +154,7 @@
                 }, 200);
             });
 
-            test("selects another tile on click", function (done) {
+            it("selects another tile on click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 125);
                 click(tw.tile(1), 150);
@@ -168,7 +168,7 @@
                 }, 200);
             });
 
-            /*test("selects multiple tiles on ctrl + click", function (done) {
+            /*it("selects multiple tiles on ctrl + click", function (done) {
                 dblclick(tw.table, 100);
                 click(tw.tile(0), 125);
                 ctrlClick(tw.tile(1), 150);
