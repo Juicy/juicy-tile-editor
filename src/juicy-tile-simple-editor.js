@@ -609,6 +609,7 @@
                 this.attachEventListeners();
                 this.attachedCalled = true;
                 this.isReadingSetup = false;
+                this.fire("attached");
             }.bind(this), 100);
         },
         detached: function () {
