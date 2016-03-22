@@ -471,7 +471,11 @@
             heightDynamic: { type: Boolean, observer: "heightDynamicChanged" },
             tightGroup: { type: Boolean, observer: "tightGroupChanged" },
             rightToLeft: { type: Boolean },
-            bottomUp: { type: Boolean }
+            bottomUp: { type: Boolean },
+            predefinedSetups:{
+                type: Object,
+                value: function(){return [];}
+            }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -869,7 +873,7 @@
         getTile: function () {
             var id;
             var list;
-            
+
             if (arguments.length == 1) {
                 id = arguments[0];
                 list = this.selectedList;
@@ -885,7 +889,7 @@
             }
 
             var setup = getSetupItem(list.setup, id);
-            
+
             tile = getGroupTiles(list, setup);
 
             return tile;
@@ -1382,7 +1386,7 @@
 
             if (!this.selectedList) {
                 var list = this.getListPerSetup(setup);
-                
+
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
                 return;
@@ -1659,6 +1663,23 @@
         },
         tightGroupChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("tightGroup", newVal);
+        },
+        /** experimental support for predefined form layouts*/
+        /**
+         * Applies given predefined setup constructor on selected list ~given gorup~
+         * @param  {Function} predefinedSetupConstructor(elements) predefined setup constructor
+         *                                             function that return a setup for given list ~group~
+                                                        usually it's one of `.predefinedSetups`/
+         * @return {this}                            self
+         */
+        applyPredefinedSetup: function(predefinedSetupConstructor){
+            // for debugging
+            // predefinedSetupConstructor = this.predefinedSetups["Labels on left"].apply;
+            // --
+            this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
+            this.selectedList.setup = Object.create(this.selectedList.setup);
+            this.refreshSelectedList();
+            return this;
         }
     });
 })();

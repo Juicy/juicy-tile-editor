@@ -7,19 +7,20 @@
     "example": "examples",
     "test": "test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "~1.9.1",
     "grunt": "~0.4.4",
-    "grunt-mocha": "~0.4.10",
     "grunt-bump": "^0.3.1",
-    "mocha": "~1.18.2",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-text-replace": "~0.3.11"
+    "grunt-mocha": "~0.4.10",
+    "grunt-text-replace": "~0.3.11",
+    "mocha": "~1.18.2",
+    "polyserve": "^0.7.1"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "watch": "grunt watch"
   },
   "repository": {
     "type": "git",
