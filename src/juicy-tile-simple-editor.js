@@ -1680,6 +1680,14 @@
             this.selectedList.setup = Object.create(this.selectedList.setup);
             this.refreshSelectedList();
             return this;
+        },
+        /**
+         * Draft of a UI handler for applying predefined layouts
+         * @param  {event} event
+         */
+        _choosePredefinedSetup: function(event){
+            event.target.value && this.applyPredefinedSetup(this.predefinedSetups[event.target.value].apply);
         }
+
     });
 })();

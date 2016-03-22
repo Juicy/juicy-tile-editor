@@ -19,6 +19,12 @@
         <template is="dom-if" if="{{!showMore}}" restamp>
             <div class="editor-simple-form" style="overflow: auto;">
                 <div class="editor-form-section save-section">
+                    <select on-change="_choosePredefinedSetup">
+                        <option></option>
+                        <template is="dom-repeat" items="{{predefinedSetups}}">
+                            <option value="{{index}}">{{item.id}}</option>
+                        </template>
+                    </select>
                     <!-- <button type="button" class="btn" on-click="applyPredefinedSetup">Predefined</button> -->
                     <button type="button" class="btn" on-click="saveSetup" disabled="{{!isModified}}">Save</button>
                     <button type="button" class="btn" on-click="resetSetup">Reset</button>

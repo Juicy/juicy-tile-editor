@@ -103,78 +103,7 @@
         <template is="dom-if" if="{{model.editingMode}}" restamp="true">
             <div class="editor-container">
                 <juicy-tile-simple-editor on-close-click="closeEditor"></juicy-tile-simple-editor>
-                <script>
-                    (function () {
-                        var editor = (document._currentScript || document.currentScript).previousElementSibling;
-                        editor.predefinedSetups = [
-                            {
-                                id: "labelsOnLeft",
-                                description: "Original labels will be placed on the left column, all controlls on right",
-                                apply: function labelsOnLeft (elements){
-                                    // match pairs
-                                    var elementNo = 0, label, len, element;
-                                    // array of pairs (element, element.juicy-id, label, label.juicy-id) of (element, labale) pairs
-                                    var pairs = [], pair;
-                                    for(elementNo = 0, len = elements.length; elementNo < len; elementNo++){
-                                        element = elements[elementNo];
-                                        // naive pair matching by just preceding siblings
-                                        if(element.tagName === 'LABEL'){
-                                            label = element;
-                                        } else {
-                                            pairs.push([element, element.getAttribute('juicytile'), label, label && label.getAttribute('juicytile')]);
-                                            label = undefined;
-                                        }
-                                    }
-
-                                    // create the setup for picked pairs
-                                    var items = [];
-                                    for(var pairNo = 0, pairsLength = pairs.length; pairNo < pairsLength; pairNo++){
-                                        pair = pairs[pairNo];
-
-
-                                        // naive pair matching by just preceding siblings
-                                        items.push({
-                                            "items": [{
-                                                "width": "25%",
-                                                "widthFlexible": true,
-                                                // type 1, 2
-                                                "id": pair[2] !== undefined ? pair[3] : pair[1] +'_fake-label',
-                                                // type 3
-                                                // "id": pair[1] +'_fake-label',
-                                                "heightDynamic": true,
-                                                "height": 1,
-                                                // type 1,2
-                                                // "content": pair[2] !== undefined ? '' : '<label for="'+ controlId +'" juicy-for>fake label</label>',
-                                                // type 3
-                                                // "content": '<label for="'+ controlId +'" juicy-for>fake label:</label>',
-                                                "priority": 0.8,
-                                            },{
-                                                "width": "75%",
-                                                "widthFlexible": true,
-                                                "id": pair[1],
-                                                "heightDynamic": true,
-                                                "height": 1,
-                                                "priority": 0.4
-                                            }],
-                                            "id": "input_label_pair_" + pairNo,
-                                            "priority": 1 - pairNo / pairsLength,
-                                            "width": "100%",
-                                            "height": 1,
-                                            "heightDynamic": true,
-                                            "widthFlexible": true,
-                                            "tightGroup": false,
-                                            "itemName": "Input, label pair " + pairNo,
-                                            "content": ""
-                                        });
-                                    }
-                                    return items;
-                                }
-
-                            }
-                        ];
-
-                    }());
-                </script>
+                <script src="predefined_layouts.js"></script><!-- This needs to be a nextElementSiling -->
             </div>
         </template>
         <article class="markdown-body">
