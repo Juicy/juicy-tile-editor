@@ -53,7 +53,7 @@
             var tw;
             var highlight;
 
-            beforeEach(function () {
+            beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
                 highlight = fix.querySelector("juicy-highlight#test-highlight");
@@ -63,7 +63,8 @@
 
                 setTimeout(function () {
                     editor.set("showTree", true);
-                }, 10);
+                    done();
+                }, 100);
             });
 
             it("finds all <juicy-tile-table> on the page", function () {
@@ -74,7 +75,7 @@
                 setTimeout(function () {
                     var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
                     click(btn);
-                }, 500);
+                }, 100);
 
                 setTimeout(function () {
                     var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
@@ -82,14 +83,14 @@
 
                     expect(tree).to.have.deep.property("style.display", "none");
                     click(btn, 25);
-                }, 1000);
+                }, 150);
 
                 setTimeout(function () {
                     var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
 
                     expect(tree).to.have.deep.property("style.display", "");
                     done();
-                }, 1500);
+                }, 200);
             });
 
             it("selects <juicy-tile-table> on click", function (done) {
