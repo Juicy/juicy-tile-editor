@@ -44,67 +44,69 @@
 
     <script src="helpers.js"></script>
     <script>
-        suite("juicy-tile-table setup test", function () {
+        describe("juicy-tile-table setup test", function () {
             var fix;
             var editor;
             var tw;
 
-            setup(function () {
+            beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
 
                 tw = new JuicyTileTableWrapper(fix.querySelector("juicy-tile-table"));
+
+                editor.addEventListener("attached", function () {
+                    done();
+                });
             });
 
-            test("changes width of a tile on width button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var setup = tw.setup(0);
-                    expect(setup.width).to.be.equal("50%");
-                    done();
-                }, 200);
+            it("changes width of a tile on width button click", function (done) {
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    }).then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var setup = tw.setup(0);
+                        expect(setup.width).to.be.equal("50%");
+                        done();
+                    });
             });
 
-            test("changes priority of a tile on priority arrow button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
+            it("changes priority of a tile on priority arrow button click", function (done) {
+                dblclickPromise(tw.table)
+                    .then(function () { 
+                        click(tw.tile(0), 125);
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var a = tw.setup(0);
+                        var b = tw.setup(1);
 
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var a = tw.setup(0);
-                    var b = tw.setup(1);
-
-                    expect(b.priority).to.be.above(a.priority);
-
-                    done();
-                }, 200);
+                        expect(b.priority).to.be.above(a.priority);
+                        done();
+                    });
             });
 
-            test("hides a tile on eye button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var setup = tw.setup(0);
-                    expect(setup.hidden).to.be.true;
-                    done();
-                }, 200);
+            it("hides a tile on eye button click", function (done) {
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var setup = tw.setup(0);
+                        expect(setup.hidden).to.be.true;
+                        done();
+                    });
             });
         });
     </script>

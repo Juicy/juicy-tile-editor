@@ -49,66 +49,70 @@
             var editor;
             var tw;
 
-            beforeEach(function () {
+            beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
 
                 tw = new JuicyTileTableWrapper(fix.querySelector("juicy-tile-table"));
+
+                editor.addEventListener("attached", function () {
+                    done();
+                });
             });
 
             it("changes width of a tile on width button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var rec = tw.tile(0).getBoundingClientRect();
-                    expect(rec.width).to.be.equal(pageSize.width / 2);
-                    done();
-                }, 200);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var rec = tw.tile(0).getBoundingClientRect();
+                        expect(rec.width).to.be.equal(pageSize.width / 2);
+                        done();
+                    });
             });
 
             it("changes priority of a tile on priority arrow button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var count = 2;
 
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
-                    click(btn);
-                }, 150);
+                        //The tile order is reversed now
+                        for (var i = 0; i < count; i++) {
+                            var rec = tw.tile(i).getBoundingClientRect();
+                            expect(rec.top).to.be.equal((count - i - 1) * pageSize.tileHeight);
+                        }
 
-                setTimeout(function () {
-                    var count = 2;
-
-                    //The tile order is reversed now
-                    for (var i = 0; i < count; i++) {
-                        var rec = tw.tile(i).getBoundingClientRect();
-                        expect(rec.top).to.be.equal((count - i - 1) * pageSize.tileHeight);
-                    }
-
-                    done();
-                }, 200);
+                        done();
+                    });
             });
 
             it("hides a tile on eye button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var rec = tw.tile(0).getBoundingClientRect();
-                    expect(rec.width).to.be.empty;
-                    expect(rec.height).to.be.empty;
-                    done();
-                }, 200);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
+                        click(btn);
+                    })
+                    .then(function () {
+                        var rec = tw.tile(0).getBoundingClientRect();
+                        expect(rec.width).to.be.empty;
+                        expect(rec.height).to.be.empty;
+                        done();
+                    });
             });
         });
     </script>

@@ -1,4 +1,12 @@
-﻿function fireEvent(obj, evt, ctrl) {
+﻿function wait() { 
+    return new Promise(function (complete) {
+        setTimeout(function () {
+            complete(true);
+        }, 200);
+    });
+}
+
+function fireEvent(obj, evt, ctrl) {
     var fireOnThis = obj;
 
     if (document.createEvent) {
@@ -15,37 +23,34 @@
     }
 }
 
-function click(element, timeout) {
-    if (!timeout) {
-        element.click();
-        return;
-    }
+function click(element) {
+    element.click();
+}
 
-    setTimeout(function () {
+function dblclick(element) {
+    fireEvent(element, "dblclick");
+}
+
+function ctrlClick(element) {
+    console.error("ctrlClick is not implemented");
+}
+
+function clickPromise(element) {
+    return new Promise(function (complete) {
         click(element);
-    }, timeout);
+        wait().then(function () {
+            complete(true);
+        });
+    });
 }
 
-function dblclick(element, timeout) {
-    if (!timeout) {
-        fireEvent(element, "dblclick");
-        return;
-    }
-
-    setTimeout(function () {
+function dblclickPromise(element, timeout) {
+    return new Promise(function (complete) {
         dblclick(element);
-    }, timeout);
-}
-
-function ctrlClick(element, timeout) {
-    if (!timeout) {
-        console.error("ctrlClick is not implemented");
-        return;
-    }
-
-    setTimeout(function () {
-        ctrlClick(element);
-    }, timeout);
+        wait().then(function () {
+            complete(true);
+        });
+    });
 }
 
 function getCellById(table, id) {
