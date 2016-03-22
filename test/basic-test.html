@@ -9,6 +9,7 @@
 
     <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html" />
     <link rel="import" href="../src/juicy-tile-simple-editor.html" />
+    <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html" />
 
     <link rel="stylesheet" href="style.css" />
     <script src="juicy-tile-setup.js"></script>
@@ -27,6 +28,7 @@
                         <div class="tile">tile-10</div>
                         <div class="tile">tile-11</div>
                     </juicy-tile-table>
+                    <juicy-highlight id="test-highlight"></juicy-highlight>
                 </template>
                 <script>
                     var script = document._currentScript || document.currentScript;
@@ -49,10 +51,12 @@
             var editor;
             var tables;
             var tw;
+            var highlight;
 
             setup(function () {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
+                highlight = fix.querySelector("juicy-highlight#test-highlight");
 
                 tables = Array.prototype.slice.call(fix.querySelectorAll("juicy-tile-table"));
                 tw = new JuicyTileTableWrapper(tables[0]);
@@ -95,6 +99,36 @@
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
                     done();
                 }, 200);
+            });
+
+            test("highlights selected <juicy-tile-table>", function (done) {
+                click(tw.table, 100);
+
+                setTimeout(function () {
+                    highlight.show(tw.table);
+
+                    var a = editor.$.highlightTileSelected.getSvg().querySelector("path").getAttribute("d");
+                    var b = highlight.getSvg().querySelector("path").getAttribute("d");
+                    
+                    expect(a).to.equal(b);
+                    done();
+                }, 150);
+            });
+
+            test("removes all highlights when detached", function (done) {
+                click(tw.table, 100);
+                dblclick(tw.table, 125);
+                click(tw.tile(0), 150);
+
+                setTimeout(function () {
+                    editor.parentNode.removeChild(editor);
+                }, 175);
+
+                setTimeout(function () {
+                    var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
+                    expect(svgs).to.be.empty;
+                    done();
+                }, 400);
             });
 
             test("scopes into <juicy-tile-table> on double click", function (done) {
