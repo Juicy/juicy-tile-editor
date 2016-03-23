@@ -2,7 +2,7 @@
     return new Promise(function (resolve) {
         setTimeout(function () {
             resolve(true);
-        }, 200);
+        }, 50);
     });
 }
 
