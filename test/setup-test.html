@@ -73,7 +73,7 @@
                         var setup = tw.setup(0);
                         expect(setup.width).to.be.equal("50%");
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("changes priority of a tile on priority arrow button click", function (done) {
@@ -91,7 +91,7 @@
 
                         expect(b.priority).to.be.above(a.priority);
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("hides a tile on eye button click", function (done) {
@@ -107,7 +107,7 @@
                         var setup = tw.setup(0);
                         expect(setup.hidden).to.be.true;
                         done();
-                    }, done);
+                    }).catch(done);
             });
         });
     </script>

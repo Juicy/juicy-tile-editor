@@ -74,7 +74,7 @@
                         var rec = tw.tile(0).getBoundingClientRect();
                         expect(rec.width).to.be.equal(pageSize.width / 2);
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("changes priority of a tile on priority arrow button click", function (done) {
@@ -96,7 +96,7 @@
                         }
 
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("hides a tile on eye button click", function (done) {
@@ -120,7 +120,7 @@
                         }
 
                         done();
-                    }, done);
+                    }).catch(done);
             });
         });
     </script>

@@ -85,14 +85,14 @@
                     }).then(function () {
                         expect(tree).to.have.deep.property("style.display", "");
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("selects <juicy-tile-table> on click", function (done) {
                 clickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
                     done();
-                }, done);
+                }).catch(done);
             });
 
             it("highlights selected <juicy-tile-table>", function (done) {
@@ -104,7 +104,7 @@
 
                     expect(a).to.equal(b);
                     done();
-                }, done);
+                }).catch(done);
             });
 
             it("removes all highlights when detached", function (done) {
@@ -117,7 +117,7 @@
                         var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
                         expect(svgs).to.be.empty;
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("scopes into <juicy-tile-table> on double click", function (done) {
@@ -125,7 +125,7 @@
                     expect(editor.selectedTiles).to.be.empty;
                     expect(editor.selectedList).to.equal(tw.table);
                     done();
-                }, done);
+                }).catch(done);
             });
 
             it("selects a tile on click", function (done) {
@@ -138,7 +138,7 @@
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             it("selects another tile on click", function (done) {
@@ -155,7 +155,7 @@
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
                         done();
-                    }, done);
+                    }).catch(done);
             });
 
             /*it("selects multiple tiles on ctrl + click", function (done) {
