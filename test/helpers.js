@@ -1,7 +1,7 @@
 ﻿function wait() { 
-    return new Promise(function (complete) {
+    return new Promise(function (resolve) {
         setTimeout(function () {
-            complete(true);
+            resolve(true);
         }, 200);
     });
 }
@@ -36,19 +36,19 @@ function ctrlClick(element) {
 }
 
 function clickPromise(element) {
-    return new Promise(function (complete) {
+    return new Promise(function (resolve) {
         click(element);
         wait().then(function () {
-            complete(true);
+            resolve(true);
         });
     });
 }
 
 function dblclickPromise(element, timeout) {
-    return new Promise(function (complete) {
+    return new Promise(function (resolve) {
         dblclick(element);
         wait().then(function () {
-            complete(true);
+            resolve(true);
         });
     });
 }
