@@ -70,8 +70,7 @@
                     .then(function () {
                         var rec = tw.tile(0).getBoundingClientRect();
                         expect(rec.width).to.be.equal(pageSize.width / 2);
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             it("changes priority of a tile on priority arrow button click", function (done) {
@@ -91,9 +90,7 @@
                             var rec = tw.tile(i).getBoundingClientRect();
                             expect(rec.top).to.be.equal((count - i - 1) * pageSize.tileHeight);
                         }
-
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             it("hides a tile on eye button click", function (done) {
@@ -115,9 +112,7 @@
                             expect(rec.width).to.be.empty;
                             expect(rec.height).to.be.empty;
                         }
-
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
         });
     </script>

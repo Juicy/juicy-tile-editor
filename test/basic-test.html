@@ -80,15 +80,13 @@
                         return clickPromise(btn);
                     }).then(function () {
                         expect(tree).to.have.deep.property("style.display", "");
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             it("selects <juicy-tile-table> on click", function (done) {
                 clickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
-                    done();
-                }).catch(done);
+                }).then(done, done);
             });
 
             it("highlights selected <juicy-tile-table>", function (done) {
@@ -99,8 +97,7 @@
                     var b = highlight.getSvg().querySelector("path").getAttribute("d");
 
                     expect(a).to.equal(b);
-                    done();
-                }).catch(done);
+                }).then(done, done);
             });
 
             it("removes all highlights when detached", function (done) {
@@ -112,16 +109,14 @@
                     }).then(function () {
                         var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
                         expect(svgs).to.be.empty;
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             it("scopes into <juicy-tile-table> on double click", function (done) {
                 dblclickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles).to.be.empty;
                     expect(editor.selectedList).to.equal(tw.table);
-                    done();
-                }).catch(done);
+                }).then(done, done);
             });
 
             it("selects a tile on click", function (done) {
@@ -133,8 +128,7 @@
 
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             it("selects another tile on click", function (done) {
@@ -150,8 +144,7 @@
 
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
-                        done();
-                    }).catch(done);
+                    }).then(done, done);
             });
 
             /*it("selects multiple tiles on ctrl + click", function (done) {
