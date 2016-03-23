@@ -517,16 +517,6 @@
     }
 
     var notAvailable = "N/A";
-    var defaultValues = {};
-
-    defaultValues.mediaScreenRanges = [{ name: "Mobile", width: 320, css: "iphone" }, { name: "Tablet", width: 480, css: "ipad" },
-                        { name: "Laptop", width: 960, css: "laptop" }, { name: "Desktop", width: 1200, css: "screen" }];
-
-    defaultValues.widthRanges = [{ name: "1", value: 100 / 12 + "%" }, { name: "2", value: 200 / 12 + "%" }, { name: "3", value: 300 / 12 + "%" }, { name: "4", value: 400 / 12 + "%" },
-                        { name: "5", value: 500 / 12 + "%" }, { name: "6", value: 600 / 12 + "%" }, { name: "7", value: 700 / 12 + "%" }, { name: "8", value: 800 / 12 + "%" },
-                        { name: "9", value: 900 / 12 + "%" }, { name: "10", value: 1000 / 12 + "%" }, { name: "11", value: 1100 / 12 + "%" }, { name: "12", value: 1200 / 12 + "%" }];
-    
-    defaultValues.listSelectors = ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"];
 
     Polymer({
         is: "juicy-tile-simple-editor",
@@ -534,24 +524,33 @@
             mediaScreen: { type: Object, notify: true },
             mediaScreenRanges: {
                 type: Array,
-                value: getArrayPropertyValue(defaultValues.mediaScreenRanges)
+                value: function () {
+                    return [{ name: "Mobile", width: 320, css: "iphone" }, { name: "Tablet", width: 480, css: "ipad" },
+                        { name: "Laptop", width: 960, css: "laptop" }, { name: "Desktop", width: 1200, css: "screen" }];
+                }
             },
             widthItem: { type: Object, value: null, notify: true },
             widthRanges: {
                 type: Array,
-                value: getArrayPropertyValue(defaultValues.widthRanges)
+                value: function () {
+                    return [{ name: "1", value: 100 / 12 + "%" }, { name: "2", value: 200 / 12 + "%" }, { name: "3", value: 300 / 12 + "%" }, { name: "4", value: 400 / 12 + "%" },
+                        { name: "5", value: 500 / 12 + "%" }, { name: "6", value: 600 / 12 + "%" }, { name: "7", value: 700 / 12 + "%" }, { name: "8", value: 800 / 12 + "%" },
+                        { name: "9", value: 900 / 12 + "%" }, { name: "10", value: 1000 / 12 + "%" }, { name: "11", value: 1100 / 12 + "%" }, { name: "12", value: 1200 / 12 + "%" }];
+                }
             },
             visible: { type: Boolean, value: null, notify: true },
             listSelectors: {
                 type: Array,
-                value: getArrayPropertyValue(defaultValues.listSelectors)
+                value: function () {
+                    return ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"];
+                }
             },
-            lists: { type: Array, value: getArrayPropertyValue() },
-            selectedTiles: { type: Array, value: getArrayPropertyValue() },
+            lists: { type: Array, value: function () { return []; } },
+            selectedTiles: { type: Array, value: function () { return []; } },
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
-            selectedScopeItems: { type: Array, value: getArrayPropertyValue() },
-            breadcrumb: { type: Array, value: getArrayPropertyValue() },
+            selectedScopeItems: { type: Array, value: function () { return []; } },
+            breadcrumb: { type: Array, value: function () { return []; } },
             isModified: { type: Boolean, value: false, notify: true },
             showMore: { type: Boolean, value: false },
             showTree: { type: Boolean, value: true },
