@@ -18,27 +18,15 @@
     <test-fixture id="editor-form-fixture">
         <template>
             <div id="body" style="padding: 0px; margin: 0px;">
-                <template is="dom-bind">
-                    <juicy-tile-simple-editor></juicy-tile-simple-editor>
-                    <juicy-tile-table id="table-0" setup="{{model.setup0}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-00</div>
-                        <div class="tile">tile-01</div>
-                    </juicy-tile-table>
-                    <juicy-tile-table id="table-1" setup="{{model.setup1}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-10</div>
-                        <div class="tile">tile-11</div>
-                    </juicy-tile-table>
-                </template>
-                <script>
-                    var script = document._currentScript || document.currentScript;
-                    var tempalte = script.previousElementSibling;
-
-                    tempalte.model = {
-                        setup0: getJuicyTileSetup(),
-                        setup1: getJuicyTileSetup(),
-                        setupCopy: getJuicyTileSetup()
-                    };
-                </script>
+                <juicy-tile-simple-editor></juicy-tile-simple-editor>
+                <juicy-tile-table id="table-0">
+                    <div class="tile">tile-00</div>
+                    <div class="tile">tile-01</div>
+                </juicy-tile-table>
+                <juicy-tile-table id="table-1">
+                    <div class="tile">tile-10</div>
+                    <div class="tile">tile-11</div>
+                </juicy-tile-table>
             </div>
         </template>
     </test-fixture>
@@ -49,12 +37,21 @@
             var fix;
             var editor;
             var tw;
+            var tables;
 
             beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
 
-                tw = new JuicyTileTableWrapper(fix.querySelector("juicy-tile-table"));
+                tables = fix.querySelectorAll("juicy-tile-table");
+                tables = Array.prototype.slice.call(tables);
+
+                tables.forEach(function (t) {
+                    t.setup = getJuicyTileSetup();
+                    t.defaultsetup = getJuicyTileSetup();
+                });
+
+                tw = new JuicyTileTableWrapper(tables[0]);
 
                 editor.addEventListener("attached", function () {
                     done();
