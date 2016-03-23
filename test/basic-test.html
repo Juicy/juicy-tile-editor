@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../es6-promise/es6-promise.min.js"></script>
 
     <link rel="import" href="../../juicy-tile-table/juicy-tile-table.html" />
     <link rel="import" href="../src/juicy-tile-simple-editor.html" />
@@ -51,7 +52,6 @@
             var tables;
             var tw;
             var highlight;
-            var template;
 
             beforeEach(function (done) {
                 localStorage.clear();
@@ -59,7 +59,6 @@
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
                 highlight = fix.querySelector("juicy-highlight#test-highlight");
-                template = fix.querySelector("template[is=dom-bind]");
 
                 tables = Array.prototype.slice.call(fix.querySelectorAll("juicy-tile-table"));
                 tw = new JuicyTileTableWrapper(tables[0]);
@@ -82,11 +81,12 @@
                         expect(tree).to.have.deep.property("style.display", "none");
                     })
                     .then(function () {
-                        click(btn);
-                    })
-                    .then(function () {
+                        return clickPromise(btn);
+                    }).then(function () {
                         expect(tree).to.have.deep.property("style.display", "");
                         done();
+                    }).catch(function (ex) {
+                        done(ex);
                     });
             });
 
@@ -94,6 +94,8 @@
                 clickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
                     done();
+                }).catch(function (ex) {
+                    done(ex);
                 });
             });
 
@@ -106,6 +108,8 @@
 
                     expect(a).to.equal(b);
                     done();
+                }).catch(function (ex) {
+                    done(ex);
                 });
             });
 
@@ -114,10 +118,13 @@
                     .then(function () {
                         tw.tile(0);
                         editor.parentNode.removeChild(editor);
+                        return wait();
                     }).then(function () {
                         var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
                         expect(svgs).to.be.empty;
                         done();
+                    }).catch(function (ex) {
+                        done(ex);
                     });
             });
 
@@ -126,6 +133,8 @@
                     expect(editor.selectedTiles).to.be.empty;
                     expect(editor.selectedList).to.equal(tw.table);
                     done();
+                }).catch(function (ex) {
+                    done(ex);
                 });
             });
 
@@ -139,6 +148,8 @@
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
                         done();
+                    }).catch(function (ex) {
+                        done(ex);
                     });
             });
 
@@ -156,6 +167,8 @@
                         expect(editor.selectedTiles).to.have.length(1);
                         expect(editor.selectedTiles[0]).to.equal(td);
                         done();
+                    }).catch(function (ex) {
+                        done(ex);
                     });
             });
 
