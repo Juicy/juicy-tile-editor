@@ -26,6 +26,7 @@
     "juicy-tile-list": ">=1.1.0",
     "juicy-tile-grid": ">=1.1.0",
     "juicy-tile-table": ">=0.0.5",
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "^4.0.0",
+    "es6-promise": ">=3.2.1"
   }
 }
