@@ -93,8 +93,8 @@
                 clickPromise(tw.table).then(function () {
                     highlight.show(tw.table);
 
-                    var a = editor.$.highlightTileSelected.getSvg().querySelector("path").getAttribute("d");
-                    var b = highlight.getSvg().querySelector("path").getAttribute("d");
+                    var a = editor.$.highlightTileSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
 
                     expect(a).to.equal(b);
                 }).then(done, done);
