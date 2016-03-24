@@ -23,10 +23,18 @@
                 <juicy-tile-table id="table-0">
                     <div class="tile">tile-00</div>
                     <div class="tile">tile-01</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
                 </juicy-tile-table>
                 <juicy-tile-table id="table-1">
                     <div class="tile">tile-10</div>
                     <div class="tile">tile-11</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
                 </juicy-tile-table>
                 <juicy-highlight id="test-highlight"></juicy-highlight>
             </div>
@@ -41,12 +49,14 @@
             var tables;
             var tw;
             var highlight;
+            var ew;
 
             beforeEach(function (done) {
                 localStorage.clear();
 
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
+                ew = new JuicyTileEditorWrapper(editor);
                 highlight = fix.querySelector("juicy-highlight#test-highlight");
 
                 tables = fix.querySelectorAll("juicy-tile-table");
@@ -83,6 +93,24 @@
                     }).then(done, done);
             });
 
+            //it("switches editor mode", function (done) {
+            //    clickPromise(ew.tabs.expert).then(function () {
+            //        var simple = ew.getSimpleModeForm();
+            //        var expert = ew.getExpertModeForm();
+
+            //        expect(simple).to.be.null;
+            //        expect(expert).to.not.be.null;
+
+            //        return clickPromise(ew.tabs.simple);
+            //    }).then(function () {
+            //        var simple = ew.getSimpleModeForm();
+            //        var expert = ew.getExpertModeForm();
+
+            //        expect(simple).to.not.be.null;
+            //        expect(expert).to.be.null;
+            //    }).then(done, done);
+            //});
+
             it("selects <juicy-tile-table> on click", function (done) {
                 clickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
@@ -116,6 +144,84 @@
                 dblclickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles).to.be.empty;
                     expect(editor.selectedList).to.equal(tw.table);
+                }).then(done, done);
+            });
+
+            it("scopes into a tight group on double click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedList).to.equal(tw.table);
+                    expect(editor.selectedScope).to.equal(tw.cell("group_0"));
+                }).then(done, done);
+            });
+
+            it("scopes out of a tight group on breadcrumb level up button click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-breadcrumb a");
+                    return clickPromise(btn);
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedScope).to.be.null;
+                    expect(editor.selectedList).to.equal(tw.table);
+                }).then(done, done);
+            });
+
+            it("highlights selected tight group", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    highlight.overlay = true;
+                    highlight.setAttribute("strokewidth", 1);
+                    highlight.setAttribute("strokeoffset", 2);
+                    highlight.show(tw.cell("group_0"));
+
+                    var a = editor.$.highlightScopeSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
+
+                    expect(a).to.equal(b);
+                }).then(done, done);
+            });
+
+            it("scopes into a lose group on double click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedList).to.equal(tw.table);
+                    expect(editor.selectedScope.id).to.equal("group_1");
+                }).then(done, done);
+            });
+
+            it("scopes out of a lose group on breadcrumb level up button click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-breadcrumb a");
+                    return clickPromise(btn);
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedScope).to.be.null;
+                    expect(editor.selectedList).to.equal(tw.table);
+                }).then(done, done);
+            });
+
+            it("highlights selected lose group", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    highlight.overlay = true;
+                    highlight.setAttribute("strokewidth", 1);
+                    highlight.setAttribute("strokeoffset", 2);
+                    highlight.show([tw.cell(4), tw.cell(5)]);
+
+                    var a = editor.$.highlightScopeSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
+
+                    expect(a).to.equal(b);
                 }).then(done, done);
             });
 
