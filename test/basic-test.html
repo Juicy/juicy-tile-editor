@@ -93,23 +93,23 @@
                     }).then(done, done);
             });
 
-            //it("switches editor mode", function (done) {
-            //    clickPromise(ew.tabs.expert).then(function () {
-            //        var simple = ew.getSimpleModeForm();
-            //        var expert = ew.getExpertModeForm();
+            it("switches editor mode", function (done) {
+                clickPromise(ew.tabs.expert).then(function () {
+                    var simple = ew.getSimpleModeForm();
+                    var expert = ew.getExpertModeForm();
 
-            //        expect(simple).to.be.null;
-            //        expect(expert).to.not.be.null;
+                    expect(simple).to.be.null;
+                    expect(expert).to.not.be.null;
 
-            //        return clickPromise(ew.tabs.simple);
-            //    }).then(function () {
-            //        var simple = ew.getSimpleModeForm();
-            //        var expert = ew.getExpertModeForm();
+                    return clickPromise(ew.tabs.simple);
+                }).then(function () {
+                    var simple = ew.getSimpleModeForm();
+                    var expert = ew.getExpertModeForm();
 
-            //        expect(simple).to.not.be.null;
-            //        expect(expert).to.be.null;
-            //    }).then(done, done);
-            //});
+                    expect(simple).to.not.be.null;
+                    expect(expert).to.be.null;
+                }).then(done, done);
+            });
 
             it("selects <juicy-tile-table> on click", function (done) {
                 clickPromise(tw.table).then(function () {
