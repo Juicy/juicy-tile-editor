@@ -22,10 +22,18 @@
                 <juicy-tile-table id="table-0">
                     <div class="tile">tile-00</div>
                     <div class="tile">tile-01</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
                 </juicy-tile-table>
                 <juicy-tile-table id="table-1">
                     <div class="tile">tile-10</div>
                     <div class="tile">tile-11</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
                 </juicy-tile-table>
             </div>
         </template>
@@ -36,12 +44,14 @@
         describe("light dom test", function () {
             var fix;
             var editor;
+            var ew;
             var tw;
             var tables;
 
             beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
+                ew = new JuicyTileEditorWrapper(editor);
 
                 tables = fix.querySelectorAll("juicy-tile-table");
                 tables = Array.prototype.slice.call(tables);
@@ -54,6 +64,7 @@
                 tw = new JuicyTileTableWrapper(tables[0]);
 
                 editor.addEventListener("attached", function () {
+                    ew.setSimpleMode();
                     done();
                 });
             });
