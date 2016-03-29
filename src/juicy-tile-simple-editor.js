@@ -543,7 +543,10 @@
     Polymer({
         is: "juicy-tile-simple-editor",
         properties: {
+            /** Media screen range of scoped juicy-tile-list. An item from mediaScreenRanges collection. */
             mediaScreen: { type: Object, notify: true },
+
+            /** Predefined media screen range items collection */
             mediaScreenRanges: {
                 type: Array,
                 value: function () {
@@ -551,7 +554,11 @@
                         { name: "Laptop", width: 960, css: "laptop" }, { name: "Desktop", width: 1200, css: "screen" }];
                 }
             },
+
+            /** Width of selected tile(s). An item from widthRanges collection. */
             widthItem: { type: Object, value: null, notify: true },
+
+            /** Predefined width items collection. */
             widthRanges: {
                 type: Array,
                 value: function () {
@@ -560,36 +567,106 @@
                         { name: "9", value: 900 / 12 + "%" }, { name: "10", value: 1000 / 12 + "%" }, { name: "11", value: 1100 / 12 + "%" }, { name: "12", value: 1200 / 12 + "%" }];
                 }
             },
+
+            /** Visible state of selected tile(s). */
             visible: { type: Boolean, value: null, notify: true },
+
+            /** List of element tag names which should be treated as juicy-tile-list. */
             listSelectors: {
                 type: Array,
                 value: function () {
                     return ["juicy-tile-list", "juicy-tile-grid", "juicy-tile-table"];
                 }
             },
+
+            /** All juicy-tile-list elements found on the page. */
             lists: { type: Array, value: function () { return []; } },
+
+            /** Array of setup objects of selected juicy-tile items. */
             selectedTiles: { type: Array, value: function () { return []; } },
+
+            /** Scoped juicy-tile-list, the HTMLElement itself. */
             selectedList: { type: Object, value: null, observer: "selectedListChanged" },
+
+            /**
+             * Scoped tight group - Shadow DOM HTMLElement of the group.
+             * Scoped lose group - array of Shadow DOM HTMLElements inside the group.
+             * Scoped juicy-tile with juicy-tile-list inside - Shadow DOM HTMLElement of the tile.
+             */
             selectedScope: { type: Object, value: null, observer: "selectedScopeChanged" },
+
+            /** Array of setup objects of all juicy-tile items withing selected list and scope. */
             selectedScopeItems: { type: Array, value: function () { return []; } },
+
+            /** Array of breadcrumb items. Represents scope in history. */
             breadcrumb: { type: Array, value: function () { return []; } },
+
+            /** Dirty state indicator. */
             isModified: { type: Boolean, value: false, notify: true },
+
+            /**
+             * false - normal mode.
+             * true - expert mode.
+             */
             showMore: { type: Boolean, value: false },
+
+            /**
+             * false - sidebar hidden.
+             * true - sidebar visible.
+             */
             showTree: { type: Boolean, value: true },
+
+            /** Background color of selected tile(s). */
             background: { type: String, observer: "backgroundChanged" },
+
+            /** Oversize of selected tile(s). */
             oversize: { type: Number, observer: "oversizeChanged" },
+
+            /** Outline of selected tile(s). */
             outline: { type: String, observer: "outlineChanged" },
+
+            /** Gutter of scoped list or scope. */
             gutter: { type: Number, observer: "gutterChanged" },
+
+            /** Direction of selected tile(s). Applicable to groups only. */
             direction: { type: String },
+
+            /** Content of selected tile(s). Applicable to groups only. */
             content: { type: String, observer: "contentChanged" },
+
+            /** Width of selected tile(s). */
             width: { type: String, observer: "widthChanged" },
+
+            /** Height of selected tile(s). */
             height: { type: String, observer: "heightChanged" },
+
+            /** Width flexible flag of selected tile(s). */
             widthFlexible: { type: Boolean, observer: "widthFlexibleChanged" },
+
+            /** Width dynamic flag of selected tile(s). */
             widthDynamic: { type: Boolean, observer: "widthDynamicChanged" },
+
+            /** Height flexible flag of selected tile(s). */
             heightFlexible: { type: Boolean, observer: "heightFlexibleChanged" },
+
+            /** Height dynamic flag of selected tile(s). */
             heightDynamic: { type: Boolean, observer: "heightDynamicChanged" },
+
+            /** Tight group flag of selected tile(s). Applicable to groups only. */
             tightGroup: { type: Boolean, observer: "tightGroupChanged" },
+
+            /**
+             * Horizontal direction of selected tile(s). Applicable to groups only.
+             * false - from left to right.
+             * true - from right to left.
+             */
             rightToLeft: { type: Boolean },
+
+            /**
+             * Vertical direction of selected tile(s). Applicable to groups only.
+             * false - from top to bottom.
+             * true - from bottom to top.
+             */
             bottomUp: { type: Boolean }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
