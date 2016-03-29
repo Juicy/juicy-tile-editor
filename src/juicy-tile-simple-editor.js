@@ -2178,7 +2178,36 @@
             // for debugging
             // predefinedSetupConstructor = this.predefinedSetups["Labels on left"].apply;
             // --
-            this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
+            /**
+             * Recursively fetches all HTML Elements of `parentElements`,
+             *  that are mentioned seup given in `items`
+             * @param  {[type]} items       [description]
+             * @param  {[type]} allElements [description]
+             * @return {[type]}             [description]
+             */
+            function getElementsFromSetupItems(items, parentElements){
+                var elements = [];
+                for(var itemNo = 0, len = items.length; itemNo < len; itemNo++){
+                    var item = items[itemNo];
+                    if(item.items){
+                        elements.concat(getElementsFromSetupItems(item.items, parentElements));
+                    } else {
+                        for(var elementNo = 0, elementsLen = parentElements.length; elementNo < elementsLen; elementNo++){
+                            if(parentElements[elementNo].getAttribute('juicytile') === items[itemNo].id){
+                                elements.push(parentElements[elementNo]);
+                            }
+                        }
+                    }
+                }
+                return elements;
+            }
+            if(this.selectedScope){
+                var newItems = predefinedSetupConstructor( getElementsFromSetupItems(this.selectedScope, this.selectedList.elements) );
+                this.getSetupItem(this.selectedScope).items = newItems
+            } else {
+                this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
+            }
+
             this.selectedList.setup = Object.create(this.selectedList.setup);
             this.refreshSelectedList();
             return this;

@@ -9,7 +9,7 @@ var model = {
             {
                 width: "100%",
                 widthFlexible: true,
-                id: "group_1",
+                id: "products/group_1",
                 hidden: false,
                 heightDynamic: true,
                 height: 1,
@@ -19,17 +19,17 @@ var model = {
                 height: 1,
                 direction: "horizontal",
                 items: [
-                    { width: "225", widthFlexible: false, id: 0, hidden: false, heightDynamic: true, height: 1, priority: 0.9 },
-                    { width: "225", widthFlexible: true, id: 1, hidden: false, heightDynamic: true, height: 1, priority: 0.81 }
+                    { width: "225", widthFlexible: false, id: "products/0", hidden: false, heightDynamic: true, height: 1, priority: 0.9 },
+                    { width: "225", widthFlexible: true, id: "products/1", hidden: false, heightDynamic: true, height: 1, priority: 0.81 }
                 ]
             },
-            { width: "100%", widthFlexible: true, id: 2, hidden: false, heightDynamic: true, height: 1, priority: 0.7 },
-            { width: "100%", widthFlexible: true, id: 3, hidden: false, heightDynamic: true, height: 1, priority: 0.6 },
-            { width: "100%", widthFlexible: true, id: 4, hidden: false, heightDynamic: true, height: 1, priority: 0.5 },
+            { width: "100%", widthFlexible: true, id: "products/2", hidden: false, heightDynamic: true, height: 1, priority: 0.7 },
+            { width: "100%", widthFlexible: true, id: "products/3", hidden: false, heightDynamic: true, height: 1, priority: 0.6 },
+            { width: "100%", widthFlexible: true, id: "products/4", hidden: false, heightDynamic: true, height: 1, priority: 0.5 },
             {
                 width: "100%",
                 widthFlexible: true,
-                id: "group_2",
+                id: "products/group_2",
                 hidden: false,
                 heightDynamic: true,
                 height: 1,
@@ -38,7 +38,7 @@ var model = {
                 gutter: 0,
                 direction: "horizontal",
                 items: [
-                    { width: "100%", widthFlexible: true, id: 5, hidden: false, heightDynamic: true, height: 1, priority: 0.4 }
+                    { width: "100%", widthFlexible: true, id: "products/5", hidden: false, heightDynamic: true, height: 1, priority: 0.4 }
                 ]
             }
         ]
