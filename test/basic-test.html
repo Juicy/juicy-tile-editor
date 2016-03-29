@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../es6-promise/es6-promise.min.js"></script>
 
-    <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html" />
+    <link rel="import" href="../../juicy-tile-table/juicy-tile-table.html" />
     <link rel="import" href="../src/juicy-tile-simple-editor.html" />
     <link rel="import" href="../../juicy-highlight/src/juicy-highlight.html" />
 
@@ -18,28 +19,24 @@
     <test-fixture id="editor-form-fixture">
         <template>
             <div id="body" style="padding: 0px; margin: 0px;">
-                <template is="dom-bind">
-                    <juicy-tile-simple-editor></juicy-tile-simple-editor>
-                    <juicy-tile-table id="table-0" setup="{{model.setup0}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-00</div>
-                        <div class="tile">tile-01</div>
-                    </juicy-tile-table>
-                    <juicy-tile-table id="table-1" setup="{{model.setup1}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-10</div>
-                        <div class="tile">tile-11</div>
-                    </juicy-tile-table>
-                    <juicy-highlight id="test-highlight"></juicy-highlight>
-                </template>
-                <script>
-                    var script = document._currentScript || document.currentScript;
-                    var tempalte = script.previousElementSibling;
-
-                    tempalte.model = {
-                        setup0: getJuicyTileSetup(),
-                        setup1: getJuicyTileSetup(),
-                        setupCopy: getJuicyTileSetup()
-                    };
-                </script>
+                <juicy-tile-simple-editor></juicy-tile-simple-editor>
+                <juicy-tile-table id="table-0">
+                    <div class="tile">tile-00</div>
+                    <div class="tile">tile-01</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
+                </juicy-tile-table>
+                <juicy-tile-table id="table-1">
+                    <div class="tile">tile-10</div>
+                    <div class="tile">tile-11</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
+                </juicy-tile-table>
+                <juicy-highlight id="test-highlight"></juicy-highlight>
             </div>
         </template>
     </test-fixture>
@@ -52,19 +49,29 @@
             var tables;
             var tw;
             var highlight;
+            var ew;
 
             beforeEach(function (done) {
+                localStorage.clear();
+
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
+                ew = new JuicyTileEditorWrapper(editor);
                 highlight = fix.querySelector("juicy-highlight#test-highlight");
 
-                tables = Array.prototype.slice.call(fix.querySelectorAll("juicy-tile-table"));
+                tables = fix.querySelectorAll("juicy-tile-table");
+                tables = Array.prototype.slice.call(tables);
+
+                tables.forEach(function (t) {
+                    t.setup = getJuicyTileSetup();
+                    t.defaultsetup = getJuicyTileSetup();
+                });
+
                 tw = new JuicyTileTableWrapper(tables[0]);
 
-                setTimeout(function () {
-                    editor.set("showTree", true);
+                editor.addEventListener("attached", function () {
                     done();
-                }, 100);
+                });
             });
 
             it("finds all <juicy-tile-table> on the page", function () {
@@ -72,101 +79,178 @@
             });
 
             it("hides and shows sidebar", function (done) {
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
-                    click(btn);
-                }, 100);
+                var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
+                var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
 
-                setTimeout(function () {
-                    var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-tabs button.btn-tree");
+                clickPromise(btn)
+                    .then(function () {
+                        expect(tree).to.have.deep.property("style.display", "none");
+                    })
+                    .then(function () {
+                        return clickPromise(btn);
+                    }).then(function () {
+                        expect(tree).to.have.deep.property("style.display", "");
+                    }).then(done, done);
+            });
 
-                    expect(tree).to.have.deep.property("style.display", "none");
-                    click(btn, 25);
-                }, 150);
+            it("switches editor mode", function (done) {
+                clickPromise(ew.tabs.expert).then(function () {
+                    var simple = ew.getSimpleModeForm();
+                    var expert = ew.getExpertModeForm();
 
-                setTimeout(function () {
-                    var tree = Polymer.dom(editor.root).querySelector(".editor-tree");
+                    expect(simple).to.be.null;
+                    expect(expert).to.not.be.null;
 
-                    expect(tree).to.have.deep.property("style.display", "");
-                    done();
-                }, 200);
+                    return clickPromise(ew.tabs.simple);
+                }).then(function () {
+                    var simple = ew.getSimpleModeForm();
+                    var expert = ew.getExpertModeForm();
+
+                    expect(simple).to.not.be.null;
+                    expect(expert).to.be.null;
+                }).then(done, done);
             });
 
             it("selects <juicy-tile-table> on click", function (done) {
-                click(tw.table, 100);
-
-                setTimeout(function () {
+                clickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles[0]).to.equal(tw.table);
-                    done();
-                }, 200);
+                }).then(done, done);
             });
 
             it("highlights selected <juicy-tile-table>", function (done) {
-                click(tw.table, 100);
-
-                setTimeout(function () {
+                clickPromise(tw.table).then(function () {
                     highlight.show(tw.table);
 
-                    var a = editor.$.highlightTileSelected.getSvg().querySelector("path").getAttribute("d");
-                    var b = highlight.getSvg().querySelector("path").getAttribute("d");
+                    var a = editor.$.highlightTileSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
 
                     expect(a).to.equal(b);
-                    done();
-                }, 150);
+                }).then(done, done);
             });
 
             it("removes all highlights when detached", function (done) {
-                click(tw.table, 100);
-                dblclick(tw.table, 125);
-                click(tw.tile(0), 150);
-
-                setTimeout(function () {
-                    editor.parentNode.removeChild(editor);
-                }, 175);
-
-                setTimeout(function () {
-                    var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
-                    expect(svgs).to.be.empty;
-                    done();
-                }, 400);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        tw.tile(0);
+                        editor.parentNode.removeChild(editor);
+                        return wait();
+                    }).then(function () {
+                        var svgs = Array.prototype.slice.call(fix.parentNode.parentNode.querySelectorAll("svg"));
+                        expect(svgs).to.be.empty;
+                    }).then(done, done);
             });
 
             it("scopes into <juicy-tile-table> on double click", function (done) {
-                dblclick(tw.table, 100);
-
-                setTimeout(function () {
+                dblclickPromise(tw.table).then(function () {
                     expect(editor.selectedTiles).to.be.empty;
                     expect(editor.selectedList).to.equal(tw.table);
-                    done();
-                }, 200);
+                }).then(done, done);
+            });
+
+            it("scopes into a tight group on double click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedList).to.equal(tw.table);
+                    expect(editor.selectedScope).to.equal(tw.cell("group_0"));
+                }).then(done, done);
+            });
+
+            it("scopes out of a tight group on breadcrumb level up button click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-breadcrumb a");
+                    return clickPromise(btn);
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedScope).to.be.null;
+                    expect(editor.selectedList).to.equal(tw.table);
+                }).then(done, done);
+            });
+
+            it("highlights selected tight group", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(2));
+                }).then(function () {
+                    highlight.overlay = true;
+                    highlight.setAttribute("strokewidth", 1);
+                    highlight.setAttribute("strokeoffset", 2);
+                    highlight.show(tw.cell("group_0"));
+
+                    var a = editor.$.highlightScopeSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
+
+                    expect(a).to.equal(b);
+                }).then(done, done);
+            });
+
+            it("scopes into a lose group on double click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedList).to.equal(tw.table);
+                    expect(editor.selectedScope.id).to.equal("group_1");
+                }).then(done, done);
+            });
+
+            it("scopes out of a lose group on breadcrumb level up button click", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    var btn = Polymer.dom(editor.root).querySelector(".editor-breadcrumb a");
+                    return clickPromise(btn);
+                }).then(function () {
+                    expect(editor.selectedTiles).to.be.empty;
+                    expect(editor.selectedScope).to.be.null;
+                    expect(editor.selectedList).to.equal(tw.table);
+                }).then(done, done);
+            });
+
+            it("highlights selected lose group", function (done) {
+                dblclickPromise(tw.table).then(function () {
+                    return dblclickPromise(tw.tile(4));
+                }).then(function () {
+                    highlight.overlay = true;
+                    highlight.setAttribute("strokewidth", 1);
+                    highlight.setAttribute("strokeoffset", 2);
+                    highlight.show([tw.cell(4), tw.cell(5)]);
+
+                    var a = editor.$.highlightScopeSelected.overlayRect.querySelector("path").getAttribute("d");
+                    var b = highlight.overlayRect.querySelector("path").getAttribute("d");
+
+                    expect(a).to.equal(b);
+                }).then(done, done);
             });
 
             it("selects a tile on click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 150);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    }).then(function () {
+                        var td = tw.cell(0);
 
-                setTimeout(function () {
-                    var td = tw.cell(0);
-
-                    expect(editor.selectedTiles).to.have.length(1);
-                    expect(editor.selectedTiles[0]).to.equal(td);
-                    done();
-                }, 200);
+                        expect(editor.selectedTiles).to.have.length(1);
+                        expect(editor.selectedTiles[0]).to.equal(td);
+                    }).then(done, done);
             });
 
             it("selects another tile on click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-                click(tw.tile(1), 150);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        click(tw.tile(0));
+                    })
+                    .then(function () {
+                        click(tw.tile(1));
+                    })
+                    .then(function () {
+                        var td = tw.cell(1);
 
-                setTimeout(function () {
-                    var td = tw.cell(1);
-
-                    expect(editor.selectedTiles).to.have.length(1);
-                    expect(editor.selectedTiles[0]).to.equal(td);
-                    done();
-                }, 200);
+                        expect(editor.selectedTiles).to.have.length(1);
+                        expect(editor.selectedTiles[0]).to.equal(td);
+                    }).then(done, done);
             });
 
             /*it("selects multiple tiles on ctrl + click", function (done) {

@@ -1,4 +1,12 @@
-﻿function fireEvent(obj, evt, ctrl) {
+﻿function wait() { 
+    return new Promise(function (resolve) {
+        setTimeout(function () {
+            resolve(true);
+        }, 50);
+    });
+}
+
+function fireEvent(obj, evt, ctrl) {
     var fireOnThis = obj;
 
     if (document.createEvent) {
@@ -15,37 +23,34 @@
     }
 }
 
-function click(element, timeout) {
-    if (!timeout) {
-        element.click();
-        return;
-    }
+function click(element) {
+    element.click();
+}
 
-    setTimeout(function () {
+function dblclick(element) {
+    fireEvent(element, "dblclick");
+}
+
+function ctrlClick(element) {
+    console.error("ctrlClick is not implemented");
+}
+
+function clickPromise(element) {
+    return new Promise(function (resolve) {
         click(element);
-    }, timeout);
+        wait().then(function () {
+            resolve(true);
+        });
+    });
 }
 
-function dblclick(element, timeout) {
-    if (!timeout) {
-        fireEvent(element, "dblclick");
-        return;
-    }
-
-    setTimeout(function () {
+function dblclickPromise(element, timeout) {
+    return new Promise(function (resolve) {
         dblclick(element);
-    }, timeout);
-}
-
-function ctrlClick(element, timeout) {
-    if (!timeout) {
-        console.error("ctrlClick is not implemented");
-        return;
-    }
-
-    setTimeout(function () {
-        ctrlClick(element);
-    }, timeout);
+        wait().then(function () {
+            resolve(true);
+        });
+    });
 }
 
 function getCellById(table, id) {
@@ -104,4 +109,37 @@ JuicyTileTableWrapper.prototype.setup = function (id) {
     }
 
     return null;
+};
+
+function JuicyTileEditorWrapper(editor) {
+    this.editor = editor;
+    this.root = Polymer.dom(this.editor.root);
+
+    this.tabs = {};
+    this.tabs.simple = this.root.querySelectorAll(".editor-tabs button.btn-tab")[0];
+    this.tabs.expert = this.root.querySelectorAll(".editor-tabs button.btn-tab")[1];
+}
+
+JuicyTileEditorWrapper.prototype.getSimpleModeForm = function () {
+    return this.root.querySelector(".editor-simple-form");
+};
+
+JuicyTileEditorWrapper.prototype.getExpertModeForm = function () {
+    return this.root.querySelector(".editor-expert-form");
+};
+
+JuicyTileEditorWrapper.prototype.setSimpleMode = function () {
+    var simple = this.getSimpleModeForm();
+
+    if (!simple) {
+        click(this.tabs.simple);
+    }
+};
+
+JuicyTileEditorWrapper.prototype.setExpertMode = function () {
+    var expert = this.getExpertModeForm();
+
+    if (!expert) {
+        click(this.tabs.expert);
+    }
 };

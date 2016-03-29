@@ -4,10 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../es6-promise/es6-promise.min.js"></script>
 
-    <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html" />
+    <link rel="import" href="../../juicy-tile-table/juicy-tile-table.html" />
     <link rel="import" href="../src/juicy-tile-simple-editor.html" />
 
     <link rel="stylesheet" href="style.css" />
@@ -17,27 +18,23 @@
     <test-fixture id="editor-form-fixture">
         <template>
             <div id="body" style="padding: 0px; margin: 0px;">
-                <template is="dom-bind">
-                    <juicy-tile-simple-editor></juicy-tile-simple-editor>
-                    <juicy-tile-table id="table-0" setup="{{model.setup0}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-00</div>
-                        <div class="tile">tile-01</div>
-                    </juicy-tile-table>
-                    <juicy-tile-table id="table-1" setup="{{model.setup1}}" defaultsetup="{{model.setupCopy}}">
-                        <div class="tile">tile-10</div>
-                        <div class="tile">tile-11</div>
-                    </juicy-tile-table>
-                </template>
-                <script>
-                    var script = document._currentScript || document.currentScript;
-                    var tempalte = script.previousElementSibling;
-
-                    tempalte.model = {
-                        setup0: getJuicyTileSetup(),
-                        setup1: getJuicyTileSetup(),
-                        setupCopy: getJuicyTileSetup()
-                    };
-                </script>
+                <juicy-tile-simple-editor></juicy-tile-simple-editor>
+                <juicy-tile-table id="table-0">
+                    <div class="tile">tile-00</div>
+                    <div class="tile">tile-01</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
+                </juicy-tile-table>
+                <juicy-tile-table id="table-1">
+                    <div class="tile">tile-10</div>
+                    <div class="tile">tile-11</div>
+                    <div class="tile">tile-02</div>
+                    <div class="tile">tile-03</div>
+                    <div class="tile">tile-04</div>
+                    <div class="tile">tile-05</div>
+                </juicy-tile-table>
             </div>
         </template>
     </test-fixture>
@@ -47,68 +44,86 @@
         describe("light dom test", function () {
             var fix;
             var editor;
+            var ew;
             var tw;
+            var tables;
 
-            beforeEach(function () {
+            beforeEach(function (done) {
                 fix = fixture("editor-form-fixture");
                 editor = fix.querySelector("juicy-tile-simple-editor");
+                ew = new JuicyTileEditorWrapper(editor);
 
-                tw = new JuicyTileTableWrapper(fix.querySelector("juicy-tile-table"));
+                tables = fix.querySelectorAll("juicy-tile-table");
+                tables = Array.prototype.slice.call(tables);
+
+                tables.forEach(function (t) {
+                    t.setup = getJuicyTileSetup();
+                    t.defaultsetup = getJuicyTileSetup();
+                });
+
+                tw = new JuicyTileTableWrapper(tables[0]);
+
+                editor.addEventListener("attached", function () {
+                    ew.setSimpleMode();
+                    done();
+                });
             });
 
             it("changes width of a tile on width button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
-
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var rec = tw.tile(0).getBoundingClientRect();
-                    expect(rec.width).to.be.equal(pageSize.width / 2);
-                    done();
-                }, 200);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        return clickPromise(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .width-section button:nth-child(6)");
+                        return clickPromise(btn);
+                    })
+                    .then(function () {
+                        var rec = tw.tile(0).getBoundingClientRect();
+                        expect(rec.width).to.be.equal(pageSize.width / 2);
+                    }).then(done, done);
             });
 
             it("changes priority of a tile on priority arrow button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        return clickPromise(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
+                        return clickPromise(btn);
+                    })
+                    .then(function () {
+                        var count = 2;
 
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .position-section button:nth-child(2)");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var count = 2;
-
-                    //The tile order is reversed now
-                    for (var i = 0; i < count; i++) {
-                        var rec = tw.tile(i).getBoundingClientRect();
-                        expect(rec.top).to.be.equal((count - i - 1) * pageSize.tileHeight);
-                    }
-
-                    done();
-                }, 200);
+                        //The tile order is reversed now
+                        for (var i = 0; i < count; i++) {
+                            var rec = tw.tile(i).getBoundingClientRect();
+                            expect(rec.top).to.be.equal((count - i - 1) * pageSize.tileHeight);
+                        }
+                    }).then(done, done);
             });
 
             it("hides a tile on eye button click", function (done) {
-                dblclick(tw.table, 100);
-                click(tw.tile(0), 125);
+                dblclickPromise(tw.table)
+                    .then(function () {
+                        return clickPromise(tw.tile(0));
+                    })
+                    .then(function () {
+                        var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
+                        return clickPromise(btn);
+                    })
+                    .then(function () {
+                        var tile = tw.tile(0);
 
-                setTimeout(function () {
-                    var btn = Polymer.dom(editor.root).querySelector(".editor-simple-form .visible-section button");
-                    click(btn);
-                }, 150);
-
-                setTimeout(function () {
-                    var rec = tw.tile(0).getBoundingClientRect();
-                    expect(rec.width).to.be.empty;
-                    expect(rec.height).to.be.empty;
-                    done();
-                }, 200);
+                        // Native Shadow DOM does not remove non-distributed node
+                        // While Shadow DOM polyfill physically removes non-distributed node
+                        if (tile) {
+                            var rec = tile.getBoundingClientRect();
+                            expect(rec.width).to.be.empty;
+                            expect(rec.height).to.be.empty;
+                        }
+                    }).then(done, done);
             });
         });
     </script>

@@ -5,6 +5,16 @@ juicy-tile-table {
     padding: 0px;
     margin: 0px;
     width: 1000px;
+    border: none;
+}
+
+juicy-tile-table table,
+juicy-tile-table table tr,
+juicy-tile-table table tr td {
+    padding: 0px;
+    margin: 0px;
+    border-collapse: collapse;
+    border: none;
 }
 
 div.tile {
