@@ -12,7 +12,8 @@
   "ignore": [
     "**/.*",
     "examples",
-    "bower_components"
+    "bower_components",
+    "test"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer",
