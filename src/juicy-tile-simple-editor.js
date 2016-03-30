@@ -2202,8 +2202,7 @@
                 return elements;
             }
             if(this.selectedScope){
-                var newItems = predefinedSetupConstructor( getElementsFromSetupItems(this.selectedScope, this.selectedList.elements) );
-                this.getSetupItem(this.selectedScope).items = newItems
+                this.getSetupItem(this.selectedScope).items = predefinedSetupConstructor( getElementsFromSetupItems(this.selectedScopeItems, this.selectedList.elements));
             } else {
                 this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
             }
