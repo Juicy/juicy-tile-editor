@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-simple-editor&gt;</title>
+    <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
+
+    <!-- Importing Web Component's Polyfill -->
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../../../polymer/polymer.html">
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html">
+    <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
+    <link rel="import" href="../../src/juicy-tile-simple-editor.html">
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <template is="dom-bind" id="root">
+        <div class="editor-container">
+            <juicy-tile-simple-editor on-close-click="closeEditor"></juicy-tile-simple-editor>
+        </div>
+        <article class="markdown-body">
+            <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+            <div>
+                <juicy-tiles-setup-sync name="juicy-tile-simple-editor/simple.html#left" use-localstorage="true"></juicy-tiles-setup-sync>
+                <juicy-tile-table id="st0" defaultTileSetup='{
+                        "height": 1,
+                        "heightDynamic": true,
+                        "width": "100%",
+                        "widthFlexible": true
+                    }'>
+                    <h1>Page title</h1>
+                    <p>Some page text</p>
+                    <button type="button" juicy-style="width: 100;">Submit</button>
+                    <button type="button" juicy-style="width: 100;">Cancel</button>
+                    <p>Some more page text</p>
+                </juicy-tile-table>
+            </div>
+        </article>
+    </template>
+</body>
+</html>

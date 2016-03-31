@@ -1,0 +1,84 @@
+﻿
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+div.editor-container {
+    height: 115px;
+}
+
+article.markdown-body {
+    padding: 20px;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+juicy-tile-table {
+    box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+}
+
+juicy-tile-table juicy-tile-table {
+    box-shadow: none;
+}
+
+juicy-tile-table#st1 {
+    width: 100%;
+    min-height: 600px;
+    margin: 2em 0;
+}
+
+juicy-tile-table > * {
+    /*box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);*/
+    padding: 2px;
+}
+
+iframe {
+    float: right;
+}
+
+juicy-tile-table label {
+    width: 220px;
+    display: inline-block;
+}
+
+juicy-tile-table div input[type=text] {
+    width: calc(100% - 230px);
+    box-sizing: border-box;
+}
+
+juicy-tile-table input[type=text] {
+    width: calc(100% - 10px);
+    box-sizing: border-box;
+}
+/* Override github-markdown styles affecting bled ShadowDOM in shimmed browsers */
+table.juicy-tile-table {
+    display: table;
+}
+
+table.juicy-tile-table > .juicy-shadow-row > td {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+table.juicy-tile-table > .juicy-shadow-row:nth-child(2n),
+table.juicy-tile-table > .juicy-shadow-row {
+    border: 0;
+    background-color: transparent;
+}
+
+article.markdown-body {
+    overflow: auto;
+}
+
+article.markdown-body div.col-left,
+article.markdown-body div.col-right {
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 10px;
+}
