@@ -469,6 +469,11 @@
         }
 
         var tile = list.querySelector("[juicytile='" + setup.id + "']");
+
+        if (!tile) {
+            return "Removed element";
+        }
+
         var value = getListSetupName(tile, listSelectors);
 
         if (value) {
