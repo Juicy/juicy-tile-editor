@@ -15,17 +15,17 @@
     $ bower install Juicy/juicy-tile-editor --save
     ```
 
-2. Import Web Components' polyfill:
+
+2. Import Web Components' polyfill, if needed:
 
     ```html
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/platform.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/polymer.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
     ```
 
 3. Import Custom Element:
 
     ```html
-    <link rel="import" href="bower_components/juicy-tile-list/src/juicy-tile-list.html">
+    <link rel="import" href="bower_components/juicy-tile-table/juicy-tile-table.html">
     <link rel="import" href="bower_components/juicy-tile-editor/src/juicy-tile-editor.html">
     ```
 
@@ -33,7 +33,7 @@
 
     ```html
     <juicy-tile-editor selectionMode></juicy-tile-editor>
-    <juicy-tile-list></juicy-tile-list>
+    <juicy-tile-table></juicy-tile-table>
     ```
 
 ## Options
