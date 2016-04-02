@@ -676,7 +676,15 @@
              * false - from top to bottom.
              * true - from bottom to top.
              */
-            bottomUp: { type: Boolean }
+            bottomUp: { type: Boolean },
+
+            /**
+             * Array of predefined setup objects
+             */
+            predefinedSetups:{
+                type: Object,
+                value: function(){return [];}
+            }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
         attached: function () {
@@ -2247,6 +2255,59 @@
          */
         tightGroupChanged: function (newVal, oldVal) {
             this.setCommonSetupValue("tightGroup", newVal);
+        },
+        /** experimental support for predefined form layouts*/
+        /**
+         * Applies given predefined setup constructor on selected list ~given gorup~
+         * @param  {Function} predefinedSetupConstructor(elements) predefined setup constructor
+         *                                             function that return a setup for given list ~group~
+                                                        usually it's one of `.predefinedSetups`/
+         * @return {this}                            self
+         */
+        applyPredefinedSetup: function(predefinedSetupConstructor){
+            // for debugging
+            // predefinedSetupConstructor = this.predefinedSetups["Labels on left"].apply;
+            // --
+            /**
+             * Recursively fetches all HTML Elements of `parentElements`,
+             *  that are mentioned seup given in `items`
+             * @param  {[type]} items       [description]
+             * @param  {[type]} allElements [description]
+             * @return {[type]}             [description]
+             */
+            function getElementsFromSetupItems(items, parentElements){
+                var elements = [];
+                for(var itemNo = 0, len = items.length; itemNo < len; itemNo++){
+                    var item = items[itemNo];
+                    if(item.items){
+                        elements.concat(getElementsFromSetupItems(item.items, parentElements));
+                    } else {
+                        for(var elementNo = 0, elementsLen = parentElements.length; elementNo < elementsLen; elementNo++){
+                            if(parentElements[elementNo].getAttribute('juicytile') === items[itemNo].id){
+                                elements.push(parentElements[elementNo]);
+                            }
+                        }
         }
+                }
+                return elements;
+            }
+            if(this.selectedScope){
+                this.getSetupItem(this.selectedScope).items = predefinedSetupConstructor( getElementsFromSetupItems(this.selectedScopeItems, this.selectedList.elements));
+            } else {
+                this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
+            }
+
+            this.selectedList.setup = Object.create(this.selectedList.setup);
+            this.refreshSelectedList();
+            return this;
+        },
+        /**
+         * Draft of a UI handler for applying predefined layouts
+         * @param  {event} event
+         */
+        _choosePredefinedSetup: function(event){
+            event.target.value && this.applyPredefinedSetup(this.predefinedSetups[event.target.value].apply);
+        }
+
     });
 })();

@@ -17,8 +17,9 @@
             <button on-click="toggleTree" class="btn-tree">List</button>
         </div>
         <template is="dom-if" if="{{!showMore}}" restamp>
-            <div class="editor-simple-form">
+            <div class="editor-simple-form" style="overflow: auto;">
                 <div class="editor-form-section save-section">
+                    <!-- <button type="button" class="btn" on-click="applyPredefinedSetup">Predefined</button> -->
                     <button type="button" class="btn" on-click="saveSetup" disabled="{{!isModified}}">Save</button>
                     <button type="button" class="btn" on-click="resetSetup">Reset</button>
                 </div>
@@ -128,6 +129,15 @@
                         <button type="button" class="btn" disabled$="{{!getIsGroupSelection(selectedTiles, selectedTiles.length)}}" on-click="unpackGroup">
                             Unbox
                         </button>
+                        <div class="btn-group">
+                            <select class="btn btn-left"  on-change="_choosePredefinedSetup" title="Select the element that will control the layout of this group">
+                                <!-- <option value="" title="subgrid/virtual group">parent conatiner</option> -->
+                                <option title="tight group">juicy-tile-table</option>
+                                <template is="dom-repeat" items="{{predefinedSetups}}">
+                                    <option value="{{index}}">{{item.id}}</option>
+                                </template>
+                            </select>
+                        </div>
                     </div>
                     <div class="visible-section">
                         <template is="dom-if" if="{{getIsHidden(visible)}}">

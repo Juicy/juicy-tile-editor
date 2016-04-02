@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>&lt;juicy-tile-simple-editor&gt;</title>
+    <link rel="stylesheet" href="http://juicy.github.io/github-markdown-css/github-markdown.css">
+
+    <!-- Importing Web Component's Polyfill -->
+    <script src="../../../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../../../polymer/polymer.html">
+
+    <!-- Importing Custom Elements -->
+    <link rel="import" href="../../../juicy-tile-table/juicy-tile-table.html">
+    <link rel="import" href="../../../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
+    <link rel="import" href="../../src/juicy-tile-simple-editor.html">
+
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        div.editor-container {
+            height: 115px;
+        }
+
+        article.markdown-body {
+            padding: 20px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        juicy-tile-table {
+            box-shadow: inset 0px 0px 10px 0px rgba(50, 50, 50, 0.6);
+        }
+
+        juicy-tile-table juicy-tile-table {
+            box-shadow: none;
+        }
+
+        juicy-tile-table#st1 {
+            width: 100%;
+            min-height: 600px;
+            margin: 2em 0;
+        }
+
+        juicy-tile-table > * {
+            /*box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.75);*/
+            padding: 2px;
+        }
+
+        iframe {
+            float: right;
+        }
+
+        juicy-tile-table label {
+            width: 220px;
+            display: inline-block;
+        }
+
+        juicy-tile-table div input[type=text] {
+            width: calc(100% - 230px);
+            box-sizing: border-box;
+        }
+
+        juicy-tile-table input[type=text] {
+            width: calc(100% - 10px);
+            box-sizing: border-box;
+        }
+        /* Override github-markdown styles affecting bled ShadowDOM in shimmed browsers */
+        table.juicy-tile-table{
+            display: table;
+        }
+        table.juicy-tile-table > .juicy-shadow-row>td{
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        table.juicy-tile-table > .juicy-shadow-row:nth-child(2n),
+        table.juicy-tile-table > .juicy-shadow-row{
+            border: 0;
+            background-color: transparent;
+        }
+
+        article.markdown-body {
+            overflow: auto;
+        }
+
+        article.markdown-body div.col-left,
+        article.markdown-body div.col-right {
+            float: left;
+            width: 50%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <template is="dom-bind" id="root">
+        <template is="dom-if" if="{{model.editingMode}}" restamp="true">
+            <div class="editor-container">
+                <juicy-tile-simple-editor on-close-click="closeEditor"></juicy-tile-simple-editor>
+                <script src="predefined_layouts.js"></script><!-- This needs to be a nextElementSiling -->
+            </div>
+        </template>
+        <article class="markdown-body">
+            <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=fork&amp;count=true&amp;size=medium"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+            <iframe src="http://ghbtns.com/github-btn.html?user=juicy&amp;repo=juicy-tile-editor&amp;type=watch&amp;count=true&amp;size=medium"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="90" height="30"></iframe>
+
+            <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
+            <div>
+                <label><input type="checkbox" checked="{{model.editingMode::change}}"> Show editor (<span>{{model.editingMode}}</span>)</label>
+            </div>
+            <div class="col-left">
+                <juicy-tiles-setup-sync name="juicy-tile-simple-editor/simple.html#left" stored-value="{{model.setupLeft}}" use-localstorage="true"></juicy-tiles-setup-sync>
+                <juicy-tile-table id="st1" setup="{{model.setupLeft}}" defaultsetup="{{model.setupLeftCopy}}">
+                    <juicy-tile-group name="products"></juicy-tile-group>
+                    <label for="products/productId">Product ID</label>
+                    <input type="text" value="r9-380" id="products/productId"/>
+                    <div>
+                        <h3>Wrapped within a <code>div</code></h3>
+                        <label>Name</label>
+                        <input type="text" value="AMD Radeon R9 380" />
+                    </div>
+                    <label>Description</label>
+                    <input type="text" value="Middle level dedicated graphics card" />
+                    <!-- <label>Barcode</label> -->
+                    <input type="text" value="1234567890" />
+                    <label>before<span>nested</span><input value="nested-input"/>after<span>nested</span></label>
+                </juicy-tile-table>
+            </div>
+
+        </article>
+    </template>
+    <script src="simple.js"></script>
+</body>
+</html>
