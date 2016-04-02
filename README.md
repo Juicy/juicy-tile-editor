@@ -58,6 +58,14 @@ Event                     | Description
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
+## Development
+
+In order to develop it locally we suggest to use [polyserve](https://npmjs.com/polyserve) tool to handle bower paths gently.
+
+1. Install [bower](http://bower.io/) & [polyserve](https://npmjs.com/polyserve): `$ npm install -g bower polyserve`
+2. Install local dependencies: `$ bower install`
+3. Start development server `$ polyserve` and open `http://localhost:8080/components/juicy-element/`.
+
 ## License
 
 [MIT License](http://opensource.org/licenses/MIT)
