@@ -803,15 +803,6 @@
                 }
             }.bind(this);
 
-            this.onDocumentClick = function (e) {
-                this.scopeOut();
-            }.bind(this);
-
-            this.onClick = function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-            }.bind(this);
-
             this.set("lists", lists);
             this.set("listsTree", listsTree);
 
@@ -862,9 +853,6 @@
                 list.addEventListener("dblclick", this.onListDoubleClick, true);
                 shadow.addEventListener("dblclick", this.onListDoubleClick, true);
             }
-
-            document.addEventListener("click", this.onDocumentClick);
-            this.addEventListener("click", this.onClick);
         },
         /**
          * Removes document click, editor click, juicy-tile-list click/dblclick/mousemove event handlers.
@@ -882,9 +870,6 @@
                 list.removeEventListener("dblclick", this.onListDoubleClick, true);
                 shadow.removeEventListener("dblclick", this.onListDoubleClick, true);
             }.bind(this));
-
-            document.removeEventListener("click", this.onDocumentClick);
-            this.removeEventListener("click", this.onClick);
         },
         /**
          * Polymer binding helper. Gets css class value for a media range button.
