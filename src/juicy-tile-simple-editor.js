@@ -681,9 +681,9 @@
             /**
              * Array of predefined setup objects
              */
-            predefinedSetups:{
+            predefinedSetups: {
                 type: Object,
-                value: function(){return [];}
+                value: function () { return []; }
             }
         },
         observers: ["selectedTilesChanged(selectedTiles.length)"],
@@ -1069,7 +1069,7 @@
         getSelectedScopeName: function (list, scope) {
             if (scope) {
                 return getSetupName(list, getSetupItem(list.setup, getTileId(scope)), this.listSelectors);
-            } else if(list) {
+            } else if (list) {
                 return getSetupName(list, list.setup, this.listSelectors);
             }
 
@@ -1169,7 +1169,7 @@
         getTile: function () {
             var id;
             var list;
-            
+
             if (arguments.length == 1) {
                 id = arguments[0];
                 list = this.selectedList;
@@ -1185,7 +1185,7 @@
             }
 
             var setup = getSetupItem(list.setup, id);
-            
+
             tile = getGroupTiles(list, setup);
 
             return tile;
@@ -1885,7 +1885,7 @@
 
             if (!this.selectedList) {
                 var list = this.getListPerSetup(setup);
-                
+
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
                 return;
@@ -2057,7 +2057,7 @@
                 this.$.highlightScopeSelected.show(this.selectedScope);
             } else if (this.selectedList) {
                 this.$.highlightScopeSelected.show(this.selectedList);
-            } else if(this.listsTree) {
+            } else if (this.listsTree) {
                 var lists = this.listsTree.map(function (item) {
                     return item.list;
                 });
@@ -2249,7 +2249,7 @@
                                                         usually it's one of `.predefinedSetups`/
          * @return {this}                            self
          */
-        applyPredefinedSetup: function(predefinedSetupConstructor){
+        applyPredefinedSetup: function (predefinedSetupConstructor) {
             // for debugging
             // predefinedSetupConstructor = this.predefinedSetups["Labels on left"].apply;
             // --
@@ -2260,24 +2260,24 @@
              * @param  {[type]} allElements [description]
              * @return {[type]}             [description]
              */
-            function getElementsFromSetupItems(items, parentElements){
+            function getElementsFromSetupItems(items, parentElements) {
                 var elements = [];
-                for(var itemNo = 0, len = items.length; itemNo < len; itemNo++){
+                for (var itemNo = 0, len = items.length; itemNo < len; itemNo++) {
                     var item = items[itemNo];
-                    if(item.items){
+                    if (item.items) {
                         elements.concat(getElementsFromSetupItems(item.items, parentElements));
                     } else {
-                        for(var elementNo = 0, elementsLen = parentElements.length; elementNo < elementsLen; elementNo++){
-                            if(parentElements[elementNo].getAttribute('juicytile') === items[itemNo].id){
+                        for (var elementNo = 0, elementsLen = parentElements.length; elementNo < elementsLen; elementNo++) {
+                            if (parentElements[elementNo].getAttribute('juicytile') === items[itemNo].id) {
                                 elements.push(parentElements[elementNo]);
                             }
                         }
-        }
+                    }
                 }
                 return elements;
             }
-            if(this.selectedScope){
-                this.getSetupItem(this.selectedScope).items = predefinedSetupConstructor( getElementsFromSetupItems(this.selectedScopeItems, this.selectedList.elements));
+            if (this.selectedScope) {
+                this.getSetupItem(this.selectedScope).items = predefinedSetupConstructor(getElementsFromSetupItems(this.selectedScopeItems, this.selectedList.elements));
             } else {
                 this.selectedList.setup.items = predefinedSetupConstructor(this.selectedList.elements);
             }
@@ -2290,7 +2290,7 @@
          * Draft of a UI handler for applying predefined layouts
          * @param  {event} event
          */
-        _choosePredefinedSetup: function(event){
+        _choosePredefinedSetup: function (event) {
             event.target.value && this.applyPredefinedSetup(this.predefinedSetups[event.target.value].apply);
         }
 
