@@ -454,6 +454,8 @@
             }
 
             var names = [];
+            var groupTitle = "Group: ";
+            var partialTitle = "Partial: ";
 
             for (var i = 0; i < setup.items.length; i++) {
                 names.push(getFullSetupName(list, setup.items[i], listSelectors));
@@ -461,10 +463,14 @@
 
             names = names.join(" & ");
 
+            if (names.indexOf(groupTitle) == 0 || names.indexOf(partialTitle) == 0) {
+                return names;
+            }
+
             if (setup.container) {
-                return "Group: " + names;
+                return groupTitle + names;
             } else {
-                return "Partial: " + names;
+                return partialTitle + names;
             }
         }
 
