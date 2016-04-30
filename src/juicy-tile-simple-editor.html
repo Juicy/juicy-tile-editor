@@ -285,7 +285,12 @@
                         <template is="dom-if" if="{{getIsScopable(item)}}">
                             <a href="javascript:" class="scope-in" on-click="selectScopeItem" item="{{item}}" title="Scope in">...</a>
                         </template>
-                        <span>{{getSetupName(item)}}</span>
+                        <input type="text" value="{{item.name::change}}" readonly 
+                               on-click="clickTreeItemName" 
+                               on-dblclick="editTreeItemName" 
+                               on-blur="saveTreeItemName" 
+                               on-keypress="saveTreeItemName" 
+                               on-change="touch" />
                     </div>
                 </template>
             </div>

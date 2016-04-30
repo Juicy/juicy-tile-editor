@@ -1670,6 +1670,42 @@
             this.notifyPath("selectedScopeItems." + index + ".hidden", setup.hidden);
         },
         /**
+         * Polymer event handler. Handles tree item input double click. Enables editing.
+         * @param   {MouseEvent}   e   The mouse click event object.
+         */
+        editTreeItemName: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            var txt = e.currentTarget;
+
+            txt.removeAttribute("readonly");
+            txt.setSelectionRange(0, txt.value.length);
+            txt.focus();
+        },
+        /**
+         * Polymer event handler. Handles tree item input enter click and blur events. Disables editing.
+         * @param   {MouseEvent}   e   The mouse click event object.
+         */
+        saveTreeItemName: function (e) {
+            if (!e.which || e.which == 13) {
+                e.currentTarget.setAttribute("readonly", "readonly");
+                clearSelection();
+            }
+        },
+        /**
+         * Polymer event handler. Handles tree item input click. Cancels the event in editing mode.
+         * @param   {MouseEvent}   e   The mouse click event object.
+         */
+        clickTreeItemName: function (e) {
+            var txt = e.currentTarget;
+
+            if (!txt.hasAttribute("readonly")) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            }
+        },
+        /**
          * Polymer event handler. Scopes in a group or a juicy-tile-list on sidebar item ... button click.
          * @param   {MouseEvent}   e   The mouse click event object.
          */
@@ -2026,6 +2062,12 @@
             } else {
                 items = [];
             }
+
+            items.forEach(function (x) {
+                if (!x.name) {
+                    x.name = this.getSetupName(x);
+                }
+            }.bind(this));
 
             this.set("selectedScopeItems", items);
         },

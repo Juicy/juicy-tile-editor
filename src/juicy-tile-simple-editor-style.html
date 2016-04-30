@@ -147,8 +147,8 @@
             }
 
             .editor-tree div.editor-tree-item {
-                padding: 2px 5px 2px 10px;
                 cursor: pointer;
+                padding: 3px 0px;
             }
 
             .editor-tree div.editor-tree-item:hover {
@@ -157,6 +157,21 @@
 
             .editor-tree div.editor-tree-item.selected {
                 background-color: #01629E;
+            }
+
+            .editor-tree div.editor-tree-item input {
+                padding: 2px 5px 2px 10px;
+                border: none;
+                margin: 0px;
+                color: inherit;
+                background-color: transparent;
+                font-size: inherit;
+                font-family: inherit;
+                display: block;
+            }
+
+            .editor-tree div.editor-tree-item input[readonly] {
+                cursor: pointer;
             }
 
             .editor-tree a {
