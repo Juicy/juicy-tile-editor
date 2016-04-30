@@ -1980,7 +1980,7 @@
                 return;
             }
 
-            var index = this.selectedTiles.indexOf(tile);
+            var index = this.selectedTiles.map(function (x) { return x.id; }).indexOf(tile.id);
 
             if (index >= 0) {
                 this.splice("selectedTiles", index, 1);
