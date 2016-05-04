@@ -12,7 +12,7 @@
     <!-- Importing Custom Elements -->
     <link rel="import" href="../juicy-tile-list/src/juicy-tile-list.html">
     <link rel="import" href="../juicy-tiles-setup-sync/src/juicy-tiles-setup-sync.html">
-    <link rel="import" href="src/juicy-tile-editor.html">
+    <link rel="import" href="src/juicy-tile-simple-editor.html">
 
     <style>
         body {
@@ -84,17 +84,12 @@
         <template is="dom-bind" id="root">
             <template is="dom-if" if="{{model.editingMode}}" restamp="true">
                 <div id="aboveOverlay">
-                    <juicy-tile-editor selection-mode="true"></juicy-tile-editor>
+                    <juicy-tile-simple-editor on-close-click="closeEditor"></juicy-tile-simple-editor>
                 </div>
-                <script>
-                    document.querySelector("juicy-tile-editor").addEventListener("juicy-tile-editor-close", function (e) {
-                        document.querySelector("template#root").set("model.editingMode", false);
-                    });
-                </script>
             </template>
             <p>Press Ctrl or Command on your keyboard and move your mouse over an item to edit</p>
             <label><input type="checkbox" checked="{{model.editingMode::change}}"> Show editor (<span>{{model.editingMode}}</span>)</label>
-            <juicy-tiles-setup-sync name="juicy-tile-editor/index.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
+            <juicy-tiles-setup-sync name="juicy-tile-simple-editor/index.html" stored-value="{{model.setup}}" use-localstorage="true"></juicy-tiles-setup-sync>
             <juicy-tile-list id="st1" setup="{{model.setup}}">
                 <div>Item 0 </div>
                 <div>
@@ -204,6 +199,10 @@
             var template = document.querySelector("template#root");
 
             template.model = model;
+
+            template.closeEditor = function () {
+                template.set("model.editingMode", false);
+            };
 
             function blockme() {
                 alert("I should get blocked when editor is opened");
