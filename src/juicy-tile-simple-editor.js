@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     /**
      * Checks whether an element is a juicy-tile-list.
      * @param   {HTMLElement}   element     The element to check.
@@ -195,26 +195,51 @@
     }
 
     /**
-     * Gets all juicy-tile-list elements within a tile.
-     * @param   {JuicyTileList}   list        The list to look for the tile in.
-     * @param   {String}          tileId      The tile's id. The tile should belong to the list.
-     * @param   {Array}           selectors   List of valid tag names for juicy-tile-list.
-     * @return  {Array}                       Returns list of juicy-tile-list items found inside the tile.
+     * Filters elements nested too deep (nested in other elements from array)
+     * @param  {Array<HTMLElement>} elementsArray array of elements to filter. This array will be changed.
+     * @param  {HTMLElement} root          root of our elements
+     * @return {Array<HTMLElement>}               reduced array
      */
-    function getNestedLists(list, tileId, selectors) {
-        if (!list) {
+    function filterNestedTooDeep(elementsArray, root) {
+        // start from last node, to reduce the size of an array faster - usually last nodes are nested deeper due to tree order
+        // Plus it would be easier to iterate over shrinking array
+        var elementNo = elementsArray.length;
+        while (elementNo--) {
+            var parent = elementsArray[elementNo];
+            while (parent && parent != root) {
+                parent = parent.parentNode;
+                // if this element is inside someone else from our list, it's nested too deep
+                if (elementsArray.indexOf(parent) > -1) {
+                    // remove it from our list
+                    elementsArray.splice(elementNo, 1);
+
+                    parent = null;
+                    // continue abovelabel;
+                }
+            }
+        };
+        return elementsArray;
+    }
+
+    /**
+     * Gets all juicy-tile-list elements within a tile.
+     * @param   {HTMLElement}     element     The HTML element from Shadow DOM, which distributes somewhere the nodes that we will browse.
+     * @param   {Array}           selectors   List of valid tag names for juicy-tile-list.
+     * @return  {Array}                       Returns list of juicy-tile-list items found inside the element.
+     */
+    function getNestedLists(element, selectors) {
+        element = element &&
+                element.querySelector &&
+                element.querySelector('content').getDistributedNodes()[0];
+        if (!element) {
             return [];
         }
 
-        var selector = selectors.map(function (s) {
-            return "[juicytile='" + tileId + "'] " + s;
-        }).join(", ");
-
-        var lists = list.querySelectorAll(selector);
+        var lists = element.querySelectorAll(selectors.join(','));
 
         lists = Array.prototype.slice.call(lists);
 
-        return lists;
+        return filterNestedTooDeep(lists, element);
     }
 
     /**
@@ -982,15 +1007,20 @@
         },
         /**
          * Gets whether a juicy setup item is scopable.
+         * Scopable are
+         * - all groups ≡ nodes with .items
+         * - tiles with nested juicy-tile-*
          * @param   {Object}    item   The juicy setup item to check.
          * @return  {Boolean}          Returns true if the item is a jucy-tile-list, is a tight group, is a lose group, or contains juicy-tile-list. Returns false otherwise.
          */
         getIsScopable: function (item) {
-            if (item.items && item.items.length) {
+            if (item.items) {
                 return true;
             }
 
-            return getNestedLists(this.selectedList, item.id, this.listSelectors).length;
+            return getNestedLists(
+                this.selectedList.tiles[item.id],
+                this.listSelectors).length;
         },
         /**
          * Polymer binding helper. Gets whether a list and/or scope is able to apply gutter.
@@ -1950,10 +1980,12 @@
             if (list) {
                 this.set("selectedScope", null);
                 this.set("selectedList", list);
-            } else if (setup.items && setup.items.length) {
+            } else if (setup.items) {
                 this.set("selectedScope", tile);
             } else {
-                var lists = getNestedLists(this.selectedList, setup.id, this.listSelectors);
+                var lists = getNestedLists(
+                    this.selectedList.tiles[setup.id],
+                    this.listSelectors);
 
                 if (!lists.length) {
                     throw "Cannot scope in to this tile!";
@@ -2048,7 +2080,9 @@
                     items = setup.items.slice();
                     items.sort(sortByPriorityDesc);
                 } else {
-                    items = getNestedLists(this.selectedList, setup.id, this.listSelectors).map(function (it) {
+                    // fetch nested juicy-tile-* from given element
+                    items = getNestedLists(this.selectedScope, this.listSelectors)
+                    .map(function (it) {
                         return it.setup;
                     });
                 }
