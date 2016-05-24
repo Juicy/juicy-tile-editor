@@ -68,4 +68,4 @@ In order to develop it locally we suggest to use [polyserve](https://npmjs.com/p
 
 ## License
 
-[MIT License](http://opensource.org/licenses/MIT)
+MIT
