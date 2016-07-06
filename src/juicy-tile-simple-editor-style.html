@@ -498,12 +498,11 @@
                 margin-top: 12px;
                 padding: 1px 0px 0px 10px;
                 margin-right: 100px;
-                overflow: auto;
+                overflow: visible;
                 height: 93px;
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 min-width: 1200px;
-                overflow: hidden;
             }
 
             .editor-expert-form .btn-range,
@@ -1019,6 +1018,7 @@
                 width: 95px;
                 height: 91px;
                 margin: -1px;
+                display: none; /*not implemented anyway*/
             }
 
             .editor-expert-form .align-section .btn {
@@ -1031,6 +1031,10 @@
 
             .editor-expert-form .align-section .btn.active {
                 background-color: #21b3cf;
+            }
+
+            .editor-expert-form .predefined-setup-picker {
+                width: 80px;
             }
         </style>
         <style>
