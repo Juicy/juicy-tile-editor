@@ -33,7 +33,7 @@
             border-bottom-width: 4px;
         }
 
-        :host input, 
+        :host input,
         :host select {
             height: 25px;
             min-width: 25px;
@@ -50,31 +50,31 @@
             border: 1px solid #C0C0C0;
         }
 
-        :host input.width {
+        :host .juicyborderpicker-border-width__input {
             width: 60%;
             float: left;
         }
 
-        :host select.width {
+        :host .juicyborderpicker-border-width__select {
             width: 40%;
             float: left;
         }
 
-        :host div.width {
+        :host .juicyborderpicker-border-width {
             overflow: auto;
         }
 
-        :host div.value {
+        :host .juicyborderpicker-border-value {
             margin-top: 10px;
             overflow: auto;
         }
 
-        :host div.value input {
+        :host .juicyborderpicker-border-value__input {
             width: calc(100% - 25px);
             float: left;
         }
 
-        :host div.value button {
+        :host .juicyborderpicker-border-value__button {
             height: 25px;
             width: 22px;
             float: left;
@@ -82,10 +82,10 @@
         }
     </style>
     <template>
-        <div class="container">
-            <div class="width">
-                <input type="text" value="{{borderWidth::input}}" class="width" />
-                <select class="width" value="{{borderWidthUnit::change}}">
+        <div>
+            <div class="juicyborderpicker-border-width">
+                <input type="text" value="{{borderWidth::input}}" class="juicyborderpicker-border-width__input" />
+                <select class="juicyborderpicker-border-width__select" value="{{borderWidthUnit::change}}">
                     <option value="px">px</option>
                     <option value="em">em</option>
                     <option value="%">%</option>
@@ -110,9 +110,9 @@
                 </template>
             </ul>
             <juicy-color-picker value="{{borderColor::change}}" on-change="refreshBorderValueAsync"></juicy-color-picker>
-            <div class="value">
-                <input type="text" value="[[borderValue]]" readonly="readonly" />
-                <button type="button" on-click="clearBorder">x</button>
+            <div class="juicyborderpicker-border-value">
+                <input type="text" value="[[borderValue]]" readonly="readonly" class="juicyborderpicker-border-value__input" />
+                <button type="button" on-click="clearBorder" class="juicyborderpicker-border-value__button">x</button>
             </div>
         </div>
     </template>
