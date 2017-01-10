@@ -17,13 +17,13 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer",
-    "juicy-highlight": "Juicy/juicy-highlight#gh-pages",
+    "juicy-highlight": "Juicy/juicy-highlight#master",
     "juicy-popover": "Juicy/juicy-popover#~0.0.3",
-    "juicy-color-picker": "Juicy/juicy-color-picker#gh-pages",
-    "juicy-draggable": "Juicy/juicy-draggable#gh-pages"
+    "juicy-color-picker": "Juicy/juicy-color-picker#master",
+    "juicy-draggable": "Juicy/juicy-draggable#master"
   },
   "devDependencies": {
-    "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#gh-pages",
+    "juicy-tiles-setup-sync": "Juicy/juicy-tiles-setup-sync#master",
     "juicy-tile-list": ">=1.1.0",
     "juicy-tile-grid": ">=1.1.0",
     "juicy-tile-table": ">=0.0.5",
